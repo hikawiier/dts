@@ -46,7 +46,7 @@ namespace item_misc
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','logger'));
+		eval(import_module('sys','player','logger','input','localproject'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
@@ -399,6 +399,12 @@ namespace item_misc
 						$itme = $itms = 0;
 					}
 				}
+				return;
+			} elseif($itm=='便携式控制中心子端'){
+				ob_clean();
+				include template(MOD_LOCALPROJECT_MOBGSC_CMD);
+				$cmd = ob_get_contents();
+				ob_clean();
 				return;
 			} elseif(strpos($itm,'RP回复设备')!==false){
 				$rp = 0;

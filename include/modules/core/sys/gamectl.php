@@ -56,6 +56,9 @@ namespace sys
 		$hdamage = 0;
 		$hplayer = '';
 		
+		//重设控制台功能
+		$bancombo = 0;
+		
 		save_combatinfo();
 		
 		//清空临时文件夹

@@ -1,0 +1,7 @@
+<!--{eval eval(import_module('localproject'));}-->
+<!--{if in_array($pls,array_keys($localproject_map))}-->
+	该地区可使用的特殊功能：<br>
+	<!--{if $pls == 0}-->	
+		<input type="button" class="bigbutton" id="lp_gamesysctl" name="lp_gamesysctl" value="幻境系统控制台" onclick="$('command').value='localproject';$('subcmd').name='lp_cmd';$('subcmd').value='lp_gamesysctl';postCmd('gamecmd','command.php');this.disabled=true;">
+	<!--{/if}--> 
+<!--{/if}--> 
