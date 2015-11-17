@@ -33,6 +33,7 @@ namespace itemmain
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
 		//p,ygo,fy 各类礼包
+		//RT item_urt 传送器道具
 		//ss song 歌词卡片
 		//T* trap 各类陷阱
 		//U item_misc
