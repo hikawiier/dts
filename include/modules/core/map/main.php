@@ -84,7 +84,7 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
-			$plsnum = sizeof($plsinfo) - 1;
+			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
 			{
@@ -140,7 +140,7 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			$plsnum = sizeof($plsinfo);
+			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
 			array_unshift($arealist,0);
@@ -175,7 +175,7 @@ namespace map
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';
 		}else{
-			if($areanum < count($plsinfo)) {
+			if($areanum < (count($plsinfo)-count($hidden_arealist))) {
 				$at= getdate($atime);
 				$nexthour = $at['hours'];$nextmin = $at['minutes'];
 				while($nextmin >= 60){
@@ -187,7 +187,7 @@ namespace map
 					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$i]].'&nbsp;';
 				}
 			}
-			if($areanum+$areaadd < count($plsinfo)) {
+			if($areanum+$areaadd < (count($plsinfo)-count($hidden_arealist))) {
 				$at2= getdate($atime + get_area_interval()*60);
 				$nexthour2 = $at2['hours'];$nextmin2 = $at2['minutes'];
 				while($nextmin2 >= 60){
@@ -199,7 +199,7 @@ namespace map
 					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$areaadd+$i]].'&nbsp;';
 				}
 			}
-			if($areanum+$areaadd*2 < count($plsinfo)) {
+			if($areanum+$areaadd*2 < (count($plsinfo)-count($hidden_arealist))) {
 				$at3= getdate($atime + get_area_interval()*120);
 				$nexthour3 = $at3['hours'];$nextmin3 = $at3['minutes'];
 				while($nextmin3 >= 60){

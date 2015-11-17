@@ -7,7 +7,7 @@ require './include/common.inc.php';
 $vcoor = Array('A','B','C','D','E','F','G','H','I','J');
 $hcoor = range(0,10);
 
-for($i=0;$i < count($plsinfo);$i++){
+for($i=0;$i < (count($plsinfo)-count($hidden_arealist));$i++){
 	if($hack || array_search($i,$arealist) > ($areanum + $areaadd)){
 		$plscolor[$i] = 'mapspanlime';
 	} elseif(array_search($i,$arealist) <= $areanum) {
