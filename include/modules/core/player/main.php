@@ -302,7 +302,8 @@ namespace player
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
-		if($areanum >= sizeof($plsinfo) - 1) return;//如果禁区数已达上限，跳过所有处理（gameover()函数会判定游戏结束）
+		if($areanum >= (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1) return;//如果禁区数已达上限，跳过所有处理（gameover()函数会判定游戏结束）
+		$arealist = array_diff($arealist,$hidden_arealist);
 		$now_areaarr = array_slice($arealist,0,$areanum+1);
 		$where = "('".implode("','",$now_areaarr)."')";//构建查询列表——当前所有禁区
 		$result = $db->query("SELECT * FROM {$tablepre}players WHERE pls IN $where AND hp>0");

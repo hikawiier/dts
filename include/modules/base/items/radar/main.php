@@ -22,7 +22,7 @@ namespace radar
 		
 		$npctplist = Array(90,2,5,6,7,11,14);
 		$tdheight = 20;
-		$screenheight = count($plsinfo)*$tdheight;
+		$screenheight = (count($plsinfo)-count($hidden_arealist))*$tdheight;
 		$result = $db->query("SELECT type,pls FROM {$tablepre}players WHERE hp>0");
 		while($cd = $db->fetch_array($result)) {
 			$chdata[] = $cd;
@@ -40,7 +40,7 @@ namespace radar
 			$radarscreen .= "<td class=b2><div class=nttx>{$typeinfo[$value]}</div></td>";
 		}
 		$radarscreen .= '</tr>';
-		for($i=0;$i<count($plsinfo);$i++) {
+		for($i=0;$i<(count($plsinfo)-count($hidden_arealist));$i++) {
 			$radarscreen .= "<tr><td class=b2 height={$tdheight}px><div class=nttx>{$plsinfo[$i]}</div></td>";
 			if((array_search($i,$arealist) > $areanum) || $hack) {
 				if($i==$pls) {

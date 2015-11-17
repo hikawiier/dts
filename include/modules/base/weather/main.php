@@ -115,11 +115,11 @@ namespace weather
 		eval(import_module('sys','map','player','logger'));
 		if($hack)
 		{
-			$pls = rand(0,sizeof($plsinfo)-1);
+			$pls = rand(0,(sizeof($plsinfo)-sizeof($hidden_arealist)));
 		}
 		else 
 		{
-			$pls = rand($areanum+1,sizeof($plsinfo)-1);$pls=$arealist[$pls];
+			$pls = rand($areanum+1,(sizeof($plsinfo)-sizeof($hidden_arealist)));$pls=$arealist[$pls];
 		}
 		$log .= "但是强烈的龙卷风把你吹到了<span class=\"yellow\">$plsinfo[$pls]</span>！<br>";
 	}

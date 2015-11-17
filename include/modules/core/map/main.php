@@ -38,6 +38,7 @@ namespace map
 	function get_safe_plslist($no_dangerous_zone = true){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map'));
+		$arealist = array_diff($arealist,$hidden_arealist);
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
@@ -61,7 +62,7 @@ namespace map
 	function check_addarea_gameover($atime){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
-		$plsnum = sizeof($plsinfo) - 1;
+		$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
 		if($areanum >= $plsnum) 
 		{
 			\sys\gameover($atime,'end1');
@@ -83,8 +84,9 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','map'));
+		$arealist = array_diff($arealist,$hidden_arealist);
 		if ( $gamestate > 10 && $now > $atime ) {
-			$plsnum = sizeof($plsinfo) - 1;
+			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
 			{
@@ -123,6 +125,7 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','map'));
+		$arealist = array_diff($arealist,$hidden_arealist);
 		$areaaddlist = array_slice($arealist,$areanum+1,$areaadd);
 		$areawarn = 1;
 		systemputchat($now,'areawarn',$areaaddlist);
@@ -135,12 +138,13 @@ namespace map
 		$chprocess($xmode);
 		
 		eval(import_module('sys','map'));
+		$arealist = array_diff($arealist,$hidden_arealist);
 		if ($xmode & 2) {
 			//echo " - 禁区初始化 - ";
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			$plsnum = sizeof($plsinfo);
+			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
 			array_unshift($arealist,0);
@@ -167,6 +171,7 @@ namespace map
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
+		$arealist = array_diff($arealist,$hidden_arealist);
 		$areadata='';
 		if(!$atime){
 			$atime = $areatime;
@@ -175,7 +180,7 @@ namespace map
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';
 		}else{
-			if($areanum < count($plsinfo)) {
+			if($areanum < (count($plsinfo)-count($hidden_arealist))) {
 				$at= getdate($atime);
 				$nexthour = $at['hours'];$nextmin = $at['minutes'];
 				while($nextmin >= 60){
@@ -187,7 +192,7 @@ namespace map
 					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$i]].'&nbsp;';
 				}
 			}
-			if($areanum+$areaadd < count($plsinfo)) {
+			if($areanum+$areaadd < (count($plsinfo)-count($hidden_arealist))) {
 				$at2= getdate($atime + get_area_interval()*60);
 				$nexthour2 = $at2['hours'];$nextmin2 = $at2['minutes'];
 				while($nextmin2 >= 60){
@@ -199,7 +204,7 @@ namespace map
 					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$areaadd+$i]].'&nbsp;';
 				}
 			}
-			if($areanum+$areaadd*2 < count($plsinfo)) {
+			if($areanum+$areaadd*2 < (count($plsinfo)-count($hidden_arealist))) {
 				$at3= getdate($atime + get_area_interval()*120);
 				$nexthour3 = $at3['hours'];$nextmin3 = $at3['minutes'];
 				while($nextmin3 >= 60){
