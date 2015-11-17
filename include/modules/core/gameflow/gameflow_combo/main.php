@@ -20,7 +20,12 @@ namespace gameflow_combo
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','gameflow_combo'));
 		if(!$time) $time = $now;
-		if($gamestate < 40 && $gamestate >= 30 && $alivenum <= $combolimit) {//判定进入连斗条件1：停止激活时玩家数少于特定值
+		if($gamestate <= 40 && $bancombo == 1){
+			if($gamestate == 40){
+				$gamestate = 20;
+				systemputchat($now,'bancombo');
+			}
+		}elseif($gamestate < 40 && $gamestate >= 30 && $alivenum <= $combolimit) {//判定进入连斗条件1：停止激活时玩家数少于特定值
 			$gamestate = 40;
 			addnews($time,'combo');
 			systemputchat($time,'combo');

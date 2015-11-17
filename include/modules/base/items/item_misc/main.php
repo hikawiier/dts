@@ -46,7 +46,7 @@ namespace item_misc
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','logger'));
+		eval(import_module('sys','player','logger','input','localproject'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
@@ -426,6 +426,11 @@ namespace item_misc
 					\sys\addnews ( 0, 'debuffself', $name);
 					\sys\addchat(6, "{$name}一边大口吃翔一边说道：“满场沙包，不足为惧。且看爷吃了这百斤翔，再来包你们爽！”");
 				}
+			}elseif($itm=='便携式控制中心子端'){
+				ob_clean();
+				include template(MOD_LOCALPROJECT_MOBGSC_CMD);
+				$cmd = ob_get_contents();
+				ob_clean();
 				return;
 			}
 		}
