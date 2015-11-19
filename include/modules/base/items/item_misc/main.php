@@ -428,7 +428,7 @@ namespace item_misc
 				}
 			}elseif($itm=='便携式控制中心子端'){
 				ob_clean();
-				include template(MOD_LOCALPROJECT_MOBGSC_CMD);
+				include template(MOD_GAMESYSCTL_MOBGSC_CMD);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
