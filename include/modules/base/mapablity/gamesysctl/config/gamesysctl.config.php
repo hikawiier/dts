@@ -1,8 +1,8 @@
 <?php
 
-namespace localproject
+namespace gamesysctl
 {
-	//特定地图提供的特殊功能位置
+	//gamesysctl - 特定地图提供的特殊功能位置
 	$extract_npc = Array(
 		0 => Array(
 			'type' => 88, //NPC种类

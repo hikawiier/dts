@@ -1,6 +1,6 @@
 <?php
 
-namespace localproject
+namespace gamesysctl
 {
 	function init()
 	{
@@ -8,34 +8,12 @@ namespace localproject
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','localproject','input','weather','npc','itemmain'));
-		
+		eval(import_module('sys','player','logger','gamesysctl','input','weather','npc','itemmain'));
 		/*==========无月之影特殊功能：gamesysctl菜单部分开始==========*/
-		if ($mode == 'command' && $command == 'localproject')	
-		{
-			$lp_name = substr($lp_cmd,3);
-			if($lp_cmd=="lp_gamesysctl" && ($localproject_map[$pls]==$lp_name || in_array($lp_name,$localproject_map[$pls])))
-			{
-				$check_gamesysctl_flag = 0;
-				$check_gamesysctl_flag = check_gamesysctl();
-				if($check_gamesysctl_flag){
-					ob_clean();
-					include template(MOD_LOCALPROJECT_LP_GAMESYSCTL);
-					$cmd = ob_get_contents();
-					ob_clean();
-					return;
-				}
-			}
-			else
-			{
-				$log.="该地图没有{$lp_name}功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
-			}
-			return;
-		}
 		if($mode == 'lp_gamesysctl')
 		{
 			//能力不够，废话来凑。
-			if($localproject_map[$pls]!=='gamesysctl' && !in_array('gamesysctl',$localproject_map[$pls]))
+			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctl功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
 				return;
@@ -53,7 +31,7 @@ namespace localproject
 			elseif($command=='changewth')
 			{
 				ob_clean();
-				include template(MOD_LOCALPROJECT_LP_GAMESYSCTL_CWTH);
+				include template(MOD_GAMESYSCTL_LP_GAMESYSCTL_CWTH);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
@@ -65,7 +43,7 @@ namespace localproject
 			elseif($command=='findthings')
 			{
 				ob_clean();
-				include template(MOD_LOCALPROJECT_LP_GAMESYSCTL_FIND);
+				include template(MOD_GAMESYSCTL_LP_GAMESYSCTL_FIND);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
@@ -86,7 +64,7 @@ namespace localproject
 		if($gamesysctl=='gamesysctl_changewth')
 		{
 			//废话again
-			if($localproject_map[$pls]!=='gamesysctl' && !in_array('gamesysctl',$localproject_map[$pls]))
+			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctlcwth功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
 				return;
@@ -109,7 +87,7 @@ namespace localproject
 		elseif($gamesysctl== 'gamesysctl_findthings')
 		{
 			//废话again
-			if($localproject_map[$pls]!=='gamesysctl' && !in_array('gamesysctl',$localproject_map[$pls]))
+			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctlcwth功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
 				return;
@@ -161,14 +139,13 @@ namespace localproject
 			}
 		}
 		/*==========无月之影特殊功能：gamesysctl菜单部分结束==========*/
-		
 		$chprocess();
 	}
 	/*==========无月之影特殊功能：gamesysctl功能部分开始==========*/
 	function gamesysctl_extractnpc()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','itemmain','logger','addnpc','npc','localproject'));
+		eval(import_module('sys','player','itemmain','logger','addnpc','npc','gamesysctl'));
 		
 		$enpc_num = sizeof($extract_npc);
 		if(!$enpc_num)
@@ -481,7 +458,7 @@ namespace localproject
 	function check_gamesysctl()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','itemmain'));		
+		eval(import_module('sys','player','logger','itemmain','gamesysctl'));		
 		$crm_lose_flag = false;
 		$have_corebar_flag = false;
 		$crmdata = cache_fetch_npcdata('红暮',1);
