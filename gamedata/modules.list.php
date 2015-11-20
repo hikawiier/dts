@@ -43,7 +43,7 @@ apm,base/apm/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
-remakegun,base/mapablity/remakegun/,1
+remakegun,base/mapability/remakegun/,1
 item_urg,base/items/item_urg/,1
 skill413,extra/card/skills/skill413/,1
 skill302,extra/achievement/skills/skill302/,1
@@ -429,7 +429,7 @@ ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
 skill43,extra/club/skills/skill43/,1
 itemnumlist,extra/misc/itemnumlist/,1
-localproject,base/mapablity/localproject/,1
+localproject,base/mapability/localproject/,1
 skill56,extra/club/skills/skill56/,1
 skill435,extra/card/skills/skill435/,1
 tutorial,extra/instance/instance7_tutorial/tutorial/,1
@@ -473,4 +473,4 @@ skill36,extra/club/skills/skill36/,1
 skill38,extra/club/skills/skill38/,1
 skill34,extra/club/skills/skill34/,1
 halloween2017,extra/activities/halloween2017/main/,0
-gamesysctl,base/mapablity/gamesysctl/,1
+gamesysctl,base/mapability/gamesysctl/,1
