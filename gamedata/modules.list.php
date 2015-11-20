@@ -43,7 +43,7 @@ song,base/items/song/,1
 skill23,extra/club/skills/skill23/,1
 skill220,extra/club/skills/skill220/,1
 item_urt,base/items/item_urt/,1
-remakegun,base/mapablity/remakegun/,1
+remakegun,base/mapability/remakegun/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -428,6 +428,6 @@ ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
 skill43,extra/club/skills/skill43/,1
 skill56,extra/club/skills/skill56/,1
-gamesysctl,base/mapablity/gamesysctl/,1
+gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
-localproject,base/mapablity/localproject/,1
+localproject,base/mapability/localproject/,1
