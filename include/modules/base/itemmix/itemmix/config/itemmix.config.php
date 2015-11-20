@@ -18,7 +18,7 @@ $mixinfo = array
 	array('class' => 'h', 'stuff' => array('曾经的荣光-橙黄','面包'),'result' => array('更改菜谱后的不甜酱包（无毒）','HB',300,8,'Z'),),
 	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',85,2,),),
 	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,2,),),
-	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PS',100,5,),),	
+	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),	
 	array('class' => 'h', 'stuff' => array('早苗面包','仙贝面包','海星面包','彩虹光芒的面包'),'result' => array('禁忌「Four of a Bread」','HB',444,4,'z'),),
 	array('class' => 'h', 'stuff' => array('寂寞','脸','杯子'),'result' => array('淡定红茶','HB',200,20,),),
 	array('class' => 'h', 'stuff' => array('凸眼鱼','面包','锅'),'result' => array('仰望星空派','HR',30,3,),),
