@@ -18,12 +18,7 @@ $mixinfo = array
 	array('class' => 'h', 'stuff' => array('曾经的荣光-橙黄','面包'),'result' => array('更改菜谱后的不甜酱包（无毒）','HB',300,8,'Z'),),
 	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',85,2,),),
 	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,2,),),
-	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PS',100,5,),),
-	array('class' => 'h', 'stuff' => array('早苗面包','仙贝面包','海星面包','彩虹光芒的面包'),'result' => array('禁忌「Four of a Bread」','HB',444,4,'z'),),
-	array('class' => 'h', 'stuff' => array('寂寞','脸','杯子'),'result' => array('淡定红茶','HB',200,20,),),
-	array('class' => 'h', 'stuff' => array('凸眼鱼','面包','锅'),'result' => array('仰望星空派','HR',30,3,),),
-	array('class' => 'h', 'stuff' => array('河豚鱼','氯化氢','大夭使的气息'),'result' => array('鲱鱼罐头','PR9',90,10,),),
-	array('class' => 'h', 'stuff' => array('矿泉水','杏仁豆腐','SCP-294的饮料'),'result' => array('【社系摧泪弹】','PB',3600,5,'zd'),),
+	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),
 	
 	
 	array('class' => 'wc', 'stuff' => array('汽油','空瓶'),'result' => array('☆火焰瓶☆','WC',80,50,'ud'),),	
@@ -82,8 +77,8 @@ $mixinfo = array
 	array('class' => 'wp', 'stuff' => array('《哲♂学》','小棍棒','增幅设备'),'result' => array('森之妖精的棍棒','WP',200,60,'re'),),
 	array('class' => 'wp', 'stuff' => array('『祝福宝石』','『心灵激光鞭』'),'result' => array('萨卡兰姆神圣棍棒','WP',150,140,'Nwcy'),),
 	array('class' => 'wp', 'stuff' => array('悲叹之种','萨卡兰姆神圣棍棒'),'result' => array('妖邪必败','WP',1540,200,'Nfcy'),),
-	array('class' => 'wp', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrf'),),
-	array('class' => 'hidden', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰钉棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrf'),),
+	array('class' => 'wp', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
+	array('class' => 'hidden', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰钉棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
 	
 	array('class' => 'wp', 'stuff' => array('『延展御柱』','驱云弹','弹幕符札'),'result' => array('御柱「Meteoric Onbashira」','WP',200,50,'Nir'),),
 	array('class' => 'wp', 'stuff' => array('手机','手枪子弹'),'result' => array('『诺基亚』','WP',50,9999,'N'),),
@@ -150,7 +145,7 @@ $mixinfo = array
 	array('class' => 'wd', 'stuff' => array('『祝福宝石』','★瓶装幽灵★','某种电子零件'),'result' => array('★幽灵冲击★','WD',320,200,'Nn'),),
 	array('class' => 'wd', 'stuff' => array('★幽灵冲击★','《魔女的魔导书》','笔记本电脑'),'result' => array('奥术飞弹','WD',400,300,'Nnr'),),
 	array('class' => 'wd', 'stuff' => array('寒冰炸弹','奥术飞弹','烈焰风暴'),'result' => array('★BIUBIUBIU★','WD',600,400,'ZnyNdr'),),
-	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','Znfdr'),),
+	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','ZnkNdr'),),
 
 	array('class' => 'd', 'stuff' => array('数据……碎片','电子马克笔','天然属性也是很可怕的！'),'result' => array('黑色夺魂曲','DB',57,77,'ZBb'),),
 	array('class' => 'd', 'stuff' => array('『午夜钟声』','『午夜钟声』','『午夜钟声』'),'result' => array('电子马克笔','DA',53,75,'Z'),),
