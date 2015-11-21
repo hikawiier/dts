@@ -171,9 +171,9 @@ namespace remakegun
 			$log.="<span class='red'>该地区不存在改造工作台，请重新输入指令。</span><br>";
 			return;
 		}
-		if(!is_numeric($i) || !$i || $i>6 || $i<0 || ${'itmk'.$i}!=='RG' || ${'itms'.$i}<=0)
+		if(!is_numeric($i) || !$i || $i>6 || $i<1 || ${'itmk'.$i}!=='RG' || ${'itms'.$i}<=0)
 		{
-			$log.="<span class='red'>要使用的枪械配件选择错误，请重新输入指令。{$i}</span><br>";
+			$log.="<span class='red'>要使用的枪械配件选择错误，请重新输入指令。</span><br>";
 			return;
 		}
 		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WGK')

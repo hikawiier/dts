@@ -44,6 +44,7 @@ corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
 remakegun,base/mapability/remakegun/,1
+itemdepot,base/mapability/itemdepot/,1
 item_urg,base/items/item_urg/,1
 skill413,extra/card/skills/skill413/,1
 skill302,extra/achievement/skills/skill302/,1
