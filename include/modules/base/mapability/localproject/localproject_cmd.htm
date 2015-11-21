@@ -3,7 +3,9 @@
 	该地区可使用的特殊功能：<br>
 	<!--{if $pls == 0}-->	
 		<input type="button" class="bigbutton" id="lp_gamesysctl" name="lp_gamesysctl" value="幻境系统控制台" onclick="$('command').value='localproject';$('subcmd').name='lp_cmd';$('subcmd').value='lp_gamesysctl';postCmd('gamecmd','command.php');this.disabled=true;">
+	<!--{elseif $pls == 19}-->	
+		<input type="button" class="bigbutton" id="lp_itemdepot" name="lp_itemdepot" value="道具存取查询台" onclick="$('command').value='localproject';$('subcmd').name='lp_cmd';$('subcmd').value='lp_itemdepot';postCmd('gamecmd','command.php');this.disabled=true;">
 	<!--{elseif $pls == 28}-->	
-		<input type="button" class="bigbutton" id="lp_gamesysctl" name="lp_gamesysctl" value="枪械改造工作台" onclick="$('command').value='localproject';$('subcmd').name='lp_cmd';$('subcmd').value='lp_remakegun';postCmd('gamecmd','command.php');this.disabled=true;">
+		<input type="button" class="bigbutton" id="lp_remakegun" name="lp_remakegun" value="枪械改造工作台" onclick="$('command').value='localproject';$('subcmd').name='lp_cmd';$('subcmd').value='lp_remakegun';postCmd('gamecmd','command.php');this.disabled=true;">
 	<!--{/if}--> 
 <!--{/if}--> 
