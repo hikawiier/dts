@@ -154,6 +154,7 @@ $mixinfo = array
 	array('class' => 'd', 'stuff' => array('探测器电池','实验装甲A'),'result' => array('电磁充能手套','DA',45,15,'E'),),
 	
 	array('class' => 'item', 'stuff' => array('杏仁豆腐的ID卡','■DeathNote■'),'result' => array('Untainted Glory','A',1,1,'ZHA'),),
+	array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('土制二踢脚（？）','EW',1,1,0),),
 	array('class' => 'item', 'stuff' => array('生命探测器','增幅设备'),'result' => array('广域生命探测器','ER',1,1,2),),
 	//array('class' => 'item', 'stuff' => array('☆自爆电池☆','☆★☆大打击☆★☆'),'result' => array('★捆绑式炸药★','Y',1,1,),), 
 	array('class' => 'item', 'stuff' => array('安雅人体冰雕','火把'),'result' => array('武器师安雅的奖赏','Y',1,1,),),

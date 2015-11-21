@@ -42,9 +42,6 @@ item_uee,base/items/item_uee/,1
 song,base/items/song/,1
 skill23,extra/club/skills/skill23/,1
 skill220,extra/club/skills/skill220/,1
-item_urt,base/items/item_urt/,1
-remakegun,base/mapability/remakegun/,1
-itemdepot,base/mapability/itemdepot/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -55,7 +52,6 @@ skill69,extra/club/skills/skill69/,1
 skill300,extra/achievement/skills/skill300/,1
 attrbase,extra/attr/attrbase/,1
 cooldown,base/cooldown/,1
-item_urg,base/items/item_urg/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1
@@ -429,6 +425,4 @@ ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
 skill43,extra/club/skills/skill43/,1
 skill56,extra/club/skills/skill56/,1
-gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
-localproject,base/mapability/localproject/,1

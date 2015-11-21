@@ -107,7 +107,7 @@ namespace remakegun
 					$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 5;			
 				}
 			}
-			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.9;}
+			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.85;}
 			elseif($wep_sk_rarity>25 && $wep_sk_rarity<=40){$wep_sk_rarity*=0.8;}
 			elseif($wep_sk_rarity>40 && $wep_sk_rarity<=55){$wep_sk_rarity*=0.75;}
 			elseif($wep_sk_rarity>55 && $wep_sk_rarity<=70){$wep_sk_rarity*=0.7;}
@@ -140,6 +140,7 @@ namespace remakegun
 				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，枪械的修复工作就<span class='red'>顺利完成</span>了！<br>而且经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>";
 				$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
 				$log.="<span class='yellow'>属性减少  -＞  <span class='red'>【{$itemspkinfo[$r_sk]}】</span></span><br><br>";
+				addnews($now,'repair_succ',$name,$itemspkinfo[$r_sk],$wep);
 			}
 			else
 			{
@@ -148,6 +149,7 @@ namespace remakegun
 				$log.="虽然你尽可能让自己小心的操作，但还是出现了操作上的失误。<br>这样看来，枪械的修复工作<span class='red'>彻底失败</span>了。<br>但是，经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>希望下次能够成功吧……<br>";
 				$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
 				$log.="<span class='yellow'>效果降低  -＞  <span class='red'>【{$down_effect}】</span></span><br><br>";
+				addnews($now,'repair_fail',$name,$itemspkinfo[$r_sk],$wep);
 			}
 			\itemmain\itms_reduce($rub);
 		}
@@ -206,12 +208,12 @@ namespace remakegun
 			{
 				if((in_array($rg_skinfo,$merge_sk))&&($merge_flag))
 				{
-					$merge_effect += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 5;
+					$merge_effect += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 					unset($rg_sk[$rg_skey]);
 				}
 				else
 				{
-					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 5;
+					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 				}
 			}			
 		}
@@ -220,7 +222,7 @@ namespace remakegun
 			$wep_sk_rarity = 0;
 			foreach($wep_sk as $wep_skey => $wep_skinfo)
 			{
-				$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 5;
+				$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 1;
 			}
 			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.9;}
 			elseif($wep_sk_rarity>25 && $wep_sk_rarity<=40){$wep_sk_rarity*=0.8;}
@@ -262,6 +264,7 @@ namespace remakegun
 				}
 				$log.="<br><br>";
 			}
+			addnews($now,'remake_succ',$name,$rgi['itm'],$wep);
 		}
 		else
 		{
@@ -289,6 +292,7 @@ namespace remakegun
 			$itme0=1;
 			$itms0=1;
 			\itemmain\itemget();
+			addnews($now,'remake_fail',$name,$rgi['itm'],$wep);
 		}
 		\itemmain\itms_reduce($rgi);
 	}
@@ -344,12 +348,12 @@ namespace remakegun
 			{
 				if((in_array($rg_skinfo,$merge_sk))&&($merge_flag))
 				{
-					$merge_effect += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 5;
+					$merge_effect += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 					unset($rg_sk[$rg_skey]);
 				}
 				else
 				{
-					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 5;
+					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 				}
 			}			
 		}
@@ -359,10 +363,10 @@ namespace remakegun
 			$wep_sk_rarity = 0;
 			foreach($wep_sk as $wep_skey => $wep_skinfo)
 			{
-				$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 5;
+				$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 1;
 			}
 
-			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.9;}
+			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.85;}
 			elseif($wep_sk_rarity>25 && $wep_sk_rarity<=40){$wep_sk_rarity*=0.8;}
 			elseif($wep_sk_rarity>40 && $wep_sk_rarity<=55){$wep_sk_rarity*=0.75;}
 			elseif($wep_sk_rarity>55 && $wep_sk_rarity<=70){$wep_sk_rarity*=0.7;}
@@ -399,6 +403,21 @@ namespace remakegun
 		ob_clean();
 		return;
 	}
+	function parse_news($news, $hour, $min, $sec, $a, $b, $c, $d, $e)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player'));
+		if($news == 'remake_succ') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用{$b}改造了<span class='yellow'>{$c}</span>，真是可恶的欧洲人！</span><br>\n";
+		if($news == 'remake_fail') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用{$b}对<span class='yellow'>{$c}</span>进行改造……但是很残念的失败了……</span><br>\n";
+		if($news == 'repair_succ') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功去除了<span class='yellow'>{$c}</span>上的【{$b}】属性，真是可恶的欧洲人！</span><br>\n";
+		if($news == 'repair_fail') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用去除<span class='yellow'>{$c}</span>上的【{$b}】属性……但是很残念的失败了……</span><br>\n";
+		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
+	}
+	/*==========Fargo前基地特殊功能：remakegun功能部分结束==========*/
 }
 
 ?>

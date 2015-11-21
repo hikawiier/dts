@@ -499,7 +499,7 @@ namespace gamesysctl
 	function parse_news($news, $hour, $min, $sec, $a, $b, $c, $d, $e)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','weather'));
+		eval(import_module('sys','player'));
 		if($news == 'gsc_cwth') 
 			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，将天气变成了{$wthinfo[$b]}！</span><br>\n";
 		if($news == 'gsc_hack') 
