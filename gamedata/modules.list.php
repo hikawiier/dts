@@ -18,8 +18,6 @@ lvlctl,base/lvlctl/,1
 gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,base/mapability/localproject/,1
-item_urt,base/items/item_urt/,0
-item_urg,base/items/item_urg/,0
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -364,6 +362,7 @@ skill254,extra/club/skills/skill254/,1
 song,base/items/song/,1
 itemdepot,base/mapability/itemdepot/,1
 remakegun,base/mapability/remakegun/,1
+item_urt,base/items/item_urt/,1
 instance9,extra/instance/instance9_rush/,1
 skill37,extra/club/skills/skill37/,1
 skill73,extra/club/skills/skill73/,1
@@ -415,6 +414,7 @@ gtype2,extra/instance/gtype2/main/,1
 gtype3,extra/instance/gtype3/main/,1
 skill270,extra/club/skills/skill270/,1
 cooldown,base/cooldown/,1
+item_urg,base/items/item_urg/,1
 item_misc,base/items/item_misc/,1
 skill458,extra/card/skills/skill458/,1
 skill498,extra/card/skills/skill498/,1
