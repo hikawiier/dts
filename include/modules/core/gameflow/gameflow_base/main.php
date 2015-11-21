@@ -51,7 +51,7 @@ namespace gameflow_base
 	function checkendgame(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys')); 
-		if($gamestate >= 40) {
+		if($gamestate >= 40 || $gamestate == 21) {
 			//队伍胜利模式游戏结束判断
 			if (in_array($gametype,$teamwin_mode))
 			{
