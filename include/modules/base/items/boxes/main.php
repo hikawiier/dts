@@ -10,7 +10,7 @@ namespace boxes
 		$iteminfo['fy'] = '全图唯一的野生浮云礼盒';
 		$iteminfo['kj3'] = '礼包';
 		$iteminfo['GA'] = '弹药箱';
-		$iteminfo['GB'] = '军火箱';
+		$iteminfo['GC'] = '军火箱';
 	}
 
 	function itemuse(&$theitem) 
@@ -85,7 +85,7 @@ namespace boxes
 			\itemmain\itms_reduce($theitem);
 			\itemmain\itemget();	
 			return;
-		} elseif(strpos ( $itmk, 'GB' ) === 0){
+		} elseif(strpos ( $itmk, 'GC' ) === 0){
 			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
 			$file = __DIR__.'/config/ugcbox.config.php';
 			$plist1 = openfile($file);
