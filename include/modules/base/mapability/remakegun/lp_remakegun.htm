@@ -30,11 +30,12 @@
 <span class="grey">选择一种你拥有的<span class="yellow">枪械部件</span>，可以对手中的<span class="yellow">远程武器/重型枪械/枪刃/重炮</span>进行改造。<br>提交后将会得知<span class="yellow">改造的成功率</span>，并获得一次确认的机会。<br>改造失败会使枪械<span class="red">下降一定的效果</span>，并有极低（1%~5%）的概率使枪械获得<span class="red">一发</span>属性。</span><br>
 <input type="radio" name="command" id="repair_gun" value="repair_gun"><a onclick=sl('repair_gun'); href="javascript:void(0);" onmouseover="status=' ';return true;">【修复枪械】</a>
 <a onclick=sl('repair_gun');><select name="sk_num">
+<option value="addwepe">增加武器效果<br>
 <!--{loop $wep_skind $n $wgsk}-->
 <option value="$n">$itemspkinfo[$wgsk]<br>
 <!--{/loop}-->
 </select></a>
 <br>
-<span class="grey">当你装备<span class="yellow">远程武器/重型枪械/枪刃/重炮</span>的情况下，选择一种武器上存在的<span class="yellow">属性</span>，可以通过消耗<span class="yellow">一堆废铁（不增加成功率）/某种机械设备（增加18%成功率）/非法枪械部件（增加23%成功率）</span>中任意一种道具，将该属性从武器上<span class="yellow">抹除</span>。<br>提交后将<span class="red">直接开始修复作业，无法得知成功率，也没有重新确认的机会。</span>请慎重选择。<br>修复失败会导致武器<span class='red'>下降大量效果</span>，除此之外没有别的损失。</span><br>
+<span class="grey">当你装备<span class="yellow">远程武器/重型枪械/枪刃/重炮</span>的情况下，选择一种武器上存在的<span class="yellow">属性</span>或是选择<span class="yellow">增加武器效果</span>，可以通过消耗<span class="yellow">一堆废铁（不增加成功率/等同于其效果）/某种机械设备（增加18%成功率/增加35效果）/非法枪械部件（增加23%成功率/增加45效果）</span>中任意一种道具，将该属性从武器上<span class="yellow">抹除</span>或是使武器效果增加<span class="yellow">等同于部件效果</span>的数值。<br>提交后将<span class="red">直接开始修复作业，无法得知成功率，也没有重新确认的机会。</span>请慎重选择。<br>修复失败会导致武器<span class='red'>下降大量效果</span>，除此之外没有别的损失。</span><br>
 <br><br>
 <input type="button" class="cmdbutton" name="submit" id="提交操作" value="提交操作" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

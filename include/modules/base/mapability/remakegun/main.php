@@ -26,7 +26,7 @@ namespace remakegun
 				{
 					$wep_skind = $wepsk ? str_split($wepsk) : Array();
 				}
-				$wg_sk = $wep_skind[$sk_num];
+				$wg_sk = $sk_num=='addwepe' ? 'addwepe' : $wep_skind[$sk_num];
 				repair_gun($wg_sk);				
 			}
 			else
@@ -71,7 +71,7 @@ namespace remakegun
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;
 		}
-		if(strpos($wepsk,$r_sk)===false)
+		if(strpos($wepsk,$r_sk)===false && $r_sk!=='addwepe')
 		{
 			$log.="<span class='red'>你的武器上没有该属性，请重新选择！</span><br>";
 			return;
@@ -104,7 +104,7 @@ namespace remakegun
 				}
 				else
 				{
-					$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 5;			
+					$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 1;			
 				}
 			}
 			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.85;}
@@ -115,41 +115,72 @@ namespace remakegun
 			$wepsk_rarity_obbs = $wep_sk_rarity;
 			//基础成功率
 			$base_repairsucc_obbs = 0;
-			if($wg<=100){$base_repairsucc_obbs = $wg*0.25;}
-			elseif($wg>100 && $wg<=200){$base_repairsucc_obbs = 25+(($wg-100)*0.2);}	
-			elseif($wg>200 && $wg<=400){$base_repairsucc_obbs = 45+(($wg-200)*0.14);}
-			else{$base_repairsucc_obbs = 73+(($wg-400)*0.1);}
+			if($wg<=100){$base_repairsucc_obbs = $wg*0.28;}
+			elseif($wg>100 && $wg<=200){$base_repairsucc_obbs = 28+(($wg-100)*0.22);}	
+			elseif($wg>200 && $wg<=300){$base_repairsucc_obbs = 50+(($wg-200)*0.18);}
+			elseif($wg>300 && $wg<=400){$base_repairsucc_obbs = 68+(($wg-300)*0.14);}
+			else{$base_repairsucc_obbs = 82+(($wg-400)*0.1);}
 			$base_repairsucc_obbs = min(99,$base_repairsucc_obbs);	
-			//零件增益
-			if($rub['itm']=='某种机械设备'){$rubbish_add_obbs=18;}
-			elseif($rub['itm']=='非法枪械部件'){$rubbish_add_obbs=23;}
-			else{$rubbish_add_obbs=0;}
-			//要摘除属性的稀有度，一发和多重为特判的50
-			$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
-			//最终概率
-			$final_repairsucc_obbs = round($base_repairsucc_obbs + $rubbish_add_obbs - $repairsk_reduce_obbs - $wepsk_rarity_obbs);
-			$final_repairsucc_obbs = max(1,$final_repairsucc_obbs);
-			//$log.="开始计算：<br>打算去除的属性：{$r_sk}<br>去除失败会扣除效果：{$down_effect}<br>基础成功率{$base_repairsucc_obbs}%<br>零件增效{$rubbish_add_obbs}%<br>要抹去属性的稀有度{$repairsk_reduce_obbs}%<br>除它之外的武器属性稀有度之合{$wepsk_rarity_obbs}%<br>最终成功率{$final_repairsucc_obbs}%<br>";
-			if($final_repairsucc_obbs<=25){$final_obbs_word="<span class='red'>{$final_repairsucc_obbs}%</span><br>";}
-			elseif($final_repairsucc_obbs>25 && $final_repairsucc_obbs<=50){$final_obbs_word="<span class='yellow'>{$final_repairsucc_obbs}%</span>";}
-			elseif($final_repairsucc_obbs>50 && $final_repairsucc_obbs<=75){$final_obbs_word="<span class='clan'>{$final_repairsucc_obbs}%</span>";}
-			else{$final_obbs_word="<span class='lime'>{$final_repairsucc_obbs}%</span>";}
-			if(rand(1,100)<=$final_repairsucc_obbs)
+			
+			if($r_sk=='addwepe')
 			{
-				$wepsk = str_replace($r_sk,'',$wepsk);	
-				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，枪械的修复工作就<span class='red'>顺利完成</span>了！<br>而且经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>";
-				$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
-				$log.="<span class='yellow'>属性减少  -＞  <span class='red'>【{$itemspkinfo[$r_sk]}】</span></span><br><br>";
-				addnews($now,'repair_succ',$name,$itemspkinfo[$r_sk],$wep);
+				if($rub['itm']=='某种机械设备'){$rub_add_wepe=35;}
+				elseif($rub['itm']=='非法枪械部件'){$rub_add_wepe=45;}
+				else{$rub_add_wepe=$rub['itme'];}
+				$add_wepe = $rub_add_wepe;
+				$final_repairsucc_obbs = round($base_repairsucc_obbs  - $wepsk_rarity_obbs);
+				$final_repairsucc_obbs = max(1,$final_repairsucc_obbs);
+				if($final_repairsucc_obbs<=25){$final_obbs_word="<span class='red'>{$final_repairsucc_obbs}%</span>";}
+				elseif($final_repairsucc_obbs>25 && $final_repairsucc_obbs<=50){$final_obbs_word="<span class='yellow'>{$final_repairsucc_obbs}%</span>";}
+				elseif($final_repairsucc_obbs>50 && $final_repairsucc_obbs<=75){$final_obbs_word="<span class='clan'>{$final_repairsucc_obbs}%</span>";}
+				else{$final_obbs_word="<span class='lime'>{$final_repairsucc_obbs}%</span>";}
+				if(rand(1,100)<=$final_repairsucc_obbs)
+				{
+					$wepe += $add_wepe;
+					$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，枪械的修复工作就<span class='red'>顺利完成</span>了！<br>而且经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>";
+					$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
+					$log.="<span class='yellow'>效果增加  -＞  <span class='red'>【{$add_wepe}】</span></span><br><br>";
+					addnews($now,'repairadd_succ',$name,$add_wepe,$wep);
+				}
+				else
+				{
+					$log.="虽然你尽可能让自己小心的操作，但还是出现了操作上的失误。<br>这样看来，枪械的修复工作<span class='red'>彻底失败</span>了。<br>但是，经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>希望下次能够成功吧……<br>";
+					addnews($now,'repairadd_fail',$name,$wep);
+				}
 			}
 			else
 			{
-				$down_effect = round(($wep_sk_rarity+$repairsk_reduce_obbs) * ($wepe/200));
-				$wepe -= $down_effect;
-				$log.="虽然你尽可能让自己小心的操作，但还是出现了操作上的失误。<br>这样看来，枪械的修复工作<span class='red'>彻底失败</span>了。<br>但是，经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>希望下次能够成功吧……<br>";
-				$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
-				$log.="<span class='yellow'>效果降低  -＞  <span class='red'>【{$down_effect}】</span></span><br><br>";
-				addnews($now,'repair_fail',$name,$itemspkinfo[$r_sk],$wep);
+				//零件增益
+				if($rub['itm']=='某种机械设备'){$rubbish_add_obbs=18;}
+				elseif($rub['itm']=='非法枪械部件'){$rubbish_add_obbs=23;}
+				else{$rubbish_add_obbs=0;}
+				//要摘除属性的稀有度，一发和多重为特判的50
+				$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
+				//最终概率
+				$final_repairsucc_obbs = round($base_repairsucc_obbs + $rubbish_add_obbs - $repairsk_reduce_obbs - $wepsk_rarity_obbs);
+				$final_repairsucc_obbs = max(1,$final_repairsucc_obbs);
+				//$log.="开始计算：<br>打算去除的属性：{$r_sk}<br>去除失败会扣除效果：{$down_effect}<br>基础成功率{$base_repairsucc_obbs}%<br>零件增效{$rubbish_add_obbs}%<br>要抹去属性的稀有度{$repairsk_reduce_obbs}%<br>除它之外的武器属性稀有度之合{$wepsk_rarity_obbs}%<br>最终成功率{$final_repairsucc_obbs}%<br>";
+				if($final_repairsucc_obbs<=25){$final_obbs_word="<span class='red'>{$final_repairsucc_obbs}%</span>";}
+				elseif($final_repairsucc_obbs>25 && $final_repairsucc_obbs<=50){$final_obbs_word="<span class='yellow'>{$final_repairsucc_obbs}%</span>";}
+				elseif($final_repairsucc_obbs>50 && $final_repairsucc_obbs<=75){$final_obbs_word="<span class='clan'>{$final_repairsucc_obbs}%</span>";}
+				else{$final_obbs_word="<span class='lime'>{$final_repairsucc_obbs}%</span>";}
+				if(rand(1,100)<=$final_repairsucc_obbs)
+				{
+					$wepsk = str_replace($r_sk,'',$wepsk);	
+					$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，枪械的修复工作就<span class='red'>顺利完成</span>了！<br>而且经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>";
+					$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
+					$log.="<span class='yellow'>属性减少  -＞  <span class='red'>【{$itemspkinfo[$r_sk]}】</span></span><br><br>";
+					addnews($now,'repair_succ',$name,$itemspkinfo[$r_sk],$wep);
+				}
+				else
+				{
+					$down_effect = round(($wep_sk_rarity+$repairsk_reduce_obbs) * ($wepe/200));
+					$wepe -= $down_effect;
+					$log.="虽然你尽可能让自己小心的操作，但还是出现了操作上的失误。<br>这样看来，枪械的修复工作<span class='red'>彻底失败</span>了。<br>但是，经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>希望下次能够成功吧……<br>";
+					$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
+					$log.="<span class='yellow'>效果降低  -＞  <span class='red'>【{$down_effect}】</span></span><br><br>";
+					addnews($now,'repair_fail',$name,$itemspkinfo[$r_sk],$wep);
+				}
 			}
 			\itemmain\itms_reduce($rub);
 		}
@@ -215,7 +246,12 @@ namespace remakegun
 				{
 					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 				}
-			}			
+			}
+			if($rg_sk_rarity<=25){$rg_sk_rarity*=0.75;}
+			elseif($rg_sk_rarity>25 && $rg_sk_rarity<=40){$rg_sk_rarity*=0.8;}	
+			elseif($rg_sk_rarity>40 && $rg_sk_rarity<=55){$rg_sk_rarity*=0.85;}
+			elseif($rg_sk_rarity>55 && $rg_sk_rarity<=70){$rg_sk_rarity*=0.9;}
+			else{$rg_sk_rarity*=1;}			
 		}
 		if($wep_sk_num)
 		{
@@ -224,7 +260,7 @@ namespace remakegun
 			{
 				$wep_sk_rarity += in_array($wep_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$wep_skinfo] : 1;
 			}
-			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.9;}
+			if($wep_sk_rarity<=25){$wep_sk_rarity*=0.85;}
 			elseif($wep_sk_rarity>25 && $wep_sk_rarity<=40){$wep_sk_rarity*=0.8;}
 			elseif($wep_sk_rarity>40 && $wep_sk_rarity<=55){$wep_sk_rarity*=0.75;}
 			elseif($wep_sk_rarity>55 && $wep_sk_rarity<=70){$wep_sk_rarity*=0.7;}
@@ -232,10 +268,11 @@ namespace remakegun
 		}
 		$changesucc_obbs_max = $r_way=='r_local' ? 99 : 75;		
 		$base_changesucc_obbs = 0;
-		if($wg<=100){$base_changesucc_obbs = $wg*0.25;}
-		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 25+(($wg-100)*0.2);}	
-		elseif($wg>200 && $wg<=400){$base_changesucc_obbs = 45+(($wg-200)*0.14);}
-		else{$base_changesucc_obbs = 73+(($wg-400)*0.1);}
+		if($wg<=100){$base_changesucc_obbs = $wg*0.28;}
+		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 28+(($wg-100)*0.22);}	
+		elseif($wg>200 && $wg<=300){$base_changesucc_obbs = 50+(($wg-200)*0.18);}
+		elseif($wg>300 && $wg<=400){$base_changesucc_obbs = 68+(($wg-300)*0.14);}
+		else{$base_changesucc_obbs = 82+(($wg-400)*0.1);}
 		$base_changesucc_obbs = min($changesucc_obbs_max,$base_changesucc_obbs);		
 		$r_effect_obbs = ($r_itme+$merge_effect)/25; 
 		$r_skrarity_obbs = $rg_sk_rarity;
@@ -269,7 +306,7 @@ namespace remakegun
 		else
 		{
 			$log.="虽然你尽可能让自己小心的操作，但还是由于一个小失误弄坏了精密的配件。<br>这样看来，枪械改造的工作<span class='red'>彻底失败</span>了。<br>虽然如此，你还是把枪械部件的残骸收了起来。<br>";
-			$basic_down_effect = round($rg_sk_rarity) + $rgi['itme'];
+			$basic_down_effect = round($rg_sk_rarity)+rand(1,5);
 			$down_effect = $wepe-$basic_down_effect<=0 ? $wepe-1 : $basic_down_effect;
 			$wepe -= $down_effect;
 			if((rand(1,100)<=round($rg_sk_rarity/10)) && strpos($wepsk,'o')===false)
@@ -289,8 +326,9 @@ namespace remakegun
 			}
 			$itm0='一堆废铁';
 			$itmk0='X';
-			$itme0=1;
+			$itme0=round($rg_sk_rarity)+$rgi['itme'];
 			$itms0=1;
+			$itmsk0='';
 			\itemmain\itemget();
 			addnews($now,'remake_fail',$name,$rgi['itm'],$wep);
 		}
@@ -355,7 +393,12 @@ namespace remakegun
 				{
 					$rg_sk_rarity += in_array($rg_skinfo,array_keys($sk_rarity)) ? $sk_rarity[$rg_skinfo] : 1;
 				}
-			}			
+			}
+			if($rg_sk_rarity<=25){$rg_sk_rarity*=0.75;}//受部件非重复属性稀有度影响的成功率
+			elseif($rg_sk_rarity>25 && $rg_sk_rarity<=40){$rg_sk_rarity*=0.8;}	
+			elseif($rg_sk_rarity>40 && $rg_sk_rarity<=55){$rg_sk_rarity*=0.85;}
+			elseif($rg_sk_rarity>55 && $rg_sk_rarity<=70){$rg_sk_rarity*=0.9;}
+			else{$rg_sk_rarity*=1;}
 		}
 		if($wep_sk_num)
 		{
@@ -377,10 +420,11 @@ namespace remakegun
 		$changesucc_obbs_max = $r_way=='r_local' ? 99 : 75;//成功率上限
 		
 		$base_changesucc_obbs = 0;
-		if($wg<=100){$base_changesucc_obbs = $wg*0.25;}//受射系熟练影响的基础成功率
-		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 25+(($wg-100)*0.2);}	
-		elseif($wg>200 && $wg<=400){$base_changesucc_obbs = 45+(($wg-200)*0.14);}
-		else{$base_changesucc_obbs = 73+(($wg-400)*0.1);}
+		if($wg<=100){$base_changesucc_obbs = $wg*0.28;}//受射系熟练影响的基础成功率
+		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 28+(($wg-100)*0.22);}	
+		elseif($wg>200 && $wg<=300){$base_changesucc_obbs = 50+(($wg-200)*0.18);}
+		elseif($wg>300 && $wg<=400){$base_changesucc_obbs = 68+(($wg-300)*0.14);}
+		else{$base_changesucc_obbs = 82+(($wg-400)*0.1);}
 		$base_changesucc_obbs = min($changesucc_obbs_max,$base_changesucc_obbs);		
 
 		$r_effect_obbs = ($r_itme+$merge_effect)/25; //受部件效果影响的成功率
@@ -415,6 +459,10 @@ namespace remakegun
 			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功去除了<span class='yellow'>{$c}</span>上的【{$b}】属性，真是可恶的欧洲人！</span><br>\n";
 		if($news == 'repair_fail') 
 			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用去除<span class='yellow'>{$c}</span>上的【{$b}】属性……但是很残念的失败了……</span><br>\n";
+		if($news == 'repairadd_succ') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功修复了武器<span class='yellow'>{$c}</span>，并使其效果增加了{$b}点，真是可恶的欧洲人！</span><br>\n";
+		if($news == 'repairadd_fail') 
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图修复武器<span class='yellow'>{$b}</span>……但是很残念的失败了……</span><br>\n";
 		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========Fargo前基地特殊功能：remakegun功能部分结束==========*/
