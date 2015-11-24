@@ -19,7 +19,7 @@ namespace addnpc
 		return $ret;
 	}
 		
-	function addnpc($xtype,$xsub,$num,$time = 0) 
+	function addnpc($xtype,$xsub,$num,$time = 0,$xpls = 0) 
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger','addnpc','lvlctl','skillbase'));
