@@ -106,6 +106,7 @@ namespace itemmain
 		//| 特殊分隔符
 		//^001 itemmix_sync 同调（标记是同调产物）
 		//^002 itemmix_sync 变星
+		//^kagari001 ammunition 枪械扩容
 	);
 	
 	$itemspkdesc = array(
