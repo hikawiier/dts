@@ -329,10 +329,10 @@ namespace remakegun
 			$itme0=round($rg_sk_rarity)+$rgi['itme'];
 			$itms0=1;
 			$itmsk0='';
-			\itemmain\itemget();
 			addnews($now,'remake_fail',$name,$rgi['itm'],$wep);
 		}
 		\itemmain\itms_reduce($rgi);
+		\itemmain\itemget();
 	}
 	function remake_gun($r_way,$i)
 	{

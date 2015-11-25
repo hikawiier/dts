@@ -17,6 +17,7 @@ namespace remakegun
 		'I' => 4,
 		'U' => 4,
 		'W' => 4,
+		'R' => 5,
 		'q' => 4,
 		'e' => 6,
 		'i' => 6,

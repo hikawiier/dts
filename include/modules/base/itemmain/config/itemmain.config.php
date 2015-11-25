@@ -86,6 +86,7 @@ namespace itemmain
 		//Q ///////////////////////////
 		//q ex_dmg_def 防毒
 		//R ex_rapid_def 防连
+		//R ammunition 枪械扩容
 		//r ex_rapid_attr 连击		
 		//S ex_attr_silencer 消音
 		//s itemmix_sync 调整（同调合成必需）
