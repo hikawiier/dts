@@ -127,6 +127,7 @@ namespace changetrap
 				$itme0 = ($citm['itms']>5 || $citm['itms']=='∞') ? round($citm['itme']*5) : round($citm['itme']*$citm['itms']);
 				$itms0 = 1;
 				$itmsk0 = '';
+				addnews($now,'ct_succ',$name,$citm['itm'],'爆炸物','陷阱');
 			}
 			else
 			{
@@ -146,7 +147,6 @@ namespace changetrap
 					\player\player_save($sdata);
 					\player\load_playerdata($sdata);
 				}
-				\addnews($now,'ct_succ',$name,$citm['itm'],'爆炸物','陷阱');
 			}
 			if($citm['itms']=='∞')
 			{
@@ -170,9 +170,9 @@ namespace changetrap
 		if($news == 'death98') 
 			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造易爆物品时失误被炸死，实在是喜大普奔！{$e0}";
 		if($news == 'ct_succ') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功将<span class='yellow'>{$c}{$b}</span>改造成了<span class='yellow'>{$d}</span>……细作吃矛！</span><br>\n";
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功将<span class='yellow'>{$c}【{$b}】</span>改造成了<span class='yellow'>{$d}</span>……细作吃矛！</span><br>\n";
 		if($news == 'ct_fail') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图将<span class='yellow'>{$c}{$b}</span>改造成<span class='yellow'>{$d}</span>……但是失败了，还因此受到了<span class='red'>【{$e}】</span>点伤害！</span><br>\n";
+			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图将<span class='yellow'>{$c}【{$b}】</span>改造成<span class='yellow'>{$d}</span>……但是失败了，还因此受到了<span class='red'>【{$e}】</span>点伤害！</span><br>\n";
 		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========Fargo前基地特殊功能：remakegun功能部分结束==========*/
