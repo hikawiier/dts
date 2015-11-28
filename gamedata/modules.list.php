@@ -45,6 +45,7 @@ skill220,extra/club/skills/skill220/,1
 itemdepot,base/mapability/itemdepot/,1
 remakegun,base/mapability/remakegun/,1
 item_urt,base/items/item_urt/,1
+changetrap,base/mapability/changetrap/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1

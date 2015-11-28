@@ -8,7 +8,7 @@ namespace localproject
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','itemmain','localproject','gamesysctl','remakegun','itemdepot','input'));
+		eval(import_module('sys','player','logger','itemmain','localproject','gamesysctl','remakegun','itemdepot','changetrap','input'));
 		if ($mode == 'command' && $command == 'localproject')	
 		{
 			//判断该地区是否有该功能
@@ -49,6 +49,16 @@ namespace localproject
 				//F前：remakegun
 				ob_clean();
 				include template(MOD_REMAKEGUN_LP_REMAKEGUN);
+				$cmd = ob_get_contents();
+				ob_clean();
+				return;
+			}
+			elseif($lp_cmd=='lp_changetrap')
+			{
+				//和田：changetrap
+				$change_fail_obbs = round(100-($wd*0.35));
+				ob_clean();
+				include template(MOD_CHANGETRAP_LP_CHANGETRAP);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
