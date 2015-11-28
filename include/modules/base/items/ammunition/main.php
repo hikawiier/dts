@@ -86,7 +86,8 @@ namespace ammunition
 		}
 
 		if(strpos($wepsk,'R')!==false){
-			$bulletnum += 12;
+			$bulletnum *= 2;
+			$bulletnum += 20;
 		}
 		if ($weps == $nosta) {
 			$weps = 0;

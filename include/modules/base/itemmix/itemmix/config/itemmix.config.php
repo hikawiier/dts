@@ -16,8 +16,8 @@ $mixinfo = array
 	array('class' => 'h', 'stuff' => array('治疗针','体力回复药','蒸馏水'),'result' => array('特级恢复药','HB',240,3,),),	
 	array('class' => 'h', 'stuff' => array('甜生姜','地雷酥糖'),'result' => array('曾经的荣光-橙黄','HB',50,1,),),
 	array('class' => 'h', 'stuff' => array('曾经的荣光-橙黄','面包'),'result' => array('更改菜谱后的不甜酱包（无毒）','HB',300,8,'Z'),),
-	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',85,2,),),
-	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,2,),),
+	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',95,4,),),
+	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,4,),),
 	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),
 	
 	
@@ -191,7 +191,7 @@ $mixinfo = array
 	array('class' => 'key', 'stuff' => array('生命之源','黑色雏菊','白色雏菊'),'result' => array('红色的丝带','WK',1200,1,'N'),),
 	array('class' => 'key', 'stuff' => array('红色的丝带','红色的丝带','生命之源'),'result' => array('【KEY系燃烧弹】','WF',4800,2,'Nuzy'),),
 	array('class' => 'key', 'stuff' => array('生命之源','对魔物用卵石'),'result' => array('舍身成就之羁绊','WCF',233,20,'Z'),),
-	array('class' => 'key', 'stuff' => array('生命之源','二重战斗匕首'),'result' => array('微小日常之爱恋','WKG',233,20,'Z'),),
+	array('class' => 'key', 'stuff' => array('生命之源','二重战斗匕首'),'result' => array('微小日常之爱恋','WGK',233,20,'Z'),),
 	array('class' => 'key', 'stuff' => array('生命之源','巨大路灯柱'),'result' => array('无尽散花之涅磐','WKP',233,20,'Z'),),
 	array('class' => 'key', 'stuff' => array('生命之源','黑魔法-权利'),'result' => array('无法推卸的命运','WDG',233,20,'Z'),),
 	array('class' => 'key', 'stuff' => array('生命之源','『9mm鲁格枪』'),'result' => array('破灭未来的残光','WKF',233,20,'Z'),),
