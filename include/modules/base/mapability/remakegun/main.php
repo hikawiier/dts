@@ -332,7 +332,10 @@ namespace remakegun
 			addnews($now,'remake_fail',$name,$rgi['itm'],$wep);
 		}
 		\itemmain\itms_reduce($rgi);
-		\itemmain\itemget();
+		if($itms0)
+		{
+			\itemmain\itemget();	
+		}
 	}
 	function remake_gun($r_way,$i)
 	{

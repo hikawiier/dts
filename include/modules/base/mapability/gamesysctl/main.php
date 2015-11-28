@@ -205,7 +205,6 @@ namespace gamesysctl
 		$itmk0='Y';
 		$itme0=1;
 		$itms0=1;
-		\itemmain\itemget();
 		foreach(Array(1,2,3,4,5,6) as $i)
 		{
 			if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
@@ -216,6 +215,7 @@ namespace gamesysctl
 				break;
 			}
 		}
+		\itemmain\itemget();
 	}
 	function gamesysctl_bancombo()
 	{

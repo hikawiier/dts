@@ -7,6 +7,7 @@ namespace localproject
 		0 => 'gamesysctl',
 		19 => 'itemdepot',
 		28 => 'remakegun',
+		31 => 'changetrap',
 	);
 }
 
