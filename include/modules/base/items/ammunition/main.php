@@ -23,12 +23,9 @@ namespace ammunition
 		$iteminfo['GBe'] = '能源弹药';
 		
 		$itemspkinfo['o'] = '一发';
-<<<<<<< HEAD
 		$itemspkdesc['o']='本枪械不能装填弹药';
 		$itemspkremark['o']='……';
-=======
-		$itemspkinfo['R'] = '扩容';
->>>>>>> refix bug + add changelog + add sk
+		$itemspkinfo['^kagari001'] = '扩容';
 		
 	}
 	
@@ -80,7 +77,6 @@ namespace ammunition
 			$mode = 'command';
 			return;
 		}
-<<<<<<< HEAD
 		
 		list($bulletkind, $bulletnum) = check_ammukind($wepk, $wepsk);
 		if($itmk != $bulletkind){
@@ -89,11 +85,10 @@ namespace ammunition
 			return;
 		}
 
-=======
-		if(strpos($wepsk,'R')!==false){
-			$bulletnum += 12;
+		if(strpos($wepsk,'^kagari001')!==false){
+			$bulletnum *= 2;
+			$bulletnum += 20;
 		}
->>>>>>> refix bug + add changelog + add sk
 		if ($weps == $nosta) {
 			$weps = 0;
 		}
