@@ -56,7 +56,7 @@ namespace localproject
 			elseif($lp_cmd=='lp_changetrap')
 			{
 				//和田：changetrap
-				$change_fail_obbs = round(100-($wd*0.35));
+				$change_fail_obbs = max(0,round(100-($wd*0.35)));
 				ob_clean();
 				include template(MOD_CHANGETRAP_LP_CHANGETRAP);
 				$cmd = ob_get_contents();

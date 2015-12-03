@@ -107,11 +107,7 @@ namespace changetrap
 				}
 				addnews($now,'ct_fail',$name,$citm['itm'],'陷阱','爆炸物',$fail_dmg);
 			}
-			if($citm['itms']=='∞')
-			{
-				$citm['itms']=1;
-			}
-			\itemmain\itms_reduce($citm);
+			\itemmain\itms_reduce($citm,1);
 			if($itms0)
 			{
 				\itemmain\itemget();
@@ -148,11 +144,7 @@ namespace changetrap
 					\player\load_playerdata($sdata);
 				}
 			}
-			if($citm['itms']=='∞')
-			{
-				$citm['itms']=1;
-			}
-			\itemmain\itms_reduce($citm);
+			\itemmain\itms_reduce($citm,1);
 			if($itms0)
 			{
 				\itemmain\itemget();

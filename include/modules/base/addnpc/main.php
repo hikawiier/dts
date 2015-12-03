@@ -66,7 +66,11 @@ namespace addnpc
 				$summon_ids[] = $db->insert_id();
 				$newsname=$typeinfo[$xtype].' '.$npc['name'];
 				//$npcwordlist[] = $typeinfo[$type].' '.$npc['name'];
-				addnews($now, 'addnpc', $newsname);
+				if($num>1){
+					addnews($now, 'addnpcs', $newsname,$num);
+				}else{
+					addnews($now, 'addnpc', $newsname);
+				}
 				//$result = $db->query("SELECT pid FROM {$tablepre}players where pass='$spid' AND type>0");
 //				if (!$summon_pid)
 //				{

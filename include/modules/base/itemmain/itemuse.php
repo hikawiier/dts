@@ -3,15 +3,15 @@
 namespace itemmain
 {
 
-	function itms_reduce(&$theitem)
+	function itms_reduce(&$theitem,$allused=0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('itemmain','logger'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
-		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
-		
+		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];		
+		if($allused) $itms = 1;
 		if ($itms != $nosta) {
 			$itms --;
 			if ($itms <= 0) {

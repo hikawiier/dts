@@ -92,7 +92,7 @@ namespace remakegun
 			$log.="你将武器放在了工作台上，开始小心翼翼的拆解它……<br>";
 			$log.="…………<br>";
 			//读取枪械上包含的属性，以及属性数量
-			$wep_sk = $wepsk ? str_split($wepsk) : Array();
+			$wep_sk = \itemmain\get_itmsk_array($wepsk);
 			$wep_sk_num = sizeof($wep_sk);
 			$wep_sk_rarity = 0;
 			//将要摘除的属性从枪械属性中去除，并计算其他属性的稀有度之合
@@ -218,8 +218,9 @@ namespace remakegun
 		$log.="…………<br>";
 		$rgi['itm']=&${'itm'.$i}; $rgi['itmk']=&${'itmk'.$i};
 		$rgi['itme']=&${'itme'.$i}; $rgi['itms']=&${'itms'.$i}; $rgi['itmsk']=&${'itmsk'.$i};
-		$rg_sk = $rgi['itmsk'] ? str_split($rgi['itmsk']) : Array();
-		$wep_sk = $wepsk ? str_split($wepsk) : Array();
+		$rg_sk = \itemmain\get_itmsk_array($rgi['itmsk']);
+		$wep_sk = \itemmain\get_itmsk_array($wepsk);
+		print_r($rg_sk);
 		$rg_sk_num = sizeof($rg_sk);
 		$wep_sk_num = sizeof($wep_sk);		
 		if($rg_sk_num && $wep_sk_num)
@@ -365,10 +366,11 @@ namespace remakegun
 		$r_itm=&${'itm'.$i}; $r_itmk=&${'itmk'.$i};
 		$r_itme=&${'itme'.$i}; $r_itms=&${'itms'.$i}; $r_itmsk=&${'itmsk'.$i};
 		//读取枪械部件和武器上的属性及属性数量
-		$rg_sk = $r_itmsk ? str_split($r_itmsk) : Array();
-		$wep_sk = $wepsk ? str_split($wepsk) : Array();
+		$rg_sk = \itemmain\get_itmsk_array($r_itmsk);
+		$wep_sk = \itemmain\get_itmsk_array($wepsk);
+		print_r($rg_sk);
 		$rg_sk_num = sizeof($rg_sk);
-		$wep_sk_num = sizeof($wep_sk);		
+		$wep_sk_num = sizeof($wep_sk);			
 		//计算可安装的属性，分别计算部件的非重复属性和武器自带属性的稀有度之合。重复的属性会按照其稀有度折算成效果
 		if($rg_sk_num && $wep_sk_num)
 		{
