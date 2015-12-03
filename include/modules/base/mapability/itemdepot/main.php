@@ -124,7 +124,7 @@ namespace itemdepot
 			$log.="<span class='red'>你所在的位置没有仓库功能，如果存在BUG，请告知管理员。</span><br>";
 			return;
 		}
-		if(!is_numeric($i) || !$i || $i>6 || $i<1 || ${'itms'.$i}<=0)
+		if(!is_numeric($i) || !$i || $i>6 || $i<1 || (${'itms'.$i}<=0 && ${'itms'.$i}!=='∞'))
 		{
 			$log.="<span class='red'>要储存的道具信息错误，请返回重新输入。</span><br>";
 			return;
@@ -170,7 +170,7 @@ namespace itemdepot
 		}
 		$idpt = change_itemdepot('decode',$itemdepot);
 		$idpt_num = sizeof($idpt);		
-		if(!is_numeric($i) || $i>$max_saveitem_num || $i<0 || $idpt[$i]['itms']<=0)
+		if(!is_numeric($i) || $i>$max_saveitem_num || $i<0 || ($idpt[$i]['itms']<=0 && $idpt[$i]['itms']!=='∞'))
 		{
 			$log.="<span class='red'>要取出的道具信息错误，请返回重新输入。</span><br>";
 			return;

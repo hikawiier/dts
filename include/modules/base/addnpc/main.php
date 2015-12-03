@@ -94,6 +94,11 @@ namespace addnpc
 //					\player\player_save($pp);
 //				}
 			}
+			if($num>1){
+				addnews($now, 'addnpcs', $newsname,$num);
+			}else{
+				addnews($now, 'addnpc', $newsname);
+			}
 		}
 		return $summon_ids;
 	}
