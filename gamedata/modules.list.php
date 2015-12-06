@@ -57,6 +57,9 @@ skill317,extra/achievement/skills/skill317/,1
 skill319,extra/achievement/skills/skill319/,1
 skill320,extra/achievement/skills/skill320/,1
 skill431,extra/card/skills/skill431/,1
+skill3000,extra/achievement/skills/skill3000/,1
+skill3001,extra/achievement/skills/skill3001/,1
+skill3002,extra/achievement/skills/skill3002/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1

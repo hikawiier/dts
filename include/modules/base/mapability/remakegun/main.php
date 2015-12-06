@@ -220,7 +220,6 @@ namespace remakegun
 		$rgi['itme']=&${'itme'.$i}; $rgi['itms']=&${'itms'.$i}; $rgi['itmsk']=&${'itmsk'.$i};
 		$rg_sk = \itemmain\get_itmsk_array($rgi['itmsk']);
 		$wep_sk = \itemmain\get_itmsk_array($wepsk);
-		print_r($rg_sk);
 		$rg_sk_num = sizeof($rg_sk);
 		$wep_sk_num = sizeof($wep_sk);		
 		if($rg_sk_num && $wep_sk_num)
@@ -368,7 +367,6 @@ namespace remakegun
 		//读取枪械部件和武器上的属性及属性数量
 		$rg_sk = \itemmain\get_itmsk_array($r_itmsk);
 		$wep_sk = \itemmain\get_itmsk_array($wepsk);
-		print_r($rg_sk);
 		$rg_sk_num = sizeof($rg_sk);
 		$wep_sk_num = sizeof($wep_sk);			
 		//计算可安装的属性，分别计算部件的非重复属性和武器自带属性的稀有度之合。重复的属性会按照其稀有度折算成效果
