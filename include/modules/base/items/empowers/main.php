@@ -197,7 +197,7 @@ namespace empowers
 			if ($skill [$nowsk] != $skill [$maxsk] && !$frk_flag) 
 			{
 				$wepk = $maxsk;
-				$kind = "将{$wep}的类别改造成了<span class=\"yellow\">{$iteminfo['$wepk']}</span>！";
+				$kind = "将{$wep}的类别改造成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";
 			}
 			else
 			{

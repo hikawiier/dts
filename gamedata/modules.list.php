@@ -79,6 +79,7 @@ skill204,extra/club/skills/skill204/,1
 skill310,extra/achievement/skills/skill310/,1
 skill311,extra/achievement/skills/skill311/,1
 skill312,extra/achievement/skills/skill312/,1
+<<<<<<< HEAD
 skill314,extra/achievement/skills/skill314/,1
 skill443,extra/card/skills/skill443/,1
 skill325,extra/achievement/skills/skill325/,1
@@ -90,6 +91,14 @@ skill488,extra/card/skills/skill488/,1
 skill327,extra/activities/nationalday2017/skill327/,1
 achievement_base,extra/achievement/achievement_base/,1
 skill1000,extra/instance/instance7_tutorial/skill1000/,1
+=======
+skill3000,extra/achievement/skills/skill3000/,1
+skill3001,extra/achievement/skills/skill3001/,1
+skill3002,extra/achievement/skills/skill3002/,1
+kuji0,extra/card/kuji/kuji0/,1
+kuji1,extra/card/kuji/kuji1/,1
+kuji2,extra/card/kuji/kuji2/,1
+>>>>>>> fix bug + add ach + add npc
 skill418,extra/card/skills/skill418/,1
 set_gametype,extra/misc/set_gametype/,1
 kujibase,extra/card/kujibase/,1
