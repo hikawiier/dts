@@ -29,6 +29,7 @@ namespace itemmain
 		//GB* ammunition 各类弹药
 		//HH,HS,HB edible 各类命体恢复
 		//HM,HT song 歌魂补给
+		//HF item_uhf 提供BUFF的食物
 		//M* item_um 各类强化药
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
@@ -107,6 +108,7 @@ namespace itemmain
 		//^001 itemmix_sync 同调（标记是同调产物）
 		//^002 itemmix_sync 变星
 		//^kagari001 ammunition 枪械扩容
+		//^kagarix01 skill2800 动力装甲 
 	);
 	
 	$itemspkdesc = array(

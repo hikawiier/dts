@@ -15,6 +15,7 @@ bufficons,extra/misc/bufficons/,1
 explore,base/explore/,1
 noise,base/noise/,1
 lvlctl,base/lvlctl/,1
+buffeffect,extra/campfire/buff/buffeffect/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -46,6 +47,7 @@ itemdepot,base/mapability/itemdepot/,1
 remakegun,base/mapability/remakegun/,1
 item_urt,base/items/item_urt/,1
 changetrap,base/mapability/changetrap/,1
+skill2900,extra/campfire/buff/skills/skill2900/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
