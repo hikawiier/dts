@@ -46,7 +46,7 @@ namespace item_misc
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','logger','input','localproject'));
+		eval(import_module('sys','player','logger','input','localproject','skill2900'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];

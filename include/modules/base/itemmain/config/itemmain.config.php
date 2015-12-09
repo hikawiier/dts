@@ -29,6 +29,7 @@ namespace itemmain
 		//GB* ammunition 各类弹药
 		//HH,HS,HB edible 各类命体恢复
 		//HM,HT song 歌魂补给
+		//HF item_uhf 提供BUFF的食物
 		//M* item_um 各类强化药
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
@@ -100,6 +101,7 @@ namespace itemmain
 		//w ex_dmg_att 音波
 		//X ///////////////////////////
 		'x' => '奇迹',
+		//Y skill2800 动力装甲 
 		//Y ///////////////////////////
 		//y ex_attr_pierce 属穿
 		//Z blessstone 菁英
