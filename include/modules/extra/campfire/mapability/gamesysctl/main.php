@@ -127,7 +127,7 @@ namespace gamesysctl
 			{
 				$log.="你思考了一下，把子端放回了包裹内。<br>还是等到需要的时候再来操作它吧。<br>";
 			}
-			elseif($mob_flag && (($command=='gsc_addarea') || ($command =='gsc_hack')))
+			elseif($mob_flag && (($command=='gsc_addarea') || ($command =='gsc_hack') || ($command =='gsc_radar')))
 			{
 				$gsc_order = substr($command,4);
 				gamesysctl_mob($gsc_order);
@@ -257,7 +257,7 @@ namespace gamesysctl
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		eval(import_module('sys','player','map','logger'));	
 		
-		if($c_order!=='addarea' && $c_order!=='hack')
+		if($c_order!=='addarea' && $c_order!=='hack' && $c_order!=='radar')
 		{
 			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：无效的功能类别，请重新选择子端功能。</span><br>";
 			return;
@@ -301,11 +301,18 @@ namespace gamesysctl
 			$areatime += $areahour * 60;
 			addnews($now,'gsc_addarea',$name,$sec);
 		}
+		elseif($c_order=='radar')
+		{
+			$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br><span class='yellow'>当界面上的图像稳定下来时，你发现上面显示出了一排数据。</span><br>";
+			$mms = 9;
+			$mode = 'radar';
+			\radar\newradar($mms);		
+		}
 	}
 	function gamesysctl_find($findtype,$findnm,$npctype)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','map','logger','itemmain'));	
+		eval(import_module('sys','player','map','logger','itemmain','npc'));	
 		if(!$findnm/* || preg_match('/[,|<|>|&|;|#|"|\s|\p{C}]+/u',$findnm)*/)
 		{
 			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：提交的名称为空或是包含了非法字符，请重新输入。</span><br>";
@@ -335,7 +342,16 @@ namespace gamesysctl
 		}
 		elseif($findtype=='findnpc')
 		{
-			$result = $db->query("SELECT pls FROM {$tablepre}players WHERE name = '$findnm' AND type = $npctype AND hp>0");
+			if($findnm=='all')
+			{
+				$result = $db->query("SELECT pls FROM {$tablepre}players WHERE type = $npctype AND hp>0");
+				$findnm_info = '所有的'.$npc_typeinfo[$npctype];
+			}
+			else
+			{
+				$result = $db->query("SELECT pls FROM {$tablepre}players WHERE name = '$findnm' AND type = $npctype AND hp>0");
+				$findnm_info = $npc_typeinfo[$npctype].' '.$findnm;
+			}			
 			while($fn_data = $db->fetch_array($result)) 
 			{
 				$fn_data_array[] = $fn_data['pls'];
@@ -343,11 +359,11 @@ namespace gamesysctl
 			$fn_num = sizeof($fn_data_array);
 			if($fn_num==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的查询对象：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";	
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";	
 			}
 			elseif($fn_num>1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的查询对象：</span>{$findnm}<br>";
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>";
 				$fn_array = array_count_values($fn_data_array);
 				foreach(array_keys($fn_array) as $fn_pls)
 				{
@@ -357,7 +373,7 @@ namespace gamesysctl
 			}
 			else
 			{
-				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，NPC【{$findnm}】并不存在于系统中，或是他已经死了。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你的查询目标，【{$findnm_info}】并不存在于系统中，或是他已经死了。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
 			}
 		}
 		elseif($findtype=='finditm')

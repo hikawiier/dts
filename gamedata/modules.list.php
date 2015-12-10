@@ -16,9 +16,9 @@ explore,base/explore/,1
 noise,base/noise/,1
 lvlctl,base/lvlctl/,1
 buffeffect,extra/campfire/buff/buffeffect/,1
-gamesysctl,base/mapability/gamesysctl/,1
+gamesysctl,extra/campfire/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
-localproject,base/mapability/localproject/,1
+localproject,extra/campfire/mapability/localproject/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -44,7 +44,6 @@ scpdrink,base/items/scpdrink/,1
 item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
-changetrap,base/mapability/changetrap/,1
 skill2900,extra/campfire/buff/skills/skill2900/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
@@ -367,9 +366,10 @@ skill77,extra/club/skills/skill77/,1
 skill28,extra/club/skills/skill28/,1
 skill254,extra/club/skills/skill254/,1
 song,base/items/song/,1
-itemdepot,base/mapability/itemdepot/,1
-remakegun,base/mapability/remakegun/,1
-item_urt,base/items/item_urt/,1
+itemdepot,extra/campfire/mapability/itemdepot/,1
+remakegun,extra/campfire/mapability/remakegun/,1
+item_urt,extra/campfire/items/item_urt/,1
+changetrap,extra/campfire/mapability/changetrap/,1
 instance9,extra/instance/instance9_rush/,1
 skill37,extra/club/skills/skill37/,1
 skill73,extra/club/skills/skill73/,1
@@ -421,7 +421,7 @@ gtype2,extra/instance/gtype2/main/,1
 gtype3,extra/instance/gtype3/main/,1
 skill270,extra/club/skills/skill270/,1
 cooldown,base/cooldown/,1
-item_urg,base/items/item_urg/,1
+item_urg,extra/campfire/items/item_urg/,1
 item_misc,base/items/item_misc/,1
 skill458,extra/card/skills/skill458/,1
 skill498,extra/card/skills/skill498/,1
