@@ -464,3 +464,4 @@ skill56,extra/club/skills/skill56/,1
 gamesysctl,extra/campfire/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,extra/campfire/mapability/localproject/,1
+item_uec,extra/campfire/items/item_uec/,1

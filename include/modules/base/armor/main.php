@@ -70,16 +70,13 @@ namespace armor
 			}
 			$x = min($pd[$which.'s'], $hurtvalue);
 			$pd[$which.'s'] -= $x;
-			if(strpos($pd[$which.'k'],'P')!==false)
-				$hurt_info='能量储备';
-			else  $hurt_info = '耐久度';
 			if ($active)
 			{
-				$log .= "{$pd['name']}的".$pd[$which]."{$hurt_info}下降了{$x}！<br>";
+				$log .= "{$pd['name']}的".$pd[$which]."耐久度下降了{$x}！<br>";
 			}
 			else
 			{
-				$log .= "你的".$pd[$which]."的{$hurt_info}下降了{$x}！<br>";
+				$log .= "你的".$pd[$which]."的耐久度下降了{$x}！<br>";
 			}
 					
 			if ($pd[$which.'s']<=0) 
@@ -88,8 +85,8 @@ namespace armor
 				{
 					$pd[$which.'s'] = $nosta;
 					if ($active)
-						$log .= "{$pd['name']}的{$pd[$which]}能量耗尽了！<br>";
-					else  $log .= "你的{$pd[$which]}能量耗尽了！<br>";
+						$log .= "{$pd['name']}的{$pd[$which]}已经严重损坏！<br>";
+					else  $log .= "你的{$pd[$which]}已经严重损坏，请尽快修复！<br>";
 				}
 				else
 				{

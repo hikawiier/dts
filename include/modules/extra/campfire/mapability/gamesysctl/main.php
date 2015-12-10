@@ -117,7 +117,7 @@ namespace gamesysctl
 		{
 			foreach(Array(1,2,3,4,5,6) as $i)
 			{
-				if(${'itm'.$i}=='便携式控制中心子端' && ${'itms'.$i}>0  && ${'itmk'.$i}=='Y')
+				if(${'itm'.$i}=='便携式控制中心子端' && ${'itms'.$i}>0  && ${'itmk'.$i}=='EC')
 				{					
 					$mob_flag = true;
 					break;
@@ -202,7 +202,7 @@ namespace gamesysctl
 		
 		$log.="当你提交了操作后，一个<span class='yellow'>方形的黑色金属盒</span>从控制台下方的凹陷处弹射出来，你将它接到了手中。<br>控制台的界面上似乎有关于它的介绍与操作说明，但你还没来得及看，控制台就因<span class='red'>能源不足</span>而自动休眠了……<br>";
 		$itm0='便携式控制中心子端';
-		$itmk0='Y';
+		$itmk0='EC';
 		$itme0=1;
 		$itms0=1;
 		foreach(Array(1,2,3,4,5,6) as $i)

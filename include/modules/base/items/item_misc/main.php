@@ -46,7 +46,7 @@ namespace item_misc
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','logger','input','localproject','skill2900'));
+		eval(import_module('sys','player','logger','input'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
@@ -404,6 +404,7 @@ namespace item_misc
 				$rp = 0;
 				$log .= "你使用了<span class=\"yellow\">$itm</span>。你的RP归零了。<br>";
 				return;
+<<<<<<< HEAD
 			} elseif(strpos($itm,'测试用阻塞设备')!==false){
 				sleep(10);
 				$log .= "刚才那是什么，是卡了么？<br>";
@@ -432,6 +433,8 @@ namespace item_misc
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
+=======
+>>>>>>> add mod item_uec + alter npc,shop resources
 			}
 		}
 		$chprocess($theitem);
