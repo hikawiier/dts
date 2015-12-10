@@ -9,121 +9,160 @@ namespace poweredarmor
 		$armor_iteminfo['DHP']='头部装甲';
 		$armor_iteminfo['DAP']='手部装甲';
 		$armor_iteminfo['DFP']='腿部装甲';
-		//装甲分级暂时没有实装，只是一个预留的位置
+		//装甲分为T,S,A,B,C,O六个等级，在类别后面加上对应字母来区分，例如“DBPT”就是T等级的身体装甲
+		//没有等级的装甲默认为O等级
 		//不同级别的装甲差别主要体现在各个功能的数值上
 	}
-	function check_dmg_pbarmor_attr(&$pa, &$pd, $active)
-	{
-		//动力装甲抵消伤害
-		//每件动力装甲带来的减伤比例
-		$ref_per = 25;
-		//最高减伤
-		$max_ref_per = 99;
-		//每点耐久可以抵消多少点伤害
-		$itms_ref_per = 10;
-		//身体防具的抵消加成倍率
-		$body_itms_ref_per = 2;
-		//判定减伤的过程
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('logger','armor'));
-		$e_pb_array = get_ex_pb_array($pa, $pd, $active);
-		$e_pb_num = sizeof($e_pb_array);
-		if (($e_pb_num) && $pa['dmg_dealt']>($itms_ref_per*$e_pb_num))
-		{
-			$ap_dmg_ref_per = min($max_ref_per,$e_pb_num*$ref_per);
-			$plus_ref_dmg = $pa['dmg_dealt']*($ap_dmg_ref_per/100);
-			$one_ref_dmg = $plus_ref_dmg/$e_pb_num;
-			$one_reduce_itms = $one_ref_dmg/$itms_ref_per;
-			foreach($e_pb_array as $pea)
-			{
-				$ors = $pea=='arb' ? max(1,round($one_reduce_itms/$body_itms_ref_per)) : max(1,round($one_reduce_itms));
-				if($pd[$pea.'s']>$ors)
-				{
-					$ord = round($one_ref_dmg);				
-				}
-				else
-				{
-					$ors = round($pd[$pea.'s']);	
-					$ord = round($pd[$pea.'s']*$itms_ref_per);
-				}		
-				if ($active)
-						$log .= "{$pd['name']}的{$pd[$pea]}抵消了<span class='red'>{$ord}</span>点伤害！<br>";
-					else  $log .= "你的{$pd[$pea]}抵消了<span class='red'>{$ord}</span>点伤害！<br>";
-				$pa['dmg_dealt'] -= $ord;
-				\armor\armor_hurt($pa, $pd, $active, $pea,$ors);
-			}
-		}
-	}
-	//获取装备中的动力装甲
-	function get_ex_pb_array(&$pa, &$pd, $active)
+	//获取装备中的动力装甲信息（任意对象）
+	function get_pa_kind_array($pad)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		$ex_powbody_array = Array();
+		$pa_kind_array = Array();
 		foreach(array('arb','arh','ara','arf') as $armor)
 		{
-			if($pd[$armor.'s']!=='∞' && strpos($pd[$armor.'k'],'P')!==false)
+			if($pad[$armor.'s']!==$nosta && strpos($pad[$armor.'k'],'P')!==false)
 			{
-				array_push($ex_powbody_array,$armor);
+				$pa_kind = $pad[$armor.'k'];
+				//获取动力甲等级
+				$pa_lvl = substr($pa_kind,3) ? substr($pa_kind,3) : 'O';
+				$pa_kind_array[$armor] = $pa_lvl;
 			}
 		}
-		return $ex_powbody_array;
+		return $pa_kind_array;
+	}
+	//获取单个部位动力装甲信息（仅自己）
+	function get_once_pa_kind_null($pa_kind)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		eval(import_module('player'));
+		$pa_confirm_flag = false;
+		foreach(array('arb','arh','ara','arf') as $armor)
+		{
+			if(${$armor.'s'}!==$nosta && strpos(${$armor.'k'},'P')!==false && $armor==$pa_kind)
+			{
+				$pa_confirm_flag = substr(${$armor.'k'},3) ? substr(${$armor.'k'},3) : 'O';
+				break;
+			}
+		}
+		return $pa_confirm_flag;
+	}
+	//获取单个部位动力装甲信息（任意对象）
+	function get_once_pa_kind_data($pa_kind,$pad)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;			
+		$pa_confirm_flag = false;
+		foreach(array('arb','arh','ara','arf') as $armor)
+		{
+			if($pad[$armor.'s']!==$nosta && strpos($pad[$armor.'k'],'P')!==false && $armor==$pa_kind)
+			{
+				$pa_confirm_flag = substr($pad[$armor.'k'],3) ? substr($pad[$armor.'k'],3) : 'O';
+				break;
+			}
+		}
+		return $pa_confirm_flag;
+	}
+	function check_pa_reduce_dmg(&$pa, &$pd, $active)
+	{
+		//动力装甲抵消伤害,判定减伤的过程
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('logger','armor','poweredarmor'));
+		//先获取装备中的动力装甲信息……这里的pa是poweredarmor的缩写……真的很蠢
+		$pa_kind_array = get_pa_kind_array($pd);
+		if (sizeof($pa_kind_array))
+		{
+			//最多能抵消多少伤害
+			$max_able_reduce_dmg = $pa['dmg_dealt']*($max_pa_reduce_dmg_per/100);
+			//开始抵消伤害
+			foreach($pa_kind_array as $kind => $lvl)
+			{
+				//理论上单次装备能抵消的伤害最大值和应消耗的耐久
+				$once_pa_reduce_dmg = $max_able_reduce_dmg * ($once_pa_reduce_dmg_per[$lvl]/100);
+				$once_pas_cost = $once_pa_reduce_dmg / $once_pas_reduce_dmg[$lvl];
+				if($once_pas_cost>=1)
+				{
+					//只有受到会消耗超过1点耐久的伤害时才会触发动力装甲抵消伤害
+					//身体部位的动力甲可以低消耗抵消伤害，放在这里是为了高频率触发
+					if($kind=='arb')  $once_pas_cost = $once_pas_cost/$bpa_reduce_pas_cost_per[$lvl];
+					//计算实际抵消的伤害和消耗的装甲能量
+					$pa_reduce_dmg = $pd[$kind.'s'] > $once_pas_cost ? round($once_pa_reduce_dmg) : round($pd[$kind.'s'] * $once_pas_reduce_dmg[$lvl]);
+					$pas_cost = $pd[$kind.'s'] > $once_pas_cost ? round($once_pas_cost) : $pd[$kind.'s'];
+					//发log
+					if ($active)
+						$log .= "{$pd['name']}的{$pd[$kind]}抵消了<span class='red'>{$pa_reduce_dmg}</span>点伤害！<br>";
+					else  $log .= "你的{$pd[$kind]}抵消了<span class='red'>{$pa_reduce_dmg}</span>点伤害！<br>";
+					//处理伤害，降低耐久
+					$pa['dmg_dealt'] -= $pa_reduce_dmg;
+					\armor\armor_hurt($pa,$pd,$active,$kind,$pas_cost);
+				}	
+			}
+		}
 	}		
 	//动力装甲抵消伤害
 	function player_damaged_enemy(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		eval(import_module('logger'));
-		check_dmg_pbarmor_attr($pa, $pd, $active);		
+		check_pa_reduce_dmg($pa, $pd, $active);		
 		$chprocess($pa, $pd, $active);
 	}
 	//头部动力装甲增加发现率/先攻率/道具发现率
 	function calculate_active_obbs_multiplier(&$ldata,&$edata)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('poweredarmor'));
 		//作战、强袭、偷袭姿态时增加自己主动攻击时的先攻率
-		if ($ldata['arhk']=='DHP' && $ldata['arhs']!=='∞' && ($ldata['pose']==1 || $ldata['pose']==2 || $ldata['pose']==4))			
-			return $chprocess($ldata,$edata)*1.15;
+		$pa_confirm_flag = get_once_pa_kind_data('arh',$ldata);
+		if ($pa_confirm_flag && ($ldata['pose']==1 || $ldata['pose']==2 || $ldata['pose']==4))			
+			return $chprocess($ldata,$edata)*$hpa_add_acitve_obbs[$pa_confirm_flag];
 		else  return $chprocess($ldata,$edata);
 	}
 	function calculate_meetman_rate($schmode)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('poweredarmor'));
 		//作战、强袭、偷袭姿态时增加遇敌率
-		if ($arhk=='DHP' && $arfs!=='∞' && ($pose==1 || $pose==2 || $pose==4)) 
-			return 1.2*$chprocess($schmode);
+		$pa_confirm_flag = get_once_pa_kind_null('arh');
+		if ($pa_confirm_flag && ($pose==1 || $pose==2 || $pose==4)) 
+			return $chprocess($schmode)*$hpa_add_metman_obbs[$pa_confirm_flag];
 		else  return $chprocess($schmode);
 	}
 	function calculate_itemfind_obbs_multiplier()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('poweredarmor'));
 		//探索姿态时增加道具发现率
-		if ($arhk=='DHP' && $arfs!=='∞' && $pose==3) 
-			return 1.2*$chprocess();
+		$pa_confirm_flag = get_once_pa_kind_null('arh');
+		if ($pa_confirm_flag && $pose==3) 
+			return $chprocess()*$hpa_add_metman_obbs[$pa_confirm_flag];
 		else  return $chprocess();
 	}
 	//手部动力装甲增加命中率
 	function get_hitrate(&$pa,&$pd,$active)		
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if ($pa['arak']=='DAP' && $pa['aras']!=='∞')			
-			return $chprocess($pa,$pd,$active)*1.8;
+		eval(import_module('poweredarmor'));
+		$pa_confirm_flag = get_once_pa_kind_data('ara',$pa);
+		if ($pa_confirm_flag)			
+			return $chprocess($pa,$pd,$active)*$apa_add_hitrate_obbs[$pa_confirm_flag];
 		else  return $chprocess($pa,$pd,$active);
 	}
 	//腿部动力装甲减少移动探索体力消耗
 	function calculate_search_sp_cost()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('player'));
-		if ($arfk=='DFP' && $arfs!=='∞') 
-			return $chprocess()-7;
+		eval(import_module('poweredarmor'));
+		$pa_confirm_flag = get_once_pa_kind_null('arf');
+		if ($pa_confirm_flag) 
+			return $chprocess()-$fpa_reduce_move_cost[$pa_confirm_flag];
 		else  return $chprocess();
 	}
 	function calculate_move_sp_cost()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('player'));
-		if ($arfk=='DFP' && $arfs!=='∞') 
-			return $chprocess()-7;
+		eval(import_module('poweredarmor'));
+		$pa_confirm_flag = get_once_pa_kind_null('arf');
+		if ($pa_confirm_flag) 
+			return $chprocess()-$fpa_reduce_explore_cost[$pa_confirm_flag];
 		else  return $chprocess();
 	}
 		
