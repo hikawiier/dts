@@ -46,10 +46,10 @@ item_uee,base/items/item_uee/,1
 song,base/items/song/,1
 skill23,extra/club/skills/skill23/,1
 skill220,extra/club/skills/skill220/,1
-itemdepot,base/mapability/itemdepot/,1
-remakegun,base/mapability/remakegun/,1
-item_urt,base/items/item_urt/,1
-changetrap,base/mapability/changetrap/,1
+itemdepot,extra/campfire/mapability/itemdepot/,1
+remakegun,extra/campfire/mapability/remakegun/,1
+item_urt,extra/campfire/items/item_urt/,1
+changetrap,extra/campfire/mapability/changetrap/,1
 skill2900,extra/campfire/buff/skills/skill2900/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
@@ -69,7 +69,7 @@ skill69,extra/club/skills/skill69/,1
 skill300,extra/achievement/skills/skill300/,1
 attrbase,extra/attr/attrbase/,1
 cooldown,base/cooldown/,1
-item_urg,base/items/item_urg/,1
+item_urg,extra/campfire/items/item_urg/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1
@@ -460,6 +460,6 @@ skill50,extra/club/skills/skill50/,1
 skill27,extra/club/skills/skill27/,1
 skill43,extra/club/skills/skill43/,1
 skill56,extra/club/skills/skill56/,1
-gamesysctl,base/mapability/gamesysctl/,1
+gamesysctl,extra/campfire/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
-localproject,base/mapability/localproject/,1
+localproject,extra/campfire/mapability/localproject/,1
