@@ -1,4 +1,5 @@
 <?php
+
 namespace achievement_base
 {
 	define('POSITIVE_PLAYER_DESC','与你IP不同、获得金钱不少于1000且APM不少于10');

@@ -19,6 +19,7 @@ buffeffect,extra/campfire/buff/buffeffect/,1
 gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,base/mapability/localproject/,1
+skill57,extra/club/skills/skill57/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -261,6 +262,7 @@ skill496,extra/card/skills/skill496/,1
 skill499,extra/card/skills/skill499/,1
 skill315,extra/achievement/skills/skill315/,1
 skill313,extra/achievement/skills/skill313/,1
+skill324,extra/achievement/skills/skill324/,1
 skill300,extra/achievement/skills/skill300/,1
 skill332,extra/achievement/skills/skill332/,1
 skill333,extra/achievement/skills/skill333/,1
@@ -452,12 +454,13 @@ skill307,extra/achievement/skills/skill307/,1
 skill318,extra/achievement/skills/skill318/,1
 skill322,extra/achievement/skills/skill322/,1
 skill323,extra/achievement/skills/skill323/,1
+skill316,extra/achievement/skills/skill316/,1
+skill321,extra/achievement/skills/skill321/,1
 skill244,extra/club/skills/skill244/,1
 skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
 skill265,extra/club/skills/skill265/,1
 gtype1,extra/instance/gtype1/main/,1
-skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
 skill228,extra/club/skills/skill228/,1
