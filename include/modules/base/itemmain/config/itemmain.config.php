@@ -101,7 +101,6 @@ namespace itemmain
 		//w ex_dmg_att 音波
 		//X ///////////////////////////
 		'x' => '奇迹',
-		//Y skill2800 动力装甲 
 		//Y ///////////////////////////
 		//y ex_attr_pierce 属穿
 		//Z blessstone 菁英

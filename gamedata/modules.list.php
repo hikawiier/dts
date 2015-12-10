@@ -337,6 +337,7 @@ skill407,extra/card/skills/skill407/,1
 skill32,extra/club/skills/skill32/,1
 skill202,extra/club/skills/skill202/,1
 skill445,extra/card/skills/skill445/,1
+poweredarmor,extra/campfire/poweredarmor/,1
 pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1

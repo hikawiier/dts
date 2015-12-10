@@ -22,7 +22,9 @@ namespace armor
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('armor'));
 		$sum = 0;
-		foreach($armor_equip_list as $key) $sum+=$pd[$key.'e'];
+		foreach($armor_equip_list as $key) 
+			if(strpos($pd[$key.'k'],'P')===false || $pd[$key.'s']!==$nosta)
+				$sum+=$pd[$key.'e'];
 		return $sum;
 	}
 	
@@ -60,26 +62,40 @@ namespace armor
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('armor','wound','logger'));
-		if (in_array($which,$armor_equip_list) && isset($pd[$which.'e']) && $pd[$which.'e']>0)	//有防具
+		if ((in_array($which,$armor_equip_list) && isset($pd[$which.'e']) && $pd[$which.'e']>0) && (strpos($pd[$which.'k'],'P')===false || $pd[$which.'s']!==$nosta))	//有防具 装甲耐久不为∞
 		{
-			if ($pd[$which.'s'] == $nosta)	//无限耐久防具可以抵挡一次任意损耗的攻击
+			if ($pd[$which.'s'] == $nosta && strpos($pd[$which.'k'],'P')===false)	//无限耐久防具可以抵挡一次任意损耗的攻击
 			{
 				$pd[$which.'s'] = $hurtvalue;
 			}
 			$x = min($pd[$which.'s'], $hurtvalue);
 			$pd[$which.'s'] -= $x;
-
+			if(strpos($pd[$which.'k'],'P')!==false)
+				$hurt_info='能量储备';
+			else  $hurt_info = '耐久度';
 			if ($active)
 			{
-				$log .= "{$pd['name']}的".$pd[$which]."的耐久度下降了{$x}！<br>";
+				$log .= "{$pd['name']}的".$pd[$which]."{$hurt_info}下降了{$x}！<br>";
 			}
 			else
 			{
-				$log .= "你的".$pd[$which]."的耐久度下降了{$x}！<br>";
+				$log .= "你的".$pd[$which]."的{$hurt_info}下降了{$x}！<br>";
 			}
 					
-			if ($pd[$which.'s']<=0) armor_break($pa, $pd, $active, $which);
-			
+			if ($pd[$which.'s']<=0) 
+			{
+				if(strpos($pd[$which.'k'],'P')!==false)
+				{
+					$pd[$which.'s'] = $nosta;
+					if ($active)
+						$log .= "{$pd['name']}的{$pd[$which]}能量耗尽了！<br>";
+					else  $log .= "你的{$pd[$which]}能量耗尽了！<br>";
+				}
+				else
+				{
+					armor_break($pa, $pd, $active, $which);
+				}
+			}			
 			return $x;
 		}
 		else  return 0;

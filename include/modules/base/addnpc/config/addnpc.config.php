@@ -547,7 +547,7 @@ namespace addnpc
 			(
 				0 => array
 				(
-				'name' => '序列E-1',
+				'name' => '第三部门序列E-1',
 				'icon' => 0,
 				'club' => 7,
 				'wep' => '防风武装',
@@ -558,7 +558,7 @@ namespace addnpc
 				),
 				1 => array
 				(
-				'name' => '序列E-1',
+				'name' => '第三部门序列E-3',
 				'icon' => 0,
 				'club' => 7,
 				'wep' => '防风武装',
@@ -569,7 +569,7 @@ namespace addnpc
 				),
 				2 => array
 				(
-				'name' => '序列E-1',
+				'name' => '第三部门序列E-D',
 				'icon' => 0,
 				'club' => 7,
 				'wep' => '防风武装',
@@ -580,7 +580,7 @@ namespace addnpc
 				),
 				3 => array
 				(
-				'name' => '序列E-1',
+				'name' => '第三部门序列E-0',
 				'icon' => 0,
 				'club' => 7,
 				'wep' => '防风武装',
