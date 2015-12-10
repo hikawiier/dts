@@ -19,7 +19,6 @@ buffeffect,extra/campfire/buff/buffeffect/,1
 gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,base/mapability/localproject/,1
-skill57,extra/club/skills/skill57/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
