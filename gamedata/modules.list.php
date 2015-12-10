@@ -463,4 +463,3 @@ skill56,extra/club/skills/skill56/,1
 gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,base/mapability/localproject/,1
-skill57,extra/club/skills/skill57/,1
