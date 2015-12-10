@@ -25,6 +25,9 @@ skill326,extra/achievement/skills/skill326/,1
 skill328,extra/activities/nationalday2017/skill328/,1
 skill330,extra/activities/halloween2017/skill330/,1
 skill1003,extra/achievement/skills/skill1003/,1
+skill313,extra/achievement/skills/skill313/,1
+skill324,extra/achievement/skills/skill324/,1
+itemmain,base/itemmain/,1
 skill4,base/skills/skill4/,1
 skill411,extra/card/skills/skill411/,1
 npc,base/npc/,1
@@ -53,7 +56,15 @@ trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
 itemmix_overlay,base/itemmix/itemmix_overlay/,1
 skill20,extra/club/skills/skill20/,1
-skill413,extra/club/skills/skill413/,1
+skill413,extra/card/skills/skill413/,1
+skill302,extra/achievement/skills/skill302/,1
+skill303,extra/achievement/skills/skill303/,1
+skill304,extra/achievement/skills/skill304/,1
+skill308,extra/achievement/skills/skill308/,1
+skill309,extra/achievement/skills/skill309/,1
+skill317,extra/achievement/skills/skill317/,1
+skill319,extra/achievement/skills/skill319/,1
+skill320,extra/achievement/skills/skill320/,1
 skill69,extra/club/skills/skill69/,1
 skill300,extra/achievement/skills/skill300/,1
 attrbase,extra/attr/attrbase/,1
@@ -70,6 +81,11 @@ gameflow_combo,core/gameflow/gameflow_combo/,1
 advteam,extra/misc/advteam/,1
 attack,base/attack/,1
 instance7,extra/instance/instance7_tutorial/,1
+skill301,extra/achievement/skills/skill301/,1
+skill307,extra/achievement/skills/skill307/,1
+skill318,extra/achievement/skills/skill318/,1
+skill322,extra/achievement/skills/skill322/,1
+skill323,extra/achievement/skills/skill323/,1
 skill316,extra/achievement/skills/skill316/,1
 skill321,extra/achievement/skills/skill321/,1
 cardbase,extra/card/cardbase/,1
@@ -81,7 +97,6 @@ skill204,extra/club/skills/skill204/,1
 skill310,extra/achievement/skills/skill310/,1
 skill311,extra/achievement/skills/skill311/,1
 skill312,extra/achievement/skills/skill312/,1
-<<<<<<< HEAD
 skill314,extra/achievement/skills/skill314/,1
 skill443,extra/card/skills/skill443/,1
 skill325,extra/achievement/skills/skill325/,1
@@ -93,14 +108,12 @@ skill488,extra/card/skills/skill488/,1
 skill327,extra/activities/nationalday2017/skill327/,1
 achievement_base,extra/achievement/achievement_base/,1
 skill1000,extra/instance/instance7_tutorial/skill1000/,1
-=======
 skill3000,extra/achievement/skills/skill3000/,1
 skill3001,extra/achievement/skills/skill3001/,1
 skill3002,extra/achievement/skills/skill3002/,1
 kuji0,extra/card/kuji/kuji0/,1
 kuji1,extra/card/kuji/kuji1/,1
 kuji2,extra/card/kuji/kuji2/,1
->>>>>>> fix bug + add ach + add npc
 skill418,extra/card/skills/skill418/,1
 set_gametype,extra/misc/set_gametype/,1
 kujibase,extra/card/kujibase/,1
@@ -439,8 +452,15 @@ skill51,extra/club/skills/skill51/,1
 skill493,extra/card/skills/skill493/,1
 ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
+instance5,extra/instance/instance5/,1
+instance6,extra/instance/instance6/,1
+skill42,extra/club/skills/skill42/,1
+addnpc,base/addnpc/,1
+skill50,extra/club/skills/skill50/,1
+skill27,extra/club/skills/skill27/,1
 skill43,extra/club/skills/skill43/,1
 skill56,extra/club/skills/skill56/,1
 gamesysctl,base/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,base/mapability/localproject/,1
+skill57,extra/club/skills/skill57/,1
