@@ -7,29 +7,33 @@ namespace skill2900
 		define('MOD_SKILL2900_INFO','hidden');
 	}
 	
-	function acquire2900(&$pa)
+	function acquire2900(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','buffeffect'));
-		\buffeffect\get_buff_full_food();
+		eval(import_module('player'));
+		$msp+=200;$sp+=200;
+		$att+=100;$def+=100;
 	}
 	
-	function lost2900(&$pa)
+	function lost2900(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','buffeffect'));
-		\buffeffect\lost_buff_full_food();
+		eval(import_module('player'));
+		$msp-=200;$sp-=200;
+		$att-=100;$def-=100;
 	}
 	
-	function skill_onload_event(&$pa)
+	function skill_onload_event(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
 		$chprocess($pa);
 	}
 	
-	function skill_onsave_event(&$pa)
+	function skill_onsave_event(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
 		$chprocess($pa);
 	}
 	

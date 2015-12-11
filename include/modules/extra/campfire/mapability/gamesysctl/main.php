@@ -130,7 +130,7 @@ namespace gamesysctl
 			elseif($mob_flag && (($command=='gsc_addarea') || ($command =='gsc_hack') || ($command =='gsc_radar')))
 			{
 				$gsc_order = substr($command,4);
-				gamesysctl_mob($gsc_order);
+				gamesysctl_mob($gsc_order,$radar_mmn);
 			}
 			else
 			{
@@ -252,7 +252,7 @@ namespace gamesysctl
 			}
 		}
 	}
-	function gamesysctl_mob($c_order)
+	function gamesysctl_mob($c_order,$c_radar)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		eval(import_module('sys','player','map','logger'));	
@@ -304,7 +304,7 @@ namespace gamesysctl
 		elseif($c_order=='radar')
 		{
 			$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br><span class='yellow'>当界面上的图像稳定下来时，你发现上面显示出了一排数据。</span><br>";
-			$mms = 9;
+			$mms = $c_radar ? $c_radar : 9;
 			$mode = 'radar';
 			\radar\newradar($mms);		
 		}

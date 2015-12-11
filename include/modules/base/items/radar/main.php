@@ -21,8 +21,8 @@ namespace radar
 		}
 		
 		$npctplist = Array(90,2,5,6,7,11,14);
-		$ev_npctplist = Array(45,89);
-		if($mms==9) $npctplist = array_merge($npctplist,$ev_npctplist);
+		$ev_npctplist = Array(75,76,89,45,4,12);
+		if($mms==8) $npctplist = $ev_npctplist;
 		$tdheight = 20;
 		$screenheight = (count($plsinfo)-count($hidden_arealist))*$tdheight;
 		$result = $db->query("SELECT type,pls FROM {$tablepre}players WHERE hp>0");
@@ -65,7 +65,7 @@ namespace radar
 						${'npc'.$j.'num'}[$i] ='<span class="yellow b">-</span>';
 						}
 					}
-				} elseif($mms == 2 || $mms == 9) {
+				} elseif($mms >= 2) {
 					$num0 = isset($radar[$i][0]) ? $radar[$i][0] : 0;
 					foreach ($npctplist as $j){
 						if($gamestate == 50){${'num'.$j} = 0;}
