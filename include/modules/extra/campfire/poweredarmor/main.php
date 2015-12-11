@@ -20,7 +20,7 @@ namespace poweredarmor
 		$pa_kind_array = Array();
 		foreach(array('arb','arh','ara','arf') as $armor)
 		{
-			if($pad[$armor.'s']!==$nosta && strpos($pad[$armor.'k'],'P')!==false)
+			if($pad[$armor.'s']!=='∞' && strpos($pad[$armor.'k'],'P')!==false)
 			{
 				$pa_kind = $pad[$armor.'k'];
 				//获取动力甲等级
@@ -38,7 +38,7 @@ namespace poweredarmor
 		$pa_confirm_flag = false;
 		foreach(array('arb','arh','ara','arf') as $armor)
 		{
-			if(${$armor.'s'}!==$nosta && strpos(${$armor.'k'},'P')!==false && $armor==$pa_kind)
+			if(${$armor.'s'}!=='∞' && strpos(${$armor.'k'},'P')!==false && $armor==$pa_kind)
 			{
 				$pa_confirm_flag = substr(${$armor.'k'},3) ? substr(${$armor.'k'},3) : 'O';
 				break;
@@ -53,7 +53,7 @@ namespace poweredarmor
 		$pa_confirm_flag = false;
 		foreach(array('arb','arh','ara','arf') as $armor)
 		{
-			if($pad[$armor.'s']!==$nosta && strpos($pad[$armor.'k'],'P')!==false && $armor==$pa_kind)
+			if($pad[$armor.'s']!=='∞' && strpos($pad[$armor.'k'],'P')!==false && $armor==$pa_kind)
 			{
 				$pa_confirm_flag = substr($pad[$armor.'k'],3) ? substr($pad[$armor.'k'],3) : 'O';
 				break;
@@ -70,6 +70,7 @@ namespace poweredarmor
 		$pa_kind_array = get_pa_kind_array($pd);
 		if (sizeof($pa_kind_array))
 		{
+			$mix_pa_reduce_dmg = 0;
 			//最多能抵消多少伤害
 			$max_able_reduce_dmg = $pa['dmg_dealt']*($max_pa_reduce_dmg_per/100);
 			//开始抵消伤害
@@ -86,15 +87,19 @@ namespace poweredarmor
 					//计算实际抵消的伤害和消耗的装甲能量
 					$pa_reduce_dmg = $pd[$kind.'s'] > $once_pas_cost ? round($once_pa_reduce_dmg) : round($pd[$kind.'s'] * $once_pas_reduce_dmg[$lvl]);
 					$pas_cost = $pd[$kind.'s'] > $once_pas_cost ? round($once_pas_cost) : $pd[$kind.'s'];
-					//发log
-					if ($active)
-						$log .= "{$pd['name']}的{$pd[$kind]}抵消了<span class='red'>{$pa_reduce_dmg}</span>点伤害！<br>";
-					else  $log .= "你的{$pd[$kind]}抵消了<span class='red'>{$pa_reduce_dmg}</span>点伤害！<br>";
 					//处理伤害，降低耐久
 					$pa['dmg_dealt'] -= $pa_reduce_dmg;
+					$mix_pa_reduce_dmg += $pa_reduce_dmg;
 					\armor\armor_hurt($pa,$pd,$active,$kind,$pas_cost);
 				}	
 			}
+			//发log
+			if($mix_pa_reduce_dmg)
+			{
+				if ($active)
+					$log .= "<span class='yellow'>{$pd['name']}身上的动力装甲抵消了<span class='red'>{$mix_pa_reduce_dmg}</span>点伤害！</span><br>";
+				else  $log .= "<span class='yellow'>你身上的动力装甲抵消了<span class='red'>{$mix_pa_reduce_dmg}</span>点伤害！</span><br>";
+			}		
 		}
 	}		
 	//动力装甲抵消伤害

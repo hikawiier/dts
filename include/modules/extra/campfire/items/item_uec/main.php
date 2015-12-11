@@ -96,6 +96,7 @@ namespace item_uec
 						$mitm['itme']=&${'itme'.$i}; $mitm['itms']=&${'itms'.$i}; $mitm['itmsk']=&${'itmsk'.$i};
 						$metal_flag += $mitm['itme']*$mitm['itms'];	
 						\itemmain\itms_reduce($mitm,1);
+						break;
 					}
 				}
 				if($metal_flag)

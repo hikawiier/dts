@@ -5,7 +5,7 @@ namespace item_uhf
 	function init() 
 	{
 		eval(import_module('itemmain'));
-		$iteminfo['HF'] = '食物';
+		$iteminfo['HF'] = '特效补给';
 	}
 	
 	function itemuse_uhf(&$theitem)

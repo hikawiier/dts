@@ -20,6 +20,7 @@ gamesysctl,extra/campfire/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
 localproject,extra/campfire/mapability/localproject/,1
 item_uec,extra/campfire/items/item_uec/,1
+globalevent,extra/campfire/end/globalevent/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -46,6 +47,7 @@ item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
 skill2900,extra/campfire/buff/skills/skill2900/,1
+item_uhf,extra/campfire/items/item_uhf/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -178,6 +180,7 @@ skill501,extra/card/skills/skill501/,1
 skill504,extra/card/skills/skill504/,1
 skill83,extra/club/skills/skill83/,1
 skill256,extra/club/skills/skill256/,1
+item_campfire,extra/campfire/items/item_campfire/,1
 skill433,extra/card/skills/skill433/,1
 skill221,extra/club/skills/skill221/,1
 wep_n,base/weapon/wep_n/,1

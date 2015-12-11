@@ -39,7 +39,7 @@ namespace addnpc
 				$npc['type'] = $xtype;
 				$npc['sNo'] = $i;
 				$npc = \npc\init_npcdata($npc,$pls_available);
-//				$spid = uniqid('',true);
+//				$spid = uniqid(''get_safe_plslist,true);
 //				$npc['pass']=$spid;
 //				$npc['endtime'] = $time;
 //				$npc['exp'] = \lvlctl\calc_upexp($npc['lvl'] - 1);
@@ -173,7 +173,7 @@ namespace addnpc
 		$chprocess($theitem);
 	}
 	
-	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())	//烧伤发作死亡新闻
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
