@@ -2665,7 +2665,7 @@ namespace npc
 		'att' => 233,
 		'def' => 233,
 		'lvl' => 28,
-		'skill' => 175,
+		'skill' => 233,
 		'money' => 2200,
 		'arb' => '人啊就是不知道',
 		'arbk' => 'DB',
@@ -2693,7 +2693,7 @@ namespace npc
 		0 => array
 			(
 			'name' => '死于毒酱包的亡灵',
-			'icon' => 0,
+			'icon' => 250,
 			'wep' => '更改菜谱后的不甜酱包',
 			'wepk' => 'WC',
 			'wepe' => 168,
@@ -2701,8 +2701,8 @@ namespace npc
 			'wepsk' => 'p',
 			'itm1' => '愿天堂没有毒酱包',
 			'itmk1' => 'HB',
-			'itme1' => 233,
-			'itms1' => 66,
+			'itme1' => 450,
+			'itms1' => 120,
 			'itm2' => '受潮的军火箱',
 			'itmk2' => 'GC',
 			'itme2' => 1,
@@ -2718,7 +2718,7 @@ namespace npc
 		1 => array
 			(
 			'name' => '死于地雷改造的亡灵',
-			'icon' => 0,
+			'icon' => 249,
 			'wep' => '便携式☆大打击☆',
 			'wepk' => 'WD',
 			'wepe' => 136,
@@ -2728,7 +2728,7 @@ namespace npc
 			'itmk1' => 'A',
 			'itme1' => 233,
 			'itms1' => 233,
-			'itmsk1' => 'za',
+			'itmsk1' => 'zaH',
 			'itm2' => '受潮的军火箱',
 			'itmk2' => 'GC',
 			'itme2' => 1,
@@ -2744,7 +2744,7 @@ namespace npc
 		2 => array
 			(
 			'name' => '死于献祭的亡灵',
-			'icon' => 0,
+			'icon' => 248,
 			'wep' => '吸取生命力的结界',
 			'wepk' => 'WF',
 			'wepe' => 173,
@@ -2770,7 +2770,7 @@ namespace npc
 		3 => array
 			(
 			'name' => '死于鱼弹袭击的亡灵',
-			'icon' => 0,
+			'icon' => 247,
 			'wep' => '虎纹鲨鱼',
 			'wepk' => 'WG',
 			'wepe' => 145,
@@ -2778,7 +2778,7 @@ namespace npc
 			'wepsk' => 'i',
 			'itm1' => '手贱是原罪',
 			'itmk1' => 'ME',
-			'itme1' => 20,
+			'itme1' => 12,
 			'itms1' => 4,
 			'itmsk1' => 'z',
 			'itm2' => '受潮的军火箱',
