@@ -379,7 +379,7 @@ namespace addnpc
 				0 => array
 				(
 				'name' => '0x47554E',
-				'icon' => 0,
+				'icon' => 255,
 				'club' => 3,
 				'wep' => '高能粒子束发射装置',
 				'wepk' => 'WG',
@@ -390,7 +390,7 @@ namespace addnpc
 				1 => array
 				(
 				'name' => '0x4B4E46',
-				'icon' => 0,
+				'icon' => 255,
 				'club' => 2,
 				'wep' => '高周波切割装置',
 				'wepk' => 'WK',
@@ -401,7 +401,7 @@ namespace addnpc
 				2 => array
 				(
 				'name' => '0x505753',
-				'icon' => 0,
+				'icon' => 255,
 				'club' => 1,
 				'wep' => '高频动力装甲拳套',
 				'wepk' => 'WP',
@@ -624,7 +624,7 @@ namespace addnpc
 			'att' => 400,
 			'def' => 250,
 			'lvl' => 112,
-			'skill' => 799,
+			'skill' => 129,
 			'skills' => array('403'=>'4'),
 			'money' => 0,
 			'arb' => '未测试动力装甲-B',
