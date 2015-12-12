@@ -11,29 +11,31 @@ namespace skill2900
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		$msp+=200;$sp+=200;
-		$att+=100;$def+=100;
+		$add_buff_effect = \skillbase\skill_getvalue(2900,'add_buff_effect');
+		$msp+=$add_buff_effect;
+		$sp+=$add_buff_effect;
 	}
 	
 	function lost2900(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		$msp-=200;$sp-=200;
-		$att-=100;$def-=100;
+		$del_buff_effect = \skillbase\skill_getvalue(2900,'del_buff_effect');
+		$msp-=$del_buff_effect;
+		$sp-=$del_buff_effect;
+		\skillbase\skill_setvalue(2900,'del_buff_effect',0);
 	}
 	
 	function skill_onload_event(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('player'));
+		update_skill2900_state();
 		$chprocess($pa);
 	}
 	
 	function skill_onsave_event(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('player'));
 		$chprocess($pa);
 	}
 	
@@ -50,10 +52,22 @@ namespace skill2900
 		$chprocess($theitem);
 	}
 	
+	function update_skill2900_state()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(check_skill2900_state()==0)
+		{
+			$del_buff_effect = \skillbase\skill_getvalue(2900,'del_buff_effect');
+			if($del_buff_effect)
+			{
+				\skillbase\skill_lost(2900);
+			}
+		}
+	}
+	
 	function check_skill2900_state(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','skill2900'));
-		if (!\skillbase\skill_query(2900)) return 0;
 		$e=\skillbase\skill_getvalue(2900,'end');
 		if ($now<$e) return 1;
 		return 0;
@@ -72,7 +86,7 @@ namespace skill2900
 			$z=Array(
 				'disappear' => 1,
 				'clickable' => 0,
-				'hint' => '状态「饱腹」<br>体力上限+200<br>攻击力和防御力+100',
+				'hint' => '状态「饱腹」<br>体力上限+200',
 			);
 			if ($now<$skill2900_end)
 			{

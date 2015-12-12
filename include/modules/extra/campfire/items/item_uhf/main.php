@@ -15,19 +15,17 @@ namespace item_uhf
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
-		if($itm=='大补锅')
+		
+		if(strpos($itm,'测试用补给')!==false)
 		{
-			$log.="喵，你吃饱了！<br>";
-			$buff_last_time = 15;
-			if (!\skillbase\skill_query(2900,$pa)){
-				\skillbase\skill_acquire(2900,$pa);
-				$buff_start_time=$now;
-			}else{
-				$buff_start_time=\skillbase\skill_getvalue(2900,'end',$pa);
-				if ($buff_start_time<$now) $buff_start_time=$now;
-			}
-			\skillbase\skill_setvalue(2900,'start',$buff_start_time,$pa);
-			\skillbase\skill_setvalue(2900,'end',$buff_start_time+$buff_last_time,$pa);
+			$log.="你使用了测试用特效补给来获得BUFF。<br>";
+			$lasttime = 15;
+			$starttime = $now;
+			\skillbase\skill_acquire(2900);
+			\skillbase\skill_setvalue(2900,'start',$starttime);
+			\skillbase\skill_setvalue(2900,'end',$starttime+$lasttime);
+			\skillbase\skill_setvalue(2900,'add_buff_effect',200);
+			\skillbase\skill_setvalue(2900,'del_buff_effect',200);
 		}
 	}
 	function itemuse(&$theitem)
