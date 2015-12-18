@@ -15,7 +15,7 @@ bufficons,extra/misc/bufficons/,1
 explore,base/explore/,1
 noise,base/noise/,1
 lvlctl,base/lvlctl/,1
-buffeffect,extra/campfire/buff/buffeffect/,1
+buffeffect,campfire/buff/buffeffect/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -46,12 +46,12 @@ item_uee,base/items/item_uee/,1
 song,base/items/song/,1
 skill23,extra/club/skills/skill23/,1
 skill220,extra/club/skills/skill220/,1
-itemdepot,extra/campfire/mapability/itemdepot/,1
-remakegun,extra/campfire/mapability/remakegun/,1
-item_urt,extra/campfire/items/item_urt/,1
-changetrap,extra/campfire/mapability/changetrap/,1
-skill2900,extra/campfire/buff/skills/skill2900/,1
-item_uhf,extra/campfire/items/item_uhf/,1
+itemdepot,campfire/mapability/itemdepot/,1
+remakegun,campfire/mapability/remakegun/,1
+item_urt,campfire/items/item_urt/,1
+changetrap,campfire/mapability/changetrap/,1
+skill2900,campfire/buff/skills/skill2900/,1
+item_uhf,campfire/items/item_uhf/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -70,7 +70,7 @@ skill69,extra/club/skills/skill69/,1
 skill300,extra/achievement/skills/skill300/,1
 attrbase,extra/attr/attrbase/,1
 cooldown,base/cooldown/,1
-item_urg,extra/campfire/items/item_urg/,1
+item_urg,campfire/items/item_urg/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1
@@ -164,6 +164,7 @@ skill232,extra/club/skills/skill232/,1
 skill234,extra/club/skills/skill234/,1
 skill235,extra/club/skills/skill235/,1
 skill420,extra/card/skills/skill420/,1
+<<<<<<< HEAD
 skill424,extra/instance/gtype1/skill424/,1
 skill426,extra/instance/gtype1/skill426/,1
 skill428,extra/instance/gtype1/skill428/,1
@@ -200,6 +201,9 @@ skill83,extra/club/skills/skill83/,1
 skill256,extra/club/skills/skill256/,1
 skill433,extra/card/skills/skill433/,1
 item_campfire,extra/campfire/items/item_campfire/,1
+=======
+item_campfire,campfire/items/item_campfire/,1
+>>>>>>> change mod's directory
 skill236,extra/club/skills/skill236/,1
 skill221,extra/club/skills/skill221/,1
 wep_n,base/weapon/wep_n/,1
@@ -358,8 +362,12 @@ attrbase,extra/attr/attrbase/,1
 skill407,extra/card/skills/skill407/,1
 skill32,extra/club/skills/skill32/,1
 skill202,extra/club/skills/skill202/,1
+<<<<<<< HEAD
 skill445,extra/card/skills/skill445/,1
 poweredarmor,extra/campfire/poweredarmor/,1
+=======
+poweredarmor,campfire/poweredarmor/,1
+>>>>>>> change mod's directory
 pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1
@@ -464,8 +472,8 @@ skill50,extra/club/skills/skill50/,1
 skill27,extra/club/skills/skill27/,1
 skill43,extra/club/skills/skill43/,1
 skill56,extra/club/skills/skill56/,1
-gamesysctl,extra/campfire/mapability/gamesysctl/,1
+gamesysctl,campfire/mapability/gamesysctl/,1
 skill57,extra/club/skills/skill57/,1
-localproject,extra/campfire/mapability/localproject/,1
-item_uec,extra/campfire/items/item_uec/,1
-globalevent,extra/campfire/end/globalevent/,1
+localproject,campfire/mapability/localproject/,1
+item_uec,campfire/items/item_uec/,1
+globalevent,campfire/end/globalevent/,1
