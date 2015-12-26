@@ -50,6 +50,10 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
+			} elseif(is_array($npc['pls'])) {
+				$plslist = $npc['pls'];
+				shuffle($plslist);
+				$npc['pls'] = $plslist[0];
 			}else{
 				$npc['pls'] = 0;
 			}
