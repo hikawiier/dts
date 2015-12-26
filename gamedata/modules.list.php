@@ -164,7 +164,6 @@ skill232,extra/club/skills/skill232/,1
 skill234,extra/club/skills/skill234/,1
 skill235,extra/club/skills/skill235/,1
 skill420,extra/card/skills/skill420/,1
-<<<<<<< HEAD
 skill424,extra/instance/gtype1/skill424/,1
 skill426,extra/instance/gtype1/skill426/,1
 skill428,extra/instance/gtype1/skill428/,1
@@ -201,9 +200,7 @@ skill83,extra/club/skills/skill83/,1
 skill256,extra/club/skills/skill256/,1
 skill433,extra/card/skills/skill433/,1
 item_campfire,extra/campfire/items/item_campfire/,1
-=======
 item_campfire,campfire/items/item_campfire/,1
->>>>>>> change mod's directory
 skill236,extra/club/skills/skill236/,1
 skill221,extra/club/skills/skill221/,1
 wep_n,base/weapon/wep_n/,1
@@ -362,12 +359,9 @@ attrbase,extra/attr/attrbase/,1
 skill407,extra/card/skills/skill407/,1
 skill32,extra/club/skills/skill32/,1
 skill202,extra/club/skills/skill202/,1
-<<<<<<< HEAD
 skill445,extra/card/skills/skill445/,1
 poweredarmor,extra/campfire/poweredarmor/,1
-=======
 poweredarmor,campfire/poweredarmor/,1
->>>>>>> change mod's directory
 pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1
