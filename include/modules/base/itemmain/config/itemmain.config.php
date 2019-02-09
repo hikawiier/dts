@@ -34,7 +34,7 @@ namespace itemmain
 		//M* item_um 各类强化药
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
-		//p,ygo,fy,GA,GC 各类礼包 //礼包道具现在统一使用类别p，用属性^999^~^995^来区分
+		//p,ygo,fy,GA,GC 各类礼包
 		//RG item_urg 枪械部件道具
 		//RT item_urt 传送器道具
 		//ss song 歌词卡片
@@ -88,6 +88,7 @@ namespace itemmain
 		//Q ///////////////////////////
 		//q ex_dmg_def 防毒
 		//R ex_rapid_def 防连
+		//R ammunition 枪械扩容
 		//r ex_rapid_attr 连击		
 		//S ex_attr_silencer 消音
 		//s itemmix_sync 调整（同调合成必需）

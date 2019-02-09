@@ -20,11 +20,11 @@ namespace gameflow_combo
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','gameflow_combo'));
 		if(!$time) $time = $now;
-		if($gamestate < 40 && $gamestate >= 30 && $alivenum <= $combolimit  && !$bancombo) {//判定进入连斗条件1：停止激活时玩家数少于特定值
+		if($gamestate < 40 && $gamestate >= 30 && $alivenum <= $combolimit && !$bancombo) {//判定进入连斗条件1：停止激活时玩家数少于特定值
 			$gamestate = 40;
 			addnews($time,'combo');
 			systemputchat($time,'combo');
-		}elseif($gamestate < 40 && $gamestate >= 20 && $combonum && $deathnum >= $combonum  && !$bancombo){//判定进入连斗条件2：死亡人数超过特定公式计算出的值
+		}elseif($gamestate < 40 && $gamestate >= 20 && $combonum && $deathnum >= $combonum && !$bancombo){//判定进入连斗条件2：死亡人数超过特定公式计算出的值
 			$real_combonum = calculate_combonum();
 			if($deathnum >= $real_combonum){
 				$gamestate = 40;

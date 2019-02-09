@@ -39,7 +39,7 @@ namespace addnpc
 				$npc['type'] = $xtype;
 				$npc['sNo'] = $i;
 				$npc = \npc\init_npcdata($npc,$pls_available);
-//				$spid = uniqid('',true);
+//				$spid = uniqid(''get_safe_plslist,true);
 //				$npc['pass']=$spid;
 //				$npc['endtime'] = $time;
 //				$npc['exp'] = \lvlctl\calc_upexp($npc['lvl'] - 1);
@@ -66,7 +66,11 @@ namespace addnpc
 				$summon_ids[] = $db->insert_id();
 				$newsname=$typeinfo[$xtype].' '.$npc['name'];
 				//$npcwordlist[] = $typeinfo[$type].' '.$npc['name'];
-				addnews($now, 'addnpc', $newsname);
+				if($num>1){
+					addnews($now, 'addnpcs', $newsname,$num);
+				}else{
+					addnews($now, 'addnpc', $newsname);
+				}
 				//$result = $db->query("SELECT pid FROM {$tablepre}players where pass='$spid' AND type>0");
 //				if (!$summon_pid)
 //				{
@@ -174,7 +178,7 @@ namespace addnpc
 		$chprocess($theitem);
 	}
 	
-	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())	//烧伤发作死亡新闻
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
@@ -182,7 +186,7 @@ namespace addnpc
 		if($news == 'addnpc') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">{$a}乱入战场！</span></li>";
 		if($news == 'addnpcs') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">{$b}名{$a}加入战斗！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">{$b}名{$a}乱入战场！</span></li>";
 		if($news == 'secphase') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了挑战者之证，让3名幻影执行官加入了战场！打倒他们去获得ID卡来解除游戏吧！</span></li>";
 		if($news == 'thiphase') 

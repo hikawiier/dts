@@ -71,6 +71,7 @@ $mixinfo = array
 	array('class' => 'wk', 'stuff' => array('冰封的『Oblivion』','解冻药水'),'result' => array('『Oblivion』','WK',300,10,'i'),),
 	array('class' => 'wk', 'stuff' => array('『Oathkeeper』','『Oblivion』'),'result' => array('『Two Become One』','WK',450,20,'ui'),),
 	
+	array('class' => 'wp', 'stuff' => array('御币','☆守矢神签☆'),'result' => array('☆守矢风祝的御币☆','WP',139,19,'ew'),),
 	array('class' => 'wp', 'stuff' => array('电击鞭','原型武器P','实验装甲A'),'result' => array('『T-LINK念动冲拳』','WP',180,'∞','e'),),
 	array('class' => 'wp', 'stuff' => array('☆电击器☆','原型武器P','实验装甲A'),'result' => array('『T-LINK念动冲拳』','WP',240,'∞','e'),),
 	array('class' => 'wp', 'stuff' => array('『T-LINK念动冲拳』','增幅设备'),'result' => array('『T-LINK天上天下念动连击拳』','WP',240,'∞','erN'),),
@@ -81,6 +82,9 @@ $mixinfo = array
 	array('class' => 'wp', 'stuff' => array('《哲♂学》','小棍棒','增幅设备'),'result' => array('森之妖精的棍棒','WP',200,60,'re'),),
 	array('class' => 'wp', 'stuff' => array('『祝福宝石』','『心灵激光鞭』'),'result' => array('萨卡兰姆神圣棍棒','WP',150,140,'Nwcy'),),
 	array('class' => 'wp', 'stuff' => array('悲叹之种','萨卡兰姆神圣棍棒'),'result' => array('妖邪必败','WP',1540,200,'Nfcy'),),
+	array('class' => 'wp', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
+	array('class' => 'hidden', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰钉棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
+	
 	array('class' => 'wp', 'stuff' => array('『延展御柱』','驱云弹','弹幕符札'),'result' => array('御柱「Meteoric Onbashira」','WP',200,50,'Nir'),),
 	array('class' => 'wp', 'stuff' => array('手机','手枪子弹'),'result' => array('『诺基亚』','WP',50,9999,'N'),),
 	array('class' => 'wp', 'stuff' => array('『诺基亚』','曾经的荣光-巨盾','防弹背心','防弹背心','防弹背心','防弹背心'),'result' => array('『曾经的荣光-诺基亚』','WP',255,9999,'NAZ'),),
@@ -99,7 +103,7 @@ $mixinfo = array
 	array('class' => 'wp_mrm', 'stuff' => array('【死神降临】','【死神降临】','【死神降临】'),'result' => array('【死神绝界】','WP',6666,666,'ZBbdrV'),),
 	
 	
-	array('class' => 'wg', 'stuff' => array('『环形激光』','红宝石方块','原型武器G'),'result' => array('『红石光束炮』','WG',240,360,'ud'),),
+	array('class' => 'wg', 'stuff' => array('『环形激光』','红宝石方块','原型武器G'),'result' => array('『红石光束炮』','WG',450,12,'Zud'),),
 	array('class' => 'hidden', 'stuff' => array('红宝石方块','蓝宝石方块','绿宝石方块','非法枪械部件'),'result' => array('『宝石光束炮-试作型』','WG',1800,144,'ndo'),),
 	array('class' => 'wg', 'stuff' => array('老式火枪','原型武器G','某种电子零件'),'result' => array('★发条式突击步枪★','WG',150,100,'r'),),
 	array('class' => 'wg', 'stuff' => array('『60mm火神炮』','鲨鱼鳍','原型武器G'),'result' => array('『迷你鲨』','WG',20,12,'r'),),
@@ -147,7 +151,7 @@ $mixinfo = array
 	array('class' => 'wd', 'stuff' => array('★幽灵冲击★','《魔女的魔导书》','笔记本电脑'),'result' => array('奥术飞弹','WD',400,300,'Nnr'),),
 
 	array('class' => 'wd', 'stuff' => array('寒冰炸弹','奥术飞弹','烈焰风暴'),'result' => array('★BIUBIUBIU★','WD',600,400,'ZnyNdr'),),
-	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','Znfdr'),),
+	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','ZnkNdr'),),
 
 	array('class' => 'd', 'stuff' => array('数据……碎片','电子马克笔','天然属性也是很可怕的！'),'result' => array('黑色夺魂曲','DB',57,77,'ZBb'),),
 	array('class' => 'd', 'stuff' => array('『午夜钟声』','『午夜钟声』','『午夜钟声』'),'result' => array('电子马克笔','DA',53,75,'Z'),),
@@ -161,7 +165,6 @@ $mixinfo = array
 	array('class' => 'item', 'stuff' => array('安雅人体冰雕','解冻药水'),'result' => array('武器师安雅的奖赏','Y',1,1,),),
 	array('class' => 'item', 'stuff' => array('手机','笔记本电脑'),'result' => array('移动PC','EE',1,1,),),
 	array('class' => 'item', 'stuff' => array('原型武器G','原型武器C'),'result' => array('电磁发射装置','X',1,1,''),),
-	//array('class' => 'item', 'stuff' => array('风见 幽香的ID卡','坂持 金发的ID卡','御坂 美琴的ID卡'),'result' => array('游戏解除钥匙','Y',1,1,),),
 	array('class' => 'item', 'stuff' => array('社员专用的ID卡','社员专用的ID卡','社员专用的ID卡'),'result' => array('游戏解除钥匙','Y',1,1,),),
 	array('class' => 'item', 'stuff' => array('★荆棘式电子地雷★','★阔剑地雷★','★全图不唯一的野生巨大香蕉★'),'result' => array('★一发逆转神话★','TNc',1,1,'x'),),
 	array('class' => 'item', 'stuff' => array('水','黑色雏菊','白色方块'),'result' => array('风祭河水','Y',1,1,'x'),),

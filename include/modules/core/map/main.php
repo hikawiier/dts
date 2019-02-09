@@ -42,6 +42,7 @@ namespace map
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
+			$r = array_slice($arealist,$hidden_arealist);
 			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
 			return $r;
 		}
@@ -259,7 +260,7 @@ namespace map
 			$arealimit = $arealimit > 0 ? $arealimit : 1; 
 			if( $validnum <= 0 && $areanum >= $arealimit*$areaadd ) {//判定无人参加并结束游戏
 				\sys\gameover($areatime-get_area_interval()*60+1,'end4');
-			} elseif((($areanum >= $arealimit*$areaadd) || ($validnum >= $validlimit)) && (!$bancombo)){//判定游戏停止激活
+			} elseif((($areanum >= $arealimit*$areaadd) || ($validnum >= $validlimit)) && (!$bancombo)) {//判定游戏停止激活
 				$gamestate = 30;
 			}
 		}

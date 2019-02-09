@@ -2,10 +2,10 @@
 -- version phpStudy 2014
 -- http://www.phpmyadmin.net
 --
--- ä¸»æœº: localhost
--- ç”Ÿæˆæ—¥æœŸ: 2017 å¹?12 æœ?17 æ—?12:17
--- æœåŠ¡å™¨ç‰ˆæœ?: 5.5.53
--- PHP ç‰ˆæœ¬: 5.6.27
+-- 主机: localhost
+-- 生成日期: 2017 �?12 �?17 �?12:17
+-- 服务器版�?: 5.5.53
+-- PHP 版本: 5.6.27
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- æ•°æ®åº?: `acdts_2`
+-- 数据�?: `acdts_2`
 --
 
 -- --------------------------------------------------------
@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_game` (
   `combonum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `hack` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hdamage` int(10) unsigned NOT NULL DEFAULT '0',
   `hplayer` char(15) NOT NULL DEFAULT '',
   `winmode` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -301,6 +302,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `itme6` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `itms6` char(5) NOT NULL DEFAULT '0',
   `itmsk6` varchar(40) NOT NULL DEFAULT '',
+  `itemdepot` varchar(8000) NOT NULL default '',
   `searchmemory` text NOT NULL,
   `nskill` text NOT NULL,
   `nskillpara` text NOT NULL,
