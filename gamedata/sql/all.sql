@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2017 �?12 �?17 �?12:17
--- 服务器版�?: 5.5.53
+-- 生成日期: 2017 �?12 �?17 �?12:17
+-- 服务器版�?: 5.5.53
 -- PHP 版本: 5.6.27
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- 数据�?: `acdts_2`
+-- 数据�?: `acdts_2`
 --
 
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_chat`
+-- è¡¨çš„ç»“æž„ `acbra2_chat`
 --
 
 DROP TABLE IF EXISTS `acbra2_chat`;
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_chat` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_game`
+-- è¡¨çš„ç»“æž„ `acbra2_game`
 --
 
 DROP TABLE IF EXISTS `acbra2_game`;
@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_game` (
   `combonum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `hack` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hdamage` int(10) unsigned NOT NULL DEFAULT '0',
   `hplayer` char(15) NOT NULL DEFAULT '',
   `winmode` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -70,13 +71,14 @@ CREATE TABLE IF NOT EXISTS `acbra2_game` (
   `noisevars` varchar(1000) NOT NULL DEFAULT '',
   `roomvars` text NOT NULL,
   `gamevars` text NOT NULL,
+  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`groomid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_history`
+-- è¡¨çš„ç»“æž„ `acbra2_history`
 --
 
 DROP TABLE IF EXISTS `acbra2_history`;
@@ -108,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_history` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_log`
+-- è¡¨çš„ç»“æž„ `acbra2_log`
 --
 
 DROP TABLE IF EXISTS `acbra2_log`;
@@ -124,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_log` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_mapitem`
+-- è¡¨çš„ç»“æž„ `acbra2_mapitem`
 --
 
 DROP TABLE IF EXISTS `acbra2_mapitem`;
@@ -142,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_mapitem` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_maptrap`
+-- è¡¨çš„ç»“æž„ `acbra2_maptrap`
 --
 
 DROP TABLE IF EXISTS `acbra2_maptrap`;
@@ -160,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_maptrap` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_newsinfo`
+-- è¡¨çš„ç»“æž„ `acbra2_newsinfo`
 --
 
 DROP TABLE IF EXISTS `acbra2_newsinfo`;
@@ -179,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_newsinfo` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_players`
+-- è¡¨çš„ç»“æž„ `acbra2_players`
 --
 
 DROP TABLE IF EXISTS `acbra2_players`;
@@ -300,6 +302,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `itme6` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `itms6` char(5) NOT NULL DEFAULT '0',
   `itmsk6` varchar(40) NOT NULL DEFAULT '',
+  `itemdepot` varchar(8000) NOT NULL default '',
   `searchmemory` text NOT NULL,
   `nskill` text NOT NULL,
   `nskillpara` text NOT NULL,
@@ -312,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_roomlisteners`
+-- è¡¨çš„ç»“æž„ `acbra2_roomlisteners`
 --
 
 DROP TABLE IF EXISTS `acbra2_roomlisteners`;
@@ -326,7 +329,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_roomlisteners` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_shopitem`
+-- è¡¨çš„ç»“æž„ `acbra2_shopitem`
 --
 
 DROP TABLE IF EXISTS `acbra2_shopitem`;
@@ -348,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_shopitem` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `acbra2_users`
+-- è¡¨çš„ç»“æž„ `acbra2_users`
 --
 
 DROP TABLE IF EXISTS `acbra2_users`;

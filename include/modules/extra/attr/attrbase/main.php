@@ -22,8 +22,9 @@ namespace attrbase
 		eval(import_module('player'));
 		$ret = Array();
 		foreach ($battle_equip_list as $itm)
-			foreach (\itemmain\get_itmsk_array($pd[$itm.'sk']) as $key)
-				array_push($ret,$key);
+			if(strpos($pd[$itm.'k'],'P')===false || $pd[$itm.'s']!=='∞')
+				foreach (\itemmain\get_itmsk_array($pd[$itm.'sk']) as $key)
+					array_push($ret,$key);
 				
 		return $ret;
 	}
@@ -76,17 +77,19 @@ namespace attrbase
 		if ($pa == NULL)
 		{
 			foreach ($battle_equip_list as $itm)
-				foreach (\itemmain\get_itmsk_array(${$itm.'sk'}) as $key)
-					if ($key==$nm)
-						return 1;
+				if(strpos(${$itm.'k'},'P')===false || ${$itm.'s'}!=='∞')
+					foreach (\itemmain\get_itmsk_array(${$itm.'sk'}) as $key)
+						if ($key==$nm)
+							return 1;
 			return 0;
 		}
 		else
 		{
 			foreach ($battle_equip_list as $itm)
-				foreach (\itemmain\get_itmsk_array($pa[$itm.'sk']) as $key)
-					if ($key==$nm)
-						return 1;
+				if(strpos($pa[$itm.'k'],'P')===false || $pa[$itm.'s']!==$nosta)
+					foreach (\itemmain\get_itmsk_array($pa[$itm.'sk']) as $key)
+						if ($key==$nm)
+							return 1;
 			return 0;
 		}
 	}

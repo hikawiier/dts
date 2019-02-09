@@ -22,6 +22,7 @@ namespace itemmain
 		//B* item_ub 电池
 		//C* item_uc 各类异常状态治疗药剂
 		//D* armor 各类防具
+		//EC item_uec 电子道具
 		//EE item_uee 电脑设备
 		//ER radar 雷达
 		//EW weather 天气控制道具
@@ -29,10 +30,13 @@ namespace itemmain
 		//GB* ammunition 各类弹药
 		//HH,HS,HB edible 各类命体恢复
 		//HM,HT song 歌魂补给
+		//HF item_uhf 提供BUFF的食物
 		//M* item_um 各类强化药
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
-		//p,ygo,fy 各类礼包
+		//p,ygo,fy,GA,GC 各类礼包
+		//RG item_urg 枪械部件道具
+		//RT item_urt 传送器道具
 		//ss song 歌词卡片
 		//T* trap 各类陷阱
 		//U item_misc
@@ -84,6 +88,7 @@ namespace itemmain
 		//Q ///////////////////////////
 		//q ex_dmg_def 防毒
 		//R ex_rapid_def 防连
+		//R ammunition 枪械扩容
 		//r ex_rapid_attr 连击		
 		//S ex_attr_silencer 消音
 		//s itemmix_sync 调整（同调合成必需）
@@ -104,6 +109,8 @@ namespace itemmain
 		//| 特殊分隔符
 		//^001 itemmix_sync 同调（标记是同调产物）
 		//^002 itemmix_sync 变星
+		//^kagari001 ammunition 枪械扩容
+		//^kagarix01 skill2800 动力装甲 
 	);
 	
 	$itemspkdesc = array(

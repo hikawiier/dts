@@ -50,6 +50,10 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
+			} elseif(is_array($npc['pls'])) {
+				$plslist = $npc['pls'];
+				shuffle($plslist);
+				$npc['pls'] = $plslist[0];
 			}else{
 				$npc['pls'] = 0;
 			}
@@ -91,7 +95,7 @@ namespace npc
 		if ($xmode & 8) {
 			//echo " - NPC初始化 - ";
 			$db->query("DELETE FROM {$tablepre}players WHERE type>0 ");
-			//$plsnum = sizeof($plsinfo);
+			//$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
 			$npcqry = '';
 			$ninfo = get_npclist();
 			//生成非禁区列表（不含英灵殿）
@@ -215,8 +219,8 @@ namespace npc
 //		if (eval(__MAGIC__)) return $___RET_VALUE;
 //		
 //		eval(import_module('sys','map','npc'));
-//		$plsnum = sizeof($plsinfo) - 1;
-//		if ($areanum >= sizeof($plsinfo) - 1) return $chprocess($where);
+//		$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
+//		if ($areanum >= (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1) return $chprocess($where);
 //		$query = $db->query("SELECT * FROM {$tablepre}players WHERE pls={$where} AND type>0 AND hp>0");
 //		while($sub = $db->fetch_array($query)) 
 //		{
