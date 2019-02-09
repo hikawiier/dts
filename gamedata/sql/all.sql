@@ -71,7 +71,6 @@ CREATE TABLE IF NOT EXISTS `acbra2_game` (
   `roomvars` text NOT NULL,
   `gamevars` text NOT NULL,
   `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `gameotherinfo` char(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`groomid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

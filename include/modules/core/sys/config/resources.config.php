@@ -73,7 +73,6 @@ namespace sys
 		41 => '自杀袭击',
 		42 => '自我完结',
 		43 => '战败身亡', //弓系
->>>>>>> add mod - changetrap
 	);
 	
 	$dinfo = Array(
