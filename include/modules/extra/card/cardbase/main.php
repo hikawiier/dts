@@ -16,7 +16,7 @@ namespace cardbase
 	function get_user_cards_process($udata){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
-		$cardlist = explode('_',$udata['cardlist']);
+		$cardlist = array_filter(explode('_',$udata['cardlist']));
 		if (!in_array(0, $cardlist))
 		{
 			$cardlist[] = 0;

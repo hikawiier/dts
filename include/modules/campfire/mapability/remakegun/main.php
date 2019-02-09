@@ -450,23 +450,23 @@ namespace remakegun
 		ob_clean();
 		return;
 	}
-	function parse_news($news, $hour, $min, $sec, $a, $b, $c, $d, $e)
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'remake_succ') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用{$b}改造了<span class='yellow'>{$c}</span>，真是可恶的欧洲人！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用{$b}改造了<span class='yellow'>{$c}</span>，真是可恶的欧洲人！</span><br>\n";
 		if($news == 'remake_fail') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用{$b}对<span class='yellow'>{$c}</span>进行改造……但是很残念的失败了……</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用{$b}对<span class='yellow'>{$c}</span>进行改造……但是很残念的失败了……</span><br>\n";
 		if($news == 'repair_succ') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功去除了<span class='yellow'>{$c}</span>上的【{$b}】属性，真是可恶的欧洲人！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功去除了<span class='yellow'>{$c}</span>上的【{$b}】属性，真是可恶的欧洲人！</span><br>\n";
 		if($news == 'repair_fail') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用去除<span class='yellow'>{$c}</span>上的【{$b}】属性……但是很残念的失败了……</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图使用去除<span class='yellow'>{$c}</span>上的【{$b}】属性……但是很残念的失败了……</span><br>\n";
 		if($news == 'repairadd_succ') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功修复了武器<span class='yellow'>{$c}</span>，并使其效果增加了{$b}点，真是可恶的欧洲人！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功修复了武器<span class='yellow'>{$c}</span>，并使其效果增加了{$b}点，真是可恶的欧洲人！</span><br>\n";
 		if($news == 'repairadd_fail') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图修复武器<span class='yellow'>{$b}</span>……但是很残念的失败了……</span><br>\n";
-		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图修复武器<span class='yellow'>{$b}</span>……但是很残念的失败了……</span><br>\n";
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========Fargo前基地特殊功能：remakegun功能部分结束==========*/
 }

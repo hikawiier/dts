@@ -512,23 +512,23 @@ namespace gamesysctl
 		$npcdata = $db->fetch_array($result);
 		return $npcdata;
 	}
-	function parse_news($news, $hour, $min, $sec, $a, $b, $c, $d, $e)
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'gsc_cwth') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，将天气变成了{$wthinfo[$b]}！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，将天气变成了{$wthinfo[$b]}！</span><br>\n";
 		if($news == 'gsc_hack') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，将禁区全部解除了！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，将禁区全部解除了！</span><br>\n";
 		if($news == 'gsc_addarea') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，使禁区的到来提前至{$b}秒后！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，使禁区的到来提前至{$b}秒后！</span><br>\n";
 		if($news == 'gsc_recombo') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，恢复了幻境的连斗检测机制！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，恢复了幻境的连斗检测机制！</span><br>\n";
 		if($news == 'gsc_bancombo') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，关闭了幻境的连斗检测机制！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，关闭了幻境的连斗检测机制！</span><br>\n";
 		if($news == 'gsc_exnpc') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，使大量未经测试的危险NPC被释放了！</span><br>\n";
-		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，使大量未经测试的危险NPC被释放了！</span><br>\n";
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========无月之影特殊功能：gamesysctl功能部分结束==========*/
 }

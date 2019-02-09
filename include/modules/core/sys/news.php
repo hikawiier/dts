@@ -82,7 +82,7 @@ namespace sys
 		elseif($news == 'roominfo')
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，本局游戏为<span class=\"yellow\">{$a}</span>，{$b}</li>";
 		
-		return "<li>$time,$news,$a,$b,$c,$d<br>\n";
+		return "<li id=\"nid$nid\">$time,$news,$a,$b,$c,$d<br>\n";
 	}
 	
 	function load_news($start = 0, $range = 0, $noday = 0, $rprefix=''){

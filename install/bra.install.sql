@@ -14,6 +14,7 @@ CREATE TABLE `bra_game` (
   `combonum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `hack` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hdamage` int(10) unsigned NOT NULL DEFAULT '0',
   `hplayer` char(15) NOT NULL DEFAULT '',
   `winmode` tinyint(3) unsigned NOT NULL DEFAULT '0',

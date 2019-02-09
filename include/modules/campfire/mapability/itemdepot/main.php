@@ -190,15 +190,15 @@ namespace itemdepot
 		$itemdepot = $idpt;
 		\player\player_save(\player\fetch_playerdata_by_pid($pid));
 	}
-	function parse_news($news, $hour, $min, $sec, $a, $b, $c, $d, $e)
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'itemdepot_save') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}向位于精灵中心的仓库中存入了道具<span class='yellow'>{$b}</span>。</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}向位于精灵中心的仓库中存入了道具<span class='yellow'>{$b}</span>。</span><br>\n";
 		if($news == 'itemdepot_load') 
-			return "<li>{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}从位于精灵中心的仓库中取出了道具<span class='yellow'>{$b}</span>。</span><br>\n";
-		return $chprocess($news, $hour, $min, $sec, $a, $b, $c, $d, $e);
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}从位于精灵中心的仓库中取出了道具<span class='yellow'>{$b}</span>。</span><br>\n";
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========精灵中心特殊功能：itemdepot功能部分结束==========*/
 }
