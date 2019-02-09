@@ -35,8 +35,6 @@ namespace itemmain
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
 		//p,ygo,fy,GA,GC 各类礼包
-		//RG item_urg 枪械部件道具
-		//RT item_urt 传送器道具
 		//ss song 歌词卡片
 		//T* trap 各类陷阱
 		//U item_misc
@@ -108,8 +106,6 @@ namespace itemmain
 		//| 特殊分隔符
 		//^001 itemmix_sync 同调（标记是同调产物）
 		//^002 itemmix_sync 变星
-		//^kagari001 ammunition 枪械扩容
-		//^kagarix01 skill2800 动力装甲 
 	);
 	
 	$itemspkdesc = array(

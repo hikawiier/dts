@@ -41,7 +41,6 @@ namespace map
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
-			$r = array_slice($arealist,$hidden_arealist);
 			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
 			return $r;
 		}

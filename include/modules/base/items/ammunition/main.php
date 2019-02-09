@@ -20,8 +20,7 @@ namespace ammunition
 		$iteminfo['GBr'] = '机枪弹药';
 		$iteminfo['GBi'] = '气体弹药';
 		$iteminfo['GBh'] = '重型弹药';
-		$iteminfo['GBe'] = '能源弹药';
-		
+		$iteminfo['GBe'] = '能源弹药';		
 		$itemspkinfo['o'] = '一发';
 		
 		$itemspkinfo['^kagari001'] = '扩容';

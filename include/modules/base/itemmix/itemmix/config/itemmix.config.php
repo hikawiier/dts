@@ -16,9 +16,7 @@ $mixinfo = array
 	array('class' => 'h', 'stuff' => array('治疗针','体力回复药','蒸馏水'),'result' => array('特级恢复药','HB',240,3,),),	
 	array('class' => 'h', 'stuff' => array('甜生姜','地雷酥糖'),'result' => array('曾经的荣光-橙黄','HB',50,1,),),
 	array('class' => 'h', 'stuff' => array('曾经的荣光-橙黄','面包'),'result' => array('更改菜谱后的不甜酱包（无毒）','HB',300,8,'Z'),),
-	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',95,4,),),
-	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,4,),),
-	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),
+	array('class' => 'h', 'stuff' => array('早苗面包','仙贝面包','海星面包','彩虹光芒的面包'),'result' => array('禁忌「Four of a Bread」','HB',444,4,'z'),),
 	array('class' => 'h', 'stuff' => array('寂寞','脸','杯子'),'result' => array('淡定红茶','HB',200,20,),),
 	array('class' => 'h', 'stuff' => array('凸眼鱼','面包','锅'),'result' => array('仰望星空派','HR',30,3,),),
 	array('class' => 'h', 'stuff' => array('河豚鱼','氯化氢','大夭使的气息'),'result' => array('鲱鱼罐头','PR9',90,10,),),
@@ -81,8 +79,6 @@ $mixinfo = array
 	array('class' => 'wp', 'stuff' => array('《哲♂学》','小棍棒','增幅设备'),'result' => array('森之妖精的棍棒','WP',200,60,'re'),),
 	array('class' => 'wp', 'stuff' => array('『祝福宝石』','『心灵激光鞭』'),'result' => array('萨卡兰姆神圣棍棒','WP',150,140,'Nwcy'),),
 	array('class' => 'wp', 'stuff' => array('悲叹之种','萨卡兰姆神圣棍棒'),'result' => array('妖邪必败','WP',1540,200,'Nfcy'),),
-	array('class' => 'wp', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
-	array('class' => 'hidden', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰钉棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
 	
 	array('class' => 'wp', 'stuff' => array('『延展御柱』','驱云弹','弹幕符札'),'result' => array('御柱「Meteoric Onbashira」','WP',200,50,'Nir'),),
 	array('class' => 'wp', 'stuff' => array('手机','手枪子弹'),'result' => array('『诺基亚』','WP',50,9999,'N'),),
@@ -149,16 +145,13 @@ $mixinfo = array
 	array('class' => 'wd', 'stuff' => array('『祝福宝石』','★瓶装幽灵★','某种电子零件'),'result' => array('★幽灵冲击★','WD',320,200,'Nn'),),
 	array('class' => 'wd', 'stuff' => array('★幽灵冲击★','《魔女的魔导书》','笔记本电脑'),'result' => array('奥术飞弹','WD',400,300,'Nnr'),),
 	array('class' => 'wd', 'stuff' => array('寒冰炸弹','奥术飞弹','烈焰风暴'),'result' => array('★BIUBIUBIU★','WD',600,400,'ZnyNdr'),),
-	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','ZnkNdr'),),
 
 	array('class' => 'd', 'stuff' => array('数据……碎片','电子马克笔','天然属性也是很可怕的！'),'result' => array('黑色夺魂曲','DB',57,77,'ZBb'),),
 	array('class' => 'd', 'stuff' => array('『午夜钟声』','『午夜钟声』','『午夜钟声』'),'result' => array('电子马克笔','DA',53,75,'Z'),),
 	array('class' => 'd', 'stuff' => array('探测器电池','实验装甲A'),'result' => array('电磁充能手套','DA',45,15,'E'),),
 	
 	array('class' => 'item', 'stuff' => array('杏仁豆腐的ID卡','■DeathNote■'),'result' => array('Untainted Glory','A',1,1,'ZHA'),),
-	array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('土制二踢脚（？）','EW',1,1,0),),
 	array('class' => 'item', 'stuff' => array('生命探测器','增幅设备'),'result' => array('广域生命探测器','ER',1,1,2),),
-	//array('class' => 'item', 'stuff' => array('☆自爆电池☆','☆★☆大打击☆★☆'),'result' => array('★捆绑式炸药★','Y',1,1,),), 
 	array('class' => 'item', 'stuff' => array('安雅人体冰雕','火把'),'result' => array('武器师安雅的奖赏','Y',1,1,),),
 	array('class' => 'item', 'stuff' => array('安雅人体冰雕','解冻药水'),'result' => array('武器师安雅的奖赏','Y',1,1,),),
 	array('class' => 'item', 'stuff' => array('手机','笔记本电脑'),'result' => array('移动PC','EE',1,1,),),
@@ -232,8 +225,6 @@ $mixinfo = array
 	array('class' => 'cube', 'stuff' => array('蓝宝石方块','蓝色方块'),'result' => array('蔚蓝色的项链','A',240,180,'Hc'),),
 	array('class' => 'cube', 'stuff' => array('红宝石方块','黑色方块'),'result' => array('终极红宝石之秘药','HB',386,76,'z'),),
 	array('class' => 'cube', 'stuff' => array('蓝宝石方块','白色方块'),'result' => array('始源蓝宝石之秘药','MV',76,2,'z'),),
-	array('class' => 'cube', 'stuff' => array('黑色方块','白色方块','怨灵'),'result' => array('★无极★','WP',114,514,'Nrd'),),
-	array('class' => 'cube', 'stuff' => array('黑色方块','白色方块','幽灵'),'result' => array('★无极★','WP',114,514,'Nrd'),),
 	array('class' => 'cube', 'stuff' => array('黄色方块','黄色方块','黄色方块'),'result' => array('★高压电击★','WD',152,251,'red'),),
 	array('class' => 'cube', 'stuff' => array('红色方块','红色方块','红色方块'),'result' => array('★烈焰冲撞★','WP',152,76,'ru'),),
 	array('class' => 'cube', 'stuff' => array('绿色方块','绿色方块','绿色方块'),'result' => array('★飞叶快刀★','WK',152,76,'Zrp'),),
@@ -426,6 +417,21 @@ $mixinfo = array
 	array('class' => 'hidden', 'stuff' => array('提示纸条K','提示纸条E'),'result' => array('提示纸条Y','WC',1,1,'zd'),),
 	array('class' => 'hidden', 'stuff' => array('【红杀铁剑】','电磁充能手套'),'result' => array('【红杀铁剑·雷击】','WK',300,45,'ned'),),
 
+	//为了便于维护，将MOD增加的合成列表移至下方。期待有更独立的解决方法。
+	//篝火-回复道具
+	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',95,4,),),
+	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,4,),),
+	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),
+	//篝火-钝器：
+	array('class' => 'wp', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
+	array('class' => 'hidden', 'stuff' => array('每只虾360元的炸虾饭','黑色方块','白色方块','冰钉棍棒'),'result' => array('★悔悟之棒★','WP',1514,'∞','Znrk'),),
+	//篝火-爆系武器：
+	array('class' => 'wd', 'stuff' => array('★BIUBIUBIU★','悲叹之种','蒸馏水'),'result' => array('★冰枪术★','WD',666,'∞','ZnkNdr'),),
+	//篝火-道具：
+	array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('土制二踢脚（？）','EW',1,1,0),),
+	//篝火-方块系：
+	array('class' => 'cube', 'stuff' => array('黑色方块','白色方块','怨灵'),'result' => array('★无极★','WP',114,514,'Nrd'),),
+	array('class' => 'cube', 'stuff' => array('黑色方块','白色方块','幽灵'),'result' => array('★无极★','WP',114,514,'Nrd'),),
 	);
 	
 }

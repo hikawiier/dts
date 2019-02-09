@@ -13,7 +13,7 @@ namespace map
 	//玩家激活结束时的增加禁区的回数，相当于已经进行的小时数/间隔时间，〉0
 	$arealimit = 2;
 	//是否激活自动躲避禁区
-	$areaesc = 0;
+	$areaesc = 1;
 	
 	$plsinfo = Array(
 		0=>'无月之影',
@@ -97,6 +97,7 @@ namespace map
 	);
 	//全部隐藏地图列表（注意：在$plsinfo中，隐藏地图的序号一定要排在非隐藏地图后面，否则会出BUG，推荐使用从98开始的倒序，无效的地图不要写在列表里，否则也会出BUG） 
 	//所谓的隐藏地图，实际上是不存在于arealist里的地图，所以不会被禁区和其他相关的东西
+	//有关隐藏地图需要进行的修改：所有使用sizeof($plsinfo)的地方需要变成sizeof($plsinfo)-sizeof($hidden_arealist)；直接调用$arealist的地方，则需要在前面添加判定$arealist=array_diff($arealist,$hidden_arealist)
 	$hidden_arealist = Array(96,97,98);
 	//隐藏地图分组（这个功能的作用是，如果有些隐藏地图之间不能互相移动，那可以通过这个分组功能来规定可以互相移动的隐藏地图都有哪些）
 	//即使只有一张地图，也请把它写进一个array里

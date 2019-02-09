@@ -12,7 +12,6 @@ namespace gamesysctl
 		/*==========无月之影特殊功能：gamesysctl菜单部分开始==========*/
 		if($mode == 'lp_gamesysctl')
 		{
-			//能力不够，废话来凑。
 			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctl功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
@@ -63,7 +62,6 @@ namespace gamesysctl
 		}
 		if($gamesysctl=='gamesysctl_changewth')
 		{
-			//废话again
 			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctlcwth功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
@@ -86,7 +84,6 @@ namespace gamesysctl
 		}
 		elseif($gamesysctl== 'gamesysctl_findthings')
 		{
-			//废话again
 			if($pls!=0)
 			{
 				$log.="该地图没有gamesysctlcwth功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
@@ -150,11 +147,10 @@ namespace gamesysctl
 		$enpc_num = sizeof($extract_npc);
 		if(!$enpc_num)
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：系统中无可释放NPC。</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：系统中无可释放NPC。</span><br>";
 			return;
 		}
-		addnews($now,'gsc_exnpc',$name);
-		//我真是哔了狗		
+		addnews($now,'gsc_exnpc',$name);	
 		$e_A = rand(0,$enpc_num); $e_npc_A = $e_A>0 ? $extract_npc[($e_A-1)] : $extract_npc[$e_A];
 		$eA_type=$e_npc_A['type'];$eA_sub=$e_npc_A['sub'];$eA_num=$e_npc_A['num'];
 		$eA_type_info=$npcinfo[$eA_type]; $eA_sub_info=$eA_type_info['sub'];$eA_npc_info=$eA_sub_info[$eA_sub];$eA_name=$eA_npc_info['name'];
@@ -168,7 +164,7 @@ namespace gamesysctl
 		$eC_type_info=$npcinfo[$eC_type]; $eC_sub_info=$eC_type_info['sub'];$eC_npc_info=$eC_sub_info[$eC_sub];$eC_name=$eC_npc_info['name'];
 		\addnpc\addnpc ($eC_type,$eC_sub,$eC_num);					
 		
-		$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<br><span class='yellow'>“已释放NPC：<br>【{$npc_typeinfo[$eA_type]} {$eA_name}】 - <span class='red'>{$eA_num}</span>名<br>【{$npc_typeinfo[$eB_type]} {$eB_name}】 - <span class='red'>{$eB_num}</span>名<br>【{$npc_typeinfo[$eC_type]} {$eC_name}】 - <span class='red'>{$eC_num}</span>名<br>请小心。它们的位置分别在……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";	
+		$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<br><span class='yellow'>“已释放NPC：<br>【{$npc_typeinfo[$eA_type]} {$eA_name}】 - <span class='red'>{$eA_num}</span>名<br>【{$npc_typeinfo[$eB_type]} {$eB_name}】 - <span class='red'>{$eB_num}</span>名<br>【{$npc_typeinfo[$eC_type]} {$eC_name}】 - <span class='red'>{$eC_num}</span>名<br>请小心。它们的位置分别在……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";	
 		foreach(Array(1,2,3,4,5,6) as $i)
 		{
 			if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
@@ -196,7 +192,7 @@ namespace gamesysctl
 		}
 		if($have_it_flag)
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：检测到你身上已携带有子端，不可重复获得。</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：检测到你身上已携带有子端，不可重复获得。</span><br>";
 			return;
 		}
 		
@@ -224,14 +220,14 @@ namespace gamesysctl
 		
 		if($bancombo==0)
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			$bancombo = 1;
 			save_gameinfo();
 			addnews($now,'gsc_bancombo',$name);
 		}				
 		elseif($bancombo==1)
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			$bancombo = 0;
 			save_gameinfo();
 			addnews($now,'gsc_recombo',$name);
@@ -259,27 +255,27 @@ namespace gamesysctl
 		
 		if($c_order!=='addarea' && $c_order!=='hack' && $c_order!=='radar')
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：无效的功能类别，请重新选择子端功能。</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：无效的功能类别，请重新选择子端功能。</span><br>";
 			return;
 		}
 		elseif($c_order=='hack' && $hack==1)
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：当前禁区已经被解除，请勿重复操作！</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：当前禁区已经被解除，请勿重复操作！</span><br>";
 			return;
 		}
 		elseif($c_order=='addarea' && in_array($pls,array_slice($arealist,0,$areanum+1+$areaadd)))
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：你所处的位置为禁区或即将成为禁区，在这里使用该功能将会导致生命危险！</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：你所处的位置为禁区或即将成为禁区，在这里使用该功能将会导致生命危险！</span><br>";
 			return;
 		}
 		elseif($c_order=='addarea' && $now>=$areatime-30)
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：系统禁区将在30秒内增加，或你已使用过本功能，在下次禁区到来前请不要重复使用！</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：系统禁区将在30秒内增加，或你已使用过本功能，在下次禁区到来前请不要重复使用！</span><br>";
 			return;
 		}
 		elseif($c_order=='addarea' && $areanum>0 && $now<=($areatime-($areahour*60)+30))
 		{
-			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：禁区增加后的30秒内不可重复使用本功能！</span><br>";
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：禁区增加后的30秒内不可重复使用本功能！</span><br>";
 			return;
 		}
 		
@@ -315,17 +311,17 @@ namespace gamesysctl
 		eval(import_module('sys','player','map','logger','itemmain','npc'));	
 		if(!$findnm/* || preg_match('/[,|<|>|&|;|#|"|\s|\p{C}]+/u',$findnm)*/)
 		{
-			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：提交的名称为空或是包含了非法字符，请重新输入。</span><br>";
+			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：提交的名称为空或是包含了非法字符，请重新输入。</span><br>";
 			return;
 		}
 		if($findtype!=='findpc' && $findtype!=='findnpc' && $findtype!=='finditm' && $findtype!=='findtrap')
 		{
-			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：未选择查询的信息类别或是该类别不存在，请重新选择。</span><br>";
+			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：未选择查询的信息类别或是该类别不存在，请重新选择。</span><br>";
 			return;
 		}
 		if($findtype=='findnpc' && $npctype<1)
 		{
-			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：查找NPC信息时，必须正确选择NPC所属的类别。</span><br>";
+			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：查找NPC信息时，必须正确选择NPC所属的类别。</span><br>";
 			return;
 		}
 		if($findtype=='findpc')
@@ -333,7 +329,7 @@ namespace gamesysctl
 			$findpc_data = \player\fetch_playerdata($findnm);
 			if($findpc_data && $findpc_data['state']<5)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm}<br>·<span class='yellow'>所处位置：</span>{$plsinfo[$findpc_data['pls']]}<br>·<span class='yellow'>持有武器：</span>{$findpc_data['wep']}<br>·<span class='yellow'>持有金钱：</span>{$findpc_data['money']}元<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm}<br>·<span class='yellow'>所处位置：</span>{$plsinfo[$findpc_data['pls']]}<br>·<span class='yellow'>持有武器：</span>{$findpc_data['wep']}<br>·<span class='yellow'>持有金钱：</span>{$findpc_data['money']}元<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			}
 			else
 			{
@@ -359,7 +355,7 @@ namespace gamesysctl
 			$fn_num = sizeof($fn_data_array);
 			if($fn_num==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";	
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";	
 			}
 			elseif($fn_num>1)
 			{
@@ -369,7 +365,7 @@ namespace gamesysctl
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$fn_pls]}</span> －＞ 存在<span class='clan'>{$fn_array[$fn_pls]}</span>名符合条件的对象<br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			}
 			else
 			{
@@ -386,7 +382,7 @@ namespace gamesysctl
 			$fi_num = sizeof($fi_data_array);
 			if($fi_num==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的道具：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$fi_data_array[0]]}</span> －＞ 存在数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的道具：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$fi_data_array[0]]}</span> －＞ 存在数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			}
 			elseif($fi_num>1)
 			{
@@ -396,7 +392,7 @@ namespace gamesysctl
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$fi_pls]}</span> －＞ 存在数量：<span class='clan'>{$fi_array[$fi_pls]}</span><br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			}
 			else
 			{
@@ -413,7 +409,7 @@ namespace gamesysctl
 			$ftnum = sizeof($ftdata_array);
 			if($ftnum==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的已埋设陷阱：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$ft_data_array[0]]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";				
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的已埋设陷阱：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$ft_data_array[0]]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";				
 			}
 			elseif($ftnum>1)
 			{
@@ -423,7 +419,7 @@ namespace gamesysctl
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$ftpls]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>{$ftarray[$ftpls]}</span><br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是国产的吧……<br>";
+				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			}
 			else
 			{
@@ -447,11 +443,11 @@ namespace gamesysctl
 		eval(import_module('sys','weather','logger','itemmain','player'));	
 		if($wth == $weather)
 		{
-			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：当前天气已为{$wthinfo[$wth]}，不需要再次修改。</span><br>";
+			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：当前天气已为{$wthinfo[$wth]}，不需要再次修改。</span><br>";
 		}
 		elseif(!isset($wthinfo[$wth]))
 		{
-			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的爱国者，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：提交的天气数据错误，请重新确认。</span><br>";
+			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：提交的天气数据错误，请重新确认。</span><br>";
 		}
 		else
 		{

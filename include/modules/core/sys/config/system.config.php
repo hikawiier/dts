@@ -17,11 +17,11 @@ namespace sys
 	//站长留言
 	//$systemmsg = '';
 	//游戏开始方式 0=后台手动开始，1=每天固定时间开始，2=上局结束后，间隔固定小时后的整点开始，3=上局结束后，间隔固定分钟开始
-	$startmode = 0;
+	$startmode = 3;
 	//游戏开始的小时，如果，如果$startmode=1,表示开始时间0~23，如果$startmode=2，表示间隔小时，>0，如果$startmode=3则无视
 	$starthour = 0;
 	//游戏开始的分钟数，范围1~59，$startmode=3时表示间隔分钟
-	$startmin = 3;
+	$startmin = 2;
 	//游戏提前准备的分钟数，建议小于$startmin，小于1时游戏会自动认为是1
 	$readymin = 1;
 	//游戏所用配置文件

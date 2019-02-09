@@ -167,7 +167,7 @@ namespace changetrap
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}试图将<span class='yellow'>{$c}【{$b}】</span>改造成<span class='yellow'>{$d}</span>……但是失败了，还因此受到了<span class='red'>【{$e}】</span>点伤害！</span><br>\n";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
-	/*==========Fargo前基地特殊功能：remakegun功能部分结束==========*/
+	/*==========和田特殊功能：changetrap功能部分结束==========*/
 }
 
 ?>
