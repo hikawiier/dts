@@ -23,7 +23,8 @@ namespace ammunition
 		$iteminfo['GBe'] = '能源弹药';
 		
 		$itemspkinfo['o'] = '一发';
-		$itemspkinfo['R'] = '扩容';
+		
+		$itemspkinfo['^kagari001'] = '扩容';
 		$itemspkdesc['o']='本枪械不能装填弹药';
 		$itemspkremark['o']='……';
 		
@@ -85,7 +86,7 @@ namespace ammunition
 			return;
 		}
 
-		if(strpos($wepsk,'R')!==false){
+		if(strpos($wepsk,'^kagari001')!==false){
 			$bulletnum *= 2;
 			$bulletnum += 20;
 		}

@@ -17,7 +17,6 @@ noise,base/noise/,1
 lvlctl,base/lvlctl/,1
 buffeffect,campfire/buff/buffeffect/,1
 gamesysctl,campfire/mapability/gamesysctl/,1
-skill57,extra/club/skills/skill57/,1
 localproject,campfire/mapability/localproject/,1
 item_uec,campfire/items/item_uec/,1
 globalevent,campfire/end/globalevent/,1
@@ -25,7 +24,6 @@ skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
 skill306,extra/achievement/skills/skill306/,1
-skill324,extra/achievement/skills/skill324/,1
 skill326,extra/achievement/skills/skill326/,1
 skill328,extra/activities/nationalday2017/skill328/,1
 skill330,extra/activities/halloween2017/skill330/,1
@@ -75,8 +73,6 @@ gameflow_combo,core/gameflow/gameflow_combo/,1
 advteam,extra/misc/advteam/,1
 attack,base/attack/,1
 instance7,extra/instance/instance7_tutorial/,1
-skill316,extra/achievement/skills/skill316/,1
-skill321,extra/achievement/skills/skill321/,1
 cardbase,extra/card/cardbase/,1
 clubbase,extra/club/clubbase/,1
 weapon,base/weapon/weapon/,1
