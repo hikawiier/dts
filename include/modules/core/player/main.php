@@ -359,7 +359,6 @@ namespace player
 //		if (eval(__MAGIC__)) return $___RET_VALUE;
 //		
 //		eval(import_module('sys','map'));
-//		
 //		$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
 //		if ($areanum >= (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1) return $chprocess($where);
 //		$query = $db->query("SELECT * FROM {$tablepre}players WHERE pls={$where} AND type=0 AND hp>0");

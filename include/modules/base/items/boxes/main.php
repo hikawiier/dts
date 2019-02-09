@@ -24,33 +24,35 @@ namespace boxes
 		
 		if(strpos ( $itmk, 'p' ) === 0)
 		{
-			//现在所有的礼物盒类道具都应该使用类别'p'，依靠属性来判断究竟是什么礼物盒
-			//每个属性对应的文件名
-			$p_arr = Array(
-				'^999^' => 'present',
-				'^998^' => 'ygobox',
-				'^997^' => 'fybox',
-				'^996^' => 'ugabox',
-				'^995^' => 'ugcbox',
-			);
-			//这样写的问题就是，礼盒的属性里不能再有其他内容了，否则就会爆炸，保险起见加一个判定
-			$pi_flag = false;
-			foreach(array_keys($p_arr) as $p_sk)
-			{
-				$isk = \itemmain\get_itmsk_array($itmsk);
-				if(in_array($p_sk,$isk) && sizeof($isk)==1)
-				{
-					$pi_flag = true;
-				}
-			}		
-			if(!$pi_flag)
-			{
-				$log.="这个盒子看起来已经坏掉了，还是扔了吧。<br>";
-				return;
-			}
-			$p_path = '/config/'.$p_arr[$isk[0]].'.config.php';
+			// //现在所有的礼物盒类道具都应该使用类别'p'，依靠属性来判断究竟是什么礼物盒
+			// //每个属性对应的文件名
+			// $p_arr = Array(
+			// 	'^999^' => 'present',
+			// 	'^998^' => 'ygobox',
+			// 	'^997^' => 'fybox',
+			// 	'^996^' => 'ugabox',
+			// 	'^995^' => 'ugcbox',
+			// );
+			// //这样写的问题就是，礼盒的属性里不能再有其他内容了，否则就会爆炸，保险起见加一个判定
+			// $pi_flag = false;
+			// foreach(array_keys($p_arr) as $p_sk)
+			// {
+			// 	$isk = \itemmain\get_itmsk_array($itmsk);
+			// 	if(in_array($p_sk,$isk) && sizeof($isk)==1)
+			// 	{
+			// 		$pi_flag = true;
+			// 	}
+			// }		
+			// if(!$pi_flag)
+			// {
+			// 	$log.="这个盒子看起来已经坏掉了，还是扔了吧。<br>";
+			// 	return;
+			// }
+			// $p_path = '/config/'.$p_arr[$isk[0]].'.config.php';
+			// $log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
+			// $file = __DIR__.$p_path;
 			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
-			$file = __DIR__.$p_path;
+			$file = __DIR__.'/config/present.config.php';
 			$plist = openfile($file);
 			while (1)
 			{
@@ -64,7 +66,7 @@ namespace boxes
 			\itemmain\itms_reduce($theitem);
 			\itemmain\itemget();		
 			return;
-		} /*elseif(strpos ( $itmk, 'ygo' ) === 0){
+		} elseif(strpos ( $itmk, 'ygo' ) === 0){
 			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
 			$file = __DIR__.'/config/ygobox.config.php';
 			$plist1 = openfile($file);
@@ -111,7 +113,7 @@ namespace boxes
 			\itemmain\itms_reduce($theitem);
 			\itemmain\itemget();	
 			return;
-		}*/
+		}
 		$chprocess($theitem);
 	}
 	

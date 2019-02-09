@@ -465,6 +465,7 @@ skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
 skill265,extra/club/skills/skill265/,1
 gtype1,extra/instance/gtype1/main/,1
+skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
 skill228,extra/club/skills/skill228/,1

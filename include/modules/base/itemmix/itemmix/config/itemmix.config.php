@@ -19,6 +19,10 @@ $mixinfo = array
 	array('class' => 'h', 'stuff' => array('压缩饼干','水'),'result' => array('应急储备粮','HB',95,4,),),
 	array('class' => 'h', 'stuff' => array('压缩饼干','蒸馏水'),'result' => array('健康储备粮','HB',150,4,),),
 	array('class' => 'h', 'stuff' => array('食堂的盒饭','打火机'),'result' => array('迷之黑暗物质','PR',100,5,),),
+	array('class' => 'h', 'stuff' => array('寂寞','脸','杯子'),'result' => array('淡定红茶','HB',200,20,),),
+	array('class' => 'h', 'stuff' => array('凸眼鱼','面包','锅'),'result' => array('仰望星空派','HR',30,3,),),
+	array('class' => 'h', 'stuff' => array('河豚鱼','氯化氢','大夭使的气息'),'result' => array('鲱鱼罐头','PR9',90,10,),),
+	array('class' => 'h', 'stuff' => array('矿泉水','杏仁豆腐','SCP-294的饮料'),'result' => array('【社系摧泪弹】','PB',3600,5,'zd'),),
 	
 	
 	array('class' => 'wc', 'stuff' => array('汽油','空瓶'),'result' => array('☆火焰瓶☆','WC',80,50,'ud'),),	

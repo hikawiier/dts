@@ -70,9 +70,10 @@ namespace armor
 			}
 			$x = min($pd[$which.'s'], $hurtvalue);
 			$pd[$which.'s'] -= $x;
+
 			if ($active)
 			{
-				$log .= "{$pd['name']}的".$pd[$which]."耐久度下降了{$x}！<br>";
+				$log .= "{$pd['name']}的".$pd[$which]."的耐久度下降了{$x}！<br>";
 			}
 			else
 			{
