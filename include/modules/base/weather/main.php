@@ -117,7 +117,7 @@ namespace weather
 		{
 			$pls = rand(0,(sizeof($plsinfo)-sizeof($hidden_arealist))-1);
 		}
-		else 
+		else
 		{
 			$pls = rand($areanum+1,(sizeof($plsinfo)-sizeof($hidden_arealist))-1);
 			$pls=$arealist[$pls];
