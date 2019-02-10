@@ -10,7 +10,7 @@ namespace campfire_item_kget
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','item_uec','input'));
+		eval(import_module('sys','player','logger','campfire_item_kget','input'));
 		if($uec_cmd == 'choose_repair_aimner')
 		{
 			if($command=='menu')
@@ -80,7 +80,7 @@ namespace campfire_item_kget
 			if($itme)
 			{
 				ob_clean();
-				include template(MOD_ITEM_UEC_CHOOSE_REPAIR_AIMMER);
+				include template(MOD_campfire_item_kget_CHOOSE_REPAIR_AIMMER);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
