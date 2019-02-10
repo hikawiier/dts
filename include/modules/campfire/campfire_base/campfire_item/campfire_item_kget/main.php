@@ -121,7 +121,7 @@ namespace campfire_item_kget
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
 		if ($itmk=='kget') {
-			itemuse_uec($theitem);
+			itemuse_kget($theitem);
 			return;
 		}
 		$chprocess($theitem);

@@ -8,7 +8,7 @@ namespace campfire_item_kgrg
 		$iteminfo['kgrg'] = '枪械部件';
 	}
 	
-	function itemuse_urg(&$theitem)
+	function itemuse_kgrg(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','itemmain','logger','campfire_areafeatures_transforgun'));
@@ -33,7 +33,7 @@ namespace campfire_item_kgrg
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
 		if ($itmk=='kgrg') {
-			itemuse_urg($theitem);
+			itemuse_kgrg($theitem);
 			return;
 		}
 		$chprocess($theitem);

@@ -8,7 +8,7 @@ namespace campfire_item_kgrt
 		$iteminfo['kgrt'] = '传送道具';
 	}
 	
-	function itemuse_urt(&$theitem)
+	function itemuse_kgrt(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','itemmain','logger'));
@@ -71,7 +71,7 @@ namespace campfire_item_kgrt
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
 		if ($itmk=='kgrt') {
-			itemuse_urt($theitem);
+			itemuse_kgrt($theitem);
 			return;
 		}
 		$chprocess($theitem);
