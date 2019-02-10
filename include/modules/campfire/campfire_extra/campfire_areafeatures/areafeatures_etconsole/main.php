@@ -30,7 +30,7 @@ namespace areafeatures_etconsole
 			elseif($command=='changewth')
 			{
 				ob_clean();
-				include template(MOD_areafeatures_etconsole_LP_areafeatures_etconsole_CWTH);
+				include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE_CWTH);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;
@@ -42,7 +42,7 @@ namespace areafeatures_etconsole
 			elseif($command=='findthings')
 			{
 				ob_clean();
-				include template(MOD_areafeatures_etconsole_LP_areafeatures_etconsole_FIND);
+				include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE_FIND);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;

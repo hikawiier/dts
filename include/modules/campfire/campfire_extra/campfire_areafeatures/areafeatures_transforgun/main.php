@@ -445,7 +445,7 @@ namespace areafeatures_transforgun
 		else{$log.="<span class='lime'>{$final_changesucc_obbs}%</span>！<br>";}
 
 		ob_clean();
-		include template(MOD_areafeatures_transforgun_LP_areafeatures_transforgun_CONFIRM);
+		include template(MOD_AREAFEATURES_TRANSFORGUN_LP_AREAFEATURES_TRANSFORGUN_CONFIRM);
 		$cmd = ob_get_contents();
 		ob_clean();
 		return;

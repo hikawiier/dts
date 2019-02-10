@@ -19,7 +19,7 @@ namespace areafeatures_depot
 			elseif($command == 'areafeatures_depot_save')
 			{
 				ob_clean();
-				include template(MOD_areafeatures_depot_LP_areafeatures_depot_SAVE);
+				include template(MOD_AREAFEATURES_DEPOT_LP_AREAFEATURES_DEPOT_SAVE);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;			
@@ -28,7 +28,7 @@ namespace areafeatures_depot
 			{
 				$saveitem_list = change_areafeatures_depot('decode',$areafeatures_depot);
 				ob_clean();
-				include template(MOD_areafeatures_depot_LP_areafeatures_depot_LOAD);
+				include template(MOD_AREAFEATURES_DEPOT_LP_AREAFEATURES_DEPOT_LOAD);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;				
