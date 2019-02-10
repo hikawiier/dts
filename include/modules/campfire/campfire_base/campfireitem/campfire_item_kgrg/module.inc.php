@@ -1,9 +1,9 @@
 <?php
 
-namespace globalevent
+namespace campfire_item_kgrg
 {
 	////////// MODULE HEADER START ///////////////
-	$___MODULE_dependency = 'sys logger addnpc corpse battle attack enemy areafeatures_etconsole';
+	$___MODULE_dependency = 'sys player itemmain logger areafeatures_transforgun';
 	$___MODULE_dependency_optional = '';
 	$___MODULE_conflict = '';
 	$___MODULE_codelist = 'main.php';
