@@ -30,11 +30,10 @@ namespace itemmain
 		//GB* ammunition 各类弹药
 		//HH,HS,HB edible 各类命体恢复
 		//HM,HT song 歌魂补给
-		//HF item_uhf 提供BUFF的食物
 		//M* item_um 各类强化药
 		'N' => '无',	
 		//P* poison 各类被下毒的补给
-		//p,ygo,fy,GA,GC 各类礼包
+		//p,ygo,fy 各类礼包
 		//ss song 歌词卡片
 		//T* trap 各类陷阱
 		//U item_misc

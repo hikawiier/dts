@@ -9,8 +9,6 @@ namespace boxes
 		$iteminfo['ygo'] = '卡包';
 		$iteminfo['fy'] = '全图唯一的野生浮云礼盒';
 		$iteminfo['kj3'] = '礼包';
-		$iteminfo['GC'] = '军火箱';
-		$iteminfo['GA'] = '弹药箱';
 	}
 
 	function itemuse(&$theitem) 
@@ -61,31 +59,9 @@ namespace boxes
 			\itemmain\itms_reduce($theitem);
 			\itemmain\itemget();	
 			return;
-		} elseif(strpos ( $itmk, 'GA' ) === 0){
-			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
-			$file = __DIR__.'/config/ugabox.config.php';
-			$plist1 = openfile($file);
-			$rand1 = rand(0,count($plist1)-1);
-			list($in,$ik,$ie,$is,$isk) = explode(',',$plist1[$rand1]);
-			$itm0 = $in;$itmk0=$ik;$itme0=$ie;$itms0=$is;$itmsk0=$isk;
-			addnews($now,'present',$name,$itm,$in);
-			\itemmain\itms_reduce($theitem);
-			\itemmain\itemget();	
-			return;
 		} elseif(strpos ( $itmk, 'kj3' ) === 0){
 			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
-			$file = __DIR__.'/config/kj3box.config.php';
-		} elseif(strpos ( $itmk, 'GC' ) === 0){
-			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
-			$file = __DIR__.'/config/ugcbox.config.php';
-			$plist1 = openfile($file);
-			$rand1 = rand(0,count($plist1)-1);
-			list($in,$ik,$ie,$is,$isk) = explode(',',$plist1[$rand1]);
-			$itm0 = $in;$itmk0=$ik;$itme0=$ie;$itms0=$is;$itmsk0=$isk;
-			addnews($now,'present',$name,$itm,$in);
-			\itemmain\itms_reduce($theitem);
-			\itemmain\itemget();	
-			return;
+			$file = __DIR__.'/config/kj3box.config.php';		
 		}
 		$chprocess($theitem);
 	}

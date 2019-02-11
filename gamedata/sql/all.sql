@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `itme6` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `itms6` char(5) NOT NULL DEFAULT '0',
   `itmsk6` varchar(40) NOT NULL DEFAULT '',
-  `itemdepot` varchar(8000) NOT NULL default '',
+  `campfire_areafeatures_depot` varchar(8000) NOT NULL default '',
   `searchmemory` text NOT NULL,
   `nskill` text NOT NULL,
   `nskillpara` text NOT NULL,

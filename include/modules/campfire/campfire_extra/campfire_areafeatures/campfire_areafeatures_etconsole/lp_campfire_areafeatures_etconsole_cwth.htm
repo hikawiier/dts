@@ -1,0 +1,16 @@
+你按下了写有天气模拟功能的按钮。<br>
+控制台上的画面闪烁了一下，随即出现了一个写有天气信息的列表。<br>
+你打算怎么做呢？<br><br>
+<input type="hidden" name="campfire_areafeatures_etconsole" value="campfire_areafeatures_etconsole_changewth">
+<input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【取出能量核心】</a>
+<br><br>
+<input type="radio" name="command" id="cwth" value="cwth"><a onclick=sl('cwth'); href="javascript:void(0);" onmouseover="status=' ';return true;">【改变天气环境】</a>
+<a onclick=sl('cwth');>
+<select name="iweather">
+<!--{loop $wthinfo $n $wth}-->
+<option value="$n" <!--{if $weather == $n}-->selected<!--{/if}-->>$wth
+<!--{/loop}-->
+</select>
+</a>
+<br><br>
+<input type="button" class="cmdbutton" name="submit" id="提交操作" value="提交操作" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

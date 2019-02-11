@@ -121,7 +121,7 @@ CREATE TABLE bra_players (
   `itme6` int(10) unsigned NOT NULL DEFAULT '0',
   `itms6` varchar(10) NOT NULL DEFAULT '0',
   `itmsk6` varchar(40) NOT NULL DEFAULT '',
-  `itemdepot` varchar(8000) NOT NULL default '',
+  `campfire_areafeatures_depot` varchar(8000) NOT NULL default '',
   `searchmemory` text NOT NULL DEFAULT '',
   `nskill` text NOT NULL,
   `nskillpara` text NOT NULL,

@@ -85,10 +85,6 @@ namespace ammunition
 			return;
 		}
 
-		if(strpos($wepsk,'^kagari001')!==false){
-			$bulletnum *= 2;
-			$bulletnum += 20;
-		}
 		if ($weps == $nosta) {
 			$weps = 0;
 		}
