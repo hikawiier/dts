@@ -15,19 +15,6 @@ bufficons,extra/misc/bufficons/,1
 explore,base/explore/,1
 noise,base/noise/,1
 lvlctl,base/lvlctl/,1
-campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
-campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
-campfire_item_kget,compfire_base/campfireitem/campfire_item_kget/,1
-campfire_item_kghf,compfire_base/campfireitem/campfire_item_kghf/,1
-campfire_item_kgrg,compfire_base/campfireitem/campfire_item_kgrg/,1
-campfire_item_kgrt,compfire_base/campfireitem/campfire_item_kgrt/,1
-campfire_itemmain,compfire_base/campfireitem/campfire_itemmain/,1
-areafeatures_depot,compfire_extra/campfire_areafeatures/areafeatures_depot,1
-areafeatures_etconsole,compfire_extra/campfire_areafeatures/areafeatures_etconsole,1
-areafeatures_transforgun,compfire_extra/campfire_areafeatures/areafeatures_transforgun,1
-areafeatures_transfortrap,compfire_extra/campfire_areafeatures/areafeatures_transfortrap,1
-campfire_areafeatures,compfire_extra/campfire_areafeatures/main,1
-campfire_powerarmor,compfire_extra/campfire_powerarmor,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -42,6 +29,11 @@ skill411,extra/card/skills/skill411/,1
 npc,base/npc/,1
 skill331,extra/activities/halloween2017/skill331/,1
 itemmain,base/itemmain/,1
+campfire_item_kghf,campfire/campfire_base/campfireitem/campfire_item_kghf/,1
+campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,1
+areafeatures_depot,campfire/campfire_extra/campfire_areafeatures/areafeatures_depot/,1
+areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatures_transforgun/,1
+areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
 metman,base/metman/,1
 itemmix,base/itemmix/itemmix/,1
 itemshop,base/itemshop/,1
@@ -53,6 +45,7 @@ scpdrink,base/items/scpdrink/,1
 item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
+campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -66,6 +59,7 @@ skill317,extra/achievement/skills/skill317/,1
 skill319,extra/achievement/skills/skill319/,1
 skill320,extra/achievement/skills/skill320/,1
 skill431,extra/card/skills/skill431/,1
+campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1
@@ -102,6 +96,7 @@ skill1000,extra/instance/instance7_tutorial/skill1000/,1
 skill418,extra/card/skills/skill418/,1
 set_gametype,extra/misc/set_gametype/,1
 kujibase,extra/card/kujibase/,1
+campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
 skill69,extra/club/skills/skill69/,1
 skill23,extra/club/skills/skill23/,1
 skill18,extra/club/skills/skill18/,1
@@ -347,6 +342,8 @@ skill600,extra/club/skills/skill600/,1
 empowers,base/items/empowers/,1
 skill70,extra/club/skills/skill70/,1
 skill246,extra/club/skills/skill246/,1
+campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
+campfire_powerarmor,campfire/campfire_extra/campfire_powerarmor/,1
 ex_phy_def,extra/attr/ex_phy_def/,1
 rage,extra/attr/rage/,1
 skill30,extra/club/skills/skill30/,1
@@ -438,6 +435,7 @@ skill493,extra/card/skills/skill493/,1
 ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
 skill43,extra/club/skills/skill43/,1
+areafeatures_etconsole,campfire/campfire_extra/campfire_areafeatures/areafeatures_etconsole/,1
 itemnumlist,extra/misc/itemnumlist/,1
 skill56,extra/club/skills/skill56/,1
 skill435,extra/card/skills/skill435/,1
@@ -456,6 +454,8 @@ skill244,extra/club/skills/skill244/,1
 skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
 skill265,extra/club/skills/skill265/,1
+campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
 gtype1,extra/instance/gtype1/main/,1
 skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
