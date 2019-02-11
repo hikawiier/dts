@@ -20,10 +20,20 @@ gamesysctl,campfire/mapability/gamesysctl/,1
 localproject,campfire/mapability/localproject/,1
 item_uec,campfire/items/item_uec/,1
 globalevent,campfire/end/globalevent/,1
+skill2900,campfire/buff/skills/skill2900/,1
+item_uhf,campfire/items/item_uhf/,1
+poweredarmor,campfire/poweredarmor/,1
+itemdepot,campfire/mapability/itemdepot/,1
+remakegun,campfire/mapability/remakegun/,1
+item_urt,campfire/items/item_urt/,1
+item_urg,campfire/items/item_urg/,1
+changetrap,campfire/mapability/changetrap/,1
+item_campfire,campfire/items/item_campfire/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
 skill306,extra/achievement/skills/skill306/,1
+skill324,extra/achievement/skills/skill324/,1
 skill326,extra/achievement/skills/skill326/,1
 skill328,extra/activities/nationalday2017/skill328/,1
 skill330,extra/activities/halloween2017/skill330/,1
@@ -44,8 +54,6 @@ scpdrink,base/items/scpdrink/,1
 item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
-skill2900,campfire/buff/skills/skill2900/,1
-item_uhf,campfire/items/item_uhf/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
@@ -59,9 +67,6 @@ skill317,extra/achievement/skills/skill317/,1
 skill319,extra/achievement/skills/skill319/,1
 skill320,extra/achievement/skills/skill320/,1
 skill431,extra/card/skills/skill431/,1
-skill3000,extra/achievement/skills/skill3000/,1
-skill3001,extra/achievement/skills/skill3001/,1
-skill3002,extra/achievement/skills/skill3002/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 skill22,extra/club/skills/skill22/,1
@@ -73,6 +78,8 @@ gameflow_combo,core/gameflow/gameflow_combo/,1
 advteam,extra/misc/advteam/,1
 attack,base/attack/,1
 instance7,extra/instance/instance7_tutorial/,1
+skill316,extra/achievement/skills/skill316/,1
+skill321,extra/achievement/skills/skill321/,1
 cardbase,extra/card/cardbase/,1
 clubbase,extra/club/clubbase/,1
 weapon,base/weapon/weapon/,1
@@ -176,7 +183,6 @@ skill501,extra/card/skills/skill501/,1
 skill504,extra/card/skills/skill504/,1
 skill83,extra/club/skills/skill83/,1
 skill256,extra/club/skills/skill256/,1
-item_campfire,campfire/items/item_campfire/,1
 skill433,extra/card/skills/skill433/,1
 skill221,extra/club/skills/skill221/,1
 wep_n,base/weapon/wep_n/,1
@@ -260,7 +266,6 @@ skill496,extra/card/skills/skill496/,1
 skill499,extra/card/skills/skill499/,1
 skill315,extra/achievement/skills/skill315/,1
 skill313,extra/achievement/skills/skill313/,1
-skill324,extra/achievement/skills/skill324/,1
 skill300,extra/achievement/skills/skill300/,1
 skill332,extra/achievement/skills/skill332/,1
 skill333,extra/achievement/skills/skill333/,1
@@ -337,7 +342,6 @@ skill407,extra/card/skills/skill407/,1
 skill32,extra/club/skills/skill32/,1
 skill202,extra/club/skills/skill202/,1
 skill445,extra/card/skills/skill445/,1
-poweredarmor,campfire/poweredarmor/,1
 pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1
@@ -367,10 +371,6 @@ skill77,extra/club/skills/skill77/,1
 skill28,extra/club/skills/skill28/,1
 skill254,extra/club/skills/skill254/,1
 song,base/items/song/,1
-itemdepot,campfire/mapability/itemdepot/,1
-remakegun,campfire/mapability/remakegun/,1
-item_urt,campfire/items/item_urt/,1
-changetrap,campfire/mapability/changetrap/,1
 instance9,extra/instance/instance9_rush/,1
 skill37,extra/club/skills/skill37/,1
 skill73,extra/club/skills/skill73/,1
@@ -422,7 +422,6 @@ gtype2,extra/instance/gtype2/main/,1
 gtype3,extra/instance/gtype3/main/,1
 skill270,extra/club/skills/skill270/,1
 cooldown,base/cooldown/,1
-item_urg,campfire/items/item_urg/,1
 item_misc,base/items/item_misc/,1
 skill458,extra/card/skills/skill458/,1
 skill498,extra/card/skills/skill498/,1
@@ -454,8 +453,6 @@ skill307,extra/achievement/skills/skill307/,1
 skill318,extra/achievement/skills/skill318/,1
 skill322,extra/achievement/skills/skill322/,1
 skill323,extra/achievement/skills/skill323/,1
-skill316,extra/achievement/skills/skill316/,1
-skill321,extra/achievement/skills/skill321/,1
 skill244,extra/club/skills/skill244/,1
 skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
