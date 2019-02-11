@@ -298,8 +298,6 @@ namespace sys
 			}
 		}elseif($type == 'combo'){
 			$msg = '游戏进入连斗阶段！';
-		}elseif($type == 'bancombo'){
-			$msg = '游戏恢复正常激活状态！';
 		}elseif($type == 'comboupdate'){
 			$msg = '连斗死亡判断数修正为'.$msg.'人！';
 		}elseif($type == 'duel'){

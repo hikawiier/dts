@@ -227,7 +227,7 @@ namespace areafeatures_etconsole
 		}				
 		elseif($bancombo==1)
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>但你仔细一看，原来角落里还闪烁着一行暗红色的字体：<br><span class='red'>“即使解除了连斗的判断……在2次禁区增加后，幻境也会关闭进入，这样只剩一人幸存的话游戏就结束了……<br>一定要记住……啊……！”</span>";
 			$bancombo = 0;
 			save_gameinfo();
 			addnews($now,'gsc_recombo',$name);
@@ -247,6 +247,21 @@ namespace areafeatures_etconsole
 				break;
 			}
 		}
+	}
+	function checkcombo($time){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','map','gameflow_combo'));
+		if($bancombo == 1){
+			return;
+		}
+		$chprocess($time);
+	}
+	function reset_game()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		eval(import_module('sys'));
+		//重设控制台功能
+		$bancombo = 0;
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{

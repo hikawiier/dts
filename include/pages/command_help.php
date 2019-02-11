@@ -7,7 +7,6 @@ eval(import_module('pose','tactic','itemmain','npc'));
 
 include_once GAME_ROOT . './include/itemplace.func.php';
 
-
 $mixfile = GAME_ROOT.'./include/modules/base/itemmix/itemmix/config/itemmix.config.php';
 include $mixfile;
 $writefile = GAME_ROOT.TPLDIR.'/tmp_mixhelp.htm';

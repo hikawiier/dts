@@ -46,12 +46,6 @@ namespace gameflow_base
 				gamestate_start_game();
 			}
 		}
-		if($gamestate <= 50 && $bancombo == 1){//判定限定解除
-			if($gamestate >= 40){
-				$gamestate = 21;
-				systemputchat($now,'bancombo');
-			}
-		}
 	}
 	
 	function checkendgame(){
