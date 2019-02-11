@@ -5,7 +5,7 @@ namespace campfire_item_kget
 	function init() 
 	{
 		eval(import_module('itemmain'));
-		$iteminfo['kget'] = '电子装置';
+		$iteminfo['kget'] = '精密仪器';
 	}
 	function act()
 	{
@@ -70,7 +70,7 @@ namespace campfire_item_kget
 		if($itm=='便携式控制中心子端')
 		{
 			ob_clean();
-			include template(MOD_areafeatures_etconsole_MOBGSC_CMD);
+			include template(MOD_AREAFEATURES_ETCONSOLE_MOBGSC_CMD);
 			$cmd = ob_get_contents();
 			ob_clean();
 			return;
@@ -80,7 +80,7 @@ namespace campfire_item_kget
 			if($itme)
 			{
 				ob_clean();
-				include template(MOD_campfire_item_kget_CHOOSE_REPAIR_AIMMER);
+				include template(MOD_CAMPFIRE_ITEM_KGET_CHOOSE_REPAIR_AIMMER);
 				$cmd = ob_get_contents();
 				ob_clean();
 				return;

@@ -14,7 +14,6 @@ CREATE TABLE `bra_game` (
   `combonum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `hack` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `hdamage` int(10) unsigned NOT NULL DEFAULT '0',
   `hplayer` char(15) NOT NULL DEFAULT '',
   `winmode` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -26,6 +25,7 @@ CREATE TABLE `bra_game` (
   `noisevars` varchar(1000) NOT NULL DEFAULT '',
   `roomvars` text NOT NULL DEFAULT '',
   `gamevars` text NOT NULL DEFAULT '',
+  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`groomid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -70,6 +70,7 @@ DROP TABLE IF EXISTS `bra_del_messages`;
 CREATE TABLE `bra_del_messages` (
   `mid` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `timestamp` int(10) unsigned NOT NULL DEFAULT '0',
+  `dtimestamp` int(10) unsigned NOT NULL DEFAULT '0',
   `rd` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `checked` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `receiver` char(15) NOT NULL DEFAULT '',
@@ -101,7 +102,8 @@ CREATE TABLE `bra_users` (
   `killmsg` char(30) NOT NULL DEFAULT '',
   `lastword` char(30) NOT NULL DEFAULT '', 
   `lastwin` int(10) unsigned NOT NULL DEFAULT '0',
-  `lastgame` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `lastgame` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `lastroomgame` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `validgames` smallint(5) unsigned NOT NULL DEFAULT '0',
   `wingames` smallint(5) unsigned NOT NULL DEFAULT '0',  
   `credits` int(10) NOT NULL DEFAULT '0',

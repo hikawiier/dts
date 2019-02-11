@@ -426,12 +426,6 @@ namespace item_misc
 					\sys\addnews ( 0, 'debuffself', $name);
 					\sys\addchat(6, "{$name}一边大口吃翔一边说道：“满场沙包，不足为惧。且看爷吃了这百斤翔，再来包你们爽！”");
 				}
-			}elseif($itm=='便携式控制中心子端'){
-				ob_clean();
-				include template(MOD_areafeatures_etconsole_MOBGSC_CMD);
-				$cmd = ob_get_contents();
-				ob_clean();
-				return;
 			}
 		}
 		$chprocess($theitem);

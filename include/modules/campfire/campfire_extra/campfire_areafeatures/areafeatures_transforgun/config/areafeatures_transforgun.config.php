@@ -36,6 +36,7 @@ namespace areafeatures_transforgun
 		'n' => 26,
 		'b' => 29,
 		'B' => 32,
+		'^01001' => 5,
 	);	
 }
 

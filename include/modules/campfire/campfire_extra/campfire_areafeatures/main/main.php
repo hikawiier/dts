@@ -42,10 +42,12 @@ namespace campfire_areafeatures
 			}
 			elseif($lp_cmd=='lp_areafeatures_transforgun')
 			{
-				if($wepk=='WG' || $wepk=='WJ' || $wepk=='WDG' || $wepk=='WGK')
+				if($wepk!='WG' && $wepk!='WJ' && $wepk!='WDG' && $wepk!='WGK')
 				{
-					$wep_skind = $wepsk ? str_split($wepsk) : Array();
+					$log.="你身上没有装备枪械类武器，为什么要使用枪械改造台？<br>";
+					return;
 				}
+				$wep_skind = $wepsk ? \itemmain\get_itmsk_array($wepsk) : Array();
 				//F前：areafeatures_transforgun
 				ob_clean();
 				include template(MOD_AREAFEATURES_TRANSFORGUN_LP_AREAFEATURES_TRANSFORGUN);

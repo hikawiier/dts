@@ -363,6 +363,7 @@ npcinfo,extra/misc/npcinfo/,1
 skill502,extra/card/skills/skill502/,1
 wepchange,extra/attr/wepchange/,1
 blessstone,extra/attr/blessstone/,1
+campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
 skill77,extra/club/skills/skill77/,1
 skill28,extra/club/skills/skill28/,1
 skill254,extra/club/skills/skill254/,1

@@ -8,7 +8,7 @@ namespace areafeatures_transforgun
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','areafeatures_transforgun','input'));
+		eval(import_module('sys','player','logger','areafeatures_transforgun','input','itemmain'));
 		/*==========Fargo前基地特殊功能：areafeatures_transforgun菜单部分开始==========*/
 		if($mode == 'lp_areafeatures_transforgun')
 		{
@@ -21,11 +21,8 @@ namespace areafeatures_transforgun
 				remake_gun('r_local',$rg_num);				
 			}
 			elseif($command == 'repair_gun')
-			{
-				if($wepk=='WG' || $wepk=='WJ' || $wepk=='WDG' || $wepk=='WGK')
-				{
-					$wep_skind = $wepsk ? str_split($wepsk) : Array();
-				}
+			{				
+				$wep_skind = $wepsk ? \itemmain\get_itmsk_array($wepsk) : Array();
 				$wg_sk = $sk_num=='addwepe' ? 'addwepe' : $wep_skind[$sk_num];
 				repair_gun($wg_sk);				
 			}
@@ -214,6 +211,11 @@ namespace areafeatures_transforgun
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;
 		}	
+		if($wepe<=1)
+		{
+			$log.="<span class='red'>你的武器效果已经不足以支撑你继续折腾它了，放过它吧！</span><br>";
+			return;
+		}
 		$log.="你小心翼翼的将枪械拆开，开始对内部的复杂结构进行改造……<br>";
 		$log.="…………<br>";
 		$rgi['itm']=&${'itm'.$i}; $rgi['itmk']=&${'itmk'.$i};
@@ -305,16 +307,16 @@ namespace areafeatures_transforgun
 		}
 		else
 		{
-			$log.="虽然你尽可能让自己小心的操作，但还是由于一个小失误弄坏了精密的配件。<br>这样看来，枪械改造的工作<span class='red'>彻底失败</span>了。<br>虽然如此，你还是把枪械部件的残骸收了起来。<br>";
+			$log.="虽然你尽可能让自己小心的操作，但还是由于一个小失误弄坏了精密的配件。<br>这样看来，枪械改造的工作<span class='red'>彻底失败</span>了。<br>虽然如此，你还是把枪械部件的残骸收了起来。<br>至少武器没有坏，不是吗？<br>";
 			$basic_down_effect = round($rg_sk_rarity)+rand(1,5);
 			$down_effect = $wepe-$basic_down_effect<=0 ? $wepe-1 : $basic_down_effect;
-			$wepe -= $down_effect;
-			if((rand(1,100)<=round($rg_sk_rarity/10)) && strpos($wepsk,'o')===false)
+			if(($down_effect==$wepe-1) && (rand(1,100)<=round($rg_sk_rarity/10)) && strpos($wepsk,'o')===false)
 			{
 				$log.="而且由于你的粗心大意，对你的枪械造成了<span class='red'>不可挽回的损害</span>！<br>看来它的寿命被极大的缩短了……<br>";
 				$down_sk = 'o';
 				$wepsk.= $down_sk;
 			}
+			$wepe -= $down_effect;
 			$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过<span class='lime'>【{$rgi['itm']}】</span>的改造后发生了如下改变：</span><br>";
 			if($down_effect>=0)
 			{
@@ -362,6 +364,11 @@ namespace areafeatures_transforgun
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;
 		}		
+		if($wepe<=1)
+		{
+			$log.="<span class='red'>你的武器效果已经不足以支撑你继续折腾它了，放过它吧！</span><br>";
+			return;
+		}
 		$r_itm=&${'itm'.$i}; $r_itmk=&${'itmk'.$i};
 		$r_itme=&${'itme'.$i}; $r_itms=&${'itms'.$i}; $r_itmsk=&${'itmsk'.$i};
 		//读取枪械部件和武器上的属性及属性数量
@@ -437,7 +444,7 @@ namespace areafeatures_transforgun
 		$final_changesucc_obbs = ceil($base_changesucc_obbs-$r_effect_obbs-$r_skrarity_obbs-$wep_skrarity_obbs);
 		$final_changesucc_obbs = max(1,$final_changesucc_obbs);		
 
-		$remake_info = Array('r_local' => '工具改造' ,'r_item' => '手动改造');
+		$remake_info = Array('r_local' => '工坊改造' ,'r_item' => '手动改造');
 		$log.="你确定要使用<span class='yellow'>【{$r_itm}】</span>对武器<span class='yellow'>【{$wep}】</span>进行<span class='yellow'>{$remake_info[$r_way]}</span>吗？<br>这样做的成功率为";
 		if($final_changesucc_obbs<=25){$log.="<span class='red'>{$final_changesucc_obbs}%</span>！<br>";}
 		elseif($final_changesucc_obbs>25 && $final_changesucc_obbs<=50){$log.="<span class='yellow'>{$final_changesucc_obbs}%</span>！<br>";}

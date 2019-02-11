@@ -22,11 +22,8 @@ namespace ammunition
 		$iteminfo['GBh'] = '重型弹药';
 		$iteminfo['GBe'] = '能源弹药';		
 		$itemspkinfo['o'] = '一发';
-		
-		$itemspkinfo['^kagari001'] = '扩容';
 		$itemspkdesc['o']='本枪械不能装填弹药';
-		$itemspkremark['o']='……';
-		
+		$itemspkremark['o']='……';		
 	}
 	
 	function parse_itmk_desc($k_value, $sk_value) {

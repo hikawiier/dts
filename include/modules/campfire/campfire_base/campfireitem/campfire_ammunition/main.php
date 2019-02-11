@@ -5,7 +5,9 @@ namespace campfire_ammunition
 	function init()
 	{
 		eval(import_module('itemmain'));
-		$itemspkinfo['^kg001'] = '扩容';		
+		$itemspkinfo['^01001'] = '扩容';		
+		$itemspkdesc['^01001']='使枪械弹匣容量扩充';
+		$itemspkremark['^01001']='……';	
 	}
 	
 	function itemuse_ugb(&$theitem)
@@ -29,14 +31,14 @@ namespace campfire_ammunition
 			return;
 		}
 		
-		list($bulletkind, $bulletnum) = check_ammukind($wepk, $wepsk);
+		list($bulletkind, $bulletnum) = \ammunition\check_ammukind($wepk, $wepsk);
 		if($itmk != $bulletkind){
 			$log .= "<span class='red'>弹药类型不匹配，需要</span><span class='yellow'>$iteminfo[$bulletkind]</span>。<br>";
 			$mode = 'command';
 			return;
 		}
 
-		if(strpos($wepsk,'^kg001')!==false){
+		if(strpos($wepsk,'^01001')!==false){
 			$bulletnum *= 2;
 			$bulletnum += 20;
 		}
@@ -58,7 +60,7 @@ namespace campfire_ammunition
 			$itm = $itmk = $itmsk = '';
 			$itme = $itms = 0;
 		}
-	}	
+	}
 }
 
 ?>

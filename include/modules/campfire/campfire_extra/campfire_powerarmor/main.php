@@ -5,10 +5,30 @@ namespace campfire_powerarmor
 	function init()
 	{
 		eval(import_module('armor','itemmain'));
-		$armor_iteminfo['DBP']='身体装甲';
-		$armor_iteminfo['DHP']='头部装甲';
-		$armor_iteminfo['DAP']='手部装甲';
-		$armor_iteminfo['DFP']='腿部装甲';
+		$armor_iteminfo['DBPO']='身体装甲';
+		$armor_iteminfo['DHPO']='头部装甲';
+		$armor_iteminfo['DAPO']='手部装甲';
+		$armor_iteminfo['DFPO']='腿部装甲';
+		$armor_iteminfo['DBPC']='身体装甲';
+		$armor_iteminfo['DHPC']='头部装甲';
+		$armor_iteminfo['DAPC']='手部装甲';
+		$armor_iteminfo['DFPC']='腿部装甲';
+		$armor_iteminfo['DBPB']='身体装甲';
+		$armor_iteminfo['DHPB']='头部装甲';
+		$armor_iteminfo['DAPB']='手部装甲';
+		$armor_iteminfo['DFPB']='腿部装甲';
+		$armor_iteminfo['DBPA']='身体装甲';
+		$armor_iteminfo['DHPA']='头部装甲';
+		$armor_iteminfo['DAPA']='手部装甲';
+		$armor_iteminfo['DFPA']='腿部装甲';
+		$armor_iteminfo['DBPS']='身体装甲';
+		$armor_iteminfo['DHPS']='头部装甲';
+		$armor_iteminfo['DAPS']='手部装甲';
+		$armor_iteminfo['DFPS']='腿部装甲';
+		$armor_iteminfo['DBPT']='身体装甲';
+		$armor_iteminfo['DHPT']='头部装甲';
+		$armor_iteminfo['DAPT']='手部装甲';
+		$armor_iteminfo['DFPT']='腿部装甲';
 		//装甲分为T,S,A,B,C,O六个等级，在类别后面加上对应字母来区分，例如“DBPT”就是T等级的身体装甲
 		//没有等级的装甲默认为O等级
 		//不同级别的装甲差别主要体现在各个功能的数值上
@@ -66,7 +86,7 @@ namespace campfire_powerarmor
 		//动力装甲抵消伤害,判定减伤的过程
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('logger','armor','campfire_powerarmor'));
-		//先获取装备中的动力装甲信息……这里的pa是campfire_powerarmor的缩写……真的很蠢
+		//先获取装备中的动力装甲信息
 		$pa_kind_array = get_pa_kind_array($pd);
 		if (sizeof($pa_kind_array))
 		{
