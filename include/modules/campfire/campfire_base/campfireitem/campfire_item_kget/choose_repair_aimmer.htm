@@ -1,0 +1,23 @@
+你按下了工具的启动按钮。<br>
+打算修理哪个部位的动力装甲？<br><br>
+<input type="hidden" name="uec_cmd" value="choose_repair_aimner">
+<input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【放弃修理】</a>
+<br><br>
+<!--{if $arbs && strpos($arbk,'P')!==false}-->
+<input type="radio" name="command" id="arb" value="arb"><a onclick=sl('arb'); href="javascript:void(0);" onmouseover="status=' ';return true;">【修复身体装甲部位】</a><br>
+<span class="grey"><span class="yellow">身体装甲特殊功能</span>：降低<span class="red">抵消伤害</span>时<span class="red">消耗的能量</span>。<br>
+<!--{/if}-->
+<!--{if $arhs && strpos($arhk,'P')!==false}-->
+<input type="radio" name="command" id="arh" value="arh"><a onclick=sl('arh'); href="javascript:void(0);" onmouseover="status=' ';return true;">【修复头部装甲部位】</a><br>
+<span class="grey"><span class="yellow">头部装甲特殊功能</span>：在<span class="red">作战/强袭/偷袭姿态</span>下，增加一定的<span class="red">先攻率</span>和<span class="red">发现率</span>，在<span class="red">探索姿态</span>下，增加一定的<span class="red">道具发现率</span>。<br>
+<!--{/if}-->
+<!--{if $aras && strpos($arak,'P')!==false}-->
+<input type="radio" name="command" id="ara" value="ara"><a onclick=sl('ara'); href="javascript:void(0);" onmouseover="status=' ';return true;">【修复手部装甲部位】</a><br>
+<span class="grey"><span class="yellow">手部装甲特殊功能</span>：战斗中，提高一定的<span class="red">命中率</span>。<br>
+<!--{/if}-->
+<!--{if $arfs && strpos($arfk,'P')!==false}-->
+<input type="radio" name="command" id="ara" value="ara"><a onclick=sl('ara'); href="javascript:void(0);" onmouseover="status=' ';return true;">【修复腿部装甲部位】</a><br>
+<span class="grey"><span class="yellow">腿部装甲特殊功能</span>：降低移动和探索时的<span class="red">体力消耗</span>。<br>
+<!--{/if}-->
+<br>
+<input type="button" class="cmdbutton" name="submit" id="提交" value="提交" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

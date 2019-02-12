@@ -1,0 +1,20 @@
+你将能量核心插入了台面上的凹陷中。<br>
+在一阵微弱的闪烁后，控制面板上的数据在你眼前飞速略过。<br>
+你发现自己根本看不懂。<br>
+但其实那些不重要，因为在你旁边就有一排傻瓜式操作按钮。<br>
+那么……你想对这个可怜的系统做些什么呢？<br><br>
+<input type="hidden" name="mode" value="lp_areafeatures_etconsole">
+<input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【取出能量核心】</a>
+<br><br>
+<input type="radio" name="command" id="changewth" value="changewth"><a onclick=sl('changewth'); href="javascript:void(0);" onmouseover="status=' ';return true;">【天气模拟功能】</a><br>
+<span class="grey">使用该功能，可以改变当前虚拟实境中的天气情况，<br>提交后将<span class="red">切换至该功能子面板</span>。每次使用会消耗一个能量核心。</span><br>
+<input type="radio" name="command" id="delcombo" value="delcombo"><a onclick=sl('delcombo'); href="javascript:void(0);" onmouseover="status=' ';return true;">【限定解除功能】</a><br>
+<span class="grey">使用该功能，可以关闭或开启虚拟实境对于是否进入连斗状态的检测，<br>提交后将<span class="red">直接激活该功能</span>。每次使用会消耗一个能量核心。</span><br>
+<input type="radio" name="command" id="findthings" value="findthings"><a onclick=sl('findthings'); href="javascript:void(0);" onmouseover="status=' ';return true;">【资料查找功能】</a><br>
+<span class="grey">使用该功能，可以查找地图上存在的物品/人物/陷阱的数量与位置，<br>提交后将<span class="red">切换至该功能子面板</span>。每次使用会消耗一个能量核心。</span><br>
+<input type="radio" name="command" id="extractnpc" value="extractnpc"><a onclick=sl('extractnpc'); href="javascript:void(0);" onmouseover="status=' ';return true;">【生成原始数据】</a><br>
+<span class="grey">使用该功能，会使一些未经测试的危险NPC加入战场，<br>提交后将<span class="red">直接激活该功能</span>。每次使用会消耗一个能量核心。</span><br>
+<input type="radio" name="command" id="copyhack" value="copyhack"><a onclick=sl('copyhack'); href="javascript:void(0);" onmouseover="status=' ';return true;">【拷贝便携子端】</a><br>
+<span class="grey">使用该功能，可以获得一个便携的控制端，便携端只有临时解除禁区的功能，但不会失败，<br>提交后将<span class="red">直接激活该功能</span>。每次使用会消耗一个能量核心。</span><br>
+<br><br>
+<input type="button" class="cmdbutton" name="submit" id="提交操作" value="提交操作" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

@@ -507,3 +507,16 @@ skill505,extra/card/skills/skill505/,1
 skill366,extra/activities/aprilfool2018/skill366/,1
 glowbutton,extra/misc/glowbutton/,0
 halloween2017,extra/activities/halloween2017/main/,0
+campfireitem_kget,campfire/campfire_base/campfireitem/campfireitem_kget/,1
+campfireitem_kghf,campfire/campfire_base/campfireitem/campfireitem_kghf/,1
+campfireitem_kgrt,campfire/campfire_base/campfireitem/campfireitem_kgrt/,1
+campfireitem_kgrg,campfire/campfire_base/campfireitem/campfireitem_kgrg/,1
+campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
+campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
+campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
+areafeatures_depot,campfire/campfire_extra/campfire_areafeatures/areafeatures_depot/,1
+areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatures_transforgun/,1
+areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
+areafeatures_etconsole,campfire/campfire_extra/campfire_areafeatures/areafeatures_etconsole/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
+campfire_powerarmor,campfire/campfire_extra/campfire_powerarmor/,1

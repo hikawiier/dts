@@ -17,8 +17,18 @@ namespace map
 	//检查一个地区是否可进入，包含解禁和hack两种情况
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		return !check_in_forbidden_area($pno) || $hack;
+		eval(import_module('sys','player'));
+		foreach(array_keys($hidden_areagroup) as $han){
+			if((in_array($pls,$hidden_areagroup[$han]))&&(in_array($pno,$hidden_areagroup[$han]))))
+			{
+				$enter_hidden_area_flag = true;
+			}
+			else
+			{
+				$enter_hidden_area_flag = false;
+			}
+		}
+		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;
 	}
 
 	function init_areatiming(){
@@ -53,6 +63,8 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map'));
 		if($areanum+1 > sizeof($arealist)) return array();
+		//排除隐藏地区
+		$arealist = array_diff($arealist,$hidden_arealist);
 		else {
 			$r = array_slice($arealist,$areanum+1);
 			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
@@ -98,6 +110,8 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
+			//排除隐藏地区
+			$arealist = array_diff($arealist,$hidden_arealist);
 			$plsnum = sizeof($plsinfo) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
@@ -154,6 +168,8 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
+			//排除隐藏地区
+			$arealist = array_diff($arealist,$hidden_arealist);
 			$plsnum = sizeof($plsinfo);
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
