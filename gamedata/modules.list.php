@@ -59,7 +59,6 @@ skill317,extra/achievement/skills/skill317/,1
 skill319,extra/achievement/skills/skill319/,1
 skill320,extra/achievement/skills/skill320/,1
 skill431,extra/card/skills/skill431/,1
-campfire_itemmix,campfire/campfire_base/campfireitem/campfire_itemmix/,1
 campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1

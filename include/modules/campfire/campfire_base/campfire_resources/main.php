@@ -1,6 +1,6 @@
 <?php
 
-namespace campfire_addnpc
+namespace campfire_resources
 {
 	function init() {}
 	
