@@ -28,6 +28,8 @@ $roomtypelist = Array(
 		'soleroom' => false,//唯一房间，只有不存在时才会新建房间。
 		'without-ready' => false,//是否不需要点击“准备”就直接进入房间。
 		'without-valid' => false,//是否跳过加入游戏画面就直接进入房间。
+		'cannot-forbid' => true,//是否不能禁用位置。
+		'min-team' => 2,//最小有效队伍数
 		'pnum' => 2,	//最大参与人数，只有开启准备才有效
 		'globalnum' => 0,	//全场最大开启数目，不设或者0认为无限制
 		'privatenum' => 1,	//单人最大开启数目，不设或者0认为无限制；不需要准备的房间无视这个值
@@ -45,20 +47,42 @@ $roomtypelist = Array(
 		),
 		'show-team-leader' => 0,	//是否显示“队长”标签（如队伍大于1人设为1）
 		'game-option' => array(
-			'special-rule' => array(//变量名
-				'title' => '特殊规则',//界面显示的提示
+			'opening-gamestate' => array(//变量名
+				'title' => '入场后游戏状况',//界面显示的提示
 				'type' => 'radio',//input类型
 				'options' => array(
 					array(
-						'value' => 'common',
-						'name' => '通常模式',
-						'title' => '与正常游戏一样，可选卡入内',
+						'value' => '40',
+						'name' => '进入连斗',
+						'title' => '入场后连斗，容易遭遇角色，不容易摸道具',
 						'default' => true,
 					),
 					array(
-						'value' => '4000lp',
-						'name' => '掘豆模式',
-						'title' => '强制双方选择卡片【掘豆挑战者】，以4000LP进场',
+						'value' => '30',
+						'name' => '停止激活',
+						'title' => '入场后只停止激活，发现率正常，死亡180人或者2禁后进入连斗',
+					)
+				)
+			),
+			'card-select' => array(//变量名
+				'title' => '卡片设置',//界面显示的提示
+				'type' => 'radio',//input类型
+				'options' => array(
+					array(
+						'value' => '0',
+						'name' => '自选卡片',
+						'title' => '参与者在“账号资料”里自选卡片再入场',
+						'default' => true,
+					),
+					array(
+						'value' => '1',
+						'name' => '仅挑战者',
+						'title' => '参与者强制使用挑战者入场',
+					),
+					array(
+						'value' => '2',
+						'name' => '与房主相同',
+						'title' => '其他参与者使用与房主相同的卡入场',
 					)
 				)
 			)
@@ -212,6 +236,7 @@ $roomtypelist = Array(
 		'soleroom' => false,//唯一房间，只有不存在时才会新建房间。
 		'without-ready' => false,//是否不需要点击“准备”就直接进入房间。
 		'without-valid' => false,//是否跳过加入游戏画面就直接进入房间。
+		'min-team' => 2,//最小有效队伍数
 		'pnum' => 25,//最大参与人数，只有开启准备才有效
 		'globalnum' => 0,	//全场最大开启数目，不设或者0认为无限制
 		'privatenum' => 1,	//单人最大开启数目，不设或者0认为无限制；不需要准备的房间无视这个值
@@ -284,11 +309,38 @@ $roomtypelist = Array(
 						'title' => '五支队伍互相对抗',
 					)
 				)
+			),
+			'card-select' => array(//变量名
+				'title' => '卡片设置',//界面显示的提示
+				'type' => 'radio',//input类型
+				'options' => array(
+					array(
+						'value' => '0',
+						'name' => '自选卡片',
+						'title' => '参与者在“账号资料”里自选卡片再入场',
+						'default' => true,
+					),
+					array(
+						'value' => '1',
+						'name' => '仅挑战者',
+						'title' => '参与者强制使用挑战者入场',
+					),
+					array(
+						'value' => '2',
+						'name' => '与房主相同',
+						'title' => '其他参与者使用与房主相同的卡入场',
+					),
+					array(
+						'value' => '3',
+						'name' => '与队长相同',
+						'title' => '队员使用与队长相同的卡入场',
+					)
+				)
 			)
 		)
 	),
 	5 => Array(
-		'name' => '<font class="yellow">伐木挑战</font>',
+		'name' => '<font class="yellow b">伐木挑战</font>',
 		'gtype' => 15, //对应的游戏模式编号
 		'available' => true,
 		'soleroom' => false,//唯一房间，只有不存在时才会新建房间。
@@ -331,7 +383,7 @@ $roomtypelist = Array(
 		)
 	),
 	6 => Array(
-		'name' => '<font class="green">PVE解离模式</font>',
+		'name' => '<font class="green b">PVE解离模式</font>',
 		'gtype' => 16, //对应的游戏模式编号
 		'available' => true,
 		'soleroom' => false,//唯一房间，只有不存在时才会新建房间。
@@ -359,7 +411,7 @@ $roomtypelist = Array(
 		)
 	),
 	7 => Array(//教程模式为唯一房间
-		'name' => '<font class="red">教程模式</font>',
+		'name' => '<font class="red b">教程模式</font>',
 		'gtype' => 17, //对应的游戏模式编号
 		'available' => true,
 		'soleroom' => true,//唯一房间，只有不存在时才会新建房间。
@@ -383,7 +435,7 @@ $roomtypelist = Array(
 		)
 	),
 	8 => Array(
-		'name' => '<font class="clan">荣耀模式</font>',
+		'name' => '<font class="cyan b">荣耀模式</font>',
 		'gtype' => 18, //对应的游戏模式编号
 		'available' => true,
 		'available-start' => 1506816000, //如果设置并大于零，表明时间戳迟于此时才显示和开放
@@ -407,7 +459,7 @@ $roomtypelist = Array(
 		'show-team-leader' => 0,	//是否显示“队长”标签（如队伍大于1人设为1）
 	),
 	9 => Array(
-		'name' => '<font class="red">极速模式</font>',
+		'name' => '<font class="red b">极速模式</font>',
 		'gtype' => 19, //对应的游戏模式编号
 		'available' => true,
 		'available-start' => 1509408000, //如果设置并大于零，表明时间戳迟于此时才显示和开放

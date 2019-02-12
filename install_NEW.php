@@ -1,5 +1,4 @@
 <?php
-
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 //set_magic_quotes_runtime(0);
 //ini_set('date.timezone','Asia/Shanghai');
@@ -32,6 +31,19 @@ if (!file_exists($modulemng_config)){
 		if(!copy($modulemng_config_sample,$modulemng_config)) exit('Cannot create "modulemng.config.php".');
 	}
 }
+
+$system_config =  './include/modules/core/sys/config/system.config.php';
+$system_config_sample =  './include/modules/core/sys/config/system.config.sample.php';
+if (!file_exists($system_config)){
+	if(!file_exists($system_config_sample))	exit('"system.config.sample.php" doesn\'t exist.');
+	else {
+		if(!copy($system_config_sample,$system_config)) exit('Cannot create "system.config.php".');
+	}
+}
+
+$game_config = './include/modules/core/sys/config/game.config.php';
+if(!file_exists($game_config))	exit('"game.config.php" doesn\'t exist.');
+
 $mdcontents = file_get_contents($modulemng_config);
 $mdcontents = preg_replace("/[$]___MOD_CODE_ADV1\s*\=\s*-?[0-9]+;/is", "\$___MOD_CODE_ADV1 = 0;", $mdcontents);
 $mdcontents = preg_replace("/[$]___MOD_CODE_ADV2\s*\=\s*-?[0-9]+;/is", "\$___MOD_CODE_ADV2 = 0;", $mdcontents);
@@ -39,8 +51,6 @@ $mdcontents = preg_replace("/[$]___MOD_CODE_ADV3\s*\=\s*-?[0-9]+;/is", "\$___MOD
 $mdcontents = preg_replace("/[$]___MOD_SRV\s*\=\s*-?[0-9]+;/is", "\$___MOD_SRV = 0;", $mdcontents);
 file_put_contents($modulemng_config,$mdcontents);
 
-$system_config = './include/modules/core/sys/config/system.config.php';
-if (!file_exists($system_config)){exit('"system.config.php" doesn\'t exist.');}
 @include $server_config;
 
 switch($language) {
@@ -520,6 +530,8 @@ if(!$action) {
               </tr>
 <?php
 	if(!$exist_error) {
+		
+	
 
 		if(!$write_error) {
 			if(function_exists('mysql_connect')) $default_database = 'mysql';
@@ -667,6 +679,7 @@ if(!$action) {
 
 	}
 } elseif($action == 'environment') {
+	
 
 	if($_POST['saveconfig'] && is_writeable($server_config)) {
 
@@ -966,7 +979,8 @@ if(!$action) {
 		list($nowsec,$nowmin,$nowhour,$nowday,$nowmonth,$nowyear,$nowwday,$nowyday,$nowisdst) = localtime($now);
 		$nowmonth++;
 		$nowyear += 1900;
-		$adminmsg = file_get_contents('./gamedata/adminmsg.htm') ;
+		if(file_exists('./gamedata/adminmsg.htm')) $adminmsg = file_get_contents('./gamedata/adminmsg.htm') ;
+		else $adminmsg = '';
 
 ?>
         <form method="post" action="?language=<?php echo $language; ?>" <?php echo $alert; ?>>
@@ -1030,6 +1044,7 @@ if(!$action) {
 
 	}
 } elseif($action == 'install') {
+	
 
 	$username = $_POST['username'];
 	$brpswd = $_POST['brpswd']
@@ -1151,11 +1166,11 @@ loginit('adminlog');
 loginit('newsinfo');
 
 dir_clear('./gamedata/bak');
-//dir_clear('./gamedata/log');
-//dir_clear('./gamedata/mapitem');
-//dir_clear('./gamedata/shopitem');
-dir_clear('./gamedata/templates');
+dir_clear('./gamedata/cache');
+dir_clear('./gamedata/javascript');
+dir_clear('./gamedata/remote_replays');
 dir_clear('./gamedata/replays');
+dir_clear('./gamedata/templates');
 
 dir_clear('./gamedata/tmp/log');
 dir_clear('./gamedata/tmp/news');
@@ -1180,14 +1195,14 @@ if($startmode == 1) {
 }
 
 
-$sscontents = file_get_contents($system_config);
+$gcontents = file_get_contents($game_config);
 
-//$sscontents = preg_replace("/[$]adminmsg\s*\=\s*[\"'].*?[\"'];/is", "\$adminmsg = '$adminmsg';", $sscontents);
-$sscontents = preg_replace("/[$]startmode\s*\=\s*[0-9]+;/is", "\$startmode = $startmode;", $sscontents);
-$sscontents = preg_replace("/[$]starthour\s*\=\s*[0-9]+;/is", "\$starthour = $starthour;", $sscontents);
-$sscontents = preg_replace("/[$]iplimit\s*\=\s*[0-9]+;/is", "\$iplimit = $iplimit;", $sscontents);
+//$gcontents = preg_replace("/[$]adminmsg\s*\=\s*[\"'].*?[\"'];/is", "\$adminmsg = '$adminmsg';", $gcontents);
+$gcontents = preg_replace("/[$]startmode\s*\=\s*[0-9]+;/is", "\$startmode = $startmode;", $gcontents);
+$gcontents = preg_replace("/[$]starthour\s*\=\s*[0-9]+;/is", "\$starthour = $starthour;", $gcontents);
+$gcontents = preg_replace("/[$]iplimit\s*\=\s*[0-9]+;/is", "\$iplimit = $iplimit;", $gcontents);
 
-file_put_contents($system_config,$sscontents);
+file_put_contents($game_config,$gcontents);
 file_put_contents('./gamedata/adminmsg.htm',$adminmsg);
 
 result();
@@ -1312,7 +1327,9 @@ function dir_clear($dir) {
 	global $lang;
 
 	echo $lang['clear_dir'].' '.$dir;
-	$directory = dir($dir);
+	while(!($directory = @dir($dir))){
+		@mkdir($dir, 0777);
+	}
 	while($entry = $directory->read()) {
 		$filename = $dir.'/'.$entry;
 		if(is_file($filename) && $entry != '.gitignore') {

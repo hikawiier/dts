@@ -12,7 +12,7 @@ namespace itemmain
 	//1:一般可合并道具  2:食物  0:不可合并
 	function check_mergable($ik){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if(preg_match('/^(WC|WD|WF|Y|B|C|TN|GA|GB|M|V|ygo|fy|p)/',$ik)) return 1;
+		if(preg_match('/^(WC|WD|WF|Y|B|C|EI|TN|G|M|V|ygo|fy|p)/',$ik) && !preg_match('/^W[A-Z][A-Z]/',$ik)) return 1;
 		elseif(preg_match('/^(H|P)/',$ik)) return 2;
 		else return 0;
 	}
@@ -34,6 +34,23 @@ namespace itemmain
 		}
 		if($i==$ilen) return $name_value;
 		else return middle_abbr($name_value,$i-1,$end);
+	}
+	
+	//道具效和耐的省略显示
+	function parse_itmnum_words($num_value, $elli = 0){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(!$elli || !is_numeric($num_value)) return $num_value;
+		$ret = $num_value;
+		if($num_value > 100000000) {
+			if(round($num_value/10000000)%10) $ret = round($num_value/10000000)/10;
+			else $ret = round($num_value/100000000);
+			$ret .= '亿';
+		}elseif($num_value > 10000) {
+			if(round($num_value/1000)%10) $ret = round($num_value/1000)/10;
+			else $ret = round($num_value/10000);
+			$ret .= '万';
+		}
+		return $ret;
 	}
 	
 	function parse_itmk_words($k_value, $reveal=0)
@@ -81,8 +98,10 @@ namespace itemmain
 //		return $ret;
 	}
 	
-	//鉴于字母已经基本用完，新属性应该全部命名为“^数字”的形式，其中数字可以任意
-	//例： ^233 => '防拳' 
+	//属性格式有3种：
+	//1. 单个字母
+	//2. ^数字
+	//3. ^字母数字，必须以数字结尾
 	function get_itmsk_array($sk_value)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -95,30 +114,72 @@ namespace itemmain
 			if(!empty($sub) && !in_array($sub, array('|'))){
 				if ($sub=='^')
 				{
-					//$flag = 1;
-					while ($i<strlen($sk_value) && '0'<=$sk_value[$i] && $sk_value[$i]<='9') 
+					$flag = 1;
+					while ($i<strlen($sk_value)) 
 					{
+						//^后，出现数字以后，遇到第一个不是数字的字符时跳出
+						if('0'<=$sk_value[$i] && $sk_value[$i]<='9') $flag = 0;
+						elseif(!$flag) break;
 						$sub.=$sk_value[$i];
 						$i++;
 					}
-//					if ($i<strlen($sk_value) && $sk_value[$i]=='^')
-//					{
-//						$sub.='^'; $i++;
-//					}
-//					else  continue;
 				}
 				array_push($ret,$sub);
-			}					
+			}
 		}
 		//if(!empty($flag)) var_dump($ret);
 		return $ret;		
+	}
+	
+	//获得复合属性的代号和数值。非复合属性返回NULL
+	function get_comp_itmsk_info($str){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(!is_string($str) || '^' != $str[0]) return NULL;
+		$skk = $skn = '';
+		for($i=1;$i<strlen($str);$i++) {
+			if('0'<=$str[$i] && $str[$i]<='9') {
+				if(empty($skk)) return NULL;
+				else $skn .= $str[$i];
+			}else{
+				$skk .= $str[$i];
+			}
+		}
+		$skk = '^'.$skk;
+		return array($skk, $skn);
+	}
+	
+	function get_itmsk_words_single($str)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('itemmain'));
+		$cinfo = get_comp_itmsk_info($str);
+		if(!empty($cinfo)) return $itemspkinfo[$cinfo[0]];
+		elseif(!empty($itemspkinfo[$str])) return $itemspkinfo[$str];
+		else return '';
+	}
+	
+	function get_itmsk_desc_single($str)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('itemmain'));
+		$cinfo = get_comp_itmsk_info($str);
+		if(!empty($cinfo)) {
+			$desc = $itemspkdesc[$cinfo[0]];
+			$desc = str_replace('<:skn:>', get_itmsk_desc_single_comp_process($cinfo[0], $cinfo[1]), $desc);
+			return $desc;
+		}elseif(!empty($itemspkdesc[$str])) return $itemspkdesc[$str];
+		else return '';
+	}
+	
+	function get_itmsk_desc_single_comp_process($skk, $skn) {
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return $skn;
 	}
 	
 	function parse_itmsk_words($sk_value, $simple = 0, $elli = 0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('itemmain'));
 		//纯数字或者以等号开头的，也认为是空的（特殊用法）
 		if($sk_value && is_numeric($sk_value) === false && strpos($sk_value,'=')!==0){
 			$ret = '';
@@ -129,15 +190,16 @@ namespace itemmain
 				$got = array();//除天然和奇迹外的同种属性只显示1次
 				foreach($sk_arr as $sv){
 					if(!in_array($sv,$got)){
+						$skw = get_itmsk_words_single($sv);
 						if(!$i){
-							$ret .= $itemspkinfo[$sv];
+							$ret .= $skw;
 						}elseif($elli && $i >= 3 && $i < $imax-1){
 							if(!$elli_aready){
 								$ret .= '+…';
 								$elli_aready = 1;
 							}
 						}else{
-							$ret .= '+'.$itemspkinfo[$sv];
+							$ret .= '+'.$skw;
 						}
 					}
 					$i ++ ;
@@ -146,6 +208,7 @@ namespace itemmain
 				//$ret = substr($ret,0,-1);
 			}
 		} else {
+			eval(import_module('itemmain'));
 			if ($simple)
 				$ret='';
 			else  $ret = $nospk;
@@ -160,14 +223,14 @@ namespace itemmain
 	
 	function parse_itmsk_desc($sk_value){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('itemmain'));
 		$ret = '';
 		if($sk_value && is_numeric($sk_value) === false && strpos($sk_value,'=')!==0){
 			$i = 0;
 			$sk_arr = get_itmsk_array($sk_value);
 			if(!empty($sk_arr)){
 				foreach($sk_arr as $sv){
-					$ret .= $itemspkinfo[$sv].'：'.$itemspkdesc[$sv].'<br>';
+					$skw = get_itmsk_words_single($sv);
+					$ret .= $skw.'：'.get_itmsk_desc_single($sv).'<br>';
 				}
 				$ret = substr($ret,0,-4);
 			}
@@ -193,8 +256,11 @@ namespace itemmain
 			$ev=$p1.'e'.$p2;
 			$sv=$p1.'s'.$p2;
 			$skv=$p1.'sk'.$p2;
-			$r[$v.'_words'] = parse_itmname_words($edata[$v], $elli);
+			$r[$v.'_words'] = parse_itmname_words($edata[$v], $elli);//这里如果$elli==0则会省略到20个字符
+			$r[$v.'_words_short'] = parse_itmname_words($edata[$v], 1, 15);//常用到的一个省略
 			$r[$kv.'_words'] = parse_itmk_words($edata[$kv]);
+			$r[$ev.'_words'] = parse_itmnum_words($edata[$ev], $elli);
+			$r[$sv.'_words'] = parse_itmnum_words($edata[$sv], $elli);
 			$r[$kv.'_desc'] = parse_itmk_desc($edata[$kv],$edata[$skv]);
 			$r[$skv.'_words'] = parse_itmsk_words($edata[$skv], $simple, $elli);
 			$r[$skv.'_desc'] = parse_itmsk_desc($edata[$skv]);
@@ -211,7 +277,8 @@ namespace itemmain
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
 		\player\update_sdata();
-		$tpldata+=parse_item_words($sdata,0,1);
+		if(empty($tpldata['itm1_words']))
+			$tpldata+=parse_item_words($sdata,0,1);
 		$chprocess();
 	}
 	
@@ -223,7 +290,7 @@ namespace itemmain
 		
 		eval(import_module('sys','map','itemmain'));
 		if ($xmode & 16) {	//地图道具初始化
-			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
+			$plsnum = sizeof($plsinfo);
 			$iqry = '';
 			$itemlist = get_itemfilecont();
 			$in = sizeof($itemlist);
@@ -231,15 +298,6 @@ namespace itemmain
 			for($i = 1; $i < $in; $i++) {
 				if(!empty($itemlist[$i]) && strpos($itemlist[$i],',')!==false){
 					list($iarea,$imap,$inum,$iname,$ikind,$ieff,$ista,$iskind) = mapitem_data_process(explode(',',$itemlist[$i]));
-					if(strpos($iskind,'=')===0){
-						$tmp_pa_name = substr($iskind,1);
-						$iskind = '';
-						$result = $db->query("SELECT pid FROM {$tablepre}players WHERE name='$tmp_pa_name' AND type>0");
-						if($db->num_rows($result)){
-							$ipid = $db->fetch_array($result);
-							$iskind = $ipid['pid'];
-						}
-					}
 					if( $iarea == $an || $iarea == 99 || ($iarea == 98 && $an > 0)) {
 						for($j = $inum; $j>0; $j--) {
 							if ($imap == 99)
@@ -249,6 +307,7 @@ namespace itemmain
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;
+							list($iname, $ikind, $ieff, $ista, $iskind, $rmap) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap);
 							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap'),";
 						}
 					}
@@ -261,10 +320,31 @@ namespace itemmain
 		}
 	}
 	
-	//某些模式特殊处理数据
+	//同名道具的data处理
+	//天然带毒物品的NPC pid自动处理
+	//也用于某些模式特殊处理数据
 	function mapitem_data_process($data){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		if(!empty($data[7])){
+			$iskind = $data[7];
+			if(strpos($iskind,'=')===0){
+				eval(import_module('sys'));
+				$tmp_pa_name = substr($iskind,1);
+				$iskind = '';
+				$result = $db->query("SELECT pid FROM {$tablepre}players WHERE name='$tmp_pa_name' AND type>0");
+				if($db->num_rows($result)){
+					$iskind = $db->fetch_array($result)['pid'];
+				}
+				$data[7] = $iskind;
+			}
+		}
 		return $data;
+	}
+	
+	//每个刷新到地图上的道具的data处理
+	function mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $imap){
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		return array($iname, $ikind, $ieff, $ista, $iskind, $imap);
 	}
 	
 	function get_itemfilecont(){
@@ -297,7 +377,7 @@ namespace itemmain
 		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$pls'");
 		$itemnum = $db->num_rows($result);
 		if($itemnum <= 0){
-			$log .= '<span class="yellow">周围找不到任何物品。</span><br>';
+			$log .= '<span class="yellow b">周围找不到任何物品。</span><br>';
 			$mode = 'command';
 			return;
 		}
@@ -401,10 +481,15 @@ namespace itemmain
 				itemoff($off_item);
 			} elseif(strpos($command,'swap') === 0) {
 				$swap_item = substr($command,4);
-				itemdrop($swap_item);
-				if(strpos($swap_item,'itm')===0) itemadd();
+				if(strpos($swap_item,'itm')===0) {
+					if(${str_replace('itm','itms',$swap_item)}) itemdrop($swap_item);
+					itemadd(substr($swap_item,3,1));
+				}
 				//如果要允许直接换上拾取的装备，请取消此行注释
-				//else itemuse_wrapper(0);
+				//else {
+//					if(${$swap_item.'s'}) itemdrop($swap_item);
+//					itemuse_wrapper(0);
+//				}
 			} 
 		}
 		$chprocess();

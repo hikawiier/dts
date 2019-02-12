@@ -14,7 +14,7 @@
 	<input type="hidden" name="start" value="$start">
 	<input type="hidden" id="pagemode" name="pagemode" value="">
 	<input type="submit" value="上一页" onclick="$('pagemode').value='up';">
-	<span class="yellow">$resultinfo</span>
+	<span class="yellow b">$resultinfo</span>
 	<input type="submit" value="下一页" onclick="$('pagemode').value='down';">
 	<!--{if $urdata}-->
 	<table class="admin">
@@ -118,7 +118,7 @@
 				正文：
 				<input type="text" name="scontent" size="20" maxlength="30" value="您获得了奖励，请查收！">&nbsp;&nbsp;&nbsp;
 				附件：
-				<input type="text" name="senclosure" size="20" maxlength="30" value="getqiegao_0;getcard_0">&nbsp;&nbsp;&nbsp;s
+				<input type="text" name="senclosure" size="20" maxlength="30" value="getqiegao_0;getcard_0">&nbsp;&nbsp;&nbsp;
 				<input type="submit" name="submit" value="发送站内邮件" onclick="$('urcmd').value='sendmessage'">
 			</td>
 		</tr>
@@ -133,7 +133,7 @@
 	<input type="submit" name="submit" value="返回玩家帐户管理">
 </form>
 <!--{else}-->
-<form method="post" name="urlist" onsubmit="admin.php">
+<form method="post" name="urlist" onsubmit="admin.php" enctype="multipart/form-data">
 	<input type="hidden" name="mode" value="urlist">
 	<input type="hidden" name="pagecmd" id="pagecmd" value="">
 	<input type="hidden" name="urcmd" value="list">
@@ -168,6 +168,19 @@
 		<tr>
 			<td style="text-align:center;"><input style="width:100px;height:30px;" type="submit" value="搜索" onclick="$('pagecmd').value='find';"></td>
 			<td style="text-align:center;"><input style="width:100px;height:30px;" type="submit" value="查看" onclick="$('pagecmd').value='check';"></td>
+		</tr>
+		<tr>
+			<td style="text-align:center;">
+				<select name="recover_file">
+					<option value="null">请选择</option>
+					<!--{loop $user_backup_list $ubi $ubv}-->
+					<option value="$ubv"><!--{eval echo strlen($ubv) > 12 ? substr($ubv,0,12).'..' : $ubv;}--> {$user_backup_date_list[$ubi]}</option>
+					<!--{/loop}-->
+				</select>
+				<input style="width:130px;height:30px;" type="submit" value="恢复用户数据" onclick="$('pagecmd').value='recover';">
+			</td>
+				
+			<td style="text-align:center;"><input style="width:150px;height:30px;" type="submit" value="下载用户数据备份" onclick="$('pagecmd').value='download';"></td>
 		</tr>
 	</table>
 

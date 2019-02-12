@@ -14,6 +14,7 @@ if(PHP_VERSION < '5.5.0') {
 }
 
 require GAME_ROOT.'./include/global.func.php';
+dir_init(GAME_ROOT.'./gamedata/cache');
 
 $___TEMP_pagestart_time=getmicrotime();
 
@@ -22,6 +23,7 @@ set_error_handler('gameerrorhandler');
 $magic_quotes_gpc = get_magic_quotes_gpc();
 
 require GAME_ROOT.'./include/modules/modules.func.php';
+require GAME_ROOT.'./include/user.func.php';
 require GAME_ROOT.'./include/roommng/room.func.php';
 
 define('STYLEID', '1');
@@ -89,7 +91,7 @@ if (defined('NO_SYS_UPDATE')) return;
 if (CURSCRIPT == 'index') {//首页，所有房间刷新
 	if($___MOD_SRV) {//如果daemon开启，则试图调用daemon
 		$routine_url = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0,-9).'command.php';
-		$routine_context = array('command'=>'room_routine');
+		$routine_context = array('command'=>'room_routine','nowroom'=>$room_id);
 		curl_post($routine_url,$routine_context,NULL,0.1);//相当于异步
 		unset($routine_url,$routine_context);
 	}else{
@@ -97,6 +99,6 @@ if (CURSCRIPT == 'index') {//首页，所有房间刷新
 		room_all_routine();
 	}
 }
-if (!in_array(CURSCRIPT, array('chat', 'login', 'register', 'help')) && !(CURSCRIPT == 'news' && isset($sendmode) && $sendmode=='news')) sys\routine();//聊天、游戏内进行状况、帮助页面不刷新游戏状态
+if (!defined('LOAD_CORE_ONLY') && !in_array(CURSCRIPT, array('help')) && !(CURSCRIPT == 'news' && isset($sendmode) && $sendmode=='news')) \sys\routine();//聊天、游戏内进行状况、帮助页面不刷新游戏状态
 
 ?>

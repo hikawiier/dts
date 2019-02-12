@@ -22,18 +22,21 @@ namespace blessstone
 		if (strpos ( $itmk, 'Y' ) === 0 || strpos ( $itmk, 'Z' ) === 0)
 			if ($itm == '『灵魂宝石』' || $itm == '『祝福宝石』')
 			{
-				$cmd = '<input type="hidden" name="mode" value="item"><input type="hidden" name="usemode" value="blessstone"><input type="hidden" name="itmp" value="' . $theitem['itmn'] . '">你想强化哪一件装备？<br><input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl("menu"); href="javascript:void(0);" >返回</a><br>';
+				$flag = false;
 				for($i = 1; $i <= 6; $i ++) {
 					if ((strpos ( ${'itmsk' . $i}, 'Z' ) !== false) && (strpos ( ${'itm' . $i}, '宝石』' ) === false)) {
-						$cmd .= '<input type="radio" name="command" id="itm' . $i . '" value="itm' . $i . '"><a onclick=sl("itm' . $i . '"); href="javascript:void(0);" >' . "${'itm'.$i}/${'itme'.$i}/${'itms'.$i}" . '</a><br>';
 						$flag = true;
+						break;
 					}
 				}
-				$cmd .= '<br><input type="button" id="z" onclick="postCmd(\'gamecmd\',\'command.php\');" value="[Z]提交">';
 				if (! $flag) {
 					$log .='唔？你的包裹里没有可以强化的装备，是不是没有脱下来呢？DA☆ZE<br><br>';
 				}else{
-					$log .="宝石在你的手上发出异样的光芒，似乎有个奇怪的女声在你耳边说道<span class=\"yellow\">\"我是从天界来的凯丽\"</span>.";
+					$log .="宝石在你的手上发出异样的光芒，似乎有个奇怪的女声在你耳边说道：<span class=\"yellow b\">“我是从天界来的凯丽。”</span>";
+					ob_start();
+					include template(MOD_BLESSSTONE_USE_BLESSSTONE);
+					$cmd = ob_get_contents();
+					ob_end_clean();
 				}				
 				return;
 			}
@@ -130,7 +133,7 @@ namespace blessstone
 		}	
 		addnews ( $now, 'newwep2', $name, $gem, $o_itm );
 		if ($flag){
-			$log .= "<span class=\"yellow\">『一道神圣的闪光照耀在你的眼睛上，当你恢复视力时，发现你的装备闪耀着彩虹般的光芒』</span><br>";
+			$log .= "<span class=\"yellow b\">『一道神圣的闪光照耀在你的眼睛上，当你恢复视力时，发现你的装备闪耀着彩虹般的光芒』</span><br>";
 			$nzitmlv = $zitmlv +1;
 			$itm = str_replace('[+'.$zitmlv.']','[+'.$nzitmlv.']',$itm);
 			$itme = round($itme * (1.5 + 0.1 * $zitmlv));
@@ -140,11 +143,11 @@ namespace blessstone
 			$itms = 1;
 			$itmk = 'X';
 			$itmsk = '';
-			$log .="<span class=\"yellow\">『一道神圣的闪光照耀在你的眼睛上，当你恢复视力时，发现你的装备变成了{$itm}』</span><br>";
+			$log .="<span class=\"yellow b\">『一道神圣的闪光照耀在你的眼睛上，当你恢复视力时，发现你的装备变成了{$itm}』</span><br>";
 		}			
 		$gems--;
 		if($gems <= 0){
-			$log .= "<span class=\"red\">$gem</span> 用光了。<br>";
+			$log .= "<span class=\"red b\">$gem</span> 用光了。<br>";
 			$gem = $gemk = $gemsk = '';$geme = $gems = 0;
 		}	
 		$mode = 'command';
@@ -184,7 +187,7 @@ namespace blessstone
 		eval(import_module('sys'));
 		
 		if($news == 'newwep2') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了{$b}，强化了<span class=\"yellow\">$c</span>！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了{$b}，强化了<span class=\"yellow b\">$c</span>！</span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

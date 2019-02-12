@@ -4,6 +4,10 @@ namespace itemmain
 {
 	$item_equip_list = Array('itm0','itm1','itm2','itm3','itm4','itm5','itm6');
 	
+	$item_hotkey_id_list = array(4=>'qq', 5=>'ww', 6=>'ee', 1=>'aa', 2=>'ss', 3=>'dd');//跟界面排列顺序有关系
+	
+	$itemmain_drophint = '将离开视线';
+	
 	//■ 无限耐久度 ■
 	$nosta = '∞';
 	//■ 无属性 ■
@@ -22,8 +26,7 @@ namespace itemmain
 		//B* item_ub 电池
 		//C* item_uc 各类异常状态治疗药剂
 		//D* armor 各类防具
-		//EC item_uec 电子道具
-		//EE item_uee 电脑设备
+		//EE item_uee 干扰设备
 		//ER radar 雷达
 		//EW weather 天气控制道具
 		//GA wep_b 箭矢
@@ -85,7 +88,7 @@ namespace itemmain
 		//Q ///////////////////////////
 		//q ex_dmg_def 防毒
 		//R ex_rapid_def 防连
-		//r ex_rapid_attr 连击
+		//r ex_rapid_attr 连击		
 		//S ex_attr_silencer 消音
 		//s itemmix_sync 调整（同调合成必需）
 		//T ///////////////////////////
@@ -103,13 +106,18 @@ namespace itemmain
 		//Z blessstone 菁英
 		'z' => '天然',
 		//| 特殊分隔符
+		//
 		//^001 itemmix_sync 同调（标记是同调产物）
 		//^002 itemmix_sync 变星
+		//^dd ex_def_down 降防
+		//^hu ex_mhp_temp_up 升血
+		'^TEST' => '蛋疼',
 	);
 	
 	$itemspkdesc = array(
 		'x' => '人类，可以超越神么？……',
 		'z' => '使用后会变成冴冴一样的天然呆',
+		'^TEST' => '你的蛋疼度增加<:skn:>%',
 	);
 	
 	$itemspkremark = array(

@@ -22,10 +22,10 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	$att = 95 + $rand;
 	$def = 105 - $rand;
 	$pls = 0;
-	$killnum = 0;
+	$killnum = $npckillnum = 0;
 	$lvl = 0;
 	$skillpoint = 0;
-	$exp = $areanum * 20;
+	$exp = 0;
 	$money = 20;
 	$rage = 0;
 	$pose = 3;
@@ -66,13 +66,20 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 //		$itm[3] = '手枪子弹'; $itmk[3] = 'GB'; $itme[3] = 1; $itms[3] = 12; $itmsk[3] = '';
 //	}
 
+	global $gamefounder, $cuser;
+	if($xuser != $cuser) {
+		$r = fetch_udata_by_username($xuser, 'groupid,ip,motto,killmsg,lastword');
+		if(empty($r)) return;
+	}else{
+		$r = $cudata;
+	}
+	$groupid = $r['groupid'];
+	$motto = $r['motto'];
+	$killmsg = $r['killmsg'];
+	$lastword = $r['lastword'];
+	
 	//如果没有提供ip，则自行查询
 	if(empty($ip)) {
-		global $gamefounder,$ip;
-		$result = $db->query("SELECT groupid,ip FROM {$gtablepre}users WHERE username='$xuser'");
-		$r = $db->fetch_array($result);
-		
-		$groupid = $r['groupid'];
 		$ip = $r['ip'];
 	}
 	
@@ -185,6 +192,7 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	
 	$cardname = $newscardname = $cards[$card]['name'];
 	$cardrare = $newscardrare = $cards[$card]['rare'];
+	if(!empty($cards[$card]['title'])) $cardname = $cards[$card]['title'];//某些有两重名字的卡
 	if(isset($o_card)) {
 		$newscardname=$cards[$o_card]['name'];
 		$newscardrare=$cards[$o_card]['rare'];
@@ -204,8 +212,123 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 		}
 	}
 	///////////////////////////////////////////////////////////////
-	$db->query("INSERT INTO {$tablepre}players (name,pass,ip,type,endtime,validtime,gd,sNo,icon,club,hp,mhp,sp,msp,ss,mss,att,def,pls,lvl,`exp`,money,bid,inf,rage,pose,tactic,killnum,state,wp,wk,wg,wc,wd,wf,teamID,teamPass,wep,wepk,wepe,weps,arb,arbk,arbe,arbs,arh,arhk,arhe,arhs,ara,arak,arae,aras,arf,arfk,arfe,arfs,art,artk,arte,arts,itm0,itmk0,itme0,itms0,itm1,itmk1,itme1,itms1,itm2,itmk2,itme2,itms2,itm3,itmk3,itme3,itms3,itm4,itmk4,itme4,itms4,itm5,itmk5,itme5,itms5,itm6,itmk6,itme6,itms6,wepsk,arbsk,arhsk,arask,arfsk,artsk,itmsk0,itmsk1,itmsk2,itmsk3,itmsk4,itmsk5,itmsk6,card,cardname,skillpoint) VALUES ('$name','$pass','$ip','$type','$endtime','$validtime','$gd','$sNo','$icon','$club','$hp','$mhp','$sp','$msp','$ss','$mss','$att','$def','$pls','$lvl','$exp','$money','$bid','$inf','$rage','$pose','$tactic','$state','$killnum','$wp','$wk','$wg','$wc','$wd','$wf','$teamID','$teamPass','$wep','$wepk','$wepe','$weps','$arb','$arbk','$arbe','$arbs','$arh','$arhk','$arhe','$arhs','$ara','$arak','$arae','$aras','$arf','$arfk','$arfe','$arfs','$art','$artk','$arte','$arts','$itm[0]','$itmk[0]','$itme[0]','$itms[0]','$itm[1]','$itmk[1]','$itme[1]','$itms[1]','$itm[2]','$itmk[2]','$itme[2]','$itms[2]','$itm[3]','$itmk[3]','$itme[3]','$itms[3]','$itm[4]','$itmk[4]','$itme[4]','$itms[4]','$itm[5]','$itmk[5]','$itme[5]','$itms[5]','$itm[6]','$itmk[6]','$itme[6]','$itms[6]','$wepsk','$arbsk','$arhsk','$arask','$arfsk','$artsk','$itmsk[0]','$itmsk[1]','$itmsk[2]','$itmsk[3]','$itmsk[4]','$itmsk[5]','$itmsk[6]','$card','$cardname','$skillpoint')");
-	$db->query("UPDATE {$gtablepre}users SET lastgame='$gamenum' WHERE username='$name'");
+	//禁区不为0时经验补偿移动到这里
+	$exp += $areanum * 20;
+	
+	$pdata = array(
+		'name' => $name,
+		'pass' => $pass,
+		'ip' => $ip,
+		'motto' => $motto,
+		'killmsg' => $killmsg,
+		'lastword' => $lastword,
+		'type' => $type,
+		'endtime' => $endtime,
+		'validtime' => $validtime,
+		'gd' => $gd,
+		'sNo' => $sNo,
+		'icon' => $icon,
+		'club' => $club,
+		'hp' => $hp,
+		'mhp' => $mhp,
+		'sp' => $sp,
+		'msp' => $msp,
+		'ss' => $ss,
+		'mss' => $mss,
+		'att' => $att,
+		'def' => $def,
+		'pls' => $pls,
+		'lvl' => $lvl,
+		'exp' => $exp,
+		'money' => $money,
+		'bid' => $bid,
+		'inf' => $inf,
+		'rage' => $rage,
+		'pose' => $pose,
+		'tactic' => $tactic,
+		'state' => $state,
+		'killnum' => $killnum,
+		'npckillnum' => $npckillnum,
+		'wp' => $wp,
+		'wk' => $wk,
+		'wg' => $wg,
+		'wc' => $wc,
+		'wd' => $wd,
+		'wf' => $wf,
+		'teamID' => $teamID,
+		'teamPass' => $teamPass,
+		'wep' => $wep,
+		'wepk' => $wepk,
+		'wepe' => $wepe,
+		'weps' => $weps,
+		'wepsk' => $wepsk,
+		'arb' => $arb,
+		'arbk' => $arbk,
+		'arbe' => $arbe,
+		'arbs' => $arbs,
+		'arbsk' => $arbsk,
+		'arh' => $arh,
+		'arhk' => $arhk,
+		'arhe' => $arhe,
+		'arhs' => $arhs,
+		'arhsk' => $arhsk,
+		'ara' => $ara,
+		'arak' => $arak,
+		'arae' => $arae,
+		'aras' => $aras,
+		'arask' => $arask,
+		'arf' => $arf,
+		'arfk' => $arfk,
+		'arfe' => $arfe,
+		'arfs' => $arfs,
+		'arfsk' => $arfsk,
+		'art' => $art,
+		'artk' => $artk,
+		'arte' => $arte,
+		'arts' => $arts,
+		'artsk' => $artsk,
+		'itm0' => $itm[0],
+		'itmk0' => $itmk[0],
+		'itme0' => $itme[0],
+		'itms0' => $itms[0],
+		'itmsk0' => $itmsk[0],
+		'itm1' => $itm[1],
+		'itmk1' => $itmk[1],
+		'itme1' => $itme[1],
+		'itms1' => $itms[1],
+		'itmsk1' => $itmsk[1],
+		'itm2' => $itm[2],
+		'itmk2' => $itmk[2],
+		'itme2' => $itme[2],
+		'itms2' => $itms[2],
+		'itmsk2' => $itmsk[2],
+		'itm3' => $itm[3],
+		'itmk3' => $itmk[3],
+		'itme3' => $itme[3],
+		'itms3' => $itms[3],
+		'itmsk3' => $itmsk[3],
+		'itm4' => $itm[4],
+		'itmk4' => $itmk[4],
+		'itme4' => $itme[4],
+		'itms4' => $itms[4],
+		'itmsk4' => $itmsk[4],
+		'itm5' => $itm[5],
+		'itmk5' => $itmk[5],
+		'itme5' => $itme[5],
+		'itms5' => $itms[5],
+		'itmsk5' => $itmsk[5],
+		'itm6' => $itm[6],
+		'itmk6' => $itmk[6],
+		'itme6' => $itme[6],
+		'itms6' => $itms[6],
+		'itmsk6' => $itmsk[6],
+		'card' => $card,
+		'cardname' => $cardname,
+		'skillpoint' => $skillpoint,
+	);
+	$db->array_insert("{$tablepre}players", $pdata);
+	//$db->query("INSERT INTO {$tablepre}players (name,pass,ip,type,endtime,validtime,gd,sNo,icon,club,hp,mhp,sp,msp,ss,mss,att,def,pls,lvl,`exp`,money,bid,inf,rage,pose,tactic,killnum,npckillnum,state,wp,wk,wg,wc,wd,wf,teamID,teamPass,wep,wepk,wepe,weps,arb,arbk,arbe,arbs,arh,arhk,arhe,arhs,ara,arak,arae,aras,arf,arfk,arfe,arfs,art,artk,arte,arts,itm0,itmk0,itme0,itms0,itm1,itmk1,itme1,itms1,itm2,itmk2,itme2,itms2,itm3,itmk3,itme3,itms3,itm4,itmk4,itme4,itms4,itm5,itmk5,itme5,itms5,itm6,itmk6,itme6,itms6,wepsk,arbsk,arhsk,arask,arfsk,artsk,itmsk0,itmsk1,itmsk2,itmsk3,itmsk4,itmsk5,itmsk6,card,cardname,skillpoint) VALUES ('$name','$pass','$ip','$type','$endtime','$validtime','$gd','$sNo','$icon','$club','$hp','$mhp','$sp','$msp','$ss','$mss','$att','$def','$pls','$lvl','$exp','$money','$bid','$inf','$rage','$pose','$tactic','$state','$killnum','$npckillnum','$wp','$wk','$wg','$wc','$wd','$wf','$teamID','$teamPass','$wep','$wepk','$wepe','$weps','$arb','$arbk','$arbe','$arbs','$arh','$arhk','$arhe','$arhs','$ara','$arak','$arae','$aras','$arf','$arfk','$arfe','$arfs','$art','$artk','$arte','$arts','$itm[0]','$itmk[0]','$itme[0]','$itms[0]','$itm[1]','$itmk[1]','$itme[1]','$itms[1]','$itm[2]','$itmk[2]','$itme[2]','$itms[2]','$itm[3]','$itmk[3]','$itme[3]','$itms[3]','$itm[4]','$itmk[4]','$itme[4]','$itms[4]','$itm[5]','$itmk[5]','$itme[5]','$itms[5]','$itm[6]','$itmk[6]','$itme[6]','$itms[6]','$wepsk','$arbsk','$arhsk','$arask','$arfsk','$artsk','$itmsk[0]','$itmsk[1]','$itmsk[2]','$itmsk[3]','$itmsk[4]','$itmsk[5]','$itmsk[6]','$card','$cardname','$skillpoint')");
+	update_udata_by_username(array('lastgame' => $gamenum), $name);
 	
 	///////////////////////////////////////////////////////////////
 	$pp=\player\fetch_playerdata($name);
@@ -232,7 +355,7 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 		}
 	}
 	//如果是篝火挑战者，或者别的会换卡的卡，在这里把$card换回原卡，就能做到入场后按篝火判定，但显示的是实际的卡
-	if(isset($o_card) && \skillbase\skill_query(1003,$pp)) {
+	if(isset($o_card)) {
 		//\skillbase\skill_setvalue(1003,'actual_card',$card,$pp);
 		$pp['card'] = $o_card;
 	}
@@ -249,18 +372,8 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	\player\player_save($pp);
 	///////////////////////////////////////////////////////////////
 	$rarecolor = $card_rarecolor[$newscardrare];
-//	if ($cardrare=="S"){
-//		$rarecolor="orange";
-//	}else if ($cardrare=='A'){
-//		$rarecolor="linen";
-//	}else if ($cardrare=='B'){
-//		$rarecolor="brickred";
-//	}else if ($cardrare=='C'){
-//		$rarecolor="seagreen";
-//	}
-	$result = $db->query("SELECT groupid FROM {$gtablepre}users WHERE username='$cuser'");
-	$udata = $db->fetch_array($result);
-	if($gamestate >= 30 && ($udata['groupid'] >= 6 || $cuser == $gamefounder)){
+
+	if($gamestate >= 30 && ($groupid >= 6 || $cuser == $gamefounder)){
 		addnews($now,'newgm',"<span class=\"".$rarecolor."\">".$newscardname.'</span> '.$name,"{$sexinfo[$gd]}{$sNo}号");
 	}else{
 		addnews($now,'newpc',"<span class=\"".$rarecolor."\">".$newscardname.'</span> '.$name,"{$sexinfo[$gd]}{$sNo}号");
@@ -273,6 +386,11 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	save_gameinfo();
 }
 
+function check_card_in_ownlist($card, $card_ownlist){
+	global $gametype;
+	if(in_array($card,$card_ownlist) || (5==$gametype && in_array($card,array(182, 183, 184, 185)))) return true;
+	return false;
+}
 
 function card_validate($udata){
 	eval(import_module('sys','cardbase'));
@@ -356,6 +474,24 @@ function card_validate($udata){
 		$cc = $cardChosen = 93;//自动选择软件测试工程师
 		$card_ownlist[] = 93;
 		$packlist[] = $cards[93]['pack'] = 'Testing Fan Club';
+		$hideDisableButton = 0;
+	}
+	elseif (5==$gametype)	//圣诞模式只允许某4张卡
+	{
+		$tmp_add_hidden_list = array(182, 183, 184, 185);
+		foreach($card_ownlist as $cv){
+			if(!in_array($cv, $tmp_add_hidden_list)) $card_disabledlist[$cv][]='e3';
+		}
+		global $cc,$cardChosen,$card_ownlist,$packlist,$cards,$hideDisableButton;
+		$cardChosen = $cc;
+		if(!in_array($cardChosen, $tmp_add_hidden_list)) {
+			$cc = $cardChosen = $tmp_add_hidden_list[0];//自动选择简单难度
+		}
+		foreach ($tmp_add_hidden_list as $adv){
+			$card_ownlist[] = $adv;
+			$cards[$adv]['pack'] = 'Difficulty';
+		}
+		$packlist[] = 'Difficulty';
 		$hideDisableButton = 0;
 	}
 	elseif (2==$gametype)	//deathmatch模式禁用蛋服和炸弹人

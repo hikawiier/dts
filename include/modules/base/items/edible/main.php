@@ -28,11 +28,25 @@ namespace edible
 		
 		eval(import_module('sys','player','itemmain','logger'));
 		$hp+=$hpup; $sp+=$spup;
-		$log .= "你使用了<span class=\"red\">$itm</span>，恢复了";
-		if ($hpup>0) $log.="<span class=\"yellow\">$hpup</span>点生命";
+		$log .= "你使用了<span class=\"red b\">$itm</span>，恢复了";
+		if ($hpup>0) $log.="<span class=\"yellow b\">$hpup</span>点生命";
 		if ($hpup>0 && $spup>0) $log.='和';
-		if ($spup>0) $log.="<span class=\"yellow\">$spup</span>点体力";
+		if ($spup>0) $log.="<span class=\"yellow b\">$spup</span>点体力";
 		$log.="。<br>";
+	}
+	
+	//获得最大SP值
+	function itemuse_edible_get_msp(){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
+		return $msp;
+	}
+	
+	//获得最大HP值
+	function itemuse_edible_get_mhp(){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
+		return $mhp;
 	}
 	
 	function itemuse_edible(&$theitem)
@@ -44,10 +58,13 @@ namespace edible
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
+		$tmp_msp = itemuse_edible_get_msp();
+		$tmp_mhp = itemuse_edible_get_mhp();
+		
 		if (strpos ( $itmk, 'HS' ) === 0) {
-			if ($sp < $msp) {
+			if ($sp < $tmp_msp) {
 				$spup = get_edible_spup($theitem);
-				$spup = min($msp-$sp,$spup);
+				$spup = min($tmp_msp-$sp,$spup);
 				$spup = max(0,$spup);
 				edible_recover($itm,0,$spup);
 				\itemmain\itms_reduce($theitem);
@@ -55,9 +72,9 @@ namespace edible
 				$log .= '你的体力不需要恢复。<br>';
 			}
 		} elseif (strpos ( $itmk, 'HH' ) === 0) {
-			if ($hp < $mhp) {
+			if ($hp < $tmp_mhp) {
 				$hpup = get_edible_hpup($theitem);
-				$hpup = min($mhp-$hp,$hpup);
+				$hpup = min($tmp_mhp-$hp,$hpup);
 				$hpup = max(0,$hpup);
 				edible_recover($itm,$hpup,0);
 				\itemmain\itms_reduce($theitem);
@@ -65,11 +82,11 @@ namespace edible
 				$log .= '你的生命不需要恢复。<br>';
 			}
 		} elseif (strpos ( $itmk, 'HB' ) === 0) {
-			if (($hp < $mhp) || ($sp < $msp)) {
+			if (($hp < $tmp_mhp) || ($sp < $tmp_msp)) {
 				$spup = get_edible_spup($theitem);
 				$hpup = get_edible_hpup($theitem);
-				$spup = min($msp-$sp,$spup);
-				$hpup = min($mhp-$hp,$hpup);
+				$spup = min($tmp_msp-$sp,$spup);
+				$hpup = min($tmp_mhp-$hp,$hpup);
 				$spup = max(0,$spup);
 				$hpup = max(0,$hpup);
 				edible_recover($itm,$hpup,$spup);

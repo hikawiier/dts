@@ -10,7 +10,7 @@ namespace npcchat
 		eval(import_module('npcchat'));
 		
 		if (!$npcchaton) return;
-		
+		if(!$pa['type'] && !$pd['type']) return;
 		
 		if ($pa['type'])
 		{
@@ -18,7 +18,7 @@ namespace npcchat
 			if (isset($npcchat[$pa['type']][$pa['name']]))
 				$nchat = &$npcchat[$pa['type']][$pa['name']];
 			else  $nchat = &$npcchat[$pa['type']];
-			$flag = 1;
+			$npc_active = 1;
 		}
 		else
 		{
@@ -26,9 +26,58 @@ namespace npcchat
 			if (isset($npcchat[$pd['type']][$pd['name']]))
 				$nchat = &$npcchat[$pd['type']][$pd['name']];
 			else  $nchat = &$npcchat[$pd['type']];
-			$flag = 0;
+			$npc_active = 0;
 		}
 		
+		list($chattag, $sid) = npcchat_tag_process($pa, $pd, $active, $situation, $npc_active, $nchat);
+		
+		$chatlog = npcchat_get_chatlog($chattag,$sid,$nchat);
+		
+		if(NULL===$chatlog) return;
+		
+		if($print){
+			npcchat_print(npcchat_decorate($chatlog, $nchat, $chattag));
+		}
+		return $chatlog;
+	}
+	
+	function npcchat_print($printlog)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('logger'));
+		$log .= $printlog;
+	}
+	
+	function npcchat_decorate($chatlog, $nchat, $chattag)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(!empty($nchat['color'])){
+			$printlog = "<span class = \"{$nchat['color']}\">".$chatlog;
+		}else{
+			$printlog = '<span>'.$chatlog;
+		}
+		$printlog .= '</span><br>';
+		if('kill' == $chattag || 'retreat' == $chattag) $printlog .= '<br>';
+		return $printlog;
+	}
+	
+	function npcchat_get_chatlog($chattag,$sid,$nchat){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chatlog = NULL;
+		if(isset($nchat[$chattag])) {
+			$chatlog = $nchat[$chattag];
+			if(is_array($chatlog)){
+				shuffle($chatlog);
+				$chatlog = $chatlog[0];
+			}
+		}elseif(isset($nchat[$sid])){
+			$chatlog = $nchat[$sid];
+		}
+		return $chatlog;
+	}
+	
+	function npcchat_tag_process(&$pa, &$pd, $active, $situation, $npc_active, $nchat){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$sid = -1;
 		$chattag = '';
 		if ($situation == 'meet')	//初次登场，会将NPC从睡眠状态变为正常状态
@@ -40,7 +89,7 @@ namespace npcchat
 		}
 		elseif ($situation == 'battle')
 		{
-			if ($flag)	//攻击玩家
+			if ($npc_active)	//攻击玩家
 			{
 				if ($pa['hp']>=$pa['mhp']/2)
 				{
@@ -72,25 +121,26 @@ namespace npcchat
 				}
 			}
 		}
-		elseif ($situation == 'cannot_counter' && $flag)	//NPC反击检定失败
+		elseif ($situation == 'cannot_counter' && $npc_active)	//NPC反击检定失败
 		{
 			$sid = 10;
 			$chattag = 'cannot_counter';
 		}
-		elseif ($situation == 'out_of_range' && $flag)	//NPC射程不足无法反击
+		elseif ($situation == 'out_of_range' && $npc_active)	//NPC射程不足无法反击
 		{
 			$sid = 11;
 			$chattag = 'out_of_range';
 		}
 		elseif ($situation == 'kill')
 		{
-			if ($flag){
+			if ($npc_active){
 				$sid = 13;	//击杀玩家 原为13，但不需要在这里设置
 				$chattag = 'kill';
 				$pa['npcchat_kill'] = 1;
 			}else {
 				$sid = 9;	//被击杀
-				$chattag = 'retreat';
+				if($pd['hp'] > 0 && !empty($nchat['revive'])) $chattag = 'revive';
+				else $chattag = 'retreat';
 			}
 		}
 		elseif ($situation == 'critical') //必杀技
@@ -98,38 +148,19 @@ namespace npcchat
 			$sid = 12;
 			$chattag = 'critical';
 		}
-		if(isset($nchat[$chattag])) {
-			$chatlog = $nchat[$chattag];
-			if(is_array($chatlog)){
-				shuffle($chatlog);
-				$chatlog = $chatlog[0];
-			}
-		}elseif(isset($nchat[$sid])){
-			$chatlog = $nchat[$sid];
-		}else{
-			return;
+		elseif ($situation == 'addnpc') //addnpc入场特殊宣言
+		{
+			$sid = 15;
+			$chattag = 'addnpc';
 		}
-		
-		$pringlog = '';
-		if($print){
-			$chatcolor = $nchat['color'];
-			if(!empty($chatcolor)){
-				$pringlog = "<span class = \"{$chatcolor}\">".$chatlog;
-			}else{
-				$pringlog = '<span>'.$chatlog;
-			}
-			$pringlog .= '</span><br>';
-		
-			eval(import_module('logger'));
-			$log .= $pringlog;
-		}
-		return $chatlog;
+		return array($chattag, $sid);
 	}
 	
 	function battle_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (($pa['type'] && $pa['state']==1) || ($pd['type'] && $pd['state']==1)) npcchat($pa, $pd, $active, 'meet');
+		if ($pa['type'] && $pa['state']==1) npcchat($pa, $pd, $active, 'meet');//改为只有NPC主动出击才会喊见面台词
+		//if (($pa['type'] && $pa['state']==1) || ($pd['type'] && $pd['state']==1)) npcchat($pa, $pd, $active, 'meet');
 		$chprocess($pa, $pd, $active);
 	}
 	
@@ -146,7 +177,9 @@ namespace npcchat
 		$chprocess($pa, $pd, $active);
 		$npcchat_pdflag = 1;
 		//进化了别说话
-		if(isset($pd['npc_evolved']) && $pd['npc_evolved']) $npcchat_pdflag = 0;
+		if(!empty($pd['npc_evolved'])) $npcchat_pdflag = 0;
+		//复活了别说话
+		if(!empty($pd['npc_revived'])) $npcchat_pdflag = 0;
 		//没打中别说话，否则太话痨了
 		if($pa['dmg_dealt'] <= 0) $npcchat_pdflag = 0;
 		if ($pd['type'] && $pd['hp']>0 && $npcchat_pdflag) npcchat($pa, $pd, $active, 'battle');
@@ -165,8 +198,8 @@ namespace npcchat
 	function player_kill_enemy(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if ($pa['type'] || $pd['type']) npcchat($pa, $pd, $active, 'kill');
 		$chprocess($pa, $pd, $active);
+		if ($pa['type'] || $pd['type']) npcchat($pa, $pd, $active, 'kill');
 	}
 	
 	function get_player_killmsg(&$pdata)
@@ -178,6 +211,17 @@ namespace npcchat
 			$ret = '';//不需要返回杀人台词
 		}
 		return $ret;
+	}
+	
+	//秒杀阶段如果成功秒杀，发布必杀技宣言
+	function apply_total_damage_modifier_seckill(&$pa,&$pd,$active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if (($pa['type'] && !empty($pa['seckill'])) || ($pd['type'] && !empty($pd['seckill']))) 
+		{
+			npcchat($pa, $pd, $active, 'critical');
+		}
 	}
 }
 

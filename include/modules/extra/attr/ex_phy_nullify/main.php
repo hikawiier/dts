@@ -7,7 +7,7 @@ namespace ex_phy_nullify
 		eval(import_module('itemmain'));
 		$itemspkinfo['B'] = '物抹';
 		$itemspkdesc['B']='抹消受到的所有攻击方式的物理伤害至1';
-		$itemspkremark['B']='4%概率失效；注意本属性会被贯穿属性击穿。';
+		$itemspkremark['B']='4%概率失效；注意本属性会被物穿属性击穿。';
 	}
 	
 	function get_ex_phy_nullify_proc_rate(&$pa, &$pd, $active)
@@ -29,15 +29,15 @@ namespace ex_phy_nullify
 			if ($dice<$proc_rate)
 			{
 				if ($active)
-					$log .= "<span class=\"yellow\">你的攻击完全被{$pd['name']}的装备吸收了！</span><br>";
-				else  $log .= "<span class=\"yellow\">{$pa['name']}的攻击完全被你的装备吸收了！</span><br>";
+					$log .= "<span class=\"yellow b\">你的攻击完全被{$pd['name']}的装备吸收了！</span><br>";
+				else  $log .= "<span class=\"yellow b\">{$pa['name']}的攻击完全被你的装备吸收了！</span><br>";
 				$pd['physical_nullify_success'] = 1;
 			}
 			else
 			{
 				if ($active)
-					$log .= "<span class=\"red\">{$pd['name']}的装备免疫物理伤害的效果竟然失效了！</span><br>";
-				else  $log .= "<span class=\"red\">你的装备免疫物理伤害的效果竟然失效了！</span><br>";
+					$log .= "<span class=\"red b\">{$pd['name']}的装备免疫物理伤害的效果竟然失效了！</span><br>";
+				else  $log .= "<span class=\"red b\">你的装备免疫物理伤害的效果竟然失效了！</span><br>";
 			}
 		}
 		return Array();

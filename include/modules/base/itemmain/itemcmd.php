@@ -1,7 +1,7 @@
 <?php
 
 namespace itemmain
-{
+{	
 	function itemfind() {
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
@@ -11,14 +11,29 @@ namespace itemmain
 			$mode = 'command';
 			return;
 		}
-		$tpldata['itmk0_words']=parse_itmk_words($itmk0);
-		$tpldata['itmsk0_words']=parse_itmsk_words($itmsk0);
 		show_itemfind();
+	}
+	
+	function parse_interface_gameinfo() {
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','logger'));
+		if($itm0 && $itmk0 && $itms0) {
+			$tpldata['itmk0_words']=parse_itmk_words($itmk0);
+			$tpldata['itmsk0_words']=parse_itmsk_words($itmsk0);
+			//if(!empty(trim($log))) $log .= '<br>';
+			if(strpos($log, $itm0) === false) $log .= "<br>发现了物品 <span class='yellow b'>{$itm0}</span>，<br>";
+			$log .= "类型：{$tpldata['itmk0_words']}";
+			if ($itmsk0 && !is_numeric($itmsk0)) $log .= "，属性：{$tpldata['itmsk0_words']}";
+			$log .= "，效：{$itme0}，耐：{$itms0}。";
+		}
+		$chprocess();
 	}
 	
 	function show_itemfind(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
+//		$tpldata['itmk0_words']=parse_itmk_words($itmk0);
+//		$tpldata['itmsk0_words']=parse_itmsk_words($itmsk0);
 		ob_start();
 		include template(MOD_ITEMMAIN_ITEMFIND);
 		$cmd = ob_get_contents();
@@ -29,11 +44,11 @@ namespace itemmain
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','player','logger'));
-		$log .= "获得了物品<span class=\"yellow\">$itm0</span>。<br>";
+		$log .= "获得了物品<span class=\"yellow b\">$itm0</span>。<br>";
 		if(1 == check_mergable($itmk0) && $itms0 !== $nosta){
 			if($wep == $itm0 && $wepk == $itmk0 && $wepe == $itme0 && $wepsk == $itmsk0){
 				$weps += $itms0;
-				$log .= "与装备着的武器<span class=\"yellow\">$wep</span>合并了。";
+				$log .= "与装备着的武器<span class=\"yellow b\">$wep</span>合并了。";
 				$itm0 = $itmk0 = $itmsk0 = '';
 				$itme0 = $itms0 = 0;
 				$mode = 'command';
@@ -42,7 +57,7 @@ namespace itemmain
 				for($i = 1;$i <= 6;$i++){
 					if((${'itms'.$i})&&($itm0 == ${'itm'.$i})&&($itmk0 == ${'itmk'.$i})&&($itme0 == ${'itme'.$i})&&($itmsk0 == ${'itmsk'.$i})){
 						${'itms'.$i} += $itms0;
-						$log .= "与包裹里的<span class=\"yellow\">$itm0</span>合并了。";
+						$log .= "与包裹里的<span class=\"yellow b\">$itm0</span>合并了。";
 						$itm0 = $itmk0 = $itmsk0 = '';
 						$itme0 = $itms0 = 0;
 						$mode = 'command';
@@ -58,10 +73,13 @@ namespace itemmain
 				}
 			}
 			if(isset($sameitem[0])){
+				$log .= "是否将 <span class='yellow b'>$itm0</span>与以下物品合并？";
+//				$tpldata['itme0_words'] = \itemmain\parse_itmnum_words($itme,1);
+//				$tpldata['itms0_words'] = \itemmain\parse_itmnum_words($itms,1);
 				include template(MOD_ITEMMAIN_ITEMMERGE0);
 				$cmd = ob_get_contents();
 				ob_clean();
-	//			$cmd .= '<input type="hidden" name="mode" value="itemmain"><input type="hidden" name="command" value="itemmerge"><input type="hidden" name="merge1" value="0"><br>是否将 <span class="yellow">'.$itm0.'</span> 与以下物品合并？<br><input type="radio" name="merge2" id="itmn" value="n" checked><a onclick=sl("itmn"); href="javascript:void(0);" >不合并</a><br><br>';
+	//			$cmd .= '<input type="hidden" name="mode" value="itemmain"><input type="hidden" name="command" value="itemmerge"><input type="hidden" name="merge1" value="0"><br>是否将 <span class="yellow b">'.$itm0.'</span> 与以下物品合并？<br><input type="radio" name="merge2" id="itmn" value="n" checked><a onclick=sl("itmn"); href="javascript:void(0);" >不合并</a><br><br>';
 	//			foreach($sameitem as $n) {
 	//				$cmd .= '<input type="radio" name="merge2" id="itm'.$n.'" value="'.$n.'"><a onclick=sl("itm'.$n.'"); href="javascript:void(0);">'."${'itm'.$n}/${'itme'.$n}/${'itms'.$n}".'</a><br>';
 	//			}
@@ -124,7 +142,7 @@ namespace itemmain
 		$db->query("INSERT INTO {$tablepre}mapitem (itm, itmk, itme, itms, itmsk ,pls) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$pls')");
 		$dropid = $db->insert_id();
 		$dropname = $itm;
-		$log .= "你丢弃了<span class=\"red\">$dropname</span>。<br>";
+		$log .= "你丢弃了<span class=\"red b\">$dropname</span>。<br>";
 		$mode = 'command';
 		if($item == 'wep'){
 		$itm = '拳头';
@@ -173,7 +191,7 @@ namespace itemmain
 			$mode = 'command';
 			return;
 		}
-		$log .= "你卸下了装备<span class=\"yellow\">$itm</span>。<br>";
+		$log .= "你卸下了装备<span class=\"yellow b\">$itm</span>。<br>";
 
 		$itm0 = $itm;
 		$itmk0 = $itmk;
@@ -194,8 +212,20 @@ namespace itemmain
 		itemget();
 		return;
 	}
+	
+	function get_pack_blank()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player'));
+		for($i = 1;$i <= 6;$i++){
+			if(!${'itms'.$i}){
+				return $i;
+			}
+		}
+		return 0;
+	}
 
-	function itemadd(){
+	function itemadd($pos=0){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','player','logger'));
@@ -204,19 +234,19 @@ namespace itemmain
 			$mode = 'command';
 			return;
 		}
-		for($i = 1;$i <= 6;$i++){
-			if(!${'itms'.$i}){
-				$log .= "将<span class=\"yellow\">$itm0</span>放入包裹。<br>";
-				${'itm'.$i} = $itm0;
-				${'itmk'.$i} = $itmk0;
-				${'itme'.$i} = $itme0;
-				${'itms'.$i} = $itms0;
-				${'itmsk'.$i} = $itmsk0;
-				$itm0 = $itmk0 = $itmsk0 = '';
-				$itme0 = $itms0 = 0;
-				$mode = 'command';
-				return;
-			}
+		if($pos > 0 && !${'itms'.$pos}) $i = $pos;
+		else $i = get_pack_blank();
+		if($i > 0) {
+			$log .= "将<span class=\"yellow b\">$itm0</span>放入包裹。<br>";
+			${'itm'.$i} = $itm0;
+			${'itmk'.$i} = $itmk0;
+			${'itme'.$i} = $itme0;
+			${'itms'.$i} = $itms0;
+			${'itmsk'.$i} = $itmsk0;
+			$itm0 = $itmk0 = $itmsk0 = '';
+			$itme0 = $itms0 = 0;
+			$mode = 'command';
+			return;
 		}
 		//$log .= '你的包裹已经满了。想要丢掉哪个物品？<br>';
 		include template(MOD_ITEMMAIN_ITEMDROP0);
@@ -265,7 +295,7 @@ namespace itemmain
 		}
 		
 		if($it1 != $it2 || $ite1 != $ite2){
-			$log .= "<span class=\"yellow\">$it1</span>与<span class=\"yellow\">$it2</span>不是同名同效果物品，不能合并！";
+			$log .= "<span class=\"yellow b\">$it1</span>与<span class=\"yellow b\">$it2</span>不是同名同效果物品，不能合并！";
 			$mode = 'command';
 			return false;
 		}
@@ -275,7 +305,7 @@ namespace itemmain
 			$its2 += $its1;
 			$it1 = $itk1 = $itsk1 = '';
 			$ite1 = $its1 = 0;
-			$log .= "你合并了<span class=\"yellow\">$it2</span>。";
+			$log .= "你合并了<span class=\"yellow b\">$it2</span>。";
 			$mode = 'command';
 			return true;
 		} elseif(2 == check_mergable($itk1) && 2 == check_mergable($itk2) && substr($itk1,1,1) == substr($itk2, 1,1) ) {
@@ -295,14 +325,14 @@ namespace itemmain
 			$it1 = $itk1 = $itsk1 = '';
 			$ite1 = $its1 = 0;
 			
-			$log .= "你合并了 <span class=\"yellow\">$it2</span>。";
+			$log .= "你合并了 <span class=\"yellow b\">$it2</span>。";
 			$mode = 'command';
 			return true;
 		} elseif($itk1!=$itk2||$itsk1!=$itsk2) {
-			$log .= "<span class=\"yellow\">$it1</span>与<span class=\"yellow\">$it2</span>不是同类型同属性物品，不能合并！";
+			$log .= "<span class=\"yellow b\">$it1</span>与<span class=\"yellow b\">$it2</span>不是同类型同属性物品，不能合并！";
 			return false;
 		} else{
-			$log .= "<span class=\"yellow\">$it1</span>与<span class=\"yellow\">$it2</span>不是可以堆叠的物品，不能合并！";
+			$log .= "<span class=\"yellow b\">$it1</span>与<span class=\"yellow b\">$it2</span>不是可以堆叠的物品，不能合并！";
 			return false;
 		}
 
@@ -341,7 +371,7 @@ namespace itemmain
 			return false;
 		}
 		if(!$ts){
-			$log .= "将<span class=\"yellow\">{$f}</span>移动到了<span class=\"yellow\">包裹{$to}</span>。<br>";
+			$log .= "将<span class=\"yellow b\">{$f}</span>移动到了<span class=\"yellow b\">包裹{$to}</span>。<br>";
 			$t = $f;
 			$tk = $fk;
 			$te = $fe;
@@ -351,7 +381,7 @@ namespace itemmain
 			$fe = $fs = 0;
 			
 		}else {
-			$log .= "将<span class=\"yellow\">{$f}</span>与<span class=\"yellow\">{$t}</span>互换了位置。<br>";
+			$log .= "将<span class=\"yellow b\">{$f}</span>与<span class=\"yellow b\">{$t}</span>互换了位置。<br>";
 			$temp = $t;
 			$tempk = $tk;
 			$tempe = $te;

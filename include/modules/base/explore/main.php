@@ -28,29 +28,16 @@ namespace explore
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger'));
 		
-		$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
-		if(($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum) && (!in_array($moveto,$hidden_arealist)))){
+		$plsnum = sizeof($plsinfo);
+		if(($moveto == 'main')||($moveto < 0 )||($moveto >= $plsnum)){
 			$log .= '请选择正确的移动地点。<br>';
 			return;
 		} elseif($pls == $moveto){
 			$log .= '相同地点，不需要移动。<br>';
 			return;
-		} elseif((array_search($moveto,$arealist) <= $areanum && !$hack) && (!in_array($moveto,$hidden_arealist))){
+		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack){
 			$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
 			return;
-		} elseif(in_array($moveto,$hidden_arealist)){
-			$move_overlimit_flag = false;
-			foreach(array_keys($h_a_group) as $hagnum){
-				if((in_array($pls,array_keys($h_a_group[$hagnum])))&&(in_array($moveto,array_keys($h_a_group[$hagnum])))){
-					$move_overlimit_flag = false;
-				}else{
-					$move_overlimit_flag = true;
-				}
-			}
-			if($move_overlimit_flag){
-				$log .= "地图上没有{$plsinfo[$moveto]}啊？是不是你看错了？<br>";
-				return;
-			}
 		}
 		
 		$movesp=max(calculate_move_sp_cost(),1);
@@ -62,7 +49,7 @@ namespace explore
 
 		$sp -= $movesp;
 		
-		$log .= "你消耗<span class=\"yellow\">{$movesp}</span>点体力，移动到了$plsinfo[$moveto]。<br>";
+		$log .= "你消耗<span class=\"yellow b\">{$movesp}</span>点体力，移动到了$plsinfo[$moveto]。<br>";
 		
 		$pls = $moveto;
 		
@@ -92,7 +79,7 @@ namespace explore
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger'));
 		
-		if((array_search($pls,$arealist) <= $areanum && !$hack) && (!in_array($pls,$hidden_arealist))){
+		if(array_search($pls,$arealist) <= $areanum && !$hack){
 			$log .= $plsinfo[$pls].'是禁区，还是赶快逃跑吧！<br>';
 			return;
 		}
@@ -106,7 +93,7 @@ namespace explore
 
 		$sp -= $schsp;
 		
-		$log .= "消耗<span class=\"yellow\">{$schsp}</span>点体力，你搜索着周围的一切。。。<br>";
+		$log .= "消耗<span class=\"yellow b\">{$schsp}</span>点体力，你搜索着周围的一切。。。<br>";
 		
 		search_area();
 	

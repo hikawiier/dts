@@ -2,7 +2,7 @@
 	<!--{if !empty($card_achieved)}-->
 		<img class="card_achieved" src="img/card_achieved.png" />
 	<!--{/if}-->
-	<div class="card_frame_outer
+	<div class="card_frame_outer 
 		<!--{if 'S'==$nowcard['rare']}-->
 			frame_S
 		<!--{elseif 'A'==$nowcard['rare']}-->
@@ -15,16 +15,16 @@
 		<div class="card_frame_middler">
 			<div class="card_frame_inner" style="margin-left:50px;width:187px;height:45px;">
 				<!--{if !empty($nownew)}-->
-					<span id="cname">$nowcard['name']</span>&nbsp;&nbsp;<span class="L5">NEW!</span>
+					<span id="cname">$nowcard['name']</span>&nbsp;&nbsp;<span class="L5 b">NEW!</span>
 				<!--{else}-->
 					<span id="cname">$nowcard['name']</span>
 				<!--{/if}-->
 			</div>
-			<div class="card_frame_inner" style="height:140px;margin-top:3px">
+			<div class="card_frame_inner" style="height:<!--{if !empty($nowcard['bigdesc']) && empty($lockcard)}-->200px<!--{else}-->140px<!--{/if}-->;margin-top:3px">
 				<span id="cdesc" style="max-width:225px">$nowcard['desc']</span>
 				<span class="watermark">COMMENT</span>
 			</div>
-			<div class="card_frame_inner" style="height:100px">
+			<div class="card_frame_inner" style="height:<!--{if !empty($nowcard['bigdesc']) && empty($lockcard)}-->40px<!--{else}-->100px<!--{/if}-->">
 				<span id="ceffect">$nowcard['effect']</span>
 				<span class="watermark">EFFECT</span>
 			</div>
@@ -47,7 +47,7 @@
 				</div>
 				<div id="cenergy" class="card_frame_inner card_frame_float_right" style="width:60px;height:20px;">
 					<!--{if empty($lockcard) && empty($showpack) && $card_energy[$nowcard['id']]<$nowcard['energy']}-->
-					<!--{eval $ecolor = $card_energy[$nowcard['id']] < $nowcard['energy'] / 2 ? 'red' : 'yellow';$cenergy = round($card_energy[$nowcard['id']]);}-->
+					<!--{eval $ecolor = $card_energy[$nowcard['id']] < $nowcard['energy'] / 2 ? 'red b' : 'yellow b';$cenergy = round($card_energy[$nowcard['id']]);}-->
 					<span><span class="$ecolor">{$cenergy}</span>/{$nowcard['energy']}</span>
 					<!--{else}-->
 					<span>$nowcard['energy']</span>

@@ -50,10 +50,6 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
-			} elseif(is_array($npc['pls'])) {
-				$plslist = $npc['pls'];
-				shuffle($plslist);
-				$npc['pls'] = $plslist[0];
 			}else{
 				$npc['pls'] = 0;
 			}
@@ -61,6 +57,24 @@ namespace npc
 		//npc初始状态默认为睡眠
 		if(!isset($npc['state'])){$npc['state'] = 1;}
 		//技能的获取
+		init_npcdata_skills($npc);
+		
+		return $npc;
+	}
+	
+	//非禁区域列表。
+	//type=1:重要NPC（女主）额外回避雏菊、圣G、冰封
+	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		$ret = $chprocess($no_dangerous_zone, $type);
+		if($no_dangerous_zone && 1 == $type)
+			$ret = array_diff($ret, array(21,26,33));
+		return $ret;
+	}
+	
+	function init_npcdata_skills(&$npc)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		if (isset($npc['skills']) && is_array($npc['skills'])){
 			$npc['pid'] = -2;//0和-1都会出问题
 			$npc['skills']['460']='0';
@@ -82,8 +96,6 @@ namespace npc
 			\skillbase\skillbase_save($npc);
 			unset($npc['pid']);
 		}
-		
-		return $npc;
 	}
 	
 	function rs_game($xmode = 0) {
@@ -95,11 +107,13 @@ namespace npc
 		if ($xmode & 8) {
 			//echo " - NPC初始化 - ";
 			$db->query("DELETE FROM {$tablepre}players WHERE type>0 ");
-			//$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
+			//$plsnum = sizeof($plsinfo);
 			$npcqry = '';
 			$ninfo = get_npclist();
 			//生成非禁区列表（不含英灵殿）
 			$pls_available = \map\get_safe_plslist();
+			//女主等重要NPC的特殊禁区列表
+			$pls_available2 = \map\get_safe_plslist(1, 1);
 			//外循环：type，编号可以不连续
 			foreach ($ninfo as $i => $npcs){
 				if(!empty($npcs)) {
@@ -130,8 +144,10 @@ namespace npc
 						//类型和编号，放进初始化函数有点蠢
 						$npc['type'] = $i;
 						$npc['sNo'] = $j;
+						//选择所用地图列表
+						$tmp_pls_available = 14 == $i ? $pls_available2 : $pls_available;
 						//初始化函数
-						$npc = init_npcdata($npc, $pls_available);
+						$npc = init_npcdata($npc, $tmp_pls_available);
 						//writeover('a.txt',json_encode($npc['nskillpara']));
 //						$npc['endtime'] = $now;
 //						$npc['hp'] = $npc['mhp'];
@@ -205,9 +221,12 @@ namespace npc
 		$pid = $sub['pid'];
 		$o_sub = $sub;
 		$pls_available = \map\get_safe_plslist();//不能移动去的区域，如果不存在，NPC不移动
+		$pls_available2 = \map\get_safe_plslist(1, 1);
 		if($sub['type'] && !in_array($sub['type'],$killzone_resistant_typelist) && $pls_available){
-			shuffle($pls_available);
-			$sub['pls'] = $pls_available[0];
+			//选择所用的安全区列表
+			$tmp_pls_available = 14 == $sub['type'] ? $pls_available2 : $pls_available;
+			shuffle($tmp_pls_available);
+			$sub['pls'] = $tmp_pls_available[0];
 			$db->array_update("{$tablepre}players",$sub,"pid='$pid'",$o_sub);
 			\player\post_pc_avoid_killarea($sub, $atime);
 			//echo $sub['pid'].' ';
@@ -219,8 +238,8 @@ namespace npc
 //		if (eval(__MAGIC__)) return $___RET_VALUE;
 //		
 //		eval(import_module('sys','map','npc'));
-//		$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
-//		if ($areanum >= (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1) return $chprocess($where);
+//		$plsnum = sizeof($plsinfo) - 1;
+//		if ($areanum >= sizeof($plsinfo) - 1) return $chprocess($where);
 //		$query = $db->query("SELECT * FROM {$tablepre}players WHERE pls={$where} AND type>0 AND hp>0");
 //		while($sub = $db->fetch_array($query)) 
 //		{
@@ -258,16 +277,25 @@ namespace npc
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('player'));
 		if ($pdata['type']>0)
 		{
+			eval(import_module('player','npc'));
+			if($pdata['hp'] > 0){
+				if(is_array ( $npc_revive_info [$pdata['type']] )){
+					if (isset($npc_revive_info[$pdata['type']][$pdata['name']]))
+						return $npc_revive_info[$pdata['type']][$pdata['name']];
+				}else {
+					if (isset($npc_revive_info[$pdata['type']]))
+						return $npc_revive_info[$pdata['type']];
+				}
+			}
 			if (is_array ( $lwinfo [$pdata['type']] )) {
-				if (isset($lwinfo [$pdata['type']] [$pdata['name']]))
-					$lstwd = $lwinfo [$pdata['type']] [$pdata['name']];
+				if (isset($lwinfo[$pdata['type']][$pdata['name']]))
+					$lstwd = $lwinfo[$pdata['type']][$pdata['name']];
 				else  $lstwd = '';
 			} else {
-				if (isset($lwinfo [$pdata['type']]))
-					$lstwd = $lwinfo [$pdata['type']];
+				if (isset($lwinfo[$pdata['type']]))
+					$lstwd = $lwinfo[$pdata['type']];
 				else  $lstwd = '';
 			}
 			return $lstwd;

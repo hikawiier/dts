@@ -1,0 +1,19 @@
+<!--{eval $___TEMP_SKILL_ID=509;}-->
+<!--{eval eval(import_module('clubbase'));}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+$clubskillname[$___TEMP_SKILL_ID]
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+你被敌方探索到时，敌方武器射程越远，则他的先手率越低
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+	触发「断罪」时一同触发
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

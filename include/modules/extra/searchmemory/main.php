@@ -1,7 +1,12 @@
 <?php
 
+//策划阶段叫searchmemory（探索记忆），但文案里用的是“视野”。以下不再分别说明
+
 namespace searchmemory
 {
+	//从尸体上剥物品的冷却时间，单位毫秒
+	$searchmemorycoldtime = 3000;
+	
 	function init() {}
 	
 	function searchmemory_available()
@@ -9,6 +14,16 @@ namespace searchmemory
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','searchmemory'));
 		return !in_array($gametype, $searchmemory_disabled_gtype);
+	}
+	
+	//修改丢弃按钮的提示
+	function init_playerdata() {
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','itemmain'));
+		if(searchmemory_available()) {
+			$itemmain_drophint = '将留在视野中';
+		}
+		$chprocess();
 	}
 	
 	function load_playerdata($pdata)
@@ -104,7 +119,7 @@ namespace searchmemory
 		if(searchmemory_available()){
 			if($mn === 'ALL'){
 				$searchmemory = array();
-				if($shwlog) $log .= '你先前记下的一切东西都脱离了视线。<br>';
+				if($shwlog) $log .= '你先前所见的一切东西都离开了视线。<br>';
 				return;
 			}elseif($mn == -1){//把刚拿到的忘掉
 				$mn = sizeof($searchmemory) - 1;
@@ -167,21 +182,31 @@ namespace searchmemory
 				$smn = substr($command,6);
 				searchmemory_discover($smn);
 			}elseif(($mode == 'combat' && $command == 'back')
-				//|| ($mode == 'corpse' && $command != 'destroy')){//修改：尸体只要不销毁，视野都留着
-				 || ($mode == 'corpse' && $command == 'menu')){
+				 || ($gamestate < 40 && $mode == 'corpse' && ($command == 'menu' || (check_keep_corpse_in_searchmemory() && $command != 'destroy')))){//测试，荣耀模式只要不销毁尸体，视野都留着
 				$eid = str_replace('enemy','',str_replace('corpse','',$action));
 				$edata = \player\fetch_playerdata_by_pid($eid);
 				$amarr = array('pid' => $edata['pid'], 'Pname' => $edata['name'], 'pls' => $pls, 'smtype' => 'unknown');
 				if($mode == 'combat') $amarr['smtype'] = 'enemy';
-				elseif($mode == 'corpse') $amarr['smtype'] = 'corpse';
-				add_memory($amarr);
-	//			$smn = seek_memory_by_id($enemyid);
-	//			if($smn >= 0){
-	//				remove_memory($smn, 0);
-	//			}
+				elseif($mode == 'corpse') {
+					$amarr['smtype'] = 'corpse';
+					$check_corpse = 1;
+				}
 			}
 		}
 		$chprocess();
+		if(!empty($edata)) {
+			if(!empty($check_corpse)){//空尸体不会留在视野里
+				$edata = \player\fetch_playerdata_by_pid($eid);
+				if(\metman\discover_player_filter_corpse($edata)) {
+					add_memory($amarr);
+				}else {
+					eval(import_module('logger'));
+					$log .= $edata['name'].'的尸体上已经不剩什么了。<br>';
+				}
+			}else{
+				add_memory($amarr);
+			}
+		}
 		if($pls != $tmp_pls && !empty($searchmemory)) {
 			remove_memory('ALL');
 		}
@@ -212,19 +237,15 @@ namespace searchmemory
 		$mn = (int)$mn;
 		//$searchmemory = array_decode($searchmemory);
 		//$mn = (int)substr($schmode,6) - 1;
-		if ($coldtimeon && $rmcdtime > 0)
-		{
-			$log .= '<span class="yellow">冷却时间尚未结束！</span><br>';
-			$mode = 'command';
-			return;
-		}
+		//正在CD时无法探索视野里的东西
+		if(\cooldown\check_in_coldtime()) return;
 	
 		if(isset($searchmemory[$mn])){
 			$mem = $searchmemory[$mn];
 			remove_memory($mn,0);
 			$mpls = $mem['pls'];
 			if($pls != $mpls){
-				$log .= '<span class="yellow">你和寻找对象不在同一地点。</span><br>';
+				$log .= '<span class="yellow b">你和寻找对象不在同一地点。</span><br>';
 				$mode = 'command';
 				return;
 			}elseif(isset($mem['itm'])){
@@ -232,12 +253,12 @@ namespace searchmemory
 				$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE iid = '$mid' AND pls = '$mpls'");
 				$itemnum = $db->num_rows($result);
 				if($itemnum <= 0){
-					$log .= '<span class="yellow">道具已经不在原先的位置了，可能是被谁捡走了吧。</span><br>';
+					$log .= '<span class="yellow b">道具已经不在原先的位置了，可能是被谁捡走了吧。</span><br>';
 					$mode = 'command';
 					return;
 				}else{
-					$log .= '<span class="lime">'.$mem['itm'].'还在原来的位置，你轻松拿到了它。</span><br>';
-					if($coldtimeon) $cmdcdtime=\cooldown\get_search_coldtime();
+					$log .= '<span class="lime b">'.$mem['itm'].'还在原来的位置，你轻松拿到了它。</span><br>';
+					\cooldown\set_coldtime(\cooldown\get_search_coldtime());
 					$marr=$db->fetch_array($result);
 					focus_item($marr);
 					\itemmain\itemget();
@@ -248,23 +269,24 @@ namespace searchmemory
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid = '$mid' AND pls = '$mpls'");
 				$pnum = $db->num_rows($result);
 				if($pnum <= 0){
-					$log .= '<span class="yellow">角色已经不在原来的位置了，可能是已经离开了吧。</span><br>';
+					$log .= '<span class="yellow b">角色已经不在原来的位置了，可能是已经离开了吧。</span><br>';
 					$mode = 'command';
 					return;
 				}else{
 					$marr=$db->fetch_array($result);
 					if($marr['hp']<=0 && $mem['smtype'] != 'corpse') {
-						$log .= '<span class="red">角色已经不在原来的位置了，地上只有一摊血迹……</span><br>';
+						$log .= '<span class="red b">角色已经不在原来的位置了，地上只有一摊血迹……</span><br>';
 						$mode = 'command';
 						return;
 					}elseif($marr['hp']<=0 && !\metman\discover_player_filter_corpse($marr)){
-						$log .= '<span class="red">尸体好像已经被毁尸灭迹了。</span><br>';
+						$log .= '<span class="red b">尸体好像已经被毁尸灭迹了。</span><br>';
 						$mode = 'command';
 						return;
 					}
-					if($fog && $mem['smtype'] != 'corpse') $log .= '<span class="lime">人影还在原来的位置。</span><br>';
-					else $log .= '<span class="lime">'.$mem['Pname'].'还在原来的位置。</span><br>';
-					$sdata['sm_active_debuff'] = 1;//临时这么写写
+					if($fog && $mem['smtype'] != 'corpse') $log .= '<span class="lime b">人影还在原来的位置。</span><br>';
+					else $log .= '<span class="lime b">'.$mem['Pname'].'还在原来的位置。</span><br>';
+					\cooldown\set_coldtime(\cooldown\get_search_coldtime());
+					$sdata['sm_active_debuff'] = 1;
 					\metman\meetman($mid);
 					unset($sdata['sm_active_debuff']);
 					return;
@@ -285,7 +307,8 @@ namespace searchmemory
 		eval(import_module('player','logger','searchmemory'));
 		$ret = $chprocess($ldata,$edata);
 		if(isset($sdata['sm_active_debuff']) && $sdata['sm_active_debuff']) {
-			//$log .= '<span class="red">两次打扰同一玩家使你的先制率降低了。</span><br>';
+			//$log .= '<span class="red b">两次打扰同一玩家使你的先制率降低了。</span><br>';
+			$ldata['active_words'] = \attack\add_format($searchmemory_battle_active_debuff, $ldata['active_words'],0);
 			$ret += $searchmemory_battle_active_debuff;
 		}
 		return $ret;
@@ -299,6 +322,51 @@ namespace searchmemory
 			remove_memory('ALL');
 		}
 		$chprocess($moveto);
+	}
+	
+	function get_searchmemory_coldtime()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('searchmemory'));
+		return $searchmemorycoldtime;
+	}
+	
+	//是否能在捡取尸体之后让尸体留在视野中
+	function check_keep_corpse_in_searchmemory()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if(15 == $gametype || 16 == $gametype) return true;//仅单人房可用
+		return false;
+	}
+	
+	//如果允许摸尸体后尸体依然留在视野里，那么摸尸体必须有个CD时间
+	function getcorpse_action(&$edata, $item)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//上一次从尸体上捡东西后若干秒内无法立刻访问同一个尸体上的东西，需要skill1003支持
+		if(check_keep_corpse_in_searchmemory() && !in_array($item, array('back','menu','destroy')) && \skillbase\skill_query(1003)) {
+			eval(import_module('sys','player','logger','searchmemory'));
+			$last_corpse_time = floor(\skillbase\skill_getvalue(1003,'last_corpse_time'));//注意这个是以毫秒为单位
+			$last_corpse_pid = (int)\skillbase\skill_getvalue(1003,'last_corpse_pid');
+			$ct = floor(getmicrotime()*1000);
+			if($last_corpse_pid == $edata['pid'] && $ct - $last_corpse_time < $searchmemorycoldtime){
+				$log .= '<span class="yellow b">'.($searchmemorycoldtime/1000).'秒内不能再次拾取同一尸体的道具。</span><br>';
+				$action = '';
+				$mode = 'command';
+				return;
+			}
+			//记录上一次摸尸体的时间和pid，需要skill1003支持
+			//也就是说如果你交错摸两个尸体是不会受干扰的（花费的时间差不多也3秒了）
+			$last_corpse_time = floor(getmicrotime()*1000);//注意这个是以毫秒为单位
+			$last_corpse_pid = $edata['pid'];
+			\skillbase\skill_setvalue(1003,'last_corpse_time',$last_corpse_time);
+			\skillbase\skill_setvalue(1003,'last_corpse_pid',$last_corpse_pid);
+		}
+		$chprocess($edata, $item);
+//		if(check_keep_corpse_in_searchmemory() && !in_array($item, array('back','menu','money','destroy'))) {
+//			\cooldown\set_coldtime(get_searchmemory_coldtime());
+//		}
 	}
 }
 ?>

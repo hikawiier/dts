@@ -30,7 +30,7 @@ namespace skill44
 	function check_unlocked44(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		return 1;
+		return $pa['lvl']>=11;
 	}
 	
 	function upgrade44()
@@ -87,11 +87,11 @@ namespace skill44
 		{
 			eval(import_module('skill44','logger'));
 			$clv = \skillbase\skill_getvalue(44,'lvl',$pd);
-			$r=min(50,$dmgreduction[$clv]*$pd['internal_def']); 
+			$r=min(50,$dmgreduction[$clv]*\weapon\get_internal_def($pa,$pd,$active));
 			if(empty($pa['skill44_log_flag'])){
 				if ($active)
-					$log.='<span class="yellow">敌人健硕的身躯使你的固定伤害降低了'.round($r).'%！</span><br>';
-				else  $log.='<span class="yellow">你健硕的身躯使敌人的固定伤害降低了'.round($r).'%！</span><br>';
+					$log.='<span class="yellow b">敌人健硕的身躯使你的固定伤害降低了'.round($r).'%！</span><br>';
+				else  $log.='<span class="yellow b">你健硕的身躯使敌人的固定伤害降低了'.round($r).'%！</span><br>';
 				$pa['skill44_log_flag'] = 1;
 			}
 			$r=1-$r/100;
@@ -121,8 +121,8 @@ namespace skill44
 //			$clv = \skillbase\skill_getvalue(44,'lvl',$pd);
 //			$r=min(50,$dmgreduction[$clv]*$pd['internal_def']); 
 //			if ($active)
-//				$log.='<span class="yellow">敌人健硕的身躯使你的固定伤害降低了'.round($r).'%！</span><br>';
-//			else  $log.='<span class="yellow">你健硕的身躯使敌人的固定伤害降低了'.round($r).'%！</span><br>';
+//				$log.='<span class="yellow b">敌人健硕的身躯使你的固定伤害降低了'.round($r).'%！</span><br>';
+//			else  $log.='<span class="yellow b">你健硕的身躯使敌人的固定伤害降低了'.round($r).'%！</span><br>';
 //			$r=1-$r/100;
 //		}
 //		else  $r=1;
@@ -139,10 +139,10 @@ namespace skill44
 		{
 			eval(import_module('skill44','logger'));
 			$clv = \skillbase\skill_getvalue(44,'lvl',$pd);
-			$r=min(50,$dmgreduction[$clv]*$pd['internal_def']); 
+			$r=min(50,$dmgreduction[$clv]*\weapon\get_internal_def($pa,$pd,$active));
 			if ($active)
-				$log.='<span class="yellow">敌人健硕的身躯抵挡了'.round($r).'%的爆炸伤害！</span><br>';
-			else  $log.='<span class="yellow">你健硕的身躯抵挡了'.round($r).'%的爆炸伤害！</span><br>';
+				$log.='<span class="yellow b">敌人健硕的身躯抵挡了'.round($r).'%的爆炸伤害！</span><br>';
+			else  $log.='<span class="yellow b">你健硕的身躯抵挡了'.round($r).'%的爆炸伤害！</span><br>';
 			$r=1-$r/100;
 		}
 		else  $r=1;

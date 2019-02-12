@@ -39,17 +39,21 @@ namespace skill400
 		$l400=\skillbase\skill_getvalue(400,'lvl',$pa);
 		if (rand(0,99)<$procrate[$l400])
 		{
+			//调用NPC必杀技宣言
+			if ($pa['type'] && defined('MOD_NPCCHAT')) \npcchat\npcchat($pa, $pd, $active, 'critical');
+			
 			if ($active){
 				if ($l400>=5)
-					$log.="<span class=\"yellow\">你朝{$pd['name']}打出了猛烈的一击！</span><br>";
+					$log.="<span class=\"yellow b\">你朝{$pd['name']}打出了猛烈的一击！</span><br>";
 				else
-					$log.="<span class=\"yellow\">你朝{$pd['name']}打出了重击！</span><br>";
+					$log.="<span class=\"yellow b\">你朝{$pd['name']}打出了重击！</span><br>";
 			}else{
 				if ($l400>=5)
-					$log.="<span class=\"yellow\">{$pa['name']}朝你打出了猛烈的一击！</span><br>";
+					$log.="<span class=\"yellow b\">{$pa['name']}朝你打出了猛烈的一击！</span><br>";
 				else
-					$log.="<span class=\"yellow\">{$pa['name']}朝你打出了重击！</span><br>";
+					$log.="<span class=\"yellow b\">{$pa['name']}朝你打出了重击！</span><br>";
 			}
+			
 			$dmggain = (100+$attgain[$l400])/100;
 			return Array($dmggain);
 		}

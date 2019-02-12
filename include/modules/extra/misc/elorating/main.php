@@ -2,7 +2,25 @@
 
 namespace elorating
 {
-	function init() {}
+	global $elo_servermark;
+	
+	function init() {
+
+	}
+	
+	function get_servermark() {
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys', 'elorating'));
+		//确定自己的服务器代号
+		$ret = 'X';
+		foreach($elo_servermark as $ek => $ev){
+			if(strpos(gurl(), $ev)!==false) {
+				$ret = $ek;
+				break;
+			}
+		}
+		return $ret;
+	}
 	
 	function elorating_math_erf($x)
 	{
@@ -306,15 +324,17 @@ namespace elorating
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
+		if(empty($gameover_plist)) return;
+		$esm = get_servermark();
+		//已改为直接用$gameover_plist和$gameover_ulist直接判定
 		if (room_check_subroom($room_prefix) && in_array($gametype,$elorated_mode))
 		{
-			$tlist=Array();
-			$result = $db->query("SELECT name,hp,state,teamID,killnum FROM {$tablepre}players WHERE type = 0");
-			while($data = $db->fetch_array($result))
+			$tlist = Array();
+			
+			foreach($gameover_plist as $data)
 			{
-				$result2=$db->query("SELECT elo_rating,elo_volatility,elo_playedtimes,elo_history FROM {$gtablepre}users WHERE username = '{$data['name']}'");
-				if (!$db->num_rows($result2)) continue;
-				$z=$db->fetch_array($result2);
+				$z = $gameover_ulist[$data['name']];
+				if(empty($z)) continue;
 				$data['rating']=$z['elo_rating'];
 				$data['vol']=$z['elo_volatility'];
 				$data['timesPlayed']=$z['elo_playedtimes'];
@@ -335,17 +355,33 @@ namespace elorating
 			foreach ($tlist as $data)
 			{
 				//游戏历史描述
+				//1字符：服务器代号
 				//1字符：游戏区域前缀
 				//4字符：游戏局号
 				//1字符：游戏类型
 				//1字符：结果
 				//3字符：rating（-131072后为真实值，虽然理论上rating不会有负数……）
 				if ($room_prefix=='') $xr=' '; else $xr=room_prefix_kind($room_prefix);
-				$eh=$data['elo_history'].$xr.base64_encode_number($gamenum,4).base64_encode_number($gametype,1).base64_encode_number($data['winner']?1:0,1).base64_encode_number($data['rating']+131072,3);
+				$eh=$data['elo_history'].$esm.$xr.base64_encode_number($gamenum,4).base64_encode_number($gametype,1).base64_encode_number($data['winner']?1:0,1).base64_encode_number($data['rating']+131072,3);
 				//考虑了一下还是不拼成一个大query了，毕竟有个text…… 爆了mysql最大query长度限制就囧了
-				$db->query("UPDATE {$gtablepre}users SET elo_rating='{$data['rating']}', elo_volatility='{$data['vol']}', elo_playedtimes='{$data['timesPlayed']}', elo_history='{$eh}' WHERE username = '{$data['name']}'");
+				//$db->query("UPDATE {$gtablepre}users SET elo_rating='{$data['rating']}', elo_volatility='{$data['vol']}', elo_playedtimes='{$data['timesPlayed']}', elo_history='{$eh}' WHERE username = '{$data['name']}'");
+				//现在改成存回$gameover_ulist
+				$gameover_ulist[$data['name']]['elo_rating'] = $data['rating'];
+				$gameover_ulist[$data['name']]['elo_volatility'] = $data['vol'];
+				$gameover_ulist[$data['name']]['elo_playedtimes'] = $data['timesPlayed'];
+				$gameover_ulist[$data['name']]['elo_history'] = $eh;
 			}
 		}
+	}
+	
+	function get_gameover_udata_update_fields(){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = $chprocess();
+		eval(import_module('sys'));
+		if (room_check_subroom($room_prefix) && in_array($gametype,$elorated_mode)) {
+			$ret = array_merge($ret, array('u_achievements', 'elo_rating', 'elo_volatility', 'elo_playedtimes', 'elo_history'));
+		}
+		return $ret;
 	}
 	
 	function post_gameover_events()
@@ -440,7 +476,14 @@ namespace elorating
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		global $roomtypelist;
-		echo '<div onclick="window.location.href=\'replay.php?repid='.(($p['rpre']!=' ')?($p['rpre'].'.'):'').$p['gid'].'\'"; onmouseover="show_fixed_div(\'user-rating-point-'.$p['id'].'\');" onmouseout="hide_fixed_div(\'user-rating-point-'.$p['id'].'\');" style="cursor:pointer; z-index:10000; position:absolute; left:'.($p['x']-6).'px;top:'.($p['y']-6).'px; height:14px; width:14px; overflow:hidden;">';
+		//外服识别
+		eval(import_module('elorating'));
+		if('X' != $p['spre'] && isset($elo_servermark[$p['spre']])) {
+			$shref = 'http://'.$elo_servermark[$p['spre']].'/';
+		}else{
+			$shref = '';
+		}
+		echo '<div onclick="window.location.href=\''.$shref.'replay.php?repid='.(($p['rpre']!=' ')?($p['rpre'].'.'):'').$p['gid'].'\'"; onmouseover="show_fixed_div(\'user-rating-point-'.$p['id'].'\');" onmouseout="hide_fixed_div(\'user-rating-point-'.$p['id'].'\');" style="cursor:pointer; z-index:10000; position:absolute; left:'.($p['x']-6).'px;top:'.($p['y']-6).'px; height:14px; width:14px; overflow:hidden;">';
 		echo '<div style="position:absolute; left:3px; top:3px;">';
 		echo '<img src="img/rating-point-highest.png" style="height:8px; width:8px;">';
 		echo '</div></div>';
@@ -540,6 +583,11 @@ namespace elorating
 		$i=0; $hist=Array(); $elo_max_rating=0;
 		while ($i<strlen($elo_history))
 		{
+			if('s'!=$elo_history[$i] && ' '!=$elo_history[$i]) {
+				$x0=$elo_history[$i]; $i++;
+			}else{
+				$x0='X';
+			}
 			$x1=$elo_history[$i]; $i++;
 			$x2=base64_decode_number(substr($elo_history,$i,4)); $i+=4;
 			$x3=base64_decode_number(substr($elo_history,$i,1)); $i++;
@@ -548,6 +596,7 @@ namespace elorating
 			$elo_max_rating=max($elo_max_rating,$x5);
 			array_push($hist,
 				Array(
+					'spre' => $x0,
 					'rpre' => $x1,
 					'gid' => $x2,
 					'gtype' => $x3,

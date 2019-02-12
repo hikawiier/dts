@@ -2,7 +2,10 @@
 
 namespace empowers
 {
-	function init() {}
+	function init() {
+		eval(import_module('itemmain'));
+		$iteminfo['EI'] = '武器改造';
+	}
 	
 	function parse_itmuse_desc($n, $k, $e, $s, $sk){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -16,6 +19,13 @@ namespace empowers
 				$ret .= '增加装备着的身体防具的效果值';
 			}elseif ($n == '武器师安雅的奖赏') {
 				$ret .= '强化手中武器的效果值、耐久值，或者将类型转变为你更擅长的系别';
+			}
+		}elseif(strpos($k,'EI')===0){
+			$ret .= '强化手中武器的效果值、耐久值，或者将类型转变为你更擅长的系别';
+			if(1==$sk){
+				$ret .= '<br>只要武器类型与你最擅长的系不同，则必定改系';
+			}elseif(2==$sk){
+				$ret .= '<br>武器效果值和耐久值都会额外强化1.5倍';
 			}
 		}
 		return $ret;
@@ -39,7 +49,7 @@ namespace empowers
 			if ($dice >= 10) 
 			{
 				$wepe += $itme;
-				$log .= "使用了<span class=\"yellow\">$itm</span>，<span class=\"yellow\">$wep</span>的攻击力变成了<span class=\"yellow\">$wepe</span>。<br>";
+				$log .= "使用了<span class=\"yellow b\">$itm</span>，<span class=\"yellow b\">$wep</span>的攻击力变成了<span class=\"yellow b\">$wepe</span>。<br>";
 				if (strpos ( $wep, '钉' ) === false) {
 					$wep = str_replace ( '棍棒', '钉棍棒', $wep );
 				}
@@ -48,11 +58,11 @@ namespace empowers
 			{
 				$wepe -= ceil ( $itme / 2 );
 				if ($wepe <= 0) {
-					$log .= "<span class=\"red\">$itm</span>使用失败，<span class=\"red\">$wep</span>损坏了！<br>";
+					$log .= "<span class=\"red b\">$itm</span>使用失败，<span class=\"red b\">$wep</span>损坏了！<br>";
 					$wep = $wepk = $wepsk = '';
 					$wepe = $weps = 0;
 				} else {
-					$log .= "<span class=\"red\">$itm</span>使用失败，<span class=\"red\">$wep</span>的攻击力变成了<span class=\"red\">$wepe</span>。<br>";
+					$log .= "<span class=\"red b\">$itm</span>使用失败，<span class=\"red b\">$wep</span>的攻击力变成了<span class=\"red b\">$wepe</span>。<br>";
 				}
 			}
 			return 1;
@@ -80,7 +90,7 @@ namespace empowers
 			if ($dice >= 15) 
 			{
 				$wepe += $itme;					
-				$log .= "使用了<span class=\"yellow\">$itm</span>，<span class=\"yellow\">$wep</span>的攻击力变成了<span class=\"yellow\">$wepe</span>。<br>";
+				$log .= "使用了<span class=\"yellow b\">$itm</span>，<span class=\"yellow b\">$wep</span>的攻击力变成了<span class=\"yellow b\">$wepe</span>。<br>";
 				if (strpos ( $wep, '锋利的' ) === false) {
 					$wep = '锋利的'.$wep;
 				}
@@ -89,11 +99,11 @@ namespace empowers
 			{
 				$wepe -= ceil ( $itme / 2 );
 				if ($wepe <= 0) {
-					$log .= "<span class=\"red\">$itm</span>使用失败，<span class=\"red\">$wep</span>损坏了！<br>";
+					$log .= "<span class=\"red b\">$itm</span>使用失败，<span class=\"red b\">$wep</span>损坏了！<br>";
 					$wep = $wepk = $wepsk = '';
 					$wepe = $weps = 0;
 				} else {
-					$log .= "<span class=\"red\">$itm</span>使用失败，<span class=\"red\">$wep</span>的攻击力变成了<span class=\"red\">$wepe</span>。<br>";
+					$log .= "<span class=\"red b\">$itm</span>使用失败，<span class=\"red b\">$wep</span>的攻击力变成了<span class=\"red b\">$wepe</span>。<br>";
 				}
 			}
 			return 1;
@@ -103,7 +113,7 @@ namespace empowers
 		}
 	}
 	
-	function use_anya($itm)
+	function use_weapon_improvement($itm, $itmsk=0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
@@ -116,6 +126,7 @@ namespace empowers
 
 		$dice = rand ( 0, 99 );
 		$dice2 = rand ( 0, 99 );
+		//判定哪个是最擅长系，只看纸面数字
 		$skill = array();
 		foreach($skillinfo as $skiv){
 			$skill[$skiv] = ${$skiv};
@@ -124,31 +135,40 @@ namespace empowers
 		arsort ( $skill );
 		$skill_keys = array_keys ( $skill );
 		$nowsk = $skillinfo[substr ( $wepk, 1, 1 )];
-		$sec_wepk = \dualwep\get_sec_attack_method($sdata);
+		//双系只要有任一系擅长就不会改系
+		$sec_wepk = \dualwep\get_sec_attack_method($sdata, 1);
 		if($sec_wepk) {
 			$secsk = $skillinfo[$sec_wepk];
 			if(${$secsk} > ${$nowsk}) $nowsk = $secsk;
 		}
 		//if('WJ' == $nowsk) $nowsk = 'WG';
 		$maxsk = $skill_keys [0];
-		if (($skill [$nowsk] != $skill [$maxsk]) && ($dice < 30)) {
+		if (1 == $itmsk && $skill [$nowsk] != $skill [$maxsk]) $dice = 0;//$itmsk为1的道具只要可能就必定改系
+		if ($skill [$nowsk] != $skill [$maxsk] && $dice < 30) {
 			$changek = array('wp' => 'WP', 'wk' => 'WK', 'wg' => 'WG', 'wc' => 'WC', 'wd' => 'WD', 'wf' => 'WF');
 			$wepk = $changek[$maxsk]. substr($wepk,2);
-			$kind = "更改了{$wep}的<span class=\"yellow\">类别</span>！";
-		} elseif (($weps != $nosta) && ($dice2 < 70)) {
+			$kind = "更改了{$wep}的<span class=\"yellow b\">类别</span>！";
+		} elseif ($weps != $nosta && $dice2 < 70) {
 			$weps += ceil ( $wepe / 2 );
-			$kind = "增强了{$wep}的<span class=\"yellow\">耐久</span>！";
+			$kind = "增强了{$wep}的<span class=\"yellow b\">耐久</span>！";
 		} else {
 			$wepe += ceil ( $wepe / 2 );
-			$kind = "提高了{$wep}的<span class=\"yellow\">攻击力</span>！";
+			$kind = "提高了{$wep}的<span class=\"yellow b\">攻击力</span>！";
 		}
-		$log .= "你使用了<span class=\"yellow\">$itm</span>，{$kind}";
+		$log .= "你使用了<span class=\"yellow b\">$itm</span>，{$kind}";
+		if(2 == $itmsk) {//$itmsk为2的道具必定额外将效和耐各提升1.5倍，如果无穷耐则效提升2.25倍
+			$wepe += ceil ( $wepe / 2 );
+			if($weps != $nosta) $weps += ceil ( $weps / 2 );
+			else $wepe += ceil ( $wepe / 2 );
+			$log .= "并对武器产生了额外的增益！";
+		}
 		addnews ( $now, 'newwep', $name, $itm, $wep );
 		if (strpos ( $wep, '-改' ) === false) {
 			$wep = $wep . '-改';
 		}
 		return 1;
 	}
+	
 	function itemuse(&$theitem) 
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -175,19 +195,22 @@ namespace empowers
 				if (($arb == $noarb) || ! $arb) {
 					$log .= '你没有装备防具，不能使用针线包。<br>';
 				} elseif(strpos($arbsk,'Z')!==false){
-					$log .= '<span class="yellow">该防具太单薄以至于不能使用针线包。</span><br>你感到一阵蛋疼菊紧，你的蛋疼度增加了<span class="yellow">233</span>点。<br>';
+					$log .= '<span class="yellow b">该防具太单薄以至于不能使用针线包。</span><br>你感到一阵蛋疼菊紧，你的蛋疼度增加了<span class="yellow b">233</span>点。<br>';
 				}else {
 					$arbe += (rand ( 0, 2 ) + $itme);
-					$log .= "用<span class=\"yellow\">$itm</span>给防具打了补丁，<span class=\"yellow\">$arb</span>的防御力变成了<span class=\"yellow\">$arbe</span>。<br>";
+					$log .= "用<span class=\"yellow b\">$itm</span>给防具打了补丁，<span class=\"yellow b\">$arb</span>的防御力变成了<span class=\"yellow b\">$arbe</span>。<br>";
 					\itemmain\itms_reduce($theitem);
 				}
 				return;
 			}
 			elseif ($itm == '武器师安雅的奖赏') 
 			{
-				if (use_anya($itm)) \itemmain\itms_reduce($theitem);
+				if (use_weapon_improvement($itm, $itmsk)) \itemmain\itms_reduce($theitem);
 				return;
 			}
+		}elseif($itmk == 'EI'){
+			if (use_weapon_improvement($itm, $itmsk)) \itemmain\itms_reduce($theitem);
+			return;
 		}
 		$chprocess($theitem);
 	}
@@ -198,7 +221,7 @@ namespace empowers
 		eval(import_module('sys','player'));
 		
 		if($news == 'newwep') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了{$b}，改造了<span class=\"yellow\">$c</span>！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了{$b}，改造了<span class=\"yellow b\">$c</span>！</span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

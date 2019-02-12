@@ -4,6 +4,7 @@ namespace skill205
 {
 
 	$ragecost=75;
+	$wep_skillkind_req = 'wg';
 	
 	$alternate_skillno205 = 265;//互斥技能编号
 	$unlock_lvl205 = 15;//解锁等级
@@ -60,12 +61,12 @@ namespace skill205
 		else
 		{
 			$rcost = get_rage_cost205($pa);
-			if ( $pa['rage']>=$rcost && \weapon\get_skillkind($pa,$pd,$active) == 'wg')
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,205) )
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「咆哮」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「咆哮」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「咆哮」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「咆哮」！</span><br>";
 				$pa['rage']-=$rcost;
 				addnews ( 0, 'bskill205', $pa['name'], $pd['name'] );
 			}
@@ -110,8 +111,8 @@ namespace skill205
 		{
 			eval(import_module('logger'));
 			if ($active)
-				$log.='<span class="yellow">「咆哮」使你造成的物理伤害提高了20%！</span><br>';
-			else  $log.='<span class="yellow">「咆哮」使敌人造成的物理伤害提高了20%！</span><br>';
+				$log.='<span class="yellow b">「咆哮」使你造成的物理伤害提高了20%！</span><br>';
+			else  $log.='<span class="yellow b">「咆哮」使敌人造成的物理伤害提高了20%！</span><br>';
 			$r=Array(1.2);
 		}
 		return array_merge($r,$chprocess($pa,$pd,$active));
@@ -126,8 +127,8 @@ namespace skill205
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.='<span class="yellow">「咆哮」使你造成的属性伤害提高了80%！</span><br>';
-				else  $log.='<span class="yellow">「咆哮」使敌人造成的属性伤害提高了80%！</span><br>';
+					$log.='<span class="yellow b">「咆哮」使你造成的属性伤害提高了80%！</span><br>';
+				else  $log.='<span class="yellow b">「咆哮」使敌人造成的属性伤害提高了80%！</span><br>';
 			}
 		}
 		return $chprocess($pa, $pd, $active);
@@ -168,7 +169,7 @@ namespace skill205
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill205') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「咆哮」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「咆哮」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

@@ -29,7 +29,7 @@ namespace achievement_base
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		return defined('MOD_SKILL'.$achid.'_INFO') && defined('MOD_SKILL'.$achid.'_ACHIEVEMENT_ID')	
-			&& \skillbase\check_skill_info($achid, 'achievement') && !\skillbase\check_skill_info($achid, 'hidden') && 1 == check_achtype_available($achid);
+			&& \skillbase\check_skill_info($achid, 'achievement') && !\skillbase\check_skill_info($achid, 'hidden');
 	}
 	
 	//判定一个成就大类是否过期
@@ -211,29 +211,33 @@ namespace achievement_base
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
 		//先获得当前局所有玩家的名称
-		$namelist = array();
-		$result = $db->query("SELECT name FROM {$tablepre}players WHERE type=0");
-		while ($pd=$db->fetch_array($result))
-		{
-			$namelist[] = $pd['name'];
+//		$namelist = array();
+//		$result = $db->query("SELECT name FROM {$tablepre}players WHERE type=0");
+//		while ($pd=$db->fetch_array($result))
+//		{
+//			$namelist[] = $pd['name'];
+//		}
+//		$updatelist = array();
+//		//然后一次性读用户记录，尽量减少在循环里读写数据库
+//		if(!empty($namelist)){
+//			$result = fetch_udata_multilist('*', array('username' => $namelist));
+//			foreach($result as $udata){
+//				$pdata = \player\fetch_playerdata($udata['username']);//这句理论上可以被玩家池加速
+//				update_achievements_by_udata($udata, $pdata);
+//				$updatelist[] = Array(
+//					'username' => $udata['username'],
+//					'u_achievements' => encode_achievements($udata['u_achievements'])
+//				);
+//			}
+//		}
+//		//一次性更新
+//		$db->multi_update("{$gtablepre}users", $updatelist, 'username');
+		
+		foreach($gameover_ulist as &$udata){
+			$pdata = $gameover_plist[$udata['username']];
+			update_achievements_by_udata($udata, $pdata);
+			$udata['u_achievements'] = encode_achievements($udata['u_achievements']);
 		}
-		$updatelist = array();
-		//然后一次性读用户记录，尽量减少在循环里读写数据库
-		if(!empty($namelist)){
-			$wherecause = "('".implode("','",$namelist)."')";
-			$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username IN $wherecause");
-			while ($udata=$db->fetch_array($result))
-			{
-				$pdata = \player\fetch_playerdata($udata['username']);//这句理论上可以被玩家池加速
-				update_achievements_by_udata($udata, $pdata);
-				$updatelist[] = Array(
-					'username' => $udata['username'],
-					'u_achievements' => encode_achievements($udata['u_achievements'])
-				);
-			}
-		}
-		//一次性更新
-		$db->multi_update("{$gtablepre}users", $updatelist, 'username');
 	}
 	
 	function post_gameover_events()
@@ -336,9 +340,8 @@ namespace achievement_base
 				$udata['u_achievements'][$key]='VWXYZ';
 			}
 		}
-		$u_ach = encode_achievements($udata['u_achievements']);
-		$u_n = $udata['username'];
-		$db->query("UPDATE {$gtablepre}users SET u_achievements = '$u_ach',cd_a1 = '$now' WHERE username='$u_n'");
+		$ud_str = encode_achievements($udata['u_achievements']);
+		update_udata_by_username(array('u_achievements' => $ud_str, 'cd_a1' => $now), $udata['username']);
 	}
 	
 	function show_ach_title($achid, $achlv, $tp=0)
@@ -374,8 +377,15 @@ namespace achievement_base
 		$ret1 = '只能在'.$ret1.'中完成';
 		$ret2 = show_ach_title($achid, $achlv-1, 1);
 		if('MISSING' == $ret2) $ret2 = '';
-		else $ret2 = '<br>已完成：<span class=\'evergreen\'>'.$ret2.'</span>';
+		else $ret2 = '<br>已完成：<span class=\'evergreen b\'>'.$ret2.'</span>';
 		return $ret1.$ret2;
+	}
+	
+	//用于其他模块继承
+	function show_ach_title_3($achid, $adata)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return NULL;
 	}
 	
 	function get_daily_type($achid)
@@ -400,13 +410,26 @@ namespace achievement_base
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		if(!$pa || !$achid) return;
+		if(defined('IN_MAINTAIN')) {
+			global $gudata;
+			$gudata['gold'] += $getqiegao;
+			$gudata['cardlist'] = explode('_', $gudata['cardlist'] );
+			if(!in_array($getcard, $gudata['cardlist'])) {
+				$gudata['cardlist'][] = $getcard;
+				$gudata['cardlist'] = implode('_', $gudata['cardlist'] );
+			}else{
+				eval(import_module('cardbase'));
+				$gudata['gold'] += $card_price[$cards[$getcard]['rare']];
+			}
+			return;
+		}
 		if (isset($pa['username'])) $n=$pa['username'];
 		else $n=$pa['name'];
 		
 		eval(import_module('sys','skill'.$achid));
 		$achtitle = ${'ach'.$achid.'_name'}[$c];
 		
-		$pt = '祝贺你在'.($room_prefix ? '房间' : '').'第'.$gamenum.'局获得了成就<span class="yellow">'.$achtitle.'</span>！'.$ext;
+		$pt = '祝贺你在'.($room_prefix ? '房间' : '').'第'.$gamenum.'局获得了成就<span class="yellow b">'.$achtitle.'</span>！'.$ext;
 		if($getqiegao || $getcard) $pt .= '查收本消息即可获取奖励。';
 		if($getcard) $pt .= '如果已有奖励卡片则会转化为切糕。';
 		include_once './include/messages.func.php';
@@ -488,6 +511,12 @@ namespace achievement_base
 		return 0;
 	}
 	
+	//成就进度值处理
+	function parse_achievement_progress_var($achid, $x){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return $x;
+	}
+	
 	//成就通用显示函数，需要成就模块里至少定义$achXXX_threshold
 	function show_achievement_single($data, $achid)
 	{
@@ -495,6 +524,7 @@ namespace achievement_base
 		eval(import_module('skill'.$achid));
 		$unit = ${'ach'.$achid.'_unit'};
 		$proc_words = ${'ach'.$achid.'_proc_words'};
+		$proc_words2 = !empty(${'ach'.$achid.'_proc_words2'}) ? ${'ach'.$achid.'_proc_words2'} : '';
 		$c = 0; $top_flag = 0;
 		$p = get_achievement_default_var($achid);
 		if ($data) $p=$data;
@@ -511,11 +541,12 @@ namespace achievement_base
 			$cu = $c;
 			//这个部分顶级和非顶级之间的关系做得有点烂……没办法，历史原因顶级变成了999，只能舍近求远
 			if(!empty($ach_threshold[$c+1])) $cu = $c + 1;//用于显示下一级名称、阈值和奖励的，0级是1，1级是2，顶级维持顶级
+			$p = parse_achievement_progress_var($achid, $p);
 		}else{//全局成就
 			$c = $top_flag = 0;$cu = 1;$p = '';
 			eval(import_module('sys'));
 			list($lversion, $lnum) = ach_global_ach_last_acomplish($data, $achid);
-			if($lversion && ($lversion >= $gameversion || $lnum == ach_global_ach_finalize_save_getnum($data, $achid))) {
+			if($lversion && (-1 != gversion_compare($lversion, $gameversion) || $lnum == ach_global_ach_finalize_save_getnum($data, $achid))) {
 				$c = $cu = 1;
 				$top_flag = 1;
 			}elseif($lversion){
@@ -529,16 +560,17 @@ namespace achievement_base
 		
 		$stitle = \achievement_base\show_ach_title($achid, $cu);
 		$atitle = \achievement_base\show_ach_title_2($achid, $c+1);
+		$ptitle = \achievement_base\show_ach_title_3($achid, $data);
 		$dailytype = \skillbase\check_skill_info($achid, 'daily') ? \achievement_base\get_daily_type($achid) : 0;
 		$prize_desc = show_prize_single($cu, $achid);
 		$ach_desc = show_achievement_single_desc($cu, $achid, $ach_threshold[$cu]);
 		
 		if(!$c) {
-			$ach_state_desc = '<span class="red">[未完成]</span>';
+			$ach_state_desc = '<span class="red b">[未完成]</span>';
 		}elseif(!$top_flag) {
-			$ach_state_desc = '<span class="clan">[进行中]</span>';
+			$ach_state_desc = '<span class="cyan b">[进行中]</span>';
 		}else {
-			$ach_state_desc = '<span class="lime">[完成]</span>';
+			$ach_state_desc = '<span class="lime b">[完成]</span>';
 		}
 		$ach_icon = show_achievement_icon($achid, $c, $top_flag);
 		if(!file_exists(GAME_ROOT."/img/ach/{$ach_icon}")) {
@@ -617,10 +649,10 @@ namespace achievement_base
 						}
 						if(substr($ret1,strlen($ret1)-1) === '|') $ret1 = substr($ret1,0,-1);
 						$ret1 = str_replace('|','、',$ret1);
-						$ret .= '<span class="evergreen" title="'.str_replace('"',"'",$ret1).'">卡集(悬浮查看)中随机卡片1张</span>';
+						$ret .= '<span class="evergreen b" title="'.str_replace('"',"'",$ret1).'">卡集(悬浮查看)中随机卡片1张</span>';
 					}elseif($cp){
 						$card = (int)$cp;
-						$ret .= '<span class="evergreen">卡片</span> '.show_prize_single_card($card);
+						$ret .= '&nbsp;'.show_prize_single_card($card);
 					}
 				}
 			}
@@ -663,7 +695,7 @@ namespace achievement_base
 				if(empty($ud['u_achievements'][$ai])) $ud['u_achievements'][$ai] = array();
 				list($lversion, $lnum) = ach_global_ach_last_acomplish($ud['u_achievements'][$ai], $ai);
 				//重新判定条件：完成版本号、完成时数目与当前都不同
-				if(!$lversion || ($lversion < $gameversion && $lnum != ach_global_ach_finalize_save_getnum($ud['u_achievements'][$ai], $ai))) {
+				if(!$lversion || (-1 == gversion_compare($lversion, $gameversion) && $lnum != ach_global_ach_finalize_save_getnum($ud['u_achievements'][$ai], $ai))) {
 					$flag = $flag || ach_global_ach_check_single($ud, $ai);
 				}
 			}
@@ -672,8 +704,7 @@ namespace achievement_base
 		//如果成就有修改则写一次
 		if($flag) {
 			$ud_str = encode_achievements($ud['u_achievements']);
-			$username = $ud['username'];
-			$db->query("UPDATE {$gtablepre}users SET u_achievements='$ud_str' WHERE username = '$username'");
+			update_udata_by_username(array('u_achievements' => $ud_str), $ud['username']);
 		}
 	}
 	
@@ -714,7 +745,7 @@ namespace achievement_base
 		}
 		
 		$achtitle = \achievement_base\show_ach_title($achid, 1);
-		$pt = '祝贺你'.($lversion ? '再次' : '').'获得了成就<span class="yellow">'.$achtitle.'</span>！';
+		$pt = '祝贺你'.($lversion ? '再次' : '').'获得了成就<span class="yellow b">'.$achtitle.'</span>！';
 		if($getqiegao || $getcard || $getkarma) $pt .= '查收本消息即可获取奖励。';
 		if($getcard) $pt .= '如果已有奖励卡片则会转化为切糕。';
 		include_once './include/messages.func.php';
@@ -753,7 +784,7 @@ namespace achievement_base
 		if(!is_array($data)) return '';
 		$tmp_version = ''; $tmp_num = 0;
 		foreach ($data as $ak => $av){
-			if(!$tmp_version || $ak > $tmp_version) {
+			if(!$tmp_version || 1 == gversion_compare($ak, $tmp_version)) {
 				$tmp_version = $ak;
 				$tmp_num = $av;
 			}

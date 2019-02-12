@@ -6,9 +6,9 @@ namespace skill7
 	{
 		eval(import_module('wound'));
 		//受伤状态简称（用于profile显示）
-		$infinfo['i'] = '<span class="clan">冻</span>';
+		$infinfo['i'] = '<span class="cyan b">冻</span>';
 		//受伤状态名称动词
-		$infname['i'] = '<span class="clan">冻结</span>';
+		$infname['i'] = '<span class="cyan b">冻结</span>';
 		//受伤状态对应的特效技能编号
 		$infskillinfo['i'] = 7;
 	}
@@ -73,25 +73,34 @@ namespace skill7
 	function get_def_multiplier(&$pa,&$pd,$active)	//冻结防御力降低
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(7,$pd))		
-			return $chprocess($pa,$pd,$active)*0.9;
-		else  return $chprocess($pa,$pd,$active);
+		$ret = $chprocess($pa,$pd,$active);
+		if (\skillbase\skill_query(7,$pd)) {
+			$var = 0.9;
+			array_unshift($ret, $var);
+		}
+		return $ret;
 	}
 	
 	function get_att_multiplier(&$pa,&$pd,$active)	//冻结攻击力降低
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(7,$pa)) 
-			return $chprocess($pa,$pd,$active)*0.9;
-		else  return $chprocess($pa,$pd,$active);
+		$ret = $chprocess($pa,$pd,$active);
+		if (\skillbase\skill_query(7,$pa)) {
+			$var = 0.9;
+			array_unshift($ret, $var);
+		}
+		return $ret;
 	}
 	
 	function calculate_active_obbs_multiplier(&$ldata,&$edata)	//冻结先攻率降低（但出于对原版本的兼容，对手冻结不会增加你的先攻率，不然NPC要哭了）
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(7,$ldata)) 
-			return $chprocess($ldata,$edata)*0.9;
-		else  return $chprocess($ldata,$edata);
+		$var = 1;
+		if (\skillbase\skill_query(7,$ldata)) {
+			$var = 0.9;
+			$ldata['active_words'] = \attack\multiply_format($var, $ldata['active_words'],0);
+		}
+		return $chprocess($ldata,$edata)*$var;
 	}
 	
 	function calculate_counter_rate_multiplier(&$pa, &$pd, $active)	//冻结反击率降低

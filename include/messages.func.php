@@ -28,14 +28,14 @@ function message_create($to, $title='', $content='', $enclosure='', $from='sys',
 	$db->array_insert("{$gtablepre}messages", $ins_arr);
 }
 
-//直接放到sys模块里了
-//function message_check_new($username)
-//{
-//	global $db,$gtablepre;
-//	$result = $db->query("SELECT mid FROM {$gtablepre}messages WHERE receiver='$username' AND rd=0");
-//	if($db->num_rows($result)) return true;
-//	return false;
-//}
+//虽然直接放到sys模块里了，但是某些地方需要第二次更新的话，还是需要这个
+function message_check_new($username)
+{
+	global $db,$gtablepre;
+	$result = $db->query("SELECT mid FROM {$gtablepre}messages WHERE receiver='$username' AND rd=0");
+	$num = $db->num_rows($result);
+	return $num;
+}
 
 function message_load($mid_only=0)
 {
@@ -54,7 +54,7 @@ function deleted_message_load()
 {
 	global $udata,$db,$gtablepre;
 	$username = $udata['username'];
-	$result = $db->query("SELECT * FROM {$gtablepre}del_messages WHERE receiver='$username' ORDER BY timestamp DESC, mid DESC");
+	$result = $db->query("SELECT * FROM {$gtablepre}del_messages WHERE receiver='$username' ORDER BY dtimestamp DESC, mid DESC");
 	$d_messages = array();
 	while($r = $db->fetch_array($result)){
 		$d_messages[$r['mid']] = $r;
@@ -77,15 +77,16 @@ function message_disp($messages)
 	//显示卡片的基本参数
 	$showpack=1;
 	foreach($messages as $mi => &$mv){
-		$mv['hint'] = '<span class="L5">NEW!</span>';
+		$mv['hint'] = '<span class="L5 b">NEW!</span>';
 		if($mv['rd']) $mv['hint'] = '';
 		
 		$mv['time_disp'] = date("Y年m月d日 H:i:s", $mv['timestamp']);
+		if(isset($mv['dtimestamp'])) $mv['del_time_disp'] = date("Y年m月d日 H:i:s", $mv['dtimestamp']);
 		$mv['encl_disp'] = '';
 		if(!empty($mv['enclosure']) && defined('MOD_CARDBASE')){
 			
-			if($mv['checked']) $mv['encl_hint'] = '<span class="grey">附件已收</span>';
-			else $mv['encl_hint'] = "<a class='L5' onclick=\"$('extracmd').name='sl$mi';$('extracmd').value='1';$('mode').value='check';postCmd('message_cmd', 'messages.php');$('extracmd').name='extracmd';$('extracmd').value='';\">附件<br>点此查收</a>";
+			if($mv['checked']) $mv['encl_hint'] = '<span class="grey b">附件已收</span>';
+			else $mv['encl_hint'] = "<a class='L5 b' onclick=\"$('extracmd').name='sl$mi';$('extracmd').value='1';$('mode').value='check';postCmd('message_cmd', 'messages.php');$('extracmd').name='extracmd';$('extracmd').value='';\">附件<br>点此查收</a>";
 
 			//切糕判定
 			$getqiegao = message_get_encl_num($mv['enclosure'], 'getqiegao');
@@ -101,12 +102,12 @@ function message_disp($messages)
 				include template(MOD_CARDBASE_CARD_FRAME);
 				$tmp_cardpage = ob_get_contents();
 				ob_end_clean();
-				$mv['encl_disp'] .= '<div>卡片：<span class="'.$card_rarecolor[$nowcard['rare']].'" title="'.str_replace('"',"'",$tmp_cardpage).'">'.$nowcard['name'].($nownew ? ' <span class="L5">NEW!</span>' : '').'</span></div>';
+				$mv['encl_disp'] .= '<div>卡片：<span class="'.$card_rarecolor[$nowcard['rare']].'" title="'.str_replace('"',"'",$tmp_cardpage).'">'.$nowcard['name'].($nownew ? ' <span class="L5 b">NEW!</span>' : '').'</span></div>';
 			}
 			//因果判定
 			$getkarma = message_get_encl_num($mv['enclosure'], 'getkarma');
 			if($getkarma) {
-				$mv['encl_disp'] .= '<div class="clan">'.$getkarma.'因果</div>';
+				$mv['encl_disp'] .= '<div class="cyan b">'.$getkarma.'因果</div>';
 			}
 		}
 	}
@@ -148,7 +149,7 @@ function message_check($checklist, $messages)
 			//获得因果
 			$getkarma = message_get_encl_num($messages[$cid]['enclosure'], 'getkarma');
 			if($getkarma) {
-				$info[] = '获得了<span class="clan">'.$getkarma.'因果</span>';
+				$info[] = '获得了<span class="cyan b">'.$getkarma.'因果</span>';
 				$getkarmasum += $getkarma;
 			}
 		}
@@ -156,10 +157,12 @@ function message_check($checklist, $messages)
 	if(!empty($cl_changed)) $udata['cardlist'] = implode('_',$udata['cardlist']);
 	if($getqiegaosum || $getcardflag || $getkarmasum) {
 		$n = $udata['username'];
-		$gold = $udata['gold']+$getqiegaosum;
-		$gold2 = $udata['gold2']+$getkarmasum;
-		$cardlist = $udata['cardlist'];
-		$db->query("UPDATE {$gtablepre}users SET gold='$gold',gold2='$gold2',cardlist='$cardlist' WHERE username='$n'");
+		$upd = array(
+			'gold' => $udata['gold']+$getqiegaosum,
+			'gold2' => $udata['gold2']+$getkarmasum,
+			'cardlist' => $udata['cardlist'],
+		);
+		update_udata_by_username($upd, $udata['username']);
 	}
 }
 

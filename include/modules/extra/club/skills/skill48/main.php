@@ -5,6 +5,8 @@ namespace skill48
 	//怒气消耗
 	$ragecost = 8; 
 	
+	$wepk_req = 'WC';
+	
 	//共享属性加成的属性
 	$skill48_ex_map = Array(
 		'f' => 'u',
@@ -67,7 +69,7 @@ namespace skill48
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$z=(int)\skillbase\skill_getvalue(48,$key);
 		if ($z<15) 
-			$sty='<span class="grey">';
+			$sty='<span class="grey b">';
 		else if ($z<30)
 			$sty='<span style="color:#ffff88">';
 		else if ($z<60)
@@ -147,12 +149,12 @@ namespace skill48
 		else
 		{
 			$rcost = get_rage_cost48($pa);
-			if ($pa['rage']>=$rcost && $pa['wep_kind']=='C' && \weapon\get_skillkind($pa,$pd,$active) == 'wc')
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,48) )
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「附魔」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「附魔」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「附魔」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「附魔」！</span><br>";
 				$pa['rage']-=$rcost;
 				addnews ( 0, 'bskill48', $pa['name'], $pd['name'] );
 				//原花雨技能
@@ -205,14 +207,14 @@ namespace skill48
 			eval(import_module('itemmain','logger'));
 			$headword = '技能「附魔」';
 			if(!empty($pa['skill48_flag2'])){
-				$log.='技能「附魔」附加了<span class="yellow">'.$itemspkinfo[$pa['skill48_flag2']].'</span>属性伤害！<br>';
+				$log.='技能「附魔」附加了<span class="yellow b">'.$itemspkinfo[$pa['skill48_flag2']].'</span>属性伤害！<br>';
 				$headword = '并';
 			} 
 			if (isset($pa['skill48_flag']))
 			{
 				if ($active)
-					$log.=$headword.'使你的<span class="yellow">'.$itemspkinfo[$pa['skill48_flag']].'</span>伤害永久提高了<span class="yellow">3%</span>。<br>';
-				else  $log.=$headword.'使敌人的<span class="yellow">'.$itemspkinfo[$pa['skill48_flag']].'</span>伤害永久提高了<span class="yellow">3%</span>。<br>';
+					$log.=$headword.'使你的<span class="yellow b">'.$itemspkinfo[$pa['skill48_flag']].'</span>伤害永久提高了<span class="yellow b">3%</span>。<br>';
+				else  $log.=$headword.'使敌人的<span class="yellow b">'.$itemspkinfo[$pa['skill48_flag']].'</span>伤害永久提高了<span class="yellow b">3%</span>。<br>';
 				$ori_val=(int)\skillbase\skill_getvalue(48,$pa['skill48_flag'],$pa);
 				$ori_val+=3;
 				if ($ori_val>150) $ori_val=150;
@@ -252,7 +254,7 @@ namespace skill48
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill48') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「附魔」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「附魔」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

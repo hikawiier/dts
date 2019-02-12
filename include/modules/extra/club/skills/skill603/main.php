@@ -95,8 +95,12 @@ namespace skill603
 	function calculate_active_obbs_change(&$ldata,&$edata,$active_r)	//不会先手敌人
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (check_skill603_state($ldata)) return 0;
-		if (check_skill603_state($edata)) return 100;
+		if (check_skill603_state($ldata)) $change_to = 0;
+		if (check_skill603_state($edata)) $change_to = 100;
+		if(isset($change_to)){
+			$ldata['active_words'] .= '→'.$change_to;
+			return $change_to;
+		}
 		return $chprocess($ldata,$edata,$active_r);
 	}
 	
@@ -120,7 +124,7 @@ namespace skill603
 			$rmt = $e - $ct;
 			if ($ct<$e)
 			{
-				$log .= '<span class="yellow">时间被静止了，无法动弹！<br>持续时间还剩<span id="timer">'.floor($rmt/1000).'.'.(floor($rmt/100)%10).'</span>秒</span><br><img style="display:none;" type="hidden" src="img/blank.png" onload="demiSecTimerStarter('.$rmt.');">';
+				$log .= '<span class="yellow b">时间被静止了，无法动弹！<br>持续时间还剩<span id="timer">'.floor($rmt/1000).'.'.(floor($rmt/100)%10).'</span>秒</span><br><img style="display:none;" type="hidden" src="img/blank.png" onload="demiSecTimerStarter('.$rmt.');">';
 				$mode = 'command'; $command = 'menu';
 			}
 		}

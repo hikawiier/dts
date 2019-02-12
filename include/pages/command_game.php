@@ -21,23 +21,16 @@ if(!$db->num_rows($result))
 $pdata = $db->fetch_array($result);
 
 //判断是否密码错误
-if($pdata['pass'] != $cpass) {
-	$tr = $db->query("SELECT `password` FROM {$gtablepre}users WHERE username='$cuser'");
-	$tp = $db->fetch_array($tr);
-	$password = $tp['password'];
-	include_once './include/user.func.php';
-	if(pass_compare($cuser, $cpass, $password)) {
-		$db->query("UPDATE {$tablepre}players SET pass='$password' WHERE name='$cuser'");
-	} else {
-		gexit($_ERROR['wrong_pw'],__file__,__line__);
-		return;
-	}
-}
+$udata = udata_check();
+if($pdata['pass'] != $udata['password'])
+	$db->query("UPDATE {$tablepre}players SET pass='{$udata['password']}' WHERE name='$cuser'");
 
 if($gamestate == 0) {
 	echo 'redirect:end.php';
 	return;
 }
+
+$log = '';
 
 \player\load_playerdata(\player\fetch_playerdata($cuser));
 
@@ -49,7 +42,6 @@ if(in_array($state, array(4,5,6))) {
 	return;
 }
 
-$log = '';
 //读取聊天信息
 //$chatdata = array_merge(getchat(0,$teamID,$pid),\sys\getnews(0));
 $chatdata = getchat(0,$teamID,$pid);
@@ -58,7 +50,7 @@ $result = $db->query("SELECT nid FROM {$tablepre}newsinfo ORDER BY nid LIMIT $ne
 $lastnid = $db->fetch_array($result)['nid'];
 $chatdata['lastnid'] = $lastnid-1;
 $nidtmp = 'nid'.($lastnid);
-$chatdata['news'] = array('<li id="'.$nidtmp.'" class="red">正在拉取进行状况…</li>');
+$chatdata['news'] = array('<li id="'.$nidtmp.'" class="red b">正在拉取进行状况…</li>');
 
 $hp_backup_temp=$hp;
 $player_dead_flag_backup_temp=$player_dead_flag;
@@ -85,7 +77,7 @@ if($hp <= 0){
 	$mode = 'command';
 }
 
-player\prepare_initial_response_content();
+\player\prepare_initial_response_content();
 
 include template('game');
 

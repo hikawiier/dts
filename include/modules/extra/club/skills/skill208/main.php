@@ -5,6 +5,8 @@ namespace skill208
 
 	$ragecost=70;
 	
+	$wep_skillkind_req = 'wk';
+	
 	function init() 
 	{
 		define('MOD_SKILL208_INFO','club;battle;');
@@ -48,12 +50,12 @@ namespace skill208
 		else
 		{
 			$rcost = get_rage_cost208($pa);
-			if ( $pa['rage']>=$rcost && \weapon\get_skillkind($pa,$pd,$active) == 'wk')
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,208))
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「强袭」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「强袭」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「强袭」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「强袭」！</span><br>";
 				$pa['rage']-=$rcost;
 				addnews ( 0, 'bskill208', $pa['name'], $pd['name'] );
 			}
@@ -102,13 +104,13 @@ namespace skill208
 			eval(import_module('logger'));
 			if ($pa['card']==5){
 				if ($active)
-					$log.='<span class="yellow">「强袭」使你造成的最终伤害提高了70%！</span><br>';
-				else  $log.='<span class="yellow">「强袭」使敌人造成的最终伤害提高了70%！</span><br>';
+					$log.='<span class="yellow b">「强袭」使你造成的最终伤害提高了70%！</span><br>';
+				else  $log.='<span class="yellow b">「强袭」使敌人造成的最终伤害提高了70%！</span><br>';
 				$r=Array(1.7);
 			}else{
 				if ($active)
-					$log.='<span class="yellow">「强袭」使你造成的最终伤害提高了40%！</span><br>';
-				else  $log.='<span class="yellow">「强袭」使敌人造成的最终伤害提高了40%！</span><br>';
+					$log.='<span class="yellow b">「强袭」使你造成的最终伤害提高了40%！</span><br>';
+				else  $log.='<span class="yellow b">「强袭」使敌人造成的最终伤害提高了40%！</span><br>';
 				$r=Array(1.4);
 			}
 		}
@@ -122,7 +124,7 @@ namespace skill208
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill208') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「强袭」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「强袭」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

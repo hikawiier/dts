@@ -6,6 +6,8 @@ if(!defined('IN_GAME')) {
 
 require GAME_ROOT.'./include/roommng/roommng.config.php';
 
+register_shutdown_function('global_shutdown_function');
+
 //----------------------------------------
 //              底层机制函数
 //----------------------------------------
@@ -36,7 +38,7 @@ function gameerrorhandler($code, $msg, $file, $line){
 }
 
 function gexit($message = '',$file = '', $line = 0) {
-	global $charset,$title,$extrahead,$allowcsscache,$errorinfo;
+	global $charset,$gtitle,$extrahead,$allowcsscache,$errorinfo;
 	defined('STYLEID') || define('STYLEID', '1');
 	defined('TEMPLATEID') || define('TEMPLATEID', '1');
 	defined('TPLDIR') || define('TPLDIR', './templates/default');
@@ -46,13 +48,13 @@ function gexit($message = '',$file = '', $line = 0) {
 		{
 			$gamedata['url'] = 'error.php';
 			$gamedata['errormsg'] = $message;
-			ob_clean();
-			echo gencode($gamedata);
+			//ob_clean();
+			throw new Exception( gencode($gamedata) );
 		}
 		else
 		{
 			ob_clean();
-			include template('error');
+			throw new Exception( include template('error'));
 		}
 	}
 	else
@@ -83,7 +85,81 @@ function output($content = '') {
 }
 
 function url_dir(){
-	return 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0,strrpos($_SERVER['PHP_SELF'],'/')+1);
+	global $server_address;
+	if(!$server_address) include GAME_ROOT.'./include/modules/core/sys/config/server.config.php';
+	return $server_address.'/';
+	//return 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0,strrpos($_SERVER['PHP_SELF'],'/')+1);
+}
+
+//正常执行时，自动清空玩家锁与用户锁
+function global_shutdown_function(){
+	$e = error_get_last();
+	if(!$e) {
+		//清除玩家锁
+		if(function_exists('\player\release_player_lock_from_pool'))
+			\player\release_player_lock_from_pool();
+		//清除用户锁
+		if(function_exists('release_user_lock_from_pool'))
+			release_user_lock_from_pool();
+	}
+}
+
+//循环判断锁是否存在，如果存在则挂起10毫秒之后继续判定，直到时间耗尽，起到阻塞作用
+//返回true表示锁存在，false表示锁不存在
+//如果加了$timeout，会阻塞到时间耗尽或者锁释放为止。$timeout时间是毫秒
+//如果加了$key，会检测锁文件内容，如果跟$key对应，则认为锁不存在
+function check_lock($dirname, $filename, $timeout=0, $key='')
+{
+	$sleept = $etime = 0;
+	$res = file_exists($dirname.$filename);
+	if($res) {
+		//如果有文件，那么超时时间从文件建立时开始计算
+		$etime = time() - filemtime($dirname.$filename);
+	}
+	$timeout = max(0, $timeout-$etime*1000);
+	
+	while($res){
+		usleep(10000);
+		$sleept += 10000;
+		if($sleept > $timeout*1000) break;
+		$res = file_exists($dirname.$filename);
+		if($key && $res) {
+			if(trim(file_get_contents($dirname.$filename)) == $key) {
+				$res = false;
+				break;
+			}
+		}
+	}
+	return $res;
+}
+
+//用于判定/生成锁
+//如果文件存在，生成并返回true
+//如果文件已经存在且跟$key不对应，返回false
+function create_lock($dirname, $filename, $key='')
+{
+	dir_init($dirname);
+	if(!file_exists($dirname.$filename)) {
+		if($key) file_put_contents($dirname.$filename, $key);
+		else touch($dirname.$filename);
+		return true;
+	}else{
+		if($key && $key == trim(file_get_contents($dirname.$filename))) {
+			touch($dirname.$filename);
+			return true;
+		}else return false;
+	}
+}
+
+//清除生成的锁
+//远程锁最多有效10秒
+function release_lock($dirname, $filename, $key='')
+{
+	dir_init($dirname);
+	if(file_exists($dirname.$filename)) {
+		$cont = trim(file_get_contents($dirname.$filename));
+		if(empty($cont) || $key == $cont || time() - filemtime($dirname.$filename) > 10) unlink($dirname.$filename);
+	}		
 }
 
 //----------------------------------------
@@ -155,7 +231,7 @@ function template($file, $templateid = NULL) {
 			$file = str_replace('include/modules','gamedata/run',$file);
 			if (substr($file, -4) != '.adv') $file .= '.adv';
 		}
-		$tplfile = $file.'_'.$templateid.'.htm';
+		$tplfile = $file.'.'.$templateid.'.htm';
 		if(!file_exists($tplfile)){
 			$templateid = TEMPLATEID;
 			$tpldir = TPLDIR;
@@ -190,9 +266,29 @@ function content($file = '') {
 	return $content;
 }
 
+//兼容IN_DAEMON的cookie设置
+function gsetcookie_comp($varname, $value, $life = 0, $prefix = 1)
+{
+	if (defined('IN_DAEMON'))
+	{
+		global $___LOCAL_INPUT__VARS__COOKIE_VAR_LIST;
+		if(empty($___LOCAL_INPUT__VARS__COOKIE_VAR_LIST) || !is_array($___LOCAL_INPUT__VARS__COOKIE_VAR_LIST)) $___LOCAL_INPUT__VARS__COOKIE_VAR_LIST=Array();
+		$___LOCAL_INPUT__VARS__COOKIE_VAR_LIST[$varname] = array(
+			'value' => $value,
+			'life' => $life,
+			'prefix' => $prefix
+		);
+	}
+	else
+	{
+		gsetcookie($varname, $value, $life, $prefix);
+	}
+}
+
 function gsetcookie($varname, $value, $life = 0, $prefix = 1) {
 	global $tablepre, $gtablepre, $cookiedomain, $cookiepath, $now, $_SERVER;
-	$cname = ($prefix ? $gtablepre : '').$varname;
+	if(empty($gtablepre)) include GAME_ROOT.'./include/modules/core/sys/config/server.config.php';
+	$cname = ($prefix ? (strpos($varname, $gtablepre)!==0 ? $gtablepre : '') : '').$varname;
 	$expire = $life ? $now + $life : 0;
 	$secure = $_SERVER['SERVER_PORT'] == 443 ? 1 : 0;
 	$httponly = 'pass' == $varname ? 1 : 0;
@@ -310,6 +406,12 @@ function mymkdir($pa)
 	mkdir($pa); chmod($pa, 0777);
 }
 
+function dir_init($pa)
+{
+	if(!is_dir($pa)) create_dir($pa);
+	return $pa;
+}
+
 function create_dir($pa)	//建立目录（自动创建不存在的父文件夹），别用父目录符号“../”
 {
 	strpos($pa,'..')!==false && debug_print_backtrace() && exit('Forbidden');
@@ -333,7 +435,7 @@ function create_dir($pa)	//建立目录（自动创建不存在的父文件夹�
 
 function copy_dir($source, $destination, $filetype='')		//递归复制目录
 {   
-	if(!is_dir($destination)) mymkdir($destination);
+	dir_init($destination);
 	if ($source[strlen($source)-1]=='/') $source=substr($source,0,-1);
 	if ($destination[strlen($destination)-1]=='/') $destination=substr($destination,0,-1);
 	if ($handle=opendir($source)) 
@@ -362,8 +464,73 @@ function copy_dir($source, $destination, $filetype='')		//递归复制目录
 	}
 }
 
-//创建打包文件，先用gencode凑合
+//多文件压缩合并成单个文件。
+//挨个读文件并写入，避免撑满内存
+function filelist_achieve($objfile, $filelist)
+{
+	if(!empty($filelist)){
+		file_put_contents($objfile, '');
+		foreach($filelist as $fv){
+			$filename = pathinfo($fv, PATHINFO_BASENAME);
+			//$exname = pathinfo($fv, PATHINFO_EXTENSION);
+			$filedata = base64_encode(gzencode(file_get_contents($fv)));
+			//结构：文件名;长度;base64内容;
+			file_put_contents($objfile, $filename.';'.strlen($filedata).';'.$filedata, FILE_APPEND);
+		}
+		return $objfile;
+	}else{
+		return false;
+	}
+}
+
+//在该文件目录展开压缩的文件。
+function filelist_unachieve($srcfile)
+{
+	$srcpath = pathinfo($srcfile, PATHINFO_DIRNAME);
+	$ret = 0;
+	$offset = $flag1 = $flag2 = 0;
+	$str = ''; 
+	$file_size = filesize($srcfile);
+	while($offset < $file_size){
+		if(!$flag1 || !$flag2){
+			$cnt = file_get_contents($srcfile,NULL,NULL,$offset,1);
+			if(';' == $cnt && $flag1){
+				$flag2 = 1;
+				$ret = 1;
+			} elseif(is_numeric($cnt) && ';' == substr($str,strlen($str)-2,1)) {
+				$flag1 = 1;
+			}
+			$str .= $cnt;
+			$offset ++;
+		}else{
+			$tmp = explode(';', substr($str,0,-1));
+			$cntsize = array_pop($tmp);
+			$filename = implode(';', $tmp);
+			$cnt = mgzdecode(base64_decode(file_get_contents($srcfile,NULL,NULL,$offset,$cntsize)));
+			if(!$cnt) $ret = 2;
+			file_put_contents($srcpath.'/'.$filename, $cnt);
+			$offset += $cntsize;
+			$str = '';
+			$flag1 = $flag2 = 0;
+		}
+	}
+	return $ret;
+}
+
 function fold($objfile, $filelist){
+	//return fold_core($objfile, $filelist);
+	return filelist_achieve($objfile, $filelist);
+}
+
+function unfold($srcfile){
+	$tmp = file_get_contents($srcfile,NULL,NULL,0,64);
+	//如果前64个字符里没有分号则是旧版
+	if(strpos($tmp,';')===false) return unfold_core($srcfile);
+	else return filelist_unachieve($srcfile);
+}
+	
+//创建打包文件，使用gencode的旧版本
+function fold_core($objfile, $filelist){
 	if(!empty($filelist)){
 		$filedata = array();
 		foreach($filelist as $fv){
@@ -380,8 +547,8 @@ function fold($objfile, $filelist){
 	}
 }
 
-//在该文件目录展开打包文件，先用gdecode凑合
-function unfold($srcfile){
+//在该文件目录展开打包文件，使用gdecode的旧版本
+function unfold_core($srcfile){
 	$srcpath = pathinfo($srcfile, PATHINFO_DIRNAME);
 	$filedata = file_get_contents($srcfile);
 	$filedata = gdecode($filedata, 1);
@@ -416,6 +583,7 @@ function file_get_contents_post($url, $post_data=array(), $post_cookie=array(), 
 }
 
 //通过curl扩展以post形式向网页发出信息
+//如果有cookie修改，则会为全局变量$response_cookies赋值
 function curl_post($url, $post_data=array(), $post_cookie=array(), $timeout = 10){
 	if($url == '') return false;
 	
@@ -429,11 +597,41 @@ function curl_post($url, $post_data=array(), $post_cookie=array(), $timeout = 10
 	
 	curl_setopt($con, CURLOPT_POST,true);
 	curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
-	curl_setopt($con, CURLOPT_HEADER, false);
+	curl_setopt($con, CURLOPT_HEADER, true);
 	curl_setopt($con, CURLOPT_POSTFIELDS, http_build_query($post_data));
 	curl_setopt($con, CURLOPT_COOKIE, http_build_cookiedata($post_cookie));
 	
-	return curl_exec($con); 
+	$ret = curl_exec($con); 
+	
+	$header_size = curl_getinfo($con, CURLINFO_HEADER_SIZE);
+	if(!$header_size) $header_size = 0;
+	$header = substr($ret, 0, $header_size);
+	$body = substr($ret, $header_size);
+	
+	//检查是否有cookies修改
+	preg_match_all('/^Set-Cookie: (.*?)[;\r\n]/m', $header, $matches);
+	if(!empty($matches)) {
+		global $response_cookies;
+		$response_cookies = array();
+		foreach($matches[1] as $mv){
+			list($ck, $cv) = explode('=', $mv, 2);
+			$response_cookies[$ck] = $cv;
+		}
+	}
+	
+	return $body;
+}
+
+//curl请求启动新的进程，到处都会用，所以放到这里
+function curl_new_server($pass, $is_root=0)
+{
+	$url = url_dir().'command.php';
+	$context = array(
+		'conn_passwd'=>$pass,
+		'command'=>'start',
+		'is_root'=>$is_root
+	);
+	curl_post($url, $context, NULL, 0.1);
 }
 
 function http_build_cookiedata($cookie_arr){
@@ -449,13 +647,84 @@ function http_build_cookiedata($cookie_arr){
 	return $cookiedata;
 }
 
+//各页面通用接口，转发请求给command
+function render_page($page, $extra_context=array()){
+	$url = url_dir().'command.php';
+	$context = array('page'=>$page);
+	foreach($_POST as $pkey => $pval){
+		$context[$pkey] = $pval;
+	}
+	if(!empty($extra_context)){
+		$context = array_merge($context, $extra_context);
+	}
+	$cookies = array();
+	foreach($_COOKIE as $ckey => $cval){
+		if(render_page_cookie_key_filter($ckey)) $cookies[$ckey] = $cval;
+	}
+	
+	$pageinfo = curl_post($url, $context, $cookies);
+	
+	global $response_cookies;
+	if(!empty($response_cookies)) {
+		foreach($response_cookies as $rckey => $rcval){
+			gsetcookie($rckey, $rcval);
+		}
+	}
+	
+	if(strpos($pageinfo, 'redirect')===0){
+		list($null, $url) = explode(':',$pageinfo);
+		header('Location: '.$url);
+		exit();
+	}
+	if(strpos($pageinfo,'<head>')===false){
+		$d_pageinfo = gdecode($pageinfo,1);
+		if(is_array($d_pageinfo) && isset($d_pageinfo['url']) && 'error.php' == $d_pageinfo['url']){
+			gexit($d_pageinfo['errormsg'],__file__,__line__);
+		}
+	}
+	return $pageinfo;
+}
+
+function render_page_cookie_key_filter($key)
+{
+	$ret = 0;
+	if(strpos($key,'user')!==false || strpos($key,'pass')!==false || strpos($key,'roomid')!==false || strpos($key,'templateid')!==false) $ret = 1;
+	return $ret;
+}
+
+//获得一个文件夹下的所有特定类型的文件名，返回数组。
+function gdir($dir, $tp=''){
+	$ret = array();
+	if($handle=opendir($dir)){
+		while (($fn=readdir($handle))!==false) 
+		{
+			if($fn!='.' && $fn!='..') {
+				if(empty($tp) || (is_dir($dir.'/'.$fn) && 'dir' == $tp) || (!is_dir($dir.'/'.$fn) && $tp == pathinfo($fn, PATHINFO_EXTENSION)) )
+					array_push($ret,$fn);
+			}
+		}
+	}else{
+		$ret = NULL;
+	}
+	return $ret;
+}
+
+//获得游戏对外url，并且自动加上结尾的/
+function gurl(){
+	global $gameurl;
+	$ret = $gameurl;
+	if(substr($gameurl, strlen($gameurl)-1, 1) != '/' ) $ret .= '/';
+	return $ret;
+}
+
 //----------------------------------------
 //              调试函数
 //----------------------------------------
 
 function getmicrotime(){
-	list($usec, $sec) = explode(" ",microtime());
-	return ((float)$usec + (float)$sec);
+	return microtime(1);
+//	list($usec, $sec) = explode(" ",microtime());
+//	return ((float)$usec + (float)$sec);
 }
 
 function putmicrotime($t_s, $t_e, $file, $info)
@@ -486,9 +755,9 @@ function get_script_runtime($pagestartime)
 	return $timecost;
 }
 
-function gwrite_var($file, $var)
+function gwrite_var($file, $var, $method='rb+')
 {
-	file_put_contents($file, var_export($var,1));
+	writeover($file, var_export($var,1), $method);
 }
 
 function check_alnumudline($key)
@@ -737,15 +1006,15 @@ function init_dbstuff(){
 
 function check_authority()
 {
+	global $gtablepre;
 	include GAME_ROOT.'./include/modules/core/sys/config/server.config.php';
 	include_once GAME_ROOT.'./include/user.func.php';
 	$_COOKIE=gstrfilter($_COOKIE);
 	$cuser=$_COOKIE[$gtablepre.'user'];
 	$cpass=$_COOKIE[$gtablepre.'pass'];
-	$db = init_dbstuff();
-	$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$cuser'");
-	if(!$db->num_rows($result)) { echo "<span><font color=\"red\">Cookie无效，请登录。</font></span><br>"; die(); }
-	$udata = $db->fetch_array($result);
+	global $db; $db = init_dbstuff(); 
+	$udata = fetch_udata_by_username($cuser);
+	if(empty($udata)) { echo "<span><font color=\"red\">Cookie无效，请登录。</font></span><br>"; die(); }
 	if(!pass_compare($udata['username'],$cpass,$udata['password'])) { echo "<span><font color=\"red\">密码错误，请重新登录并重试。</font></span><br>"; die(); }
 	elseif(($udata['groupid'] < 9)&&($cuser!==$gamefounder)) { echo "<span><font color=\"red\">要求至少9权限。</font></span><br>"; die(); }
 }
@@ -767,108 +1036,13 @@ function systemputchat($time,$type,$msg = ''){
 	\sys\systemputchat($time,$type,$msg );
 }
 
-//////////////////////////////
-
-////暂时丢在这……
-function set_credits(){
-	global $db,$gtablepre,$tablepre,$winmode,$gamenum,$winner,$pdata,$now,$gametype;
-	$result = $db->query("SELECT * FROM {$tablepre}players WHERE type='0'");
-	$list = $creditlist = $updatelist = Array();
-	while($data = $db->fetch_array($result)){
-		$list[$data['name']]['players'] = $data;
-	}
-	if(empty($list)) return;
-	$wherecause = "('".implode("','",array_keys($list))."')";
-	//在房间制之前这样写是对的……但是呢，房间会刷新lastgame，这样可能会导致拿不到积分
-	//$result = $db->query("SELECT * FROM {$gtablepre}users WHERE lastgame='$gamenum'");
-	$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username IN $wherecause");
-	while($data = $db->fetch_array($result)){
-		$list[$data['username']]['users'] = $data;
-	}
-	eval(import_module('sys'));
-	foreach($list as $key => $val){
-		if(isset($val['players']) && isset($val['users'])){
-			$credits = get_credit_up($val['players'],$winner,$winmode) + $val['users']['credits'];
-			$gold = get_gold_up($val['players'],$winner,$winmode) + $val['users']['gold'];
-			//伐木不算参与次数
-			$validgames = $gametype != 15 ? $val['users']['validgames'] + 1 : $val['users']['validgames'];
-			//非伐木房的幸存、解禁、解离、核爆才算获胜次数
-			$wingames = ($gametype != 15 && in_array($winmode, array(2, 3, 5, 7)) && $key == $winner) ? $val['users']['wingames'] + 1 : $val['users']['wingames'];
-			$lastwin = ($gametype != 15 && in_array($winmode, array(2, 3, 5, 7)) && $key == $winner) ? $now : $val['users']['lastwin'];
-			//$obtain = get_honour_obtain($val['players'],$val['users']);
-			//$honour = $val['users']['honour'] . $obtain;
-			
-			//首胜已放入每日任务
-			/*
-			if (($winner==$val['players']['name'])&&(($now-$lastwin)>72000)&&(!in_array($gametype,$qiegao_ignore_mode))){
-				if ($lastwin==0) $gold+=800;//帐号首次获胜
-				$lastwin=$now;
-				$gold+=200;
-			}*/
-			$updatelist[] = Array('username' => $key, 'credits' => $credits, 'wingames' => $wingames, 'validgames' => $validgames,'lastwin'=>$lastwin,'gold'=>$gold);
-//			if(!empty($obtain)){
-//				$udghkey[] = $key;
-//				if($pdata['name'] == $key){
-//					$pdata['gainhonour'] = $obtain;
-//				}else{
-//					$udghlist[] = Array('name' => $key, 'gainhonour' => $obtain);
-//				}
-//			}			
-		}
-	}
-	$db->multi_update("{$gtablepre}users", $updatelist, 'username');
-//	if(!empty($udghkey)){
-//		$udghkey = implode(',',$udghkey);
-//		$db->multi_update("{$tablepre}players", $upghlist, 'name', "name IN ($udghkey)");
-//	}
-	return;
+function gversion_compare($v1, $v2){
+	preg_match('/\d*\.\d*\.\d*/s', $v1, $matches);
+	$v1e = $matches[0];
+	preg_match('/\d*\.\d*\.\d*/s', $v2, $matches);
+	$v2e = $matches[0];
+	return version_compare($v1e, $v2e);
 }
 
-function get_credit_up($data,$winner = '',$winmode = 0){
-	global $gametype;
-	eval(import_module('sys'));
-	if (in_array($gametype,$qiegao_ignore_mode)) return 0;
-	if($data['name'] == $winner){//获胜
-		if($winmode == 2){$up = 200;}//最后幸存+200
-		elseif($winmode == 3){$up = 500;}//解禁+500
-		elseif($winmode == 5){$up = 100;}//核弹+100
-		elseif($winmode == 7){$up = 1200;}//解离+1200
-		else{$up = 50;}//其他胜利方式+50（暂时没有这种胜利方式）
-	}
-	elseif($data['hp']>0){$up = 25;}//存活但不是获胜者+25
-	else{$up = 10;}//死亡+10
-	if($data['killnum']){
-		$up += $data['killnum'] * 2;//杀一玩家/NPC加2
-	}
-	if($data['lvl']){
-		$up += round($data['lvl'] /2);//等级每2级加1
-	}
-//	$skill = $data['wp'] + $data['wk'] + $data['wg'] + $data['wc'] + $data['wd'] + $data['wf'];
-//	$maxskill = ;
-	$skill = array ($data['wp'] , $data['wk'] , $data['wg'] , $data['wc'] , $data['wd'] , $data['wf']);
-	rsort ( $skill );
-	$maxskill = $skill[0];
-	$up += round($maxskill / 25);//熟练度最高的系每25点熟练加1
-	$up += round($data['money']/500);//每500点金钱加1
-//	foreach(Array('wp','wk','wg','wc','wd','wf') as $val){
-//		$skill = $data[$val];
-//		$up += round($skill / 100);//每100点熟练加1
-//	}
-	return $up;
-}
-
-function get_gold_up($data,$winner = '',$winmode = 0){
-	global $gametype,$now;
-	eval(import_module('sys'));
-	if (in_array($gametype,$qiegao_ignore_mode)) return 0;//嘻嘻
-	if($data['name'] == $winner){//获胜
-		if($winmode == 3){$up = 60;}//解禁
-		elseif($winmode == 7){$up = 150;}//解离
-		else{$up = 40;}//其他胜利方式
-	}else{$up = 10;}
-	return $up;
-}
-
-
-
-?>
+/* End of file global.func.php */
+/* Location: /include/global.func.php */

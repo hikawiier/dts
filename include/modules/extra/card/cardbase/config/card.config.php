@@ -10,39 +10,41 @@ $cardtypecd=array(//卡片类别CD，单位秒
 $packlist=array(
 	'Standard Pack',
 	'Crimson Swear',
+	'Top Players',
 	'Way of Life',
 	'Best DOTO',
 	'Balefire Rekindle',
-	'Way of Life Game',
-	'Event Bonus'
+	'Event Bonus',
+	'Indev'
 );
 $packdesc = array(
-	'Standard Pack' => '最早登场的卡集，大杂烩。卡片内容多是游戏开发者、玩家和当时的一些梗。',
+	'Standard Pack' => '基本称号卡集。',
 	'Crimson Swear' => '以游戏阵营「红杀」组织以及其马甲「金龙通讯社」为主题的卡集。',
-	'Way of Life' => '以游戏开发者、重要玩家、有代表性的游戏方式以及同类游戏为捏他对象的卡集。',
+	'Top Players' => '以本游戏发展史上那些著名玩家和重要开发者为纪念/捏他对象的卡集。',
+	'Way of Life' => '大杂烩，主要以游戏方式以及同类游戏为捏他对象的卡集。',
 	'Best DOTO' => '以电竞元素和电竞圈为吐槽对象的卡集。',
 	'Balefire Rekindle' => '以游戏版本「复燃」的新增NPC角色和游戏设定为主题的卡集。',
-	'Way of Life Game' => '第二弹以游戏元素为主要吐槽点的卡集，也夹杂有少量其他要素。',
-	'Event Bonus' => '其他一些零散成就和活动奖励卡。'
+	'Event Bonus' => '其他一些零散成就和活动奖励卡。',
+	'Indev' => '开发中的卡的暂存地',
 );
 $packstart = array(
-	'Way of Life Game' => 1541905871
+	'Indev' => 4476654671
 );
 $cardindex=array(
-	'S'=>array(1,5,16,38,39,40,41,64,65,67,71,95,99,100,101,102,117,145,152,153),
-	'A'=>array(2,13,14,20,22,23,26,27,32,37,43,44,45,46,47,48,49,50,68,72,75,81,103,104,105,106,120,121,124,135,136,137,139,141,148,154),
-	'B'=>array(3,12,15,21,24,25,28,35,51,52,53,54,55,56,66,69,70,76,78,80,83,97,108,109,110,111,112,123,140,142,144,146,147,149,157,161,163,164),
-	'C'=>array(4,6,7,8,9,10,11,17,18,19,29,30,31,33,34,36,57,58,59,60,61,62,73,74,77,79,82,84,85,107,113,114,115,116,122,138,143,150,155,162,210),
+	'S'=>array(1,  5,  16, 38, 39, 40, 41, 64, 65, 67, 71, 95, 99, 100,101,102,117,145,152,153,168,174),
+	'A'=>array(2,  13, 14, 20, 22, 23, 26, 27, 32, 37, 43, 44, 45, 46, 47, 48, 49, 50, 68, 72, 75, 81, 103,104,105,106,120,121,124,135,136,137,139,141,148,154,169,173),
+	'B'=>array(3,  12, 15, 21, 24, 25, 28, 35, 51, 52, 53, 54, 55, 56, 66, 69, 70, 76, 78, 80, 83, 97, 108,109,110,111,112,123,140,142,144,146,147,149,157,161,163,164,170,171,210),
+	'C'=>array(4,  6,  7,  8,  9,  10, 11, 17, 18, 19, 29, 30, 31, 33, 34, 36, 57, 58, 59, 60, 61, 62, 73, 74, 77, 79, 82, 84, 85, 107,113,114,115,116,122,138,143,150,155,162,166,172,175,176,177,178,179,180),
 	'M'=>array()
 	//M卡的爆率实际属于C
-	//应四面要求，pop子这张卡虽然设定为S卡，但爆率是C卡的爆率
+	//pop子实际爆率是B
 );
 $card_rarecolor=array(
 	'S'=>'gold b ',
-	'A'=>'clan ',
+	'A'=>'cyan b ',
 	'B'=>'brickred b ',
-	'C'=>'white ',
-	'M'=>'grey '
+	'C'=>'white b ',
+	'M'=>'grey b '
 );
 $card_rarity_html = array(
 	'S'=>'<span class="'.$card_rarecolor['S'].'">S</span>',
@@ -74,7 +76,7 @@ $cards = array(
 	1 => array(
 		'name' => '残留的思念',
 		'rare' => 'S',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '镇守键刃墓场的BOSS',
 		'effect' => '开局经验固定为120点',
 		'energy' => 100,
@@ -85,7 +87,7 @@ $cards = array(
 	2 => array(
 		'name' => '初音大魔王',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => '2011年愚人节<br>宇宙巡航机活动的优胜者',
 		'effect' => '开局装备强力的射系武器',
 		'energy' => 120,
@@ -100,7 +102,7 @@ $cards = array(
 	3 => array(
 		'name' => '面糊饼职人',
 		'rare' => 'B',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => '善于制作面糊饼的著名面点师傅',
 		'effect' => '强化开局补给',
 		'energy' => 80,
@@ -118,7 +120,7 @@ $cards = array(
 	4 => array(
 		'name' => 'AC专业职人',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '死后会召唤强力NPC的特殊小兵',
 		'effect' => '开局全熟+5',
 		'energy' => 0,
@@ -134,7 +136,7 @@ $cards = array(
 	5 => array(
 		'name' => '虚子',
 		'rare' => 'S',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => '这个小卡片系统的作者，<br>爱好是红暮和加强斩系',
 		'effect' => '可选称号里必然有见敌必斩和黑衣组织；斩系技能强化；开局装备寻星者',
 		'energy' => 150,
@@ -288,7 +290,7 @@ $cards = array(
 	12 => array(
 		'name' => '姜瘤儿',
 		'rare' => 'B',
-		'pack' => 'Standard Pack',
+		'pack' => 'Best DOTO',
 		'desc' => '一名头很硬的著名游戏玩家',
 		'effect' => '获得技能「重击1」「硬化1」',
 		'energy' => 100,
@@ -302,7 +304,7 @@ $cards = array(
 	13 => array(
 		'name' => '熊本熊',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => '日本熊本县的吉祥物，<br>和大逃杀没有任何关系',
 		'effect' => '获得技能「直死1」',
 		'energy' => 120,
@@ -315,7 +317,7 @@ $cards = array(
 	14 => array(
 		'name' => '贝尔格里尔斯',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '该介绍已被吃掉',
 		'effect' => '可把任何物品当作补给食用<br>有毒补给对你视为无毒',
 		'energy' => 100,
@@ -341,7 +343,7 @@ $cards = array(
 	16 => array(
 		'name' => 'tabris',
 		'rare' => 'S',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => '经常死于不明AOE的顽强神触',
 		'effect' => '获得技能「重击3」「硬化3」，但踩雷率提高',
 		'energy' => 100,
@@ -356,7 +358,7 @@ $cards = array(
 	17 => array(
 		'name' => '沙包长者',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '身经百战见的多了……的沙包',
 		'effect' => '开局获得3个技能点',
 		'energy' => 0,
@@ -365,9 +367,9 @@ $cards = array(
 		)
 	),
 	18 => array(
-		'name' => '业务员',
+		'name' => 'G.D.S 业务员',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Crimson Swear',
 		'desc' => '穿着正式骨骼精奇的白领',
 		'effect' => '开局装备完整的防具',
 		'energy' => 0,
@@ -397,7 +399,7 @@ $cards = array(
 	19 => array(
 		'name' => '铁男',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Best DOTO',
 		'desc' => '为什么要放铁男？',
 		'effect' => '获得技能「重击1」',
 		'energy' => 0,
@@ -410,7 +412,7 @@ $cards = array(
 	20 => array(
 		'name' => '十万只脚本狗',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Top Players',
 		'desc' => 'SC出品的<br>一秒钟能合两把A刀的恐怖AI',
 		'effect' => '获得技能「追击1」，但踩雷率提高',
 		'energy' => 100,
@@ -527,9 +529,9 @@ $cards = array(
 				'39' => '0', 
 				'12' => '0', 
 				'79' => '0',
-				'44' => '0', 
 				'40' => '0', 
-				'45' => '0', 
+				'45' => '0',
+				'44' => '0', 
 				'43' => '0', 
 				'41' => '0', 
 				'42' => '0', 
@@ -618,7 +620,7 @@ $cards = array(
 	30 => array(
 		'name' => '穆里尼奥',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '和全世界为敌的男人',
 		'effect' => '起始怒气为100',
 		'energy' => 0,
@@ -629,7 +631,7 @@ $cards = array(
 	31 => array(
 		'name' => '变态',
 		'rare' => 'C',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '单纯的变态',
 		'effect' => '？？？',
 		'energy' => 0,
@@ -646,7 +648,7 @@ $cards = array(
 	32 => array(
 		'name' => 'BurNIng',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Best DOTO',
 		'desc' => '这个人用鸟习惯特别不好',
 		'effect' => '自带雷达',
 		'energy' => 80,
@@ -683,7 +685,7 @@ $cards = array(
 		'rare' => 'C',
 		'pack' => 'Standard Pack',
 		'desc' => '药学家是什么人，<br>为什么要伤害他们？',
-		'effect' => '可以查毒；下毒造成伤害x2',
+		'effect' => '获得黑衣组织技能「毒师」：可以查毒；下毒造成伤害x2',
 		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
@@ -694,7 +696,7 @@ $cards = array(
 	35 => array(
 		'name' => '2009',
 		'rare' => 'B',
-		'pack' => 'Standard Pack',
+		'pack' => 'Best DOTO',
 		'desc' => '著名的生物学家，兼任创世神',
 		'effect' => '可以召唤保安',
 		'energy' => 100,
@@ -708,8 +710,8 @@ $cards = array(
 		'name' => '残疾人',
 		'rare' => 'C',
 		'pack' => 'Standard Pack',
-		'desc' => '由于不明原因只有一只手的残疾人',
-		'effect' => '为什么他只有一只手呢',
+		'desc' => '为什么他只有一只手呢',
+		'effect' => '获得富家子弟技能「网购」',
 		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
@@ -720,7 +722,7 @@ $cards = array(
 	37 => array(
 		'name' => '华莱士',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '美国著名新闻工作者',
 		'effect' => '初始属性不知道高到哪里去了',
 		'energy' => 150,
@@ -773,8 +775,8 @@ $cards = array(
 		'title' => '『蓝凝』',
 		'rare' => 'S',
 		'pack' => 'Crimson Swear',
-		'desc' => '<span class="clan">“蓝凝我觉得啊，<br>这个地方没什么好写的。<br>总之我比红暮可强得多了，<br>哈哈哈！”</span>',
-		'effect' => '<span class="clan">“蓝凝觉得你进游戏实际体验一下<br>比较好哦！”</span>',
+		'desc' => '<span class="ltazure b">“蓝凝我觉得啊，<br>这个地方没什么好写的。<br>总之我比红暮可强得多了，<br>哈哈哈！”</span>',
+		'effect' => '<span class="ltazure b">“蓝凝觉得你进游戏实际体验一下<br>比较好哦！”</span>',
 		'energy' => 90,
 		'valid' => array(
 			'hp' => '260',
@@ -783,7 +785,8 @@ $cards = array(
 				'10' => '0', 
 				'11' => '0', 
 				'12' => '0', 
-				'406' => '0', 
+				'406' => '0',
+				'432' => '0', 
 			),
 			'club' => '17',
 		)
@@ -850,7 +853,7 @@ $cards = array(
 		'rare' => 'A',
 		'pack' => 'Crimson Swear',
 		'desc' => '红杀的拳脚教头',
-		'effect' => '殴系伤害+25%，拳头伤害+40%',
+		'effect' => '殴系伤害+20%，拳头伤害+40%',
 		'energy' => 100,
 		'valid' => array(
 			'skills' => array(
@@ -1004,11 +1007,11 @@ $cards = array(
 		'rare' => 'C',
 		'pack' => 'Crimson Swear',
 		'desc' => '在时空特使里默默无闻打工的<br>工作人员。某次事件之后就消失了',
-		'effect' => '开局攻防为115',
+		'effect' => '开局攻防为123',
 		'energy' => 0,
 		'valid' => array(
-			'att' => '115',
-			'def' => '115',
+			'att' => '123',
+			'def' => '123',
 		)
 	),
 	58 => array(
@@ -1071,7 +1074,7 @@ $cards = array(
 		'rare' => 'C',
 		'pack' => 'Crimson Swear',
 		'desc' => '金龙通讯社的第一道坚强防线，在公司的日常运转中也发挥着极大的作用',
-		'effect' => '获得技能「人杰」',
+		'effect' => '获得富家子弟技能「人杰」',
 		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
@@ -1107,7 +1110,7 @@ $cards = array(
 	64 => array(
 		'name' => '"Topcoder"',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => '不愿透露姓名的究极神牛，<br>代码力深不可测',
 		'effect' => '称号固定为锡安成员，技能「过载」强化，且开局即解锁',
 		'energy' => 100,
@@ -1133,7 +1136,7 @@ $cards = array(
 		'name' => '"KHIBIKI《黑曲》"',
 		'title' => '『黑曲』',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => 'ACFUN大逃杀画师，游戏中的萌妹子头像和UI都出自她手',
 		'effect' => '减半偶数战斗伤害，直至其为奇数',
 		'energy' => 100,
@@ -1159,7 +1162,7 @@ $cards = array(
 	67 => array(
 		'name' => '霜火协奏曲',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => 'ACFUN大逃杀史上第一神触',
 		'effect' => '战斗中获得的熟练度+1',
 		'energy' => 100,
@@ -1217,7 +1220,7 @@ $cards = array(
 	71 => array(
 		'name' => '枪毙的某神',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => '著名的小黄系列玩家，设计了《小黄的大师球》和初版游戏王的合成',
 		'effect' => '获得一段时间内必中（对某些武器无效）的技能',
 		'energy' => 100,
@@ -1243,7 +1246,7 @@ $cards = array(
 	73 => array(
 		'name' => '苹果姐姐',
 		'rare' => 'C',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => '唉',
 		'effect' => '你知道的',
 		'energy' => 0,
@@ -1354,12 +1357,15 @@ $cards = array(
 			'hp' => '800',
 			'mhp' => '800',
 			'club' => '17',
+			'skills' => array(
+				'12' => '0', 
+			)
 		)
 	),
 	80 => array(
 		'name' => '兵马俑',
 		'rare' => 'B',
-		'pack' => 'Way of Life',
+		'pack' => 'Standard Pack',
 		'desc' => '熟练的西安成员玩家',
 		'effect' => '称号固定为锡安成员',
 		'energy' => 100,
@@ -1570,7 +1576,7 @@ $cards = array(
 		'name' => '软件测试工程师',
 		'rare' => 'S',
 		'pack' => 'hidden',
-		'desc' => '“据称阁下乃软件测试界的精英，谨邀请阁下参加幻境除错任务，望阁下予以支持。”<br><span class="red" style="text-align:right">——红暮</span>',
+		'desc' => '“据称阁下乃软件测试界的精英，谨邀请阁下参加幻境除错任务，望阁下予以支持。”<br><span class="red b" style="text-align:right">——红暮</span>',
 		'effect' => '你其实对代码一窍不通，不过你搞野路子的经验很丰富。',
 		'energy' => 0,
 		'valid' => array(
@@ -1830,7 +1836,7 @@ $cards = array(
 	111 => array(
 		'name' => '食人魔魔法师',
 		'rare' => 'B',
-		'pack' => 'Best DOTO',
+		'pack' => 'Standard Pack',
 		'desc' => '尽管很大程度上受到智商的制约，<br>食人魔魔法师仍能依靠纯熟的技巧在战斗中取胜',
 		'effect' => '称号固定为最强大脑',
 		'energy' => 100,
@@ -1917,9 +1923,9 @@ $cards = array(
 	117 => array(
 		'name' => '星莲船挑战者',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => 'AC大逃杀元老人物之一，<br>擅长上班摸鱼、下班挖坑',
-		'effect' => '获得技能「挖坑」（误',
+		'effect' => '获得技能「挖坑」，但不能选到肌肉兄贵称号',
 		'energy' => 150,
 		'valid' => array(
 			'skills' => array(
@@ -1942,7 +1948,7 @@ $cards = array(
 		'name' => '常磐之心',
 		'rare' => 'A',
 		'pack' => 'Event Bonus',
-		'desc' => '<span class="yellow">我也是常磐森林出生的训练师！</span>',
+		'desc' => '<span class="yellow b">我也是常磐森林出生的训练师！</span>',
 		'effect' => '开局位于常磐森林。获得技能「通感」',
 		'energy' => 100,
 		'valid' => array(
@@ -2042,7 +2048,7 @@ $cards = array(
 	136 => array(
 		'name' => '董先森',
 		'rare' => 'A',
-		'pack' => 'Standard Pack',
+		'pack' => 'Way of Life',
 		'desc' => '连任好不好啊',
 		'effect' => '吼啊',
 		'energy' => 100,
@@ -2055,7 +2061,7 @@ $cards = array(
 	137 => array(
 		'name' => '大小姐',
 		'rare' => 'A',
-		'pack' => 'Way of Life',
+		'pack' => 'Standard Pack',
 		'desc' => '2016年，大逃杀战场被核子的火焰<br>笼罩！草木干枯，大地开裂，拳法家<br>像死绝了一样',
 		'effect' => '但是拳法家并没有死绝！',
 		'energy' => 130,
@@ -2311,7 +2317,7 @@ $cards = array(
 	152 => array(
 		'name' => '唱戲挑戰者',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => '你沒戲唱了，快去死吧！',
 		'effect' => '开局赠送600点歌魂。对歌魂小于30的玩家和NPC造成的伤害+30%',
 		'energy' => 100,
@@ -2325,7 +2331,7 @@ $cards = array(
 	153 => array(
 		'name' => '悲运挑战者',
 		'rare' => 'S',
-		'pack' => 'Way of Life',
+		'pack' => 'Top Players',
 		'desc' => '她说：“要有大逃杀。”<br>然后她就平地摔了',
 		'effect' => '开局携带《ACFUN大逃杀原案》。',
 		'energy' => 130,
@@ -2498,7 +2504,7 @@ $cards = array(
 		'pack' => 'Way of Life',
 		'desc' => '被禁死在雏菊之丘时还差最后30歌魂的玩家。',
 		'effect' => '开局歌魂+30',
-		'energy' => 100,
+		'energy' => 0,
 		'valid' => array(
 			'ss' => '30',
 			'mss' => '30',
@@ -2540,8 +2546,351 @@ $cards = array(
 			'mss' => '8',
 		)
 	),
+	165 => array(
+		'name' => '世界制御猫',
+		'rare' => 'B',
+		'pack' => 'Event Bonus',
+		'desc' => '猫用四条腿走路！',
+		'effect' => '所以不是猫！',
+		'energy' => 120,
+		'valid' => array(
+			'skills' => array(
+				'505' => '0', 
+			),
+		)
+	),
+	166 => array(
+		'name' => '云玩家',
+		'rare' => 'C',
+		'pack' => 'Way of Life',
+		'desc' => '快超量星尘龙啊，你艾斯比吗？',
+		'effect' => '进行状况中，你的伤害值会夸大几百倍',
+		'energy' => 0,
+		'valid' => array(
+			'skills' => array(
+				'511' => '0', 
+			),
+		)
+	),
+	167 => array(
+		'name' => '地下挑战者 Carnage',
+		'title' => '地下挑战者',
+		'rare' => 'S',
+		'pack' => 'Event Bonus',
+		'desc' => '说清场就清场的恶魔',
+		'effect' => '场上每有1名角色死亡，你的最终伤害就增加1%',
+		'energy' => 100,
+		'valid' => array(
+			'skills' => array(
+				'515' => '0', 
+			),
+		)
+	),
+	168 => array(
+		'name' => '飞雪大大',
+		'rare' => 'S',
+		'pack' => 'Top Players',
+		'desc' => '飞雪大魔王<br><br>—————魔王分割线—————<br><br>沙包们最好的朋友',
+		'effect' => '如果你受到的伤害比上一次伤害少，则不会因为这次伤害失去HP。',
+		'energy' => 100,
+		'valid' => array(
+			'skills' => array(
+				'516' => '0', 
+			),
+		)
+	),
+	169 => array(
+		'name' => '冰冻青蛙',
+		'rare' => 'A',
+		'pack' => 'Top Players',
+		'desc' => '曾经的ACFUN大逃杀开发者，<br>其脑洞对玩家十分<ruby>友<rt>bao</rt></ruby><ruby>好<rt>she</rt></ruby>',
+		'effect' => '咸鱼的目标从来不是杀死玩家',
+		'energy' => 100,
+		'valid' => array(
+			'skills' => array(
+				'517' => '0', 
+			),
+		)
+	),
+	170 => array(
+		'name' => '镜湖楼主',
+		'rare' => 'B',
+		'pack' => 'Top Players',
+		'desc' => 'ACFUN大逃杀电波服的提供者，<br>涉猎领域十分广泛',
+		'effect' => '我有镜湖楼主的头了，我过马路不用怕被汽车撞了！',
+		'energy' => 100,
+		'valid' => array(
+			'arh' => '楼主头',
+			'arhk' => 'DH',
+			'arhe' => '81',
+			'arhs' => '27',
+			'arhsk' => 'GCF',
+		)
+	),
+	171 => array(
+		'name' => '纸条挑战者 林苍月',
+		'title' => '纸条挑战者',
+		'rare' => 'B',
+		'pack' => 'Way of Life',
+		'desc' => '嗯？好像还有几张没撒完',
+		'effect' => '开局后四个包裹栏全塞满提示纸条',
+		'energy' => 100,
+		'valid' => array(
+			'itm3' => array('提示纸条A', '提示纸条B', '提示纸条C', '提示纸条D', '提示纸条E', '提示纸条F', '提示纸条G', '提示纸条H', '提示纸条I', '提示纸条J', '提示纸条K', '提示纸条L', '提示纸条M', '提示纸条N', '提示纸条O', '提示纸条P', '提示纸条Q', '提示纸条R', '提示纸条S', '提示纸条T', '提示纸条U', '提示纸条Z'),
+			'itmk3' => 'Z',
+			'itme3' => '1',
+			'itms3' => '1',
+			'itmsk3' => '',
+			'itm4' => array('提示纸条A', '提示纸条B', '提示纸条C', '提示纸条D', '提示纸条E', '提示纸条F', '提示纸条G', '提示纸条H', '提示纸条I', '提示纸条J', '提示纸条K', '提示纸条L', '提示纸条M', '提示纸条N', '提示纸条O', '提示纸条P', '提示纸条Q', '提示纸条R', '提示纸条S', '提示纸条T', '提示纸条U', '提示纸条Z'),
+			'itmk4' => 'Z',
+			'itme4' => '1',
+			'itms4' => '1',
+			'itmsk4' => '',
+			'itm5' => array('提示纸条A', '提示纸条B', '提示纸条C', '提示纸条D', '提示纸条E', '提示纸条F', '提示纸条G', '提示纸条H', '提示纸条I', '提示纸条J', '提示纸条K', '提示纸条L', '提示纸条M', '提示纸条N', '提示纸条O', '提示纸条P', '提示纸条Q', '提示纸条R', '提示纸条S', '提示纸条T', '提示纸条U', '提示纸条Z'),
+			'itmk5' => 'Z',
+			'itme5' => '1',
+			'itms5' => '1',
+			'itmsk5' => '',
+			'itm6' => array('提示纸条A', '提示纸条B', '提示纸条C', '提示纸条D', '提示纸条E', '提示纸条F', '提示纸条G', '提示纸条H', '提示纸条I', '提示纸条J', '提示纸条K', '提示纸条L', '提示纸条M', '提示纸条N', '提示纸条O', '提示纸条P', '提示纸条Q', '提示纸条R', '提示纸条S', '提示纸条T', '提示纸条U', '提示纸条Z'),
+			'itmk6' => 'Z',
+			'itme6' => '1',
+			'itms6' => '1',
+			'itmsk6' => '',
+		)
+	),
+	172 => array(
+		'name' => '富竹次郎',
+		'rare' => 'M',
+		'pack' => 'Standard Pack',
+		'desc' => '熟练的打针玩家',
+		'effect' => '称号固定为L5状态',
+		'energy' => 0,
+		'valid' => array(
+			'club' => 15,
+		)
+	),
+	173 => array(
+		'name' => '哲学家',
+		'rare' => 'A',
+		'pack' => 'Way of Life',
+		'desc' => '娶个好女人，你会很快乐；<br>娶个坏女人，你会成为哲♂学家',
+		'effect' => '开局携带《哲♂学》',
+		'energy' => 100,
+		'valid' => array(
+			'ara' => '《哲♂学》',
+			'arak' => 'DA',
+			'arae' => '30',
+			'aras' => '2',
+			'arask' => 'g',
+		)
+	),
+	174 => array(
+		'name' => '东方地雷殿',
+		'rare' => 'S',
+		'pack' => 'Top Players',
+		'desc' => 'ACFUN大逃杀最早一批玩家之一，<br>在排行榜上长期名列前茅',
+		'effect' => '每经历1次禁区，你就获得1次复活机会。',
+		'energy' => 120,
+		'valid' => array(
+			'skills' => array(
+				'518' => array('rmtime' => '0'),
+			),
+		)
+	),
+	175 => array(
+		'name' => 'G.D.S 研发人员',
+		'rare' => 'C',
+		'pack' => 'Crimson Swear',
+		'desc' => '给他一页ppt他可以讲4个小时',
+		'effect' => '开局后四个包裹栏全塞满随机的“原型武器”或者“实验装甲”',
+		'energy' => 0,
+		'valid' => array(
+			'itm3' => array('原型武器P','原型武器K','原型武器G','原型武器C','原型武器D','原型武器F','实验装甲B','实验装甲H','实验装甲A','实验装甲F'),
+			'itmk3' => 'X',
+			'itme3' => '1',
+			'itms3' => '1',
+			'itmsk3' => '',
+			'itm4' => array('原型武器P','原型武器K','原型武器G','原型武器C','原型武器D','原型武器F','实验装甲B','实验装甲H','实验装甲A','实验装甲F'),
+			'itmk4' => 'X',
+			'itme4' => '1',
+			'itms4' => '1',
+			'itmsk4' => '',
+			'itm5' => array('原型武器P','原型武器K','原型武器G','原型武器C','原型武器D','原型武器F','实验装甲B','实验装甲H','实验装甲A','实验装甲F'),
+			'itmk5' => 'X',
+			'itme5' => '1',
+			'itms5' => '1',
+			'itmsk5' => '',
+			'itm6' => array('原型武器P','原型武器K','原型武器G','原型武器C','原型武器D','原型武器F','实验装甲B','实验装甲H','实验装甲A','实验装甲F'),
+			'itmk6' => 'X',
+			'itme6' => '1',
+			'itms6' => '1',
+			'itmsk6' => '',
+		)
+	),
+	176 => array(
+		'name' => 'G.D.S 部门主管',
+		'rare' => 'C',
+		'pack' => 'Crimson Swear',
+		'desc' => '今年我们打算开掉35岁以上的员工',
+		'effect' => '凌晨3点打电话给你，你怎么没接？',
+		'energy' => 0,
+		'valid' => array(
+			'wep' => '手机',
+			'wepk' => 'WC',
+			'wepe' => '200',
+			'weps' => '100',
+			'wepsk' => 'r^dd75',
+		)
+	),
+	177 => array(
+		'name' => 'D级人员',
+		'rare' => 'C',
+		'pack' => 'Way of Life',
+		'desc' => '如果你能坚持活过这个月，你将获得自由。不，你看，我说“活过”的意思是“和我们合作”，你懂吗？',
+		'effect' => '开局位于SCP研究设施',
+		'energy' => 0,
+		'valid' => array(
+			'pls' => '32',
+		)
+	),
+	178 => array(
+		'name' => 'wdhwg001',
+		'rare' => 'C',
+		'pack' => 'Top Players',
+		'desc' => '一个水平很高的程序员，对游戏开发颇有一番见解',
+		'effect' => '开局装备「wdhwg001的键盘」',
+		'energy' => 0,
+		'valid' => array(
+			'wep' => '「wdhwg001的键盘」',
+			'wepk' => 'WG',
+			'wepe' => '50',
+			'weps' => '50',
+			'wepsk' => '',
+		)
+	),
+	179 => array(
+		'name' => 'G.D.S 网管',
+		'rare' => 'C',
+		'pack' => 'Crimson Swear',
+		'desc' => '谁他妈又在下毛片？！刚升级的千兆带宽又给占满了！',
+		'effect' => '开局随机携带增幅设备、某种电子零件、手机、笔记本电脑、探测器电池中的其中一个',
+		'energy' => 0,
+		'valid' => array(
+			'itm5' => array('增幅设备','某种电子零件','手机','笔记本电脑','探测器电池'),
+			'itmk5' => 'X',
+			'itme5' => '1',
+			'itms5' => '1',
+			'itmsk5' => '',
+		)
+	),
+	180 => array(
+		'name' => 'G.D.S 物业',
+		'rare' => 'C',
+		'pack' => 'Crimson Swear',
+		'desc' => '我们公司下个月一定能把老鼠都消灭',
+		'effect' => '已申请采购全套灭鼠装备',
+		'energy' => 0,
+		'valid' => array(
+			'itm3' => array('捕鼠夹','捕鼠笼','捕鼠胶','粘鼠板','电子灭鼠器','灭鼠无人机'),
+			'itmk3' => 'TN',
+			'itme3' => '25',
+			'itms3' => '3',
+			'itmsk3' => '',
+			'itm4' => array('捕鼠夹','捕鼠笼','捕鼠胶','粘鼠板','电子灭鼠器','灭鼠无人机'),
+			'itmk4' => 'TN',
+			'itme4' => '25',
+			'itms4' => '3',
+			'itmsk4' => '',
+			'itm5' => array('捕鼠夹','捕鼠笼','捕鼠胶','粘鼠板','电子灭鼠器','灭鼠无人机'),
+			'itmk5' => 'TN',
+			'itme5' => '25',
+			'itms5' => '3',
+			'itmsk5' => '',
+		)
+	),
+	181 => array(
+		'name' => '幽灵 帕比丝麦尔',
+		'title' => '幽灵',
+		'rare' => 'S',
+		'pack' => 'Event Bonus',
+		'desc' => '<span style="font-size:10px">　　说到幽灵，Big 52的幽灵传说仍在继续，尽管它现在比起事实，更像是个噩梦夜的鬼故事。据说，当太阳落山、月亮升起以后，会有一个鬼影踩着滑板车在大路上游荡，随风而来，寂静无声。它直奔坏蛋而去，追索着奴隶贩子、劫掠者和阴谋家的性命。至少有两队劫掠者真的死在了大路上。他们外表毫发无伤，武器上膛、如临大敌，却依然横尸街头，原因成谜，凶手却没有留下一丝线索。说了这么多，我只想问你一个问题…</span>',
+		'effect' => '<span class="red b">你 相 信 有 幽 灵 吗 ？</span>',
+		'bigdesc' => 1,
+		'energy' => 150,
+		'valid' => array(
+			'club' => '24',
+			'skills' => array(
+				'10' => '0', 
+				'11' => '0', 
+				'12' => '0', 
+				'24' => '0', 
+				'519' => '0', 
+				'61' => '0', 
+				'62' => '0', 
+				'60' => '0', 
+				'64' => '0', 
+				'63' => '0',
+				'520' => '0',
+			),
+		)
+	),
+	182 => array(
+		'name' => '简单',
+		'title' => '简单玩家',
+		'rare' => 'C',
+		'pack' => 'hidden',
+		'desc' => '简单模式',
+		'effect' => '简单模式',
+		'energy' => 0,
+		'valid' => array(
+			'skills' => array(
+				'1004' => '1', 
+			),
+		)
+	),
+	183 => array(
+		'name' => '通常',
+		'title' => '通常玩家',
+		'rare' => 'B',
+		'pack' => 'hidden',
+		'desc' => '通常模式',
+		'effect' => '通常模式',
+		'energy' => 0,
+		'valid' => array(
+			'skills' => array(
+				'1004' => '2', 
+			),
+		)
+	),
+	184 => array(
+		'name' => '困难',
+		'title' => '困难玩家',
+		'rare' => 'A',
+		'pack' => 'hidden',
+		'desc' => '困难模式',
+		'effect' => '困难模式',
+		'energy' => 0,
+		'valid' => array(
+			'skills' => array(
+				'1004' => '3', 
+			),
+		)
+	),
+	185 => array(
+		'name' => '疯狂',
+		'title' => '疯狂玩家',
+		'rare' => 'S',
+		'pack' => 'hidden',
+		'desc' => '疯狂模式',
+		'effect' => '疯狂模式',
+		'energy' => 0,
+		'valid' => array(
+			'skills' => array(
+				'1004' => '4', 
+			),
+		)
+	),
 	/////////////////////////////////////////////////
-	
 	
 	//////////////////////////////////////////////////
 	200 => array(
@@ -2700,7 +3049,7 @@ $cards = array(
 		'title' => '林氏软件董事长',
 		'rare' => 'A',
 		'pack' => 'Balefire Rekindle',
-		'desc' => '<span class="evergreen">“虚拟幻境犹如一道曙光，<br>照亮了这个万物沉沦的黑暗年代。<br>我会守护这道希望之光，<br>直到生命的最后一刻。”</span>',
+		'desc' => '<span class="evergreen b">“虚拟幻境犹如一道曙光，<br>照亮了这个万物沉沦的黑暗年代。<br>我会守护这道希望之光，<br>直到生命的最后一刻。”</span>',
 		'effect' => '你使用移动PC除必定成功之外，还能立刻增加禁区或者打乱未来禁区顺序；其他玩家入侵禁区失败概率上升',
 		'energy' => 90,
 		'valid' => array(
@@ -2724,6 +3073,20 @@ $cards = array(
 			'sp' => 100,
 			'skills' => array(
 				'504' => '0', 
+			),
+		)
+	),
+	211 => array(
+		'name' => '卖萌女神 一一五',
+		'title' => '卖萌女神',
+		'rare' => 'S',
+		'pack' => 'Balefire Rekindle',
+		'desc' => '身为主播，运气是非常重要的。<br>这位朋友问我的运气？你觉得呢？',
+		'effect' => '获得技能「胜天」：你的防御和抹消属性失效概率减半，被贯穿概率减半',
+		'energy' => 100,
+		'valid' => array(
+			'skills' => array(
+				'510' => '1', 
 			),
 		)
 	),

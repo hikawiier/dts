@@ -18,7 +18,7 @@ namespace trap
 		
 		eval(import_module('sys','map','itemmain','trap'));
 		if ($xmode & 16) {	//地图陷阱初始化
-			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
+			$plsnum = sizeof($plsinfo);
 			$iqry = '';
 			$itemlist = get_trapfilecont();
 			$in = sizeof($itemlist);
@@ -68,20 +68,15 @@ namespace trap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','trap'));
+		//最小值
+		$real_trap_obbs = $trap_min_obbs;
+		//地图上每有1个雷+0.25%
 		$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' ORDER BY itmk DESC");
 		$trpnum = $db->num_rows($trapresult);
-		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE pls='$pls' AND pid!='$pid' AND state!='16'");
-		$pnum=$db->num_rows($result);
-		$exr=0;
-		if ($pnum<=4) $exr=0.5;
-		if ($pnum<=2) $exr=0.9;
-		if ($pnum==1) $exr=1.4;
-		if ($pnum==0) $exr=0.2;
-		$real_trap_obbs = $trap_min_obbs + $trpnum/4+$exr;
+		$real_trap_obbs += $trpnum/4;
+		//把奇怪的加成值去掉了
+
 		return $real_trap_obbs;
-		/*
-		if($club == 6){$real_trap_obbs-=5;}//人肉搜索称号遭遇陷阱概率减少
-		*/
 	}
 		
 	function calculate_real_trap_obbs_change($var)
@@ -117,17 +112,17 @@ namespace trap
 		if ($is_hit)
 		{
 			if($playerflag && !$selflag && $hp<=0){
-				$w_log = "<span class=\"red\">{$name}触发了你设置的陷阱{$itm0}并被杀死了！</span><br>";
+				$w_log = "<span class=\"red b\">{$name}触发了你设置的陷阱{$itm0}并被杀死了！</span><br>";
 				\logger\logsave ( $itmsk0, $now, $w_log ,'b');
 			}elseif($playerflag && !$selflag){
-				$w_log = "<span class=\"yellow\">{$name}触发了你设置的陷阱{$itm0}！</span><br>";
+				$w_log = "<span class=\"yellow b\">{$name}触发了你设置的陷阱{$itm0}！</span><br>";
 				\logger\logsave ( $itmsk0, $now, $w_log ,'b');
 			}
 		}
 		else
 		{
 			if($playerflag && !$selflag){
-				$w_log = "<span class=\"yellow\">{$name}回避了你设置的陷阱{$itm0}！</span><br>";
+				$w_log = "<span class=\"yellow b\">{$name}回避了你设置的陷阱{$itm0}！</span><br>";
 				\logger\logsave ( $itmsk0, $now, $w_log ,'b');
 			}
 		}
@@ -177,7 +172,7 @@ namespace trap
 		}else {
 			$pa=\player\create_dummy_playerdata();
 		}
-		$log .= "糟糕，你触发了{$trprefix}陷阱<span class=\"yellow\">$itm0</span>！";
+		$log .= "糟糕，你触发了{$trprefix}陷阱<span class=\"yellow b\">$itm0</span>！";
 		$damage = get_trap_damage();
 		
 		
@@ -230,7 +225,7 @@ namespace trap
 		trap_deal_damage();
 		
 		if($hp <= 0) {
-			$log .= "<span class=\"red\">你被{$trprefix}陷阱杀死了！</span>";
+			$log .= "<span class=\"red b\">你被{$trprefix}陷阱杀死了！</span>";
 			$state = 27;
 			\player\update_sdata();
 			if (!$selflag && $playerflag) 	//有来源且不是自己
@@ -255,7 +250,7 @@ namespace trap
 			
 			if (isset($sdata['sourceless'])) unset($sdata['sourceless']);
 			if($killmsg != ''){
-				$log .= "<span class=\"yellow\">{$trname}对你说：“{$killmsg}”</span><br>";
+				$log .= "<span class=\"yellow b\">{$trname}对你说：“{$killmsg}”</span><br>";
 			}				
 		}
 		
@@ -276,7 +271,7 @@ namespace trap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger','trap'));
-		$log .= "你发现了{$trprefix}陷阱<span class=\"yellow\">$itm0</span>，不过你并没有触发它。陷阱看上去还可以重复使用。<br>";			
+		$log .= "你发现了{$trprefix}陷阱<span class=\"yellow b\">$itm0</span>，不过你并没有触发它。陷阱看上去还可以重复使用。<br>";			
 		$itmsk0 = '';$itmk0 = str_replace('TO','TN',$itmk0);
 		$mode = 'itemfind';
 	}
@@ -285,7 +280,7 @@ namespace trap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger','trap'));
-		$log .= "你发现了{$trprefix}陷阱<span class=\"yellow\">$itm0</span>，不过你成功地回避了它。<br>";
+		$log .= "你发现了{$trprefix}陷阱<span class=\"yellow b\">$itm0</span>，不过你成功地回避了它。<br>";
 		$itm0 = $itmk0 = $itmsk0 = '';
 		$itme0 = $itms0 = 0;
 		$mode = 'command';
@@ -346,7 +341,7 @@ namespace trap
 		
 		if($playerflag && !$selflag){
 			$wdata = \player\fetch_playerdata_by_pid($itmsk0);
-			$trname = $wdata['name'];$trtype = $wdata['type'];$trprefix = '<span class="yellow">'.$trname.'</span>设置的';
+			$trname = $wdata['name'];$trtype = $wdata['type'];$trprefix = '<span class="yellow b">'.$trname.'</span>设置的';
 		}elseif($selflag){
 			$trname = $name;$trtype = 0;$trprefix = '你自己设置的';
 		}else{
@@ -369,6 +364,9 @@ namespace trap
 		eval(import_module('sys','player','map','itemmain','trap'));
 		$real_trap_obbs = calculate_real_trap_obbs();
 		$real_trap_obbs = calculate_real_trap_obbs_change($real_trap_obbs);
+		
+		//好神奇的算法……在下面那个函数先40%判定是不是进入踩雷判断，再在这里用0-39的随机数判断是不是踩陷阱
+		//概率跟踩雷上限40%概率是一样的
 		$trap_dice=rand(0,$trap_max_obbs-1);
 		if($trap_dice < $real_trap_obbs){//踩陷阱判断
 			$trapresult = get_traplist();
@@ -404,19 +402,19 @@ namespace trap
 		
 		if($news == 'trap') 
 			if ($d>0)
-				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red\">{$a}中了{$b}设置的陷阱{$c}，受到了{$d}点伤害！</span></li>";
-			else  return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red\">{$a}中了{$b}设置的陷阱{$c}</span></li>";
+				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red b\">{$a}中了{$b}设置的陷阱{$c}，受到了{$d}点伤害！</span></li>";
+			else  return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red b\">{$a}中了{$b}设置的陷阱{$c}</span></li>";
 		if($news == 'trapmiss') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">{$a}回避了{$b}设置的陷阱{$c}</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">{$a}回避了{$b}设置的陷阱{$c}</span></li>";
 		if($news == 'death27') {
 			$dname = $typeinfo[$b].' '.$a;
 			if(!$e)
-				$e0="<span class=\"yellow\">【{$dname} 什么都没说就死去了】</span><br>\n";
-			else  $e0="<span class=\"yellow\">【{$dname}：“{$e}”】</span><br>\n";
+				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
+			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
 			if($c){
-				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>因触发了<span class=\"yellow\">$c</span>设置的陷阱<span class=\"red\">$d</span>被杀死{$e0}</li>";
+				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>因触发了<span class=\"yellow b\">$c</span>设置的陷阱<span class=\"red b\">$d</span>被杀死{$e0}</li>";
 			} else {
-				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>因触发了陷阱<span class=\"red\">$d</span>被杀死{$e0}</li>";
+				return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>因触发了陷阱<span class=\"red b\">$d</span>被杀死{$e0}</li>";
 			}
 		}
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
@@ -445,12 +443,15 @@ namespace trap
 		
 		if(strpos($itmk, 'TNc')===0) return $itme;//奇迹雷不判定这个
 		
-		$trape0 = round($itme / 2); //基础伤害是陷阱效果值/2
-		$trape1 = $pa['lvl'] * 50;//阈值1，等级*50
-		$trape2 = $pa['wd'] * 5;//阈值2，爆熟*5
+		$trape0 = round($itme * 0.75); //基础伤害是陷阱效果值的75%
+		$trape1 = $pa['lvl'] * 25;//阈值1，等级*25
+		$trape2 = $pa['wd'] * 4;//阈值2，爆熟*4
 		$trape_add = max($trape1, $trape2);//取上述较大那个
+		//也就是，0级0爆熟下阔剑只有600效果，8级或者50爆熟才能满伤
+		//0级0爆熟下JJ雷只有1500效果，20级或者125爆熟才能满伤
 		
-		$trape = $trape0 + $trape_add < $itme ? $trape0 + $trape_add : $itme;
+		$trape = min($trape0 + $trape_add, $itme);
+		//$trape = $trape0 + $trape_add < $itme ? $trape0 + $trape_add : $itme;
 		return $trape;
 	}
 	
@@ -462,13 +463,13 @@ namespace trap
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
-		$log .= "设置了陷阱<span class=\"red\">$itm</span>。<br>";
+		$log .= "设置了陷阱<span class=\"red b\">$itm</span>。<br>";
 		
 		$trape = get_trap_itme_limit($theitem);
 		if($trape >= $itme) {
 			$trape = $itme;
 		}else{
-			$log .= "<span class=\"yellow\">你笨拙的技术让陷阱的最大伤害限制在了<span class=\"red\">$trape</span>点。</span><br>";
+			$log .= "<span class=\"yellow b\">你笨拙的技术让陷阱的最大伤害限制在了<span class=\"red b\">$trape</span>点。</span><br>";
 		}
 		
 		$log .= "小心，自己也很难发现。<br>";

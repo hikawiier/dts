@@ -8,13 +8,12 @@ namespace sys
 	//$plock进程锁的文件
 	//$url如果存在，ajax将会直接跳转
 	//$uip其他要传给界面的变量请写在这里
-	global $mode, $command, $db, $plock, $url, $uip;
+	global $mode, $command, $db, $plock, $url, $uip, $cudata;
 	//玩家数据池，fetch的时候先判断池里存不存在，如果有则优先调用池里的；
 	//万一以后pdata_pool要变成引用呢？所以多一个origin池
-	//此外玩家池兼任玩家数据锁记录器
 	//daemon进程结束以及commmand_act.php结束时都会检查并释放玩家池对应的锁文件
-	global $pdata_pool, $pdata_origin_pool, $pdata_lock_pool;
-	$pdata_origin_pool = $pdata_pool = $pdata_lock_pool = array();
+	global $pdata_pool, $pdata_origin_pool, $pdata_lock_pool, $udata_lock_pool;
+	$pdata_origin_pool = $pdata_pool = $pdata_lock_pool = $udata_lock_pool = array();
 	
 	function init()
 	{
@@ -22,14 +21,27 @@ namespace sys
 		global ${$gtablepre.'user'}, ${$gtablepre.'pass'}, $___MOD_SRV;
 		if (isset($_COOKIE))
 		{
-			$_COOKIE=gstrfilter($_COOKIE);
+			//$_COOKIE=gstrfilter($_COOKIE);
 			foreach ($_COOKIE as $key => $value)
 			{
-				if (in_array($key, array($gtablepre.'user',$gtablepre.'pass')))
+				//用户名、密码、房间编号接受cookie传值
+				if (in_array($key, array($gtablepre.'user',$gtablepre.'pass',$gtablepre.'roomid')))
 				{
 					$$key=$value;
 				}
+				//templateid接受cookie传值，测试用
 				elseif(in_array($key, array('templateid')))
+				{
+					${'u_'.$key} = $value;
+				}
+			}
+		}
+		if (isset($_POST))
+		{
+			//templateid接受post传值，避免被覆盖
+			//$_POST=gstrfilter($_POST);
+			foreach ($_POST as $key => $value){
+				if(in_array($key, array('templateid')))
 				{
 					${'u_'.$key} = $value;
 				}
@@ -56,43 +68,52 @@ namespace sys
 			${$gtablepre.'user'}=$___LOCAL_INPUT__VARS__INPUT_VAR_LIST[$gtablepre.'user'];
 		if (isset($___LOCAL_INPUT__VARS__INPUT_VAR_LIST[$gtablepre.'pass']))
 			${$gtablepre.'pass'}=$___LOCAL_INPUT__VARS__INPUT_VAR_LIST[$gtablepre.'pass'];
+		if (isset($___LOCAL_INPUT__VARS__INPUT_VAR_LIST[$gtablepre.'roomid']))
+			${$gtablepre.'roomid'} = $___LOCAL_INPUT__VARS__INPUT_VAR_LIST[$gtablepre.'roomid'];
 		
-		//获取玩家提交的模板编号
+		//获取玩家提交的模板编号和房间号，仅供测试用
 		if (isset($___LOCAL_INPUT__VARS__INPUT_VAR_LIST['templateid']))
 			$u_templateid = $___LOCAL_INPUT__VARS__INPUT_VAR_LIST['templateid'];
 		
-		//统一获取一些用户数据备用
+		
+		//统一获取用户数据备用
+		global $cudata, $userdb_forced_local;
 		if (isset(${$gtablepre.'user'})){
-			$result = $db->query("SELECT u_templateid,roomid FROM {$gtablepre}users where username='".${$gtablepre.'user'}."'");
-			if ($db->num_rows($result)) {
-				$rarr = $db->fetch_array($result);
-			}
+			//这段可能没用
+//			$page = '';
+//			if (isset($___LOCAL_INPUT__VARS__INPUT_VAR_LIST['page']))	$page = $___LOCAL_INPUT__VARS__INPUT_VAR_LIST['page'];
+//			elseif(isset($_POST['page'])) $page = $_POST['page'];
+			//这段可能没用
+			$tmp_userdb_forced_local = $userdb_forced_local;
+			if('game' == CURSCRIPT || 'chat' == CURSCRIPT) $userdb_forced_local = 1;
+			//强制读取本地
+			$cudata = fetch_udata_by_username(${$gtablepre.'user'});
+			$userdb_forced_local = $tmp_userdb_forced_local;
 		}
 		
-		if(empty($u_templateid) && !empty($rarr['u_templateid'])) $u_templateid = $rarr['u_templateid'];
+		if(empty($u_templateid) && !empty($cudata['u_templateid'])) $u_templateid = $cudata['u_templateid'];
 		//进入当前用户房间判断
 		$room_prefix = '';
 		$room_id = 0;
+		
+		//第一顺位：用户post的room_id
 		if (isset($___LOCAL_INPUT__VARS__INPUT_VAR_LIST['___GAME_ROOMID']) && '' !== $___LOCAL_INPUT__VARS__INPUT_VAR_LIST['___GAME_ROOMID'])
 		{
 			$room_id = ((int)$___LOCAL_INPUT__VARS__INPUT_VAR_LIST['___GAME_ROOMID']);
-			///test code
-//			if(isset(${$gtablepre.'user'}) && $room_id != $rarr['roomid']){
-//				writeover('tmp_roomid_log_1.txt', ${$gtablepre.'user'}."'s roomid ".$room_id.' -> '.$rarr['roomid'].' at '.$now."\r\n",'ab+');
-//				$rarr['room_id'] = $room_id;
-//				$db->query("UPDATE {$gtablepre}users SET roomid = '{$room_id}' WHERE username = '".${$gtablepre.'user'}."'");
-//			}
-		}
-		else  
-		{
-			if (isset(${$gtablepre.'user'}))
-			{
-				$room_id = $rarr['roomid'];
+			if($room_id != ${$gtablepre.'roomid'}){
+				${$gtablepre.'roomid'} = $room_id;
+				set_current_roomid($room_id);
 			}
 		}
-		
+		//第二顺位：cookie里的room_id
+		else  
+		{
+			if (!empty(${$gtablepre.'roomid'}))
+			{
+				$room_id = ${$gtablepre.'roomid'};
+			}
+		}
 		$room_prefix = room_id2prefix($room_id);
-
 		//$room_status = 0;
 		//$room_id = room_prefix2id($room_prefix);
 		
@@ -110,14 +131,11 @@ namespace sys
 				$room_prefix = room_id2prefix(0);
 				$gameinfo = NULL;
 			}
-			//如果房间是开启状态，但游戏在结束状态，则把房间状态设为打开
+			//如果房间没有关闭，但游戏在结束状态，则把房间状态设为开放
 			elseif ($gameinfo['groomstatus'] > 0 && $gameinfo['gamestate']==0 && room_check_subroom($room_prefix))
 			{
 				$db->query("UPDATE {$gtablepre}game SET groomstatus=10 WHERE groomid='$room_id'");
 				$gameinfo['groomstatus'] = 10;
-//				$room_prefix = '';
-//				$room_id = 0;
-//				$gameinfo = NULL;
 			}
 		}
 		else
@@ -132,6 +150,7 @@ namespace sys
 			$gameinfo = $db->fetch_array($result);
 		}
 		//$gameinfo初始化，初次global这些变量
+		//所以一切在gameinfo表里定义的字段都是在这里global的
 		//注意这里并没有对$arealist等变量进行处理，真正的处理是在common.inc.php调用routine()调用load_gameinfo()时
 		foreach ($gameinfo as $key => $value)
 		{
@@ -146,9 +165,6 @@ namespace sys
 		
 		if ($room_prefix=='') $wtablepre = $gtablepre;
 		else $wtablepre = $gtablepre.room_prefix_kind($room_prefix);
-		
-		//room_auto_init();//新建房间时，自动初始化房间表
-		//实际上不应该放在这里，应该只在新建房间时调用
 		
 		//当前用户名和密码变量初始化
 		global $cuser, $cpass;

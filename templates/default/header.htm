@@ -4,13 +4,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=$charset">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv='expires' content='0'>
-<title> {lang title} </title>
+<title> $gtitle </title>
 <!--{if isset($extrahead)}-->$extrahead<!--{/if}-->
 
-<link rel="stylesheet" type="text/css" id="css" href="gamedata/config/style_1.20180118.css">
+<link rel="stylesheet" type="text/css" id="css" href="gamedata/config/style_1.20180802.css">
+<!--{if $u_templateid == 2 || defined('IN_REPLAY')}-->
+	<link rel="stylesheet" type="text/css" id="css" href="gamedata/config/style_2.20181024.css">
+<!--{/if}-->
 <link rel="stylesheet" type="text/css" id="css" href="gamedata/config/style_buttons.20180118.css">
-<!--{if CURSCRIPT=='messages'}--><link rel="stylesheet" type="text/css" href="gamedata/config/style_messages.20180221.css">
-<!--{elseif CURSCRIPT=='user_profile'}--><link rel="stylesheet" type="text/css" href="gamedata/config/style_ach.20180213.css">
+<link rel="stylesheet" type="text/css" id="css" href="gamedata/config/style_glowbuttons.20180812.css">
+<!--{if CURSCRIPT=='messages'}-->
+	<link rel="stylesheet" type="text/css" href="gamedata/config/style_messages.20180221.css">
+<!--{/if}-->
+<!--{if CURSCRIPT=='user_profile'}-->
+	<link rel="stylesheet" type="text/css" href="gamedata/config/style_ach.20180213.css">
+<!--{/if}-->
+<!--{if in_array(CURSCRIPT, array('game','command','cardbook','kuji','kujilist','messages','user','user_profile','valid'))}-->
+	<link rel="stylesheet" type="text/css" href="gamedata/config/style_card.20180304.css">
 <!--{/if}-->
 
 <!-- jScrollPanel Utility Start -->
@@ -25,9 +35,11 @@ jQuery.noConflict();
 </script>
 <!-- jScrollPanel Utility End -->
 
-<script type="text/javascript" src="include/javascript/common.20180219.js"></script>
-<script type="text/javascript" src="include/javascript/game.20180222.js"></script>
-
+<script type="text/javascript" src="include/javascript/common.20180827.js"></script>
+<script type="text/javascript" src="include/javascript/game.20180806.js"></script>
+<!--{if $u_templateid == 2 || defined('IN_REPLAY')}-->
+	<script type="text/javascript" src="include/javascript/interface_2.20180814.js"></script>
+<!--{/if}-->
 <!-- gzip Decode Utility Start -->
 <script type="text/javascript" src="include/javascript/gzip.util.js"></script>
 <!-- gzip Decode Utility End -->
@@ -44,15 +56,15 @@ jQuery.noConflict();
 <!-- jQuery Load Script Utility End -->
 
 </head>
-<BODY <!--{if CURSCRIPT == 'game'}-->onkeyup="hotkey(event);"<!--{if $gamestate>=40}-->style="background-image:url('img/PB2.gif');"<!--{else}-->style="background-image:url('img/PB_G.gif');"<!--{/if}--><!--{/if}-->>
-<div class="title" >{lang title}</div>
+<BODY <!--{if CURSCRIPT == 'game'}-->onkeyup="hotkey(event);"<!--{if !empty($gamestate) && $gamestate >= 40}-->style="background-image:url('img/PB2.gif');"<!--{/if}--><!--{/if}-->>
+<div class="title" > $gtitle <!--{if $u_templateid == 2}-->TEST INTERFACE<!--{/if}--></div>
 
 <div class="headerlink" >
 <a href="index.php">>>{lang index}</a>
 <!--{if isset($cuser) && isset($cpass)}-->
 <a href="messages.php">>>{lang messages}
 	<!--{if !empty($new_messages)}-->
-	<span class="L5">NEW!</span>
+	<span class="L5 b">NEW!</span>
 	<!--{/if}-->
 </a>
 <a href="user_profile.php">>>{lang user}</a>

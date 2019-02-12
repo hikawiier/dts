@@ -9,7 +9,7 @@ namespace skill364
 	
 	//各级显示的要求，如果不存在则取低的
 	$ach364_desc= array(
-		1=>'完成所有成就（日常、任务、终生成就除外）',
+		1=>'完成所有成就（日常任务、限期活动和终生成就除外）',
 	);
 	
 	$ach364_proc_words = '完成版本';
@@ -29,7 +29,7 @@ namespace skill364
 		2 => 20,
 	);
 	
-	$ach364_unique_prize_desc = '<font color="olive">首次完成时获得<span class="clan">'.$ach364_karma_prize[1].'因果</span>，之后每次完成获得<span class="clan">'.$ach364_karma_prize[2].'因果</span></font>';
+	$ach364_unique_prize_desc = '<font color="olive">首次完成时获得<span class="cyan b">'.$ach364_karma_prize[1].'因果</span>，之后每次完成获得<span class="cyan b">'.$ach364_karma_prize[2].'因果</span></font>';
 	
 	function init() 
 	{

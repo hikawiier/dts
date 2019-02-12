@@ -4,30 +4,17 @@ define('CURSCRIPT', 'user_profile');
 
 require './include/common.inc.php';
 
-require './include/user.func.php';
-
 $_REQUEST = gstrfilter($_REQUEST);
 if (empty($_REQUEST["playerID"]))
 {
 	$udata = udata_check();
-	
-//	if(!$cuser||!$cpass) { gexit($_ERROR['no_login'],__file__,__line__); }
-//
-//	$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$cuser'");
-//	if(!$db->num_rows($result)) { gexit($_ERROR['login_check'],__file__,__line__); }
-//	$udata = $db->fetch_array($result);
-//	if($udata['password'] != $cpass) { gexit($_ERROR['wrong_pw'], __file__, __line__); }
-//	if($udata['groupid'] <= 0) { gexit($_ERROR['user_ban'], __file__, __line__); }
-
-	
 	$curuser=true;
 }
 else
 {
 	$uname=urldecode($_REQUEST["playerID"]);
-	$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$uname'");
-	if(!$db->num_rows($result)) { gexit($_ERROR['user_not_exists'],__file__,__line__); }
-	$udata = $db->fetch_array($result);
+	$udata = fetch_udata_by_username($uname);
+	if(empty($udata)) { gexit($_ERROR['user_not_exists'],__file__,__line__); }
 	$curuser=false;
 	if ($uname==$cuser) $curuser=true;
 }

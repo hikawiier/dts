@@ -28,18 +28,9 @@ if(!$db->num_rows($result))
 $pdata = $db->fetch_array($result);
 
 //判断是否密码错误
-if($pdata['pass'] != $cpass) {
-	$tr = $db->query("SELECT `password` FROM {$gtablepre}users WHERE username='$cuser'");
-	$tp = $db->fetch_array($tr);
-	$password = $tp['password'];
-	include_once './include/user.func.php';
-	if(pass_compare($cuser, $cpass, $password)) {
-		$db->query("UPDATE {$tablepre}players SET pass='$password' WHERE name='$cuser'");
-	} else {
-		gexit($_ERROR['wrong_pw'],__file__,__line__);
-		return;
-	}
-}
+$udata = udata_check();
+if($pdata['pass'] != $udata['password'])
+	$db->query("UPDATE {$tablepre}players SET pass='{$udata['password']}' WHERE name='$cuser'");
 	
 if($gamestate == 0) {
 	$gamedata['url'] = 'end.php';
@@ -59,7 +50,6 @@ $log = $cmd = $main = '';
 
 //$timecost = get_script_runtime($pagestartime);
 //$timecostlis = (string)$timecost;
-
 $pagestartimez=microtime(true); 
 
 \player\load_playerdata(\player\fetch_playerdata($cuser));
@@ -93,6 +83,12 @@ if ($___MOD_SRV)
 
 \player\parse_interface_gameinfo();
 \player\parse_interface_profile();
+
+//如果是刷新页面，自动重生成一次右侧命令界面（为了录像），其余全部不再判定
+if('enter' == $command) {
+	$gamedata['innerHTML']['cmd_interface'] = dump_template('cmd_interface');
+}
+
 if($hp <= 0) {
 	$dtime = date("Y年m月d日H时i分s秒",$endtime);
 	$kname='';
@@ -109,11 +105,12 @@ if($hp <= 0) {
 } elseif($state == 1 || $state == 2 || $state ==3) {
 	$gamedata['innerHTML']['cmd'] = dump_template('rest');
 } elseif(!$cmd) {
-	if($mode != 'command' && $mode&&(file_exists($mode.'.htm') || file_exists(GAME_ROOT.TPLDIR.'/'.$mode.'.htm'))) {
+	if($mode != 'command' && $mode && (file_exists($mode.'.htm') || file_exists(GAME_ROOT.TPLDIR.'/'.$mode.'.htm'))) {
 		$gamedata['innerHTML']['cmd'] = dump_template($mode);
 	} elseif(defined('MOD_TUTORIAL') && $gametype == 17){
 		$gamedata['innerHTML']['cmd'] = dump_template(MOD_TUTORIAL_TUTORIAL);
 	}	else {
+		//$mode = 'command';
 		$gamedata['innerHTML']['cmd'] = dump_template('command');
 		//给#log窗格加了最小高度，但又需要让不存在$log的页面正常显示，于是让js自动隐藏空的#log窗格，那么这里就得输出一个东西
 		if(empty($uip['innerHTML']['log'])) $uip['innerHTML']['log'] = ' ';
@@ -124,6 +121,7 @@ if($hp <= 0) {
 
 if(isset($url)){$gamedata['url'] = $url;}
 if(!empty($uip['timing'])) {$gamedata['timing'] = $uip['timing'];}
+if(!empty($uip['display'])) {$gamedata['display'] = $uip['display'];}
 if(!empty($uip['effect'])) {$gamedata['effect'] = $uip['effect'];}
 if(!empty($uip['innerHTML'])) {$gamedata['innerHTML'] = array_merge($gamedata['innerHTML'], $uip['innerHTML']);}
 if(!empty($uip['value'])) {$gamedata['value'] = array_merge($gamedata['value'], $uip['value']);}
@@ -138,16 +136,16 @@ if(isset($error)){$gamedata['innerHTML']['error'] = $error;}
 
 //测试
 //函数调用计数
-//$log.="<span class=\"grey\">Fn call count: ".count($___TEMP_CALLS_COUNT)."</span><br>"; 
+//$log.="<span class=\"grey b\">Fn call count: ".count($___TEMP_CALLS_COUNT)."</span><br>"; 
 /*
 $timecost = get_script_runtime($pagestartime);
-if (isset($timecost2)) $log.="<span class=\"grey\">模块加载时间: $timecost2 秒</span><br>"; 
+if (isset($timecost2)) $log.="<span class=\"grey b\">模块加载时间: $timecost2 秒</span><br>"; 
 if ($___MOD_SRV)
 {
-	$log.="<span class=\"grey\">核心运行时间: $timecost 秒</span><br>"; 
-	$log.="<span class=\"grey\">页面运行时间: _____PAGE_RUNNING_TIME_____ 秒</span>"; //这个好像显示不了
+	$log.="<span class=\"grey b\">核心运行时间: $timecost 秒</span><br>"; 
+	$log.="<span class=\"grey b\">页面运行时间: _____PAGE_RUNNING_TIME_____ 秒</span>"; //这个好像显示不了
 }
-else  $log.="<span class=\"grey\">页面运行时间: $timecost 秒$ts</span>"; 
+else  $log.="<span class=\"grey b\">页面运行时间: $timecost 秒$ts</span>"; 
 */
 
 //$timecost = get_script_runtime($pagestartime);

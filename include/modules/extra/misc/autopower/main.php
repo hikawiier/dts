@@ -77,18 +77,18 @@ namespace autopower
 				
 				$itme = ${'itme'.$choice}; $itms = $num;
 				
-				$log.="你将{$num}个<span class=\"yellow\">".${'itm'.$choice}."</span>装填进了{$itm}。<br>";
+				$log.="你将{$num}个<span class=\"yellow b\">".${'itm'.$choice}."</span>装填进了{$itm}。<br>";
 				${'itms'.$choice} -= $num;
 				if (${'itms'.$choice}<=0)
 				{
-					$log .= "<span class=\"red\">".${'itm'.$choice}."</span>用光了。<br>";
+					$log .= "<span class=\"red b\">".${'itm'.$choice}."</span>用光了。<br>";
 					${'itm'.$choice} = ${'itmk'.$choice} = ${'itmsk'.$choice} = '';
 					${'itme'.$choice} = ${'itms'.$choice} = 0;
 				}
 			}
 			else
 			{
-				$log.="<span class=\"yellow\">你启动了机器，饶有兴致地看着机器工作着……</span><br>";
+				$log.="<span class=\"yellow b\">你启动了机器，饶有兴致地看着机器工作着……</span><br>";
 				$success_count = 0;
 				for ($i=1; $i<=$itms; $i++)
 				{
@@ -97,7 +97,7 @@ namespace autopower
 					$flag = $funcname($itm,$itme);
 					if (!$flag || $i==$itms) 
 					{
-						$log.='<span class="yellow">'.$itm.'停止了工作。<br></span></span>';
+						$log.='<span class="yellow b">'.$itm.'停止了工作。<br></span></span>';
 						if (!$flag) break;
 					}
 					else  $log.='</span>';
@@ -106,7 +106,7 @@ namespace autopower
 				$log.='<span id="autopower_curnum" style="display:none">1</span>';
 				$log.='<span id="autopower_totnum" style="display:none">'.$success_count.'</span>';
 				$log.='<span id="autopower_cd" style="display:none">'.round($itemusecoldtime*$autopower_penalty).'</span>';
-				$cmdcdtime = round($itemusecoldtime*$autopower_penalty)*$success_count;
+				\cooldown\set_coldtime(round($itemusecoldtime*$autopower_penalty)*$success_count, true);
 				if ($success_count==$itms)
 				{
 					$itme=0; $itms=1;

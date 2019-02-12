@@ -126,14 +126,14 @@ namespace instance9
 		return $ret;
 	}
 	
-	//急速模式商店防具的效果值翻倍，钉和磨刀石效果值、价格x5
+	//急速模式商店钉和磨刀石效果值、价格x5
 	function shopitem_data_process($data){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		$ret = $chprocess($data);
 		eval(import_module('sys'));
 		if(19==$gametype){
 			if(strpos($ret[5],'D')===0){
-				$ret[6] *= 2;
+				//$ret[6] *= 2;
 			}elseif((strpos($ret[4], '钉') !==false || strpos($ret[4], '磨刀石') !==false) && strpos($ret[5],'Y')===0){
 				$ret[6] *= 5;$ret[2] *= 5;
 			}
@@ -153,7 +153,7 @@ namespace instance9
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$ret = $chprocess();
 		eval(import_module('sys'));
-		if(19 == $gametype) $ret = '<span class="clan">“那家伙托付给我的东西，怎么能让你随便玷污？”</span>——<span class="clan">狂飙</span><br>';
+		if(19 == $gametype) $ret = '<span class="cyan b">“那家伙托付给我的东西，怎么能让你随便玷污？”</span>——<span class="cyan b">狂飙</span><br>';
 		return $ret;
 	}
 }

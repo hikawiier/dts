@@ -3,11 +3,6 @@
 if (! defined ( 'IN_GAME' )) { exit ( 'Access Denied' ); }
 
 class dbstuff {
-//	var $querynum = 0;
-//	var $selectnum = 0;
-//	var $insertnum = 0;
-//	var $updatenum = 0;
-//	var $deletenum = 0;
 	private $con = NULL;
 	public $query_log = array();
 	
@@ -16,7 +11,7 @@ class dbstuff {
 		
 		$this -> con = mysqli_connect ( $dbhost, $dbuser, $dbpw, $dbname );
 		if (mysqli_connect_errno())
-		$this->halt ( 'Can not connect to MySQL server' );
+		$this->halt ( mysqli_connect_errno().': Can not connect to MySQL server' );
 	
 	
 		global $charset, $dbcharset;
@@ -30,7 +25,7 @@ class dbstuff {
 		
 		mysqli_query ( $this->con, "SET sql_mode=''" );
 		if (mysqli_connect_errno())
-		$this->halt ();
+		$this->halt (mysqli_connect_errno().': Can not connect to MySQL server' );
 	}
 	
 	function select_db($dbname) {
@@ -54,7 +49,7 @@ class dbstuff {
 			if(strpos($sql, 'users') !==false && strpos($sql, 'room') !==false) {
 				$bk = debug_backtrace();
 				global $now;
-				writeover('tmp_roomid_log_2.txt', $sql.' from line '.$bk[1]['line']." at file ".$bk[1]['file'].' at '.$now."\r\n",'ab+');
+				//writeover('tmp_roomid_log_2.txt', $sql.' from line '.$bk[1]['line']." at file ".$bk[1]['file'].' at '.$now."\r\n",'ab+');
 			}
 		}
 		//if(strpos($sql, 'acbra2_users')!==false && strpos($sql, 'UPDATE')!==false && strpos($sql, 'roomid')!==false) writeover('a.txt', substr($sql,0,30).'...'.substr($sql,strlen($sql)-30).' <--- '.debug_backtrace()[0]['file'].' : '.debug_backtrace()[0]['line']."\r\n",'ab+');
@@ -100,6 +95,7 @@ class dbstuff {
 	
 	function parse_create_table($sql) {//修改了替换逻辑，不会有什么区别的
 		global $dbcharset;
+		if(!$dbcharset) include GAME_ROOT.'./include/modules/core/sys/config/server.config.php';
 		$sql = preg_replace("/ENGINE\s*=\s*([a-z]+)/i", "ENGINE=$1 DEFAULT CHARSET=".$dbcharset, $sql);
 		return $sql;
 //		$type = strtoupper(preg_replace("/\s*CREATE TABLE\s+.+\s+\(.+?\).*(ENGINE|TYPE)\s*=\s*([a-z]+?).*;/isU", "\\2", $sql));
@@ -108,7 +104,7 @@ class dbstuff {
 	}
 	
 	//根据$data的键和键值插入数据。多数据插入是直接按字段先后顺序排的，请保证输入数据字段顺序完全一致！
-	function array_insert($dbname, $data){
+	function array_insert($dbname, $data, $on_duplicate_update = 0, $keycol=''){
 		$tp = 1;//单记录插入
 		if(is_array(array_values($data)[0])) $tp = 2;//多记录插入 
 		$query = "INSERT INTO {$dbname} ";
@@ -138,9 +134,37 @@ class dbstuff {
 				$query .= '(' . substr($fieldlist, 0, -1) . ') VALUES '.substr($valuelist, 0, -1);
 			}
 		}
+		if(!empty($query) && $on_duplicate_update && $keycol) {
+			$query .= ' ON DUPLICATE KEY UPDATE ';
+			$tmp = 2==$tp ? reset($data) : $data;
+			foreach($tmp as $key => $value){
+				if($key !== $keycol){
+					$query .= '`'.$key.'`=VALUES(`'.$key.'`),';
+				}
+			}
+			$query = substr($query, 0, -1);
+		}
 		
-		if(!empty($query)) $this->query ($query);
+		if(!empty($query)) {
+			$querystrlen = mb_strlen($query);
+			if(2==$tp && sizeof($data) > 1 && $querystrlen > 1073000000) {
+				//如果长度超过1M，从中断成两个数组再尝试
+				//留一点冗余所以不是1073741824
+				list($data1, $data2) = $this->arr_query_divide($data);
+				$this->array_insert($dbname, $data1, $on_duplicate_update, $keycol);
+				$this->array_insert($dbname, $data2, $on_duplicate_update, $keycol);
+			}else{
+				$this->query ($query);
+			}
+		}
 		return $query;
+	}
+	
+	function arr_query_divide($data)
+	{
+		if(sizeof($data) <= 1) return $data;
+		$offset = (int)floor(sizeof($data)/2);
+		return array(array_slice($data, 0, $offset), array_slice($data, $offset));
 	}
 	
 	function array_update($dbname, $data, $where, $o_data=NULL){ //根据$data的键和键值更新数据
@@ -179,11 +203,22 @@ class dbstuff {
 				$query .= "$val = ${$val.'qry'},";
 			}
 		}
-		if(!empty($query)){
+		
+		if(!empty($query)) {
 			if($singleqry){$singleqry = ','.$singleqry;}
 			$query = "UPDATE {$dbname} SET ".substr($query,0,-1)."$singleqry WHERE $confield IN (".implode(',',$range).")";
-			$this->query ($query);
+			
+			$querystrlen = mb_strlen($query);
+			if(sizeof($data) > 1 && $querystrlen > 1073000000) {
+				//如果长度超过1M，从中断成两个数组再尝试
+				list($data1, $data2) = $this->arr_query_divide($data);
+				$this->multi_update($dbname, $data1, $confield, $singleqry);
+				$this->multi_update($dbname, $data2, $confield, $singleqry);
+			}else{
+				$this->query ($query);
+			}
 		}
+		
 		return $query;
 	}
 	
@@ -260,10 +295,13 @@ class dbstuff {
 	function halt($message = '', $sql = '') {
 		header('Content-Type: text/HTML; charset=utf-8');
 		echo '数据库错误。请联系管理员。<br><br>';
+		echo '类错误信息：'.$message.'<br>';
+		if(!empty($sql)) echo 'SQL语句：'.$sql;
+		echo '<br><br>';
 		$dberror = $this->errno().' '.$this->error();
-		echo '错误信息：'.$dberror.'<br><br>';
-		echo '以下是stack dump<br>';
-		var_export(debug_backtrace());
+		echo '数据库错误提示：'.$dberror.'<br><br>';
+		//echo '以下是stack dump<br>';
+		//var_export(debug_backtrace());
 		die();
 		require_once GAME_ROOT . './include/db/db_mysqli_error.inc.php';
 	}

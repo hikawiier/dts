@@ -9,7 +9,7 @@ namespace skill359
 	
 	//各级显示的要求，如果不存在则取低的
 	$ach359_desc= array(
-		1=>'在<span class="red">极速模式</span>开局15分钟之内达成锁定解除结局',
+		1=>'在<span class="red b">极速模式</span>开局15分钟之内达成锁定解除结局',
 	);
 	
 	$ach359_proc_words = '最快速度';
@@ -55,7 +55,7 @@ namespace skill359
 		if($achid == 359){
 			eval(import_module('sys'));
 			if($winner === $pa['name'] && 19==$gametype && 3 == $winmode) {
-				$time359 = $now-$gamevars['o_starttime'];
+				$time359 = $pa['endtime']-$gamevars['o_starttime'];
 				if($ret <= 0) $ret = $time359;
 				else $ret = min($ret, $time359);
 			}

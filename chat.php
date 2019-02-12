@@ -10,6 +10,8 @@ if($sendmode != 'newspage' && (!$cuser || !defined('IN_GAME'))) {
 }
 
 $ctablecorrect = 1;
+//强制读本地用户数据（如果有的话）
+$userdb_forced_local = 1;
 //如果拉取的房间号同账号不对应则进行游戏局数判定
 if((isset($cgamenum) && $gamenum != $cgamenum) || (isset($croomid) && $groomid != $croomid)){
 	if(room_check_gamenum($croomid, $cgamenum)) {
@@ -22,8 +24,7 @@ if((isset($cgamenum) && $gamenum != $cgamenum) || (isset($croomid) && $groomid !
 
 if($ctablecorrect && $sendmode == 'send' && $chatmsg ) {//发送聊天
 	if(strpos($chatmsg,'/') === 0) {
-		$result = $db->query("SELECT groupid FROM {$gtablepre}users WHERE username='$cuser'");
-		$groupid = $db->result($result,0);
+		$groupid = $cudata['groupid'];
 		if($groupid > 1) {
 			if(strpos($chatmsg,'/post') === 0) {
 				$chatmsg = substr($chatmsg,6);
@@ -32,10 +33,10 @@ if($ctablecorrect && $sendmode == 'send' && $chatmsg ) {//发送聊天
 					//$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,msg) VALUES ('4','$now','$cuser','$chatmsg')");
 				}
 			} else {
-				$showdata = array('lastcid' => $lastcid, 'msg' => Array('<span class="red">指令错误。<br></span>'));
+				$showdata = array('lastcid' => $lastcid, 'msg' => Array('<span class="red b">指令错误。<br></span>'));
 			}
 		} else {
-			$showdata = array('lastcid' => $lastcid, 'msg' => Array('<span class="red">聊天信息不能用 / 开头。<br></span>'));
+			$showdata = array('lastcid' => $lastcid, 'msg' => Array('<span class="red b">聊天信息不能用 / 开头。<br></span>'));
 		}
 	} else { 
 		if($chattype == 0) {
@@ -57,7 +58,7 @@ if(!$ctablecorrect && $lastcid >= 0 && $gamestate > 0) {
 	$lastcid = -1;
 	$showdata = array(
 		'lastcid' => $lastcid,
-		'msg' => Array('<span class="red">房间号错误，可能是新一局游戏已开始。<br></span>'),
+		'msg' => Array('<span class="red b">房间号错误，可能是新一局游戏已开始。<br></span>'),
 		'cmd' => 'chat-ref-stop'
 	);
 }
@@ -71,4 +72,6 @@ ob_clean();
 $jgamedata = gencode($showdata);
 echo $jgamedata;
 ob_end_flush();
-?>
+
+/* End of file chat.php */
+/* Location: /chat.php */

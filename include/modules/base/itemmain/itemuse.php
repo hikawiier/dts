@@ -3,7 +3,7 @@
 namespace itemmain
 {
 
-	function itms_reduce(&$theitem,$allused=0)
+	function itms_reduce(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
@@ -11,12 +11,11 @@ namespace itemmain
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
-		if($allused) $itms = 1;
-
+		
 		if ($itms != $nosta) {
 			$itms --;
 			if ($itms <= 0) {
-				$log .= "<span class=\"red\">$itm</span>用光了。<br>";
+				$log .= "<span class=\"red b\">$itm</span>用光了。<br>";
 				$itm = $itmk = $itmsk = '';
 				$itme = $itms = 0;
 			}
@@ -58,7 +57,7 @@ namespace itemmain
 		
 		eval(import_module('logger'));
 		
-		$log .= "你使用了道具 <span class=\"yellow\">{$theitem['itm']}</span> 。<br>但是什么也没有发生。<br>";
+		$log .= "你使用了道具 <span class=\"yellow b\">{$theitem['itm']}</span> 。<br>但是什么也没有发生。<br>";
 	}
 
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
@@ -66,7 +65,7 @@ namespace itemmain
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
 		if($news == 'itemuse') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了{$b}</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了{$b}</span></li>";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}
 }

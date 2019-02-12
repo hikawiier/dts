@@ -3,26 +3,30 @@
 namespace cardbase
 {
 	function init() {}
+	
+	function cardlist_decode($str){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = explode('_',$str);
+		if(empty($ret)) $ret[] = '0';
+		return $ret;
+	}
+	
+	function cardlist_encode($arr){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = implode('_',$arr);
+		return $ret;
+	}
 
 	function get_user_cards($username){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$username'");
-		$udata = $db->fetch_array($result);
+		$udata = fetch_udata_by_username($username);
 		$cardlist = get_user_cards_process($udata);
 		return $cardlist;
 	}	
 	
 	function get_user_cards_process($udata){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		$cardlist = array_filter(explode('_',$udata['cardlist']));
-		if (!in_array(0, $cardlist))
-		{
-			$cardlist[] = 0;
-			$clstr = implode('_',$cardlist);
-			$db->query("UPDATE {$gtablepre}users SET cardlist='{$clstr}' WHERE username = '$username'");
-		}
+		$cardlist = cardlist_decode($udata['cardlist']);
 		return $cardlist;
 	}
 	
@@ -79,6 +83,7 @@ namespace cardbase
 		return $ret;
 	}
 		
+	//获得玩家的卡片数据，会自动更新卡片冷却信息
 	function get_user_cardinfo($who)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -87,8 +92,7 @@ namespace cardbase
 			$udata = $who;
 			$who = $udata['username'];
 		}else{
-			$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$who'");
-			$udata = $db->fetch_array($result);
+			$udata = fetch_udata_by_username($who);
 		}
 		
 		$cardlist = get_user_cards_process($udata);		
@@ -97,6 +101,7 @@ namespace cardbase
 		$cardenergy=Array();
 		if ($udata['cardenergy']=="") $t=Array(); else $t=explode('_',$udata['cardenergy']);
 		$lastupd = $udata['cardenergylastupd'];
+		
 		for ($i=0; $i<count($cardlist); $i++)
 			if ($i<count($t))
 			{
@@ -109,35 +114,41 @@ namespace cardbase
 				$cardenergy[$cardlist[$i]] = $cards[$cardlist[$i]]['energy'];
 			}
 		
-		$nt='';
-		for ($i=0; $i<count($cardlist); $i++)
-		{
-			$x=(double)$cardenergy[$cardlist[$i]];
-			if ($i>0) $nt.='_';
-			$nt.=$x;
-		}
-		$db->query("UPDATE {$gtablepre}users SET cardenergy='$nt', cardenergylastupd='$now' WHERE username = '$who'");
-		
 		$ret=Array(
 			'cardlist' => $cardlist,
 			'cardenergy' => $cardenergy,
-			'cardchosen' => $udata['card']
+			'cardchosen' => $udata['card'],
+			'cardenergylastupd' => $now,
 		);
+		
+		if($t != $cardenergy) {
+			save_cardenergy($ret, $who);
+		}
+			
 		return $ret;
 	}
 	
+	//更新卡片能量数据库，会自动将能量值转化为浮点数
 	function save_cardenergy($data, $who)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
-		$nt='';
-		for ($i=0; $i<count($data['cardlist']); $i++)
-		{
-			$x=(double)$data['cardenergy'][$data['cardlist'][$i]];
-			if ($i>0) $nt.='_';
-			$nt.=$x;
+		if(is_array($data['cardenergy'])) {
+			$cd_n='';
+			for ($i=0; $i<count($data['cardlist']); $i++)
+			{
+				$x=(double)$data['cardenergy'][$data['cardlist'][$i]];
+				if ($i>0) $cd_n.='_';
+				$cd_n.=$x;
+			}
+		}else{
+			$cd_n = $data['cardenergy'];
 		}
-		$db->query("UPDATE {$gtablepre}users SET cardenergy='$nt' WHERE username = '$who'");
+		$upd=Array(
+			'cardenergy' => $cd_n,
+			'cardenergylastupd' => $data['cardenergylastupd'],
+		);
+		update_udata_by_username($upd, $who);
 	}
 	
 	//生成一条获得卡片的站内信，返回值为1则表示是新卡
@@ -152,8 +163,8 @@ namespace cardbase
 			else $n=$pa['name'];
 		}
 		//判定卡片是不是新卡
-		$result = $db->query("SELECT cardlist FROM {$gtablepre}users WHERE username='$n'");
-		if(!$db->num_rows($result)) return;
+		$result = fetch_udata_by_username($n,'cardlist');
+		if(empty($result)) return;
 		//if(!empty($ext)) $ext.='<br>';
 		include_once './include/messages.func.php';
 		message_create(
@@ -164,7 +175,7 @@ namespace cardbase
 		);
 		
 		$ret = 0;
-		$clist = explode('_',$db->fetch_array($result)['cardlist']);
+		$clist = explode('_',$result['cardlist']);
 		if (!in_array($ci,$clist)) $ret = 1;
 		return $ret;
 	}
@@ -180,14 +191,14 @@ namespace cardbase
 			if (isset($pa['username'])) $n=$pa['username'];
 			else $n=$pa['name'];
 		}
-		$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$n'");
-		$pu = $db->fetch_array($result);
+		$pu = fetch_udata_by_username($n);
 		$ret = get_card_process($ci,$pu,$ignore_qiegao);
 		
-		$p_cardlist = $pu['cardlist'];
-		$p_gold = $pu['gold'];
-		
-		$db->query("UPDATE {$gtablepre}users SET cardlist='$p_cardlist',gold='$p_gold' WHERE username='$n'");
+		$upd = array(
+			'cardlist' => $pu['cardlist'],
+			'gold' => $pu['gold'],
+		);
+		update_udata_by_username($upd, $n);
 		return $ret;
 	}
 	
@@ -221,13 +232,12 @@ namespace cardbase
 			if (isset($pa['username'])) $n=$pa['username'];
 			else $n=$pa['name'];
 		}
-		//writeover('a.txt', $num.' '.$n.' '.debug_backtrace()[2]['function']."\r\n",'ab+');
-		$result = $db->query("SELECT gold FROM {$gtablepre}users WHERE username='$n'");
-		$cg = $db->result($result,0);
+		$result = fetch_udata_by_username($n,'gold');
+		$cg = $result['gold'];
 		$cg=$cg+$num;
 		if ($cg<0) $cg=0;
 		if($pa) $pa['gold'] = $cg;
-		$db->query("UPDATE {$gtablepre}users SET gold='$cg' WHERE username='$n'");
+		update_udata_by_username(array('gold' => $cg), $n);
 	}
 	
 	function calc_qiegao_drop(&$pa,&$pd,&$active){
@@ -285,10 +295,16 @@ namespace cardbase
 		eval(import_module('logger'));
 		$qiegaogain=calc_qiegao_drop($pa,$pd,$active);
 		if ($qiegaogain>0){
-			get_qiegao($qiegaogain,$pa);
+			battle_get_qiegao_update($qiegaogain,$pa);
 			$log.="<span class=\"orange\">敌人掉落了{$qiegaogain}单位的切糕！</span><br>";
 		}
 		return $qiegaogain;
+	}
+	
+	function battle_get_qiegao_update($qiegaogain,&$pa)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		get_qiegao($qiegaogain,$pa);
 	}
 	
 	/*
@@ -301,7 +317,7 @@ namespace cardbase
 				if (get_card(42)==1){
 					$log.="恭喜您获得了活动奖励卡<span class=\"orange\">Fleur</span>！<br>";
 				}else{
-					$log.="您已经拥有活动奖励卡了，系统奖励您<span class=\"yellow\">100</span>切糕！<br>";
+					$log.="您已经拥有活动奖励卡了，系统奖励您<span class=\"yellow b\">100</span>切糕！<br>";
 					get_qiegao(100);
 				}
 			}
@@ -392,7 +408,14 @@ namespace cardbase
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess();
 		eval(import_module('sys','player','cardbase'));
-		$uip['cardname_show'] = !empty($cards[$card]['title']) ? $cards[$card]['title'] : $cardname;
+		if($cardname == $cards[$card]['name']) {
+			if(!empty($cards[$card]['title'])) 
+				$uip['cardname_show'] = $cards[$card]['title'];
+			else
+				$uip['cardname_show'] = $cards[$card]['name'];
+		}else{
+			$uip['cardname_show'] = $cardname;
+		}
 	}
 	
 	//战斗界面显示敌方卡片
@@ -414,9 +437,7 @@ namespace cardbase
 	function parse_card_gaining_method()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//自动生成目录
 		$dir = GAME_ROOT.'./gamedata/cache';
-		if(!file_exists($dir)) mymkdir($dir);
 		//生成文件名
 		$filename = 'card_gaining_method';
 		$file = $dir.'/'.$filename.'.config.php';
@@ -429,7 +450,7 @@ namespace cardbase
 		if(file_exists($file) && filemtime($card_main_file) < filemtime($file) && filemtime($card_config_file) < filemtime($file) && filemtime($ach_config_file) < filemtime($file)) return;
 		
 		$cgmethod = array();
-		eval(import_module('cardbase'));
+		eval(import_module('sys','cardbase'));
 		//抽卡
 		foreach($cardindex as $ckey => $cval){
 			foreach($cval as $ci)
@@ -438,6 +459,13 @@ namespace cardbase
 		//成就
 		if(defined('MOD_ACHIEVEMENT_BASE')){
 			eval(import_module('achievement_base'));
+			//生成未生效成就列表
+			$ach_expired = array();
+			foreach(array_keys($ach_available_period) as $aap_key){
+				if(1 != \achievement_base\check_achtype_available($aap_key)) {
+					$ach_expired = array_merge($ach_expired, $achlist[$aap_key]);
+				}
+			}
 			foreach($achlist as $aclass => $aval) {
 				foreach($aval as $ai) {
 					if(defined('MOD_SKILL'.$ai.'_ACHIEVEMENT_ID') && !defined('MOD_SKILL'.$ai.'_ABANDONED') && !\skillbase\check_skill_info($ai, 'global')){
@@ -457,9 +485,12 @@ namespace cardbase
 										$seriesname = $achtype[$aclass];
 										$cardset_notice = $cardset_flag ? '可能' : '';
 										$aname = ${'ach'.$ai.'_name'}[$at];
-										if(count(${'ach'.$ai.'_name'})==1) $cgmethod[$acard][] = '完成'.$seriesname.'「'.$astart.'」'.$cardset_notice.'获得';
-										elseif(preg_match('/LV\d/s', $aname)) $cgmethod[$acard][] = '完成'.$seriesname.'成就「'.$aname.'」'.$cardset_notice.'获得';
-										else $cgmethod[$acard][] = '完成'.$seriesname.'「'.$astart.'」的第'.$at.'阶段「'.$aname.'」'.$cardset_notice.'获得';
+										if(count(${'ach'.$ai.'_name'})==1) $cgmethod_this = '完成'.$seriesname.'「'.$astart.'」'.$cardset_notice.'获得';
+										elseif(preg_match('/LV\d/s', $aname)) $cgmethod_this = '完成'.$seriesname.'成就「'.$aname.'」'.$cardset_notice.'获得';
+										else $cgmethod_this = '完成'.$seriesname.'「'.$astart.'」的第'.$at.'阶段「'.$aname.'」'.$cardset_notice.'获得';
+										//过期成就判定
+										if(in_array($ai, $ach_expired)) $cgmethod_this = '<font color=grey>'.$cgmethod_this.'</font>';
+										$cgmethod[$acard][] = $cgmethod_this;
 									}
 								}
 							}
@@ -475,7 +506,7 @@ namespace cardbase
 								for($i=1;$i<=$count;$i++) {
 									$at = $matches[1][$i];
 									$adesc = $matches[2][$i];
-									preg_match('|卡片.+?\<span.+?\>(.+?)\<\/span|s', $adesc, $matches2);
+									preg_match('|奖励.+?\<span.+?\>(.+?)\<\/span|s', $adesc, $matches2);
 									if(!empty($matches2)) {
 										$cn = $matches2[1];
 										$acard = 0;
@@ -490,7 +521,6 @@ namespace cardbase
 											elseif(preg_match('/LV\d/s', $aname)) $cgmethod[$acard][] = '完成'.$seriesname.'「'.$aname.'」获得';
 											else $cgmethod[$acard][] = '完成'.$seriesname.'「'.$astart.'」的第'.$i.'阶段「'.$aname.'」获得';
 										}
-										
 									}
 								}
 							}
@@ -503,23 +533,29 @@ namespace cardbase
 		
 		//特判
 		$cgmethod[0][] = '注册账号即有';
-		$cgmethod[63][] = '使锡安成员技能「破解」达到50层以上获得';
+		//$cgmethod[63][] = '在四禁前使锡安成员技能「破解」达到50层以上获得（只在标准、卡片、荣耀或极速模式有效）';
 		$cgmethod[72][] = '完成竞速挑战「不动的大图书馆」获得';
 		$cgmethod[78][] = '完成竞速挑战「烈火疾风」获得';
 		$cgmethod[88][] = '完成战斗成就「谈笑风生」获得';
-		$cgmethod[119][] = '完成特殊挑战「常磐的训练师」的第2阶段「常磐之心」获得';
 		$cgmethod[158][] = '在「伐木模式」从商店购买「博丽神社的参拜券」并在开局20分钟之内使用以获得';
 		$cgmethod[159][] = '通过礼品盒开出的★闪熠着光辉的大逃杀卡牌包★获得（15%概率）';
 		$cgmethod[160][] = '完成2017万圣节活动「噩梦之夜 LV2」获得';
+		$cgmethod[165][] = '<br>当你看到某张小纸条有「奇怪的空白」时，你可以按下F12。<br>这张卡的获得方式，就藏在那段空白对应的页面代码的位置。<br>　　　　　　　　　　　　　　　　　　　　——林苍月';
 		for($ci=200;$ci<=204;$ci++) {
-			$cgmethod[$ci][] = '完成2017十一活动「新的战场 LV2」可能获得';
-			$cgmethod[$ci][] = '完成2017十一活动「新的战场 LV3」可能获得';
-			$cgmethod[$ci][] = '完成2017十一活动「血染乐园 LV3」可能获得';
-			$cgmethod[$ci][] = '完成2017十一活动「极光处刑 LV3」可能获得';
-			$cgmethod[$ci][] = '完成2017万圣节活动「不给糖就解禁」可能获得';
+			$cgmethod[$ci][] = '<font color=grey>完成2017十一活动「新的战场 LV2」可能获得</font>';
+			$cgmethod[$ci][] = '<font color=grey>完成2017十一活动「新的战场 LV3」可能获得</font>';
+			$cgmethod[$ci][] = '<font color=grey>完成2017十一活动「血染乐园 LV3」可能获得</font>';
+			$cgmethod[$ci][] = '<font color=grey>完成2017十一活动「极光处刑 LV3」可能获得</font>';
+			$cgmethod[$ci][] = '<font color=grey>完成2017万圣节活动「不给糖就解禁」可能获得</font>';
 		}
+		$cgmethod[200][] = '在「荣耀模式」模式击杀「全息实体 幻影斗将神 S.A.S」后，使用缴获的★锋利的卡牌包★获得（15%概率）';
+		$cgmethod[201][] = '在「荣耀模式」模式击杀「全息实体 熵魔法传人 Howling」后，使用缴获的★长着兽耳的卡牌包★获得（15%概率）';
+		$cgmethod[202][] = '在「荣耀模式」模式击杀「全息实体 通灵冒险家 星海」后，使用缴获的★套了好几层的卡牌包★获得（15%概率）';
+		$cgmethod[203][] = '在「荣耀模式」模式击杀「全息实体 银白愿天使 Annabelle」后，使用缴获的★羽翼卡牌包★获得（15%概率）';
+		$cgmethod[204][] = '在「荣耀模式」模式击杀「全息实体 麻烦妖精 Sophia」后，使用缴获的★蠢萌的卡牌包★获得（15%概率）';
+		$cgmethod[211][] = '击杀场上所有NPC之后，击杀入场的「断罪女神 一一五」，之后使用缴获的★印着「Mind Over Matters」的卡牌包★获得（必定获得）';
 		if(empty($cgmethod)) return;
-		$contents = "<?php\r\nif(!defined('IN_GAME')) exit('Access Denied');\r\n";
+		$contents = str_replace('?>','',$checkstr);//"<?php\r\nif(!defined('IN_GAME')) exit('Access Denied');\r\n";
 
 		$contents .= '$card_gaining_method = '.var_export($cgmethod,1).';';
 		

@@ -6,9 +6,9 @@ namespace skill8
 	{
 		eval(import_module('wound'));
 		//受伤状态简称（用于profile显示）
-		$infinfo['e'] = '<span class="yellow">麻</span>';
+		$infinfo['e'] = '<span class="yellow b">麻</span>';
 		//受伤状态名称动词
-		$infname['e'] = '<span class="yellow">身体麻痹</span>';
+		$infname['e'] = '<span class="yellow b">身体麻痹</span>';
 		//受伤状态对应的特效技能编号
 		$infskillinfo['e'] = 8;
 	}
@@ -73,9 +73,12 @@ namespace skill8
 	function calculate_active_obbs_multiplier(&$ldata,&$edata)	//麻痹先攻率降低（但出于对原版本的兼容，对手麻痹不会增加你的先攻率，不然NPC要哭了）
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(8,$ldata)) 
-			return $chprocess($ldata,$edata)*0.2;
-		else  return $chprocess($ldata,$edata);
+		$var = 1;
+		if (\skillbase\skill_query(8,$ldata)) {
+			$var = 0.2;
+			$ldata['active_words'] = \attack\multiply_format($var, $ldata['active_words'],0);
+		}
+		return $chprocess($ldata,$edata)*$var;
 	}
 	
 	function calculate_counter_rate_multiplier(&$pa, &$pd, $active)	//麻痹反击率降低

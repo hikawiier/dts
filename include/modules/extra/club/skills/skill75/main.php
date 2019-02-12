@@ -3,6 +3,7 @@
 namespace skill75
 {
 	$skill75_cd = 90;
+	$wep_skillkind_req = 'wk';
 	
 	function init() 
 	{
@@ -59,13 +60,13 @@ namespace skill75
 		else
 		{
 			eval(import_module('sys','skill75'));
-			$l=\skillbase\skill_getvalue(75,'lastuse',$pa);
-			if ($now-$l>=$skill75_cd && \weapon\get_skillkind($pa,$pd,$active) == 'wk')
+			//$l=\skillbase\skill_getvalue(75,'lastuse',$pa);
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,75) )
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「剑心」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「剑心」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「剑心」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「剑心」！</span><br>";
 				\skillbase\skill_setvalue(75,'lastuse',$now,$pa);
 				addnews ( 0, 'bskill75', $pa['name'], $pd['name'] );
 			}
@@ -90,7 +91,7 @@ namespace skill75
 		{
 			eval(import_module('logger'));
 			$d=$pa['lvl']+30;
-			$log.='<span class="yellow">「剑心」附加了'.$d.'点伤害！</span><br>';
+			$log.='<span class="yellow b">「剑心」附加了'.$d.'点伤害！</span><br>';
 			$ret += $d;
 			$pa['mult_words_fdmgbs'] = \attack\add_format($d, $pa['mult_words_fdmgbs']);
 		}
@@ -104,7 +105,7 @@ namespace skill75
 //		{
 //			eval(import_module('logger'));
 //			$d=$pa['lvl']+30;
-//			$log.='<span class="yellow">「剑心」附加了'.$d.'点伤害！</span><br>';
+//			$log.='<span class="yellow b">「剑心」附加了'.$d.'点伤害！</span><br>';
 //			$pa['dmg_dealt']+=$d;
 //		}
 //		$chprocess($pa, $pd, $active);
@@ -149,7 +150,7 @@ namespace skill75
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill75') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「剑心」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「剑心」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

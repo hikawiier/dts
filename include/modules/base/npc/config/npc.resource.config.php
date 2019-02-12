@@ -68,11 +68,11 @@ namespace npc
 	$npc_lwinfo = Array(
 	1 => '任务执行成功率下降，重新计算成功率。',
 	2 => Array(
-    '幻影斗将神 S.A.S' => '没关系，我钱多，我去买复活药……',
-    '熵魔法传人 Howling' => '啊～啊，还没玩够呢，撤退撤退～',
-    '通灵冒险家 星海' => '咕，幸亏我做好了医疗保险！',
-    '银白愿天使 Annabelle' => '飞不起来了啊！这时候就要……隐身术！',
-    '麻烦妖精 Sophia' => '在这里就被干掉的话还叫什么主角！主角都要从舞台左边离开的！',
+    '幻影斗将神 S.A.S' => '机体受损过重，任务被迫中止。',
+    '熵魔法传人 Howling' => '机体受损过重，任务被迫中止。',
+    '通灵冒险家 星海' => '机体受损过重，任务被迫中止。',
+    '银白愿天使 Annabelle' => '机体受损过重，任务被迫中止。',
+    '麻烦妖精 Sophia' => '机体受损过重，任务被迫中止。',
     '思念体-触手众' => '设定脱出路线。目标：非洲大陆。',
     '水濑 名雪-改' => '机体受损过重，任务被迫中止。',
     '立华 奏-改' => '机体受损过重，任务被迫中止。',
@@ -179,12 +179,13 @@ namespace npc
     '银白愿天使 Annabelle' => '飞不起来了啊！这时候就要……隐身术！',
     '麻烦妖精 Sophia' => '在这里就被干掉的话还叫什么主角！主角都要从舞台左边离开的！',
 	),
+	89 => '咕咕……鹌鹑，咕咕咕，大鹌鹑……',
 	90 => Array(
 		'复读机' => '复读机撤回了一条消息',
 		'秦国人' => '停一下，pong友，停一下！',
 		'白学家' => '可是，为什么会变成这样呢？',
 		'膜触党' => '群地位-1',
-		),
+	),
 	101 => '数据回收完成，上传数据中。',
 	102 => '虽然还没玩够，但还是到此为止！',
 	//103 => '尘归尘，土归土，字节归字节，数据归数据……',
@@ -198,23 +199,6 @@ namespace npc
 		),
 	);
 	
-
-	//campfireMOD中不需要躲避禁区的NPC
-	$killzone_resistant_typelist = array_merge($killzone_resistant_typelist,Array(1001,1002,1003));
-	//campfireMOD新增NPC类别
-	$npc_typeinfo[1001]='虚拟体-C型';
-	$npc_typeinfo[1002]='虚拟体-V型';
-	$npc_typeinfo[1003]='错误：未授权人员';
-	$npc_typeinfo[1004]='高自律型战斗模块';
-	$npc_typeinfo[1005]='残留数据';
-	//campfireMOD新增NPC类别的死亡信息
-	$npc_killmsginfo[1001]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';
-	$npc_killmsginfo[1002]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';
-	$npc_killmsginfo[1003]=Array(
-			'Mr.Lein' => '很惭愧，就做了一点微小的工作，谢谢大家！',
-		);
-	$npc_killmsginfo[1004]='WARNING：DEFINDING MOUDUEL MISSING...';
-	$npc_killmsginfo[1005]='活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！';	
 }
 
 ?>

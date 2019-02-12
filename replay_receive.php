@@ -6,7 +6,6 @@ define('IN_GAME', true);
 
 //啥也不载入，只判断密钥是否匹配
 defined('GAME_ROOT') || define('GAME_ROOT', dirname(__FILE__).'/');
-ini_set('post_max_size', '20M');
 
 require GAME_ROOT.'./include/global.func.php';
 include GAME_ROOT.'./include/modules/core/sys/config/server.config.php';
@@ -28,12 +27,11 @@ if(!$valid && $_POST['cmd']=='storage_req') {//只有储存请求需要判定密
 //由于录像文件可能高达几十M，不能让进程等待全部传输完毕，需要立刻返回值，然后本地重启一个反向请求
 if($_POST['cmd'] == 'storage_req') {
 	//显示比POST快得多得多，直接反向请求
-	$objdir = './gamedata/remote_replays';
-	if(!is_dir($objdir)) mymkdir($objdir);
+	$objdir = dir_init('./gamedata/remote_replays');
 	$objdir2 = $_POST['sign'];
-	if(!is_dir($objdir.'/'. $objdir2)) mymkdir($objdir.'/'. $objdir2);
+	dir_init($objdir.'/'. $objdir2);
 	$objdir3 = str_replace('.dat','',$_POST['filename']);
-	if(!is_dir($objdir.'/'. $objdir2.'/'.$objdir3)) mymkdir($objdir.'/'. $objdir2.'/'.$objdir3);
+	dir_init($objdir.'/'. $objdir2.'/'.$objdir3);
 	$objfile = $objdir.'/'. $objdir2.'/'.$objdir3.'/'.$_POST['filename'];
 	
 	if(!empty($_POST['no-overlap']) && file_exists($objfile)) exit($_POST['filename'].' has already existed.');
@@ -60,8 +58,7 @@ if($_POST['cmd'] == 'storage_req') {
 		);
 		$datalibcont = curl_post($callbackurl, $context);
 		
-		$objdir_datalib = $objdir.'/'. $objdir2.'/datalib';
-		if(!is_dir($objdir_datalib)) mymkdir($objdir_datalib);
+		$objdir_datalib = dir_init($objdir.'/'. $objdir2.'/datalib');
 		$objfile_datalib = $objdir_datalib.'/'.$datalibname;
 		//记录datalib的编号
 		file_put_contents(str_replace('.dat','.datalib.txt',$objfile), $datalibname);

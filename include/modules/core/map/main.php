@@ -6,6 +6,20 @@ namespace map
 	{
 		
 	}
+	
+	//检查一个地区编号是否是禁区
+	function check_in_forbidden_area($pno){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		return array_search($pno,$arealist) <= $areanum;
+	}
+	
+	//检查一个地区是否可进入，包含解禁和hack两种情况
+	function check_can_enter($pno){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		return !check_in_forbidden_area($pno) || $hack;
+	}
 
 	function init_areatiming(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -16,8 +30,8 @@ namespace map
 		if(defined('IN_REPLAY') || !in_array($GLOBALS['___CURSCRIPT'], array('GAME', 'ACT'))) $on = false;
 		$timing = ($areatime-$now);
 		$timing_r = sprintf("%02d", floor($timing/60)).':'.sprintf("%02d", $timing%60);
-		if($timing < 10) $timing_r = '<span class="red">'.$timing_r.'</span>';
-		elseif($timing < 60) $timing_r = '<span class="yellow">'.$timing_r.'</span>';
+		if($timing < 10) $timing_r = '<span class="red b">'.$timing_r.'</span>';
+		elseif($timing < 60) $timing_r = '<span class="yellow b">'.$timing_r.'</span>';
 		$uip['timing']['area_timing'] = array(
 			'on' => $on,
 			'mode' => 0,
@@ -35,7 +49,7 @@ namespace map
 	}
 	
 	//非禁区域列表。如果$no_dangerous_zone开启，则再排除掉SCP、英灵殿等危险地区
-	function get_safe_plslist($no_dangerous_zone = true){
+	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map'));
 		if($areanum+1 > sizeof($arealist)) return array();
@@ -84,7 +98,7 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
-			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist)) - 1;
+			$plsnum = sizeof($plsinfo) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
 			{
@@ -140,7 +154,7 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			$plsnum = (sizeof($plsinfo)-sizeof($hidden_arealist));
+			$plsnum = sizeof($plsinfo);
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
 			array_unshift($arealist,0);
@@ -162,6 +176,20 @@ namespace map
 		//愚蠢的movehtm函数已经被移除…… 现在move.htm和areainfo.htm都由模板自动生成
 		return;
 	}
+	
+	function get_area_plsname($forshort=0, $p1=0, $p2=0){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','map'));
+		$plsnamedata = $forshort ? $plsinfo_for_short : $plsinfo;
+		if(!$p1) $p1 = $areanum+1;
+		if(!$p2) $p2 = $areanum+$areaadd;
+		$retarr = array();
+		for($i=$p1; $i<=$p2; $i++){
+			if(isset($plsnamedata[$arealist[$i]]))
+				$retarr[] = $plsnamedata[$arealist[$i]];
+		}
+		return $retarr;
+	}
 
 	function get_next_areadata_html($atime=0)
 	{
@@ -175,41 +203,32 @@ namespace map
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';
 		}else{
-			if($areanum < (count($plsinfo)-count($hidden_arealist))) {
+			if($areanum < count($plsinfo)) {
 				$at= getdate($atime);
 				$nexthour = $at['hours'];$nextmin = $at['minutes'];
 				while($nextmin >= 60){
 					$nexthour +=1;$nextmin -= 60;
 				}
 				if($nexthour >= 24){$nexthour-=24;}
-				$areadata .= "<b>{$nexthour}时{$nextmin}分：</b> ";
-				for($i=1;$i<=$areaadd;$i++) {
-					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$i]].'&nbsp;';
-				}
+				$areadata .= "<b>{$nexthour}时{$nextmin}分：</b> " . implode('&nbsp;&nbsp;', get_area_plsname(0, $areanum+1, $areanum+$areaadd));
 			}
-			if($areanum+$areaadd < (count($plsinfo)-count($hidden_arealist))) {
+			if($areanum+$areaadd < count($plsinfo)) {
 				$at2= getdate($atime + get_area_interval()*60);
 				$nexthour2 = $at2['hours'];$nextmin2 = $at2['minutes'];
 				while($nextmin2 >= 60){
 					$nexthour2 +=1;$nextmin2 -= 60;
 				}
 				if($nexthour2 >= 24){$nexthour2-=24;}
-				$areadata .= "；<b>{$nexthour2}时{$nextmin2}分：</b> ";
-				for($i=1;$i<=$areaadd;$i++) {
-					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$areaadd+$i]].'&nbsp;';
-				}
+				$areadata .= "；<b>{$nexthour2}时{$nextmin2}分：</b> " . implode('&nbsp;&nbsp;', get_area_plsname(0, $areanum+$areaadd+1, $areanum+$areaadd*2));
 			}
-			if($areanum+$areaadd*2 < (count($plsinfo)-count($hidden_arealist))) {
+			if($areanum+$areaadd*2 < count($plsinfo)) {
 				$at3= getdate($atime + get_area_interval()*120);
 				$nexthour3 = $at3['hours'];$nextmin3 = $at3['minutes'];
 				while($nextmin3 >= 60){
 					$nexthour3 +=1;$nextmin3 -= 60;
 				}
 				if($nexthour3 >= 24){$nexthour3-=24;}
-				$areadata .= "；<b>{$nexthour3}时{$nextmin3}分：</b> ";
-				for($i=1;$i<=$areaadd;$i++) {
-					$areadata .= '&nbsp;'.$plsinfo[$arealist[$areanum+$areaadd*2+$i]].'&nbsp;';
-				}
+				$areadata .= "；<b>{$nexthour3}时{$nextmin3}分：</b> " . implode('&nbsp;&nbsp;', get_area_plsname(0, $areanum+$areaadd*2+1, $areanum+$areaadd*3));
 			}
 		}
 		echo $areadata;
@@ -254,7 +273,7 @@ namespace map
 			$arealimit = $arealimit > 0 ? $arealimit : 1; 
 			if( $validnum <= 0 && $areanum >= $arealimit*$areaadd ) {//判定无人参加并结束游戏
 				\sys\gameover($areatime-get_area_interval()*60+1,'end4');
-			} elseif(($areanum >= $arealimit*$areaadd) || ($validnum >= $validlimit)) {//判定游戏停止激活
+			} elseif( $areanum >= $arealimit*$areaadd || $validnum >= $validlimit ) {//判定游戏停止激活
 				$gamestate = 30;
 			}
 		}
@@ -266,7 +285,7 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if($news == 'death11') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>因滞留在<span class=\"red\">禁区【{$plsinfo[$c]}】</span>死亡</li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>因滞留在<span class=\"red b\">禁区【{$plsinfo[$c]}】</span>死亡</li>";
 		
 		elseif($news == 'addarea') {
 			$info = "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，增加禁区：";

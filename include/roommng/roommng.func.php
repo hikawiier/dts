@@ -1,18 +1,18 @@
 <?php
 //gamedata/tmp/rooms下的文件现在只起一个开关作用。
 
-function room_all_routine(){
+function room_all_routine($nowroom = NULL){
 	eval(import_module('sys'));
 	//startmicrotime();
-	$o_room_id = $room_id;
-	$result = $db->query("SELECT groomid,groomstatus FROM {$gtablepre}game WHERE groomid>0 AND groomstatus>=40");
+	$o_room_id = NULL === $nowroom ? $room_id : $nowroom;
+	$result = $db->query("SELECT groomid,groomstatus FROM {$gtablepre}game WHERE groomstatus>=40");
 	$wtablepre = $gtablepre.'s';
 	while($rarr = $db->fetch_array($result)){
 		$room_id = $rarr['groomid'];
 		$room_prefix = room_id2prefix($room_id);
 		if($room_id != $o_room_id) {
 			$tablepre = room_get_tablepre();
-			sys\routine();
+			\sys\routine();
 			if(!$gamestate) {
 				$db->query("UPDATE {$gtablepre}game SET groomstatus=0 WHERE groomid='{$rarr['groomid']}'");
 				if(file_exists(GAME_ROOT.'./gamedata/tmp/rooms/'.$rarr['groomid'].'.txt')) unlink(GAME_ROOT.'./gamedata/tmp/rooms/'.$rarr['groomid'].'.txt');
@@ -33,10 +33,21 @@ function update_roomstate(&$roomdata, $runflag)
 	
 	global $roomtypelist;
 	$flag=1;
-	for ($i=0; $i < room_get_vars($roomdata, 'pnum'); $i++)//人没满就不能开
-		if (!$roomdata['player'][$i]['forbidden'] && $roomdata['player'][$i]['name']=='')
-			$flag = 0;
-	
+	$tmp_min_team = (int)room_get_vars($roomdata, 'min-team');
+	$tmp_pnum = room_get_vars($roomdata, 'pnum');
+	$tmp_leader_position = room_get_vars($roomdata, 'leader-position');
+	$tmp_team_ids = Array();
+	for ($i=0; $i < $tmp_pnum; $i++) {//人没满就不能开
+		if(!$roomdata['player'][$i]['forbidden']) {
+			if ($roomdata['player'][$i]['name']=='') {
+				$flag = 0;
+			}elseif(!in_array($tmp_leader_position[$i], $tmp_team_ids)) {
+				$tmp_team_ids[] = $tmp_leader_position[$i];
+			}
+		}
+	}
+	//队伍数过少也不能开
+	if(sizeof($tmp_team_ids) < $tmp_min_team) $flag = 0;
 	$changeflag = 0;
 	if (!$runflag && $flag && $roomdata['readystat']==0)
 	{
@@ -298,7 +309,7 @@ function room_auto_kick_check(&$roomdata){
 		for ($i=0; $i < $rdpnum; $i++) 
 			if (!$rdplist[$i]['forbidden'] && !$rdplist[$i]['ready'] && $rdplist[$i]['name']!='')
 			{
-				room_new_chat($roomdata,"<span class=\"grey\">{$rdplist[$i]['name']}因为长时间未准备，被系统踢出了位置。</span><br>");
+				room_new_chat($roomdata,"<span class=\"grey b\">{$rdplist[$i]['name']}因为长时间未准备，被系统踢出了位置。</span><br>");
 				$rdplist[$i]['name']='';
 			}
 		$changed = 1;
@@ -558,8 +569,8 @@ function room_enter($id)
 		}
 		if($roomtypelist[$rd['groomtype']]['without-valid']){//如果直接进入房间，在这里处理
 			$pname = (string)$cuser;
-			$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username = '$pname' LIMIT 1");
-			$udata = $db->fetch_array($result);
+			global $cudata;
+			$udata = $cudata;
 			$result = $db->query("SELECT * FROM {$tablepre}players WHERE name = '$pname' AND type = 0");
 			if(!$db->num_rows($result)){//从未进入过则直接进入战场
 				include_once GAME_ROOT.'./include/valid.func.php';
@@ -581,11 +592,12 @@ function room_enter($id)
 		else $header = 'index.php';
 	}else{
 		//需要准备的房间，只是加入房间准备页面
-		room_new_chat($roomdata,"<span class=\"grey\">{$cuser}进入了房间</span><br>");
-		room_save_broadcast($id,$roomdata);
 		$header = 'index.php';
 	}
-	$db->query("UPDATE {$gtablepre}users SET roomid = '{$id}' WHERE username = '$cuser'");
+	room_new_chat($roomdata,"<span class=\"grey b\">{$cuser}进入了房间</span><br>");
+	room_save_broadcast($id,$roomdata);
+	set_current_roomid($id);
+	//update_udata_by_username(array('roomid' => $id), $cuser);
 
 	echo 'redirect:'.$header;
 	return 1;
@@ -628,7 +640,6 @@ function room_getteamhtml(&$roomdata, $u)
 }
 
 function room_init_db_process($room_id){
-	if (eval(__MAGIC__)) return $___RET_VALUE;
 	global $gtablepre,$db;
 	$room_prefix = room_id2prefix($room_id);
 	$init_state = 0;

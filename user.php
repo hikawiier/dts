@@ -3,23 +3,14 @@
 define('CURSCRIPT', 'user');
 
 require './include/common.inc.php';
-require './include/user.func.php';
 
 eval(import_module('cardbase'));
 
 $udata = udata_check();
-//if(!$cuser||!$cpass) { gexit($_ERROR['no_login'],__file__,__line__); }
-//
-//$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username='$cuser'");
-//if(!$db->num_rows($result)) { gexit($_ERROR['login_check'],__file__,__line__); }
-//$udata = $db->fetch_array($result);
-//if($udata['password'] != $cpass) { gexit($_ERROR['wrong_pw'], __file__, __line__); }
-//if($udata['groupid'] <= 0) { gexit($_ERROR['user_ban'], __file__, __line__); }
 
 if(!isset($mode)){
 	$mode = 'show';
 }
-
 if($mode == 'edit') {
 	$gamedata=Array();$gamedata['innerHTML']['info'] = '';
 	$passarr = array();
@@ -65,18 +56,15 @@ if($mode == 'edit') {
 		'motto' => $motto,
 		'killmsg' => $killmsg,
 		'lastword' => $lastword,
-		'card' => $card
+		'card' => $card,
+		'u_templateid' => $templateid
 	);
 	if(!empty($passarr)) $updarr = array_merge($updarr, $passarr);
-	$db->array_update("{$gtablepre}users", $updarr, "username='$cuser'");
-	//$db->query("UPDATE {$gtablepre}users SET gender='$gender', icon='$icon',{$passqry}motto='$motto',  killmsg='$killmsg', lastword='$lastword' ,card='$card' WHERE username='$cuser'");
-	//affected_rows好像一直返回0，不知怎么回事
-	//if($db->affected_rows()){
-		$gamedata['innerHTML']['info'] .= $_INFO['data_success'];
-	//}else{
-	//	$gamedata['innerHTML']['info'] .= $_INFO['data_failure'];
-	//}
 	
+	update_udata_by_username($updarr, $cuser);
+	
+	$gamedata['innerHTML']['info'] .= $_INFO['data_success'];
+
 	$gamedata['value']['opass'] = $gamedata['value']['npass'] = $gamedata['value']['rnpass'] = '';
 	if(isset($error)){$gamedata['innerHTML']['error'] = $error;}
 	ob_clean();

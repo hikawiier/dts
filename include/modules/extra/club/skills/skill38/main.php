@@ -5,6 +5,8 @@ namespace skill38
 	//怒气消耗
 	$ragecost = 85; 
 	
+	$wepk_req = 'WP';
+	
 	function init() 
 	{
 		define('MOD_SKILL38_INFO','club;battle;');
@@ -48,12 +50,12 @@ namespace skill38
 		else
 		{
 			$rcost = get_rage_cost38($pa);
-			if ($pa['rage']>=$rcost && \weapon\get_skillkind($pa,$pd,$active) == 'wp')
+			if (!\clubbase\check_battle_skill_unactivatable($pa,$pd,38))
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「闷棍」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「闷棍」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「闷棍」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「闷棍」！</span><br>";
 				if (!$pd['type'])
 					$pa['skill38_dmg_extra']=max($pd['msp']-$pd['sp'],0);
 				else  $pa['skill38_dmg_extra']=0;
@@ -89,8 +91,8 @@ namespace skill38
 		{
 			eval(import_module('logger'));
 			if ($active)
-				$log.="闷棍对体力不支的敌人造成了<span class=\"yellow\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
-			else  $log.="闷棍对体力不支的你造成了<span class=\"yellow\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
+				$log.="闷棍对体力不支的敌人造成了<span class=\"yellow b\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
+			else  $log.="闷棍对体力不支的你造成了<span class=\"yellow b\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
 			$ret+=$pa['skill38_dmg_extra'];
 			$pa['mult_words_fdmgbs'] = \attack\add_format($pa['skill38_dmg_extra'], $pa['mult_words_fdmgbs']);
 		}
@@ -106,8 +108,8 @@ namespace skill38
 //		if ($pa['is_hit'])
 //		{
 //			if ($active)
-//				$log.="闷棍对体力不支的敌人造成了<span class=\"yellow\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
-//			else  $log.="闷棍对体力不支的你造成了<span class=\"yellow\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
+//				$log.="闷棍对体力不支的敌人造成了<span class=\"yellow b\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
+//			else  $log.="闷棍对体力不支的你造成了<span class=\"yellow b\">{$pa['skill38_dmg_extra']}</span>点额外伤害！<br>";
 //			$pa['dmg_dealt']+=$pa['skill38_dmg_extra'];
 //		}
 //		$chprocess($pa, $pd, $active);
@@ -120,7 +122,7 @@ namespace skill38
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill38') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「闷棍」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「闷棍」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

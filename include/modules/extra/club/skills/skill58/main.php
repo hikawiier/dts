@@ -61,7 +61,8 @@ namespace skill58
 			$pd['hp']=$pd['mhp'];
 			$pd['skill58_flag']=1;
 			\skillbase\skill_setvalue(58,'r','1',$pd);
-			addnews ( 0, 'revival', $pd['name']);
+			$pd['rivival_news'] = array('revival', $pd['name']);
+			//addnews ( 0, 'revival', $pd['name']);
 			//满血复活时加成效果（这个其实是技能“新生”的内容，但直接做在一起好了）
 			$pd['mhp']+=$pd['lvl']*2; 
 			$pd['hp']+=$pd['lvl']*2;
@@ -81,9 +82,9 @@ namespace skill58
 		if(!empty($pd['skill58_flag'])){
 			if ($pd['o_state']==27)	//陷阱
 			{
-				$log.= "<span class=\"lime\">但是，由于你及时按下了BOMB键，你原地满血复活了！</span><br>";
+				$log.= "<span class=\"lime b\">但是，由于你及时按下了BOMB键，你原地满血复活了！</span><br>";
 				if(!$pd['sourceless']){
-					$w_log = "<span class=\"lime\">但是，由于{$pd['name']}及时按下了BOMB键，其原地满血复活了！</span><br>";
+					$w_log = "<span class=\"lime b\">但是，由于{$pd['name']}及时按下了BOMB键，其原地满血复活了！</span><br>";
 					\logger\logsave ( $pa['pid'], $now, $w_log ,'b');
 				}
 			}
@@ -102,13 +103,13 @@ namespace skill58
 		{
 			if ($active)
 			{
-				$log.='<span class="lime">但是，由于敌人及时按下了BOMB键，其原地满血复活了！</span><br>';
-				$pd['battlelog'].='<span class="lime">但是，由于你及时按下了BOMB键，你原地满血复活了，</span>';
+				$log.='<span class="lime b">但是，由于敌人及时按下了BOMB键，其原地满血复活了！</span><br>';
+				$pd['battlelog'].='<span class="lime b">但是，由于你及时按下了BOMB键，你原地满血复活了，</span>';
 			}
 			else
 			{
-				$log.='<span class="lime">但是，由于你及时按下了BOMB键，你原地满血复活了！</span><br>';
-				$pd['battlelog'].='<span class="lime">但是，由于敌人及时按下了BOMB键，其原地满血复活了，</span>';
+				$log.='<span class="lime b">但是，由于你及时按下了BOMB键，你原地满血复活了！</span><br>';
+				$pd['battlelog'].='<span class="lime b">但是，由于敌人及时按下了BOMB键，其原地满血复活了，</span>';
 			}
 		}
 	}
@@ -119,7 +120,7 @@ namespace skill58
 		eval(import_module('sys','player'));
 		
 		if($news == 'revival') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}因为及时按下了BOMB键而原地满血复活了！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}因为及时按下了BOMB键而原地满血复活了！</span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

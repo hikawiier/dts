@@ -2,17 +2,17 @@
 <!--{eval $___TEMP_SKILL_ID=432;}-->
 {template MOD_CLUBBASE_SKILLDESC_START}
 <span>
-冰心
+凝心
 </span>
 {template MOD_CLUBBASE_SKILLDESC_MID1}
-<td class=b3><span style="margin-top:8px; margin-bottom:8px; display:block;">
-你在战斗中不会受到反噬伤害<br>
+<td class="skilldesc_left b3"><span class="skilldesc">
+你在战斗中不会受到反噬伤害。遭受攻击时怒气不涨。<br>
 </span></td>
-<td class=b3 width=96>
+<td class="skilldesc_right b3">
 </td>
 {template MOD_CLUBBASE_SKILLDESC_MID2}
-<!--{if !isset($___TEMP_THIS_SKILL_ACQUIRED) || !$___TEMP_THIS_SKILL_ACQUIRED}-->
-<span class="yellow">
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
 </span>
 <!--{/if}-->
 {template MOD_CLUBBASE_SKILLDESC_END}

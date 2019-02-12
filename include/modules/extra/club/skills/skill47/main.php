@@ -5,6 +5,8 @@ namespace skill47
 	//怒气消耗
 	$ragecost = 5; 
 	
+	$wep_skillkind_req = 'wc';
+	
 	function init() 
 	{
 		define('MOD_SKILL47_INFO','club;battle;');
@@ -48,12 +50,12 @@ namespace skill47
 		else
 		{
 			$rcost = get_rage_cost47($pa);
-			if ($pa['rage']>=$rcost && $pa['wep_kind']=='C')
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,47) )
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「花雨」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「花雨」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「花雨」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「花雨」！</span><br>";
 				$pa['rage']-=$rcost;
 				addnews ( 0, 'bskill47', $pa['name'], $pd['name'] );
 				
@@ -81,7 +83,7 @@ namespace skill47
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if ($pa['bskill']!=47) return $chprocess($pa, $pd, $active);
 		eval(import_module('itemmain','logger'));
-		$log.='技能「花雨」附加了<span class="yellow">'.$itemspkinfo[$pa['skill47_flag']].'</span>属性伤害！<br>';
+		$log.='技能「花雨」附加了<span class="yellow b">'.$itemspkinfo[$pa['skill47_flag']].'</span>属性伤害！<br>';
 		return $chprocess($pa, $pd, $active);
 	}
 	
@@ -101,7 +103,7 @@ namespace skill47
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill47') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「花雨」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「花雨」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

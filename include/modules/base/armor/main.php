@@ -22,17 +22,17 @@ namespace armor
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('armor'));
 		$sum = 0;
-		foreach($armor_equip_list as $key) 
-			if(strpos($pd[$key.'k'],'P')===false || $pd[$key.'s']!==$nosta)
-				$sum+=$pd[$key.'e'];
+		foreach($armor_equip_list as $key) $sum+=$pd[$key.'e'];
 		return $sum;
 	}
 	
-	function get_def(&$pa,&$pd,$active)
+	function get_def_base(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = $chprocess($pa, $pd, $active);
 		$pd['external_def'] = get_external_def($pa,$pd,$active)*get_external_def_multiplier($pa,$pd,$active);
-		return $chprocess($pa, $pd, $active)+$pd['external_def'];
+		$pd['def_words'] = \attack\add_format($pd['external_def'], $pd['def_words'],0);
+		return $ret+$pd['external_def'];
 	}
 	
 	function armor_break(&$pa, &$pd, $active, $whicharmor)
@@ -42,10 +42,10 @@ namespace armor
 		eval(import_module('logger'));
 		if ($active)
 		{
-			$log .= "{$pd['name']}的<span class=\"red\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
-			$pd['armorbreaklog'] .= "你的<span class=\"red\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
+			$log .= "{$pd['name']}的<span class=\"red b\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
+			$pd['armorbreaklog'] .= "你的<span class=\"red b\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
 		}
-		else  $log .= "你的<span class=\"red\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
+		else  $log .= "你的<span class=\"red b\">".$pd[$whicharmor]."</span>受损过重，无法再装备了！<br>";
 		
 		$pd[$whicharmor] = ''; $pd[$whicharmor.'e'] = 0; $pd[$whicharmor.'s'] = 0; $pd[$whicharmor.'sk'] = '';
 						
@@ -62,9 +62,9 @@ namespace armor
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('armor','wound','logger'));
-		if ((in_array($which,$armor_equip_list) && isset($pd[$which.'e']) && $pd[$which.'e']>0) && (strpos($pd[$which.'k'],'P')===false || $pd[$which.'s']!==$nosta))	//有防具 装甲耐久不为∞
+		if (in_array($which,$armor_equip_list) && isset($pd[$which.'e']) && $pd[$which.'e']>0)	//有防具
 		{
-			if ($pd[$which.'s'] == $nosta && strpos($pd[$which.'k'],'P')===false)	//无限耐久防具可以抵挡一次任意损耗的攻击
+			if ($pd[$which.'s'] == $nosta)	//无限耐久防具可以抵挡一次任意损耗的攻击
 			{
 				$pd[$which.'s'] = $hurtvalue;
 			}
@@ -80,20 +80,8 @@ namespace armor
 				$log .= "你的".$pd[$which]."的耐久度下降了{$x}！<br>";
 			}
 					
-			if ($pd[$which.'s']<=0) 
-			{
-				if(strpos($pd[$which.'k'],'P')!==false)
-				{
-					$pd[$which.'s'] = $nosta;
-					if ($active)
-						$log .= "{$pd['name']}的{$pd[$which]}已经严重损坏！<br>";
-					else  $log .= "你的{$pd[$which]}已经严重损坏，请尽快修复！<br>";
-				}
-				else
-				{
-					armor_break($pa, $pd, $active, $which);
-				}
-			}			
+			if ($pd[$which.'s']<=0) armor_break($pa, $pd, $active, $which);
+			
 			return $x;
 		}
 		else  return 0;
@@ -142,7 +130,7 @@ namespace armor
 				${$eqp.'e'} = $itme;
 				${$eqp.'s'} = $itms;
 				${$eqp.'sk'} = $itmsk;
-				$log .= "装备了<span class=\"yellow\">$itm</span>。<br>";
+				$log .= "装备了<span class=\"yellow b\">$itm</span>。<br>";
 				$itm = $itmk = $itmsk = '';
 				$itme = $itms = 0;
 			} else {
@@ -151,7 +139,7 @@ namespace armor
 				swap(${$eqp.'e'},$itme);
 				swap(${$eqp.'s'},$itms);
 				swap(${$eqp.'sk'},$itmsk);
-				$log .= "卸下了<span class=\"red\">$itm</span>，装备了<span class=\"yellow\">${$eqp}</span>。<br>";
+				$log .= "卸下了<span class=\"red b\">$itm</span>，装备了<span class=\"yellow b\">${$eqp}</span>。<br>";
 			}
 			return;
 		}

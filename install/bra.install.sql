@@ -25,7 +25,6 @@ CREATE TABLE `bra_game` (
   `noisevars` varchar(1000) NOT NULL DEFAULT '',
   `roomvars` text NOT NULL DEFAULT '',
   `gamevars` text NOT NULL DEFAULT '',
-  `bancombo` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`groomid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

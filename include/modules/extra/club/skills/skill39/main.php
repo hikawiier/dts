@@ -6,7 +6,7 @@ namespace skill39
 	{
 		define('MOD_SKILL39_INFO','club;upgrade;feature;');
 		eval(import_module('clubbase'));
-		$clubdesc_h[14] = $clubdesc_a[14] = '初始基础攻击力、防御力各+200<br>每次升级额外获得2点攻击力和2-3点防御力<br>技能点换取攻防数值大幅提高';
+		$clubdesc_h[14] = $clubdesc_a[14] = '初始基础攻击力、防御力各+200<br>每次升级额外获得2点攻击力和2点防御力<br>技能点换取攻防数值大幅提高';
 		//肌肉的特性显示实际上在skill79里
 	}
 	
@@ -51,7 +51,7 @@ namespace skill39
 		$att += $att_dice;
 		$def_dice = $skillpara1*11;
 		$def += $def_dice;
-		$log.='消耗了<span class="lime">'.$skillpara1.'</span>点技能点，你的攻击力提升了<span class="yellow">'.$att_dice.'</span>点，防御力提升了<span class="yellow">'.$def_dice.'</span>点。<br>';
+		$log.='消耗了<span class="lime b">'.$skillpara1.'</span>点技能点，你的攻击力提升了<span class="yellow b">'.$att_dice.'</span>点，防御力提升了<span class="yellow b">'.$def_dice.'</span>点。<br>';
 		$skillpoint-=$skillpara1;
 	}
 	
@@ -62,7 +62,7 @@ namespace skill39
 		if (\skillbase\skill_query(39,$pa)) 
 		{
 			$lvupatt += 2;	
-			$lvupdef += rand(2,3);	
+			$lvupdef += 2;//rand(2,3);	
 		}
 		$chprocess($pa);
 	}

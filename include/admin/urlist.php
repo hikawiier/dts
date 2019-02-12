@@ -2,6 +2,135 @@
 if(!defined('IN_ADMIN')) {
 	exit('Access Denied');
 }
+
+//这个文件只能调本地用户
+global $userdb_forced_local;
+$userdb_forced_local = 1;
+
+$recover_dir = GAME_ROOT.'./gamedata/cache/user_backup';
+$user_backup_list = array();
+$user_backup_date_list = array();
+if ($handle=opendir($recover_dir)) 
+{
+	while (($entry=readdir($handle))!==false) 
+	{
+		if ($entry!='.' && $entry!='..' && in_array(pathinfo($entry,PATHINFO_EXTENSION),array('dat','php'))) 
+		{
+			$user_backup_list[] = $entry;
+			$user_backup_date_list[] = date("Y-m-d H:i:s", filemtime($recover_dir.'/'.$entry) + $now - time());
+		}
+	}
+}
+
+if(!empty($pagecmd) && $pagecmd == 'recover'){
+	if(empty($recover_file) || !in_array($recover_file, $user_backup_list)){
+		$cmd_info = "恢复参数错误";
+	}else{
+		$cont = file_get_contents($recover_dir.'/'.$recover_file);
+		if(empty($cont)) $cmd_info = "文件格式错误";
+		else{
+			set_time_limit(0);
+			$filepath = dir_init($recover_dir);
+			$odbname = 'old_db_'.uniqid().'.php';
+			$filepath .= '/';
+			urlist_userdb_backup($filepath.$odbname);
+			$cmd_info = '旧数据库已保存为"'.$odbname.'"';
+			$db->query("TRUNCATE TABLE {$gtablepre}users");
+			$cont = explode("\n", $cont);
+			$cont_size = sizeof($cont);
+			$cont_arr = array();
+			$i = 0;
+			foreach($cont as $ci => $cv){
+				if(strpos($cv, '<?php')===0) continue;
+				$cv = json_decode(trim($cv),1);
+				if(isset($cv['username']) ) {
+					$cont_arr[] = $cv;
+					$i ++;
+				}
+				//一个记录可能有400个字符，达到1M时insert1次
+				if(sizeof($cont_arr) >= 2500 || $ci >= $cont_size - 1) {
+					insert_udata($cont_arr);
+					$cont_arr = array();
+				}
+			}
+			$cmd_info .= '<br>'.$i.'条记录已恢复，用户数据恢复成功';
+		}
+	}
+	$urcmd = '';
+}elseif(!empty($pagecmd) && $pagecmd == 'upload'){
+	if(!isset($_FILES['uploadfile']) || empty($_FILES['uploadfile']['name'])) {
+		$cmd_info = "不能上传空文件";
+	}elseif($_FILES['uploadfile']['error'] > 0) {
+		$cmd_info = '上传错误，编号：'.$_FILES['uploadfile']['error'];
+	}else{
+		$cont = file_get_contents($_FILES['uploadfile']['tmp_name']);
+		$cont = explode("\r\n", $cont);
+		$errno = 0;
+		$cont_arr = array();
+		foreach($cont as $cv){
+			$cv = json_decode(trim($cv),1);
+			if(!$cv || !isset($cv['username']) ) {
+				if(!$cont_arr){
+					$errno = 1;break;
+				}
+			}else{
+				if($cv['username'] == $cuser && $cv['groupid'] < $udata['groupid']) {
+					$errno = 2;break;
+				}
+				$cont_arr[] = $cv;
+			}
+		}
+		if(1==$errno) {
+			$cmd_info = '上传文件的格式错误';
+		}elseif(2==$errno) {
+			$cmd_info = '覆盖后将导致管理员信息不正确';
+		}else{
+			
+			$filepath = dir_init($recover_dir);
+			$odbname = 'old_db_'.uniqid().'.php';
+			$filepath .= '/';
+			urlist_userdb_backup($filepath.$odbname);
+			$cmd_info = '旧数据库已保存为"'.$odbname.'"';
+			set_time_limit(0);
+			$db->query("TRUNCATE TABLE {$gtablepre}users");
+			//这个就维持覆盖本地好了
+			insert_udata($cont_arr, 1);
+			adminlog('uploadurdata');
+			$cmd_info .= '，用户数据覆盖成功';
+			
+		}
+	}
+	
+	$urcmd = '';
+}elseif(!empty($pagecmd) && $pagecmd == 'download'){
+	$filepath = dir_init(GAME_ROOT.'./gamedata/cache/user_backup');
+	$filepath .= '/';
+	$sitename = explode('.',gurl());
+	if(sizeof($sitename) <= 2) $sitename = $sitename[0];
+	else $sitename = $sitename[1];
+	$filename = 'userdb_'.$sitename.'_'.uniqid().'.php';
+	urlist_userdb_backup($filepath.$filename);
+	
+	adminlog('downloadurdata');
+	$file_size = filesize($filepath.$filename);
+	ob_clean();
+	header("Content-type: application/octet-stream");  
+  header("Accept-Ranges: bytes");  
+  header("Accept-Length: ".$file_size);  
+  header("Content-Disposition: attachment; filename={$filename}");  
+  $fp = fopen($filepath.$filename,"r");
+  $buffer_size = 4096;
+  $cur_pos = 0;
+    
+  while(!feof($fp))
+  {
+    $buffer = fread($fp,$buffer_size);
+    echo $buffer;
+    $cur_pos += $buffer_size;
+  }
+    
+  die();
+}
 if(!isset($urcmd)){$urcmd = '';}
 if($urcmd){
 	if(!isset($start)){$start = 0;}
@@ -12,24 +141,24 @@ if($urcmd){
 			$urorder = 'uid';
 		}
 		$urorder2 = $urorder2 == 'ASC' ? 'ASC' : 'DESC';
-		$result = $db->query("SELECT * FROM {$gtablepre}users ORDER BY $urorder $urorder2, uid DESC LIMIT $start,$showlimit");	
+		$urdata = fetch_udata('*', '1', "$urorder $urorder2, uid DESC LIMIT $start,$showlimit");
 	}elseif($pagecmd == 'find'){
 		if($checkmode == 'ip') {
-			$result = $db->query("SELECT * FROM {$gtablepre}users WHERE ip LIKE '%{$checkinfo}%' ORDER BY uid DESC LIMIT $start,$showlimit");
+			$urdata = fetch_udata('*', "ip LIKE '%{$checkinfo}%'", "uid DESC LIMIT $start,$showlimit");
 		} else {
-			$result = $db->query("SELECT * FROM {$gtablepre}users WHERE username LIKE '%{$checkinfo}%' ORDER BY uid DESC LIMIT $start,$showlimit");
+			$urdata = fetch_udata('*', "username LIKE '%{$checkinfo}%'", "uid DESC LIMIT $start,$showlimit");
 		}
 	}
-	if(!$db->num_rows($result)) {
+	if(empty($urdata)) {
 		$cmd_info = '没有符合条件的帐户！';
 		$startno = $start + 1;
 		$resultinfo = '位置：第'.$startno.'条记录';
 	} else {
-		while($ur = $db->fetch_array($result)) {
-			if(!$ur['gender']){$ur['gender']='0';}
+		foreach($urdata as &$ur) {
+			if(!$ur['gender']) $ur['gender']='0';
 			$ur['a_achievements'] = json_encode(\achievement_base\decode_achievements($ur));
-			$urdata[] = $ur;
 		}
+		unset($ur);
 		$startno = $start + 1;
 		$endno = $start + count($urdata);
 		$resultinfo = '第'.$startno.'条-第'.$endno.'条记录';
@@ -61,13 +190,13 @@ if($urcmd == 'ban' || $urcmd == 'unban' || $urcmd == 'del' || $urcmd == 'sendmes
 			$operword = '发送邮件给';
 		}elseif($urcmd == 'ban'){
 			$operword = '封停';
-			$qryword = "UPDATE {$gtablepre}users SET groupid='0' ";
+			$cmdgroupid = 0;
 		}elseif($urcmd == 'unban'){
 			$operword = '解封';
-			$qryword = "UPDATE {$gtablepre}users SET groupid='1' ";
+			$cmdgroupid = 1;
 		}elseif($urcmd == 'del'){
 			$operword = '删除';
-			$qryword = "DELETE FROM {$gtablepre}users ";
+			$cmdgroupid = -1;
 		}
 		if($operlist){
 			if($urcmd == 'sendmessage'){
@@ -79,9 +208,14 @@ if($urcmd == 'ban' || $urcmd == 'unban' || $urcmd == 'del' || $urcmd == 'sendmes
 				$cmd_info .= " 给帐户 $opernames 发送了邮件 。<br>";
 				adminlog($urcmd.'ur',$opernames,array($stitle,$scontent,$senclosure));
 			}else{
-				$qrywhere = '('.implode(',',array_keys($operlist)).')';
+				$qrywhere = 'uid IN ('.implode(',',array_keys($operlist)).')';
 				$opernames = implode(',',($operlist));
-				$db->query("$qryword WHERE uid IN $qrywhere");
+				if(-1 == $cmdgroupid) {
+					delete_udata($qrywhere);
+				}else{
+					update_udata(array('groupid' => $cmdgroupid), $qrywhere);
+				}
+				//$db->query("$qryword WHERE uid IN $qrywhere");
 				$cmd_info .= " 帐户 $opernames 被 $operword 。<br>";
 				adminlog($urcmd.'ur',$opernames);
 			}
@@ -99,6 +233,7 @@ if($urcmd == 'ban' || $urcmd == 'unban' || $urcmd == 'del' || $urcmd == 'sendmes
 	}
 	$urcmd = 'list';
 }elseif($urcmd == 'del2') {
+	//这个就不更新了
 	$result = $db->query("SELECT username,uid FROM {$gtablepre}users WHERE lastgame = 0 AND groupid<='$mygroup' LIMIT 1000");
 	while($ddata = $db->fetch_array($result)){
 		$n = $ddata['username'];$u = $ddata['uid'];
@@ -140,19 +275,29 @@ if($urcmd == 'ban' || $urcmd == 'unban' || $urcmd == 'del' || $urcmd == 'sendmes
 		$log_new_data = $urdata[$no];
 		$log_new_data['a_achievements'] = htmlspecialchars_decode(${'a_achievements_'.$no});
 		$cmd_info = '';
+		$updarr = array(
+			'motto' => $urmotto,
+			'killmsg' => $urkillmsg,
+			'lastword' => $urlastword,
+			'icon' => $uricon,
+			'gender' => $urgender,
+			'gold' => $urgold,
+			'cardlist' => $urcardlist,
+		);
+		
 		$extrasql='';
 		if(!empty(${'pass_'.$no})){
 			$urpass = create_storedpass($urdata[$no]['username'], create_cookiepass(${'pass_'.$no}));
-			$extrasql.=",password='$urpass'";
+			$updarr['password'] = $urpass;
+			$updarr['alt_pswd'] = 1;
 			$cmd_info = "修改了帐户 {$urdata[$no]['username']} 的密码！<br>";
 		}
 		if(empty($tmp_urna)) {
 			$cmd_info.="提交的成就参数无效，已被忽略！<br>";
 		}else{
-			$extrasql.=",u_achievements='$ur_achievements'";
+			$updarr['u_achievements'] = $ur_achievements;
 		}
-		
-		$db->query("UPDATE {$gtablepre}users SET motto='$urmotto',killmsg='$urkillmsg',lastword='$urlastword',icon='$uricon',gender='$urgender',gold='$urgold',cardlist='$urcardlist'{$extrasql} WHERE uid='$uid'");
+		update_udata($updarr, "uid='$uid'");
 		$cmd_info .= "帐户 ".$urdata[$no]['username']." 的信息已修改！";
 		
 		//为了记录具体改了啥真是大费周章啊
@@ -176,4 +321,14 @@ if($urcmd == 'ban' || $urcmd == 'unban' || $urcmd == 'del' || $urcmd == 'sendmes
 }
 include template('admin_urlist');
 
+//直接读本地数据库比较快，也省内存
+function urlist_userdb_backup($file){
+	global $db, $gtablepre, $checkstr;
+	$result = $db->query("SELECT * FROM {$gtablepre}users");
+	writeover($file, $checkstr);
+	while($r = $db->fetch_array($result)){
+		writeover($file, json_encode($r, JSON_UNESCAPED_UNICODE)."\r\n", 'ab+');
+	}
+	return $file;
+}
 ?>

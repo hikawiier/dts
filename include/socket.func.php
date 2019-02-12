@@ -9,8 +9,8 @@ function __SOCKET_ERRORLOG__($data)	//注意ERRORLOG将直接导致脚本退出
 		//if ($x) $data.=' 错误信息：'.mb_convert_encoding(socket_strerror($x),'UTF-8').'（错误'.$x.'）';//根据系统不同，strerror可能出现乱码
 		if ($x) $data.='（错误'.$x.'）';
 		__SOCKET_WARNLOG__($data);
-		global $___TEMP_runmode, $___TEMP_CONN_PORT;
-		$data = $___TEMP_runmode.' on port '.$___TEMP_CONN_PORT.' : '.$data;
+		global $___TEMP_runmode, $___TEMP_CONN_PORT, $___TEMP_script_uniqid;
+		$data = $___TEMP_runmode.' #'.$___TEMP_script_uniqid.' on port '.$___TEMP_CONN_PORT.' : '.$data;
 		date_default_timezone_set('Etc/GMT');
 		$now = time() + 8*3600 + 0*60;   
 		list($usec,$tsec)=explode(' ',microtime());
@@ -26,8 +26,8 @@ function __SOCKET_WARNLOG__($data)
 {
 	global $___MOD_LOG_LEVEL; if ($___MOD_LOG_LEVEL<2) return;
 	__SOCKET_LOG__($data);
-	global $___TEMP_runmode, $___TEMP_CONN_PORT;
-	$data = $___TEMP_runmode.' on port '.$___TEMP_CONN_PORT.' : '.$data;
+	global $___TEMP_runmode, $___TEMP_CONN_PORT, $___TEMP_script_uniqid;
+	$data = $___TEMP_runmode.' #'.$___TEMP_script_uniqid.' on port '.$___TEMP_CONN_PORT.' : '.$data;
 	date_default_timezone_set('Etc/GMT');
 	$now = time() + 8*3600 + 0*60;   
 	list($usec,$tsec)=explode(' ',microtime());
@@ -41,8 +41,8 @@ function __SOCKET_LOG__($data)
 {
 	global $___MOD_LOG_LEVEL; if ($___MOD_LOG_LEVEL<3) return;
 	__SOCKET_DEBUGLOG__($data);
-	global $___TEMP_runmode, $___TEMP_CONN_PORT;
-	$data = $___TEMP_runmode.' on port '.$___TEMP_CONN_PORT.' : '.$data;
+	global $___TEMP_runmode, $___TEMP_CONN_PORT, $___TEMP_script_uniqid;
+	$data = $___TEMP_runmode.' #'.$___TEMP_script_uniqid.' on port '.$___TEMP_CONN_PORT.' : '.$data;
 	date_default_timezone_set('Etc/GMT');
 	$now = time() + 8*3600 + 0*60;   
 	list($usec,$tsec)=explode(' ',microtime());
@@ -55,8 +55,8 @@ function __SOCKET_LOG__($data)
 function __SOCKET_DEBUGLOG__($data)
 {
 	global $___MOD_LOG_LEVEL; if ($___MOD_LOG_LEVEL<4) return;
-	global $___TEMP_runmode, $___TEMP_CONN_PORT;
-	$data = $___TEMP_runmode.' on port '.$___TEMP_CONN_PORT.' : '.$data;
+	global $___TEMP_runmode, $___TEMP_CONN_PORT, $___TEMP_script_uniqid;
+	$data = $___TEMP_runmode.' #'.$___TEMP_script_uniqid.' on port '.$___TEMP_CONN_PORT.' : '.$data;
 	date_default_timezone_set('Etc/GMT');
 	$now = time() + 8*3600 + 0*60;   
 	list($usec,$tsec)=explode(' ',microtime());
@@ -81,6 +81,14 @@ function __SOCKET_CHECK_WITH_TIMEOUT__($socket, $optype, $tsec, $tusec = 0)
   if ($num_changed_sockets === false || $num_changed_sockets === 0)
 		return $num_changed_sockets;//false;
 	else  return true;
+}
+
+function __SOCKET_SAVE_RESPONSE__($file_uid, $data)
+{
+	global $___MOD_TMP_FILE_DIRECTORY, $___LOCAL_INPUT__VARS__COOKIE_VAR_LIST;
+	writeover($___MOD_TMP_FILE_DIRECTORY.$file_uid, $data);
+	if(!empty($___LOCAL_INPUT__VARS__COOKIE_VAR_LIST))
+		writeover($___MOD_TMP_FILE_DIRECTORY.$file_uid.'.setcookie', gencode($___LOCAL_INPUT__VARS__COOKIE_VAR_LIST));
 }
 
 function __SOCKET_SEND_TO_SERVER__()
@@ -194,6 +202,16 @@ function __SOCKET_SEND_TO_SERVER__()
 		$___TEMP_res=file_get_contents($___MOD_TMP_FILE_DIRECTORY.$game_roomid.'_/'.$___TEMP_uid);
 		if (!defined('MOD_REPLAY')) 	//如果录像模式开启，最后删缓存的工作由录像模块进行
 			unlink($___MOD_TMP_FILE_DIRECTORY.$game_roomid.'_/'.$___TEMP_uid);
+	}
+	
+	$___TEMP_res_setcookie = array();
+	if(file_exists($___MOD_TMP_FILE_DIRECTORY.$game_roomid.'_/'.$___TEMP_uid.'.setcookie'))
+	{
+		$___TEMP_res_setcookie=file_get_contents($___MOD_TMP_FILE_DIRECTORY.$game_roomid.'_/'.$___TEMP_uid.'.setcookie');
+		$___TEMP_res_setcookie=gdecode($___TEMP_res_setcookie,1);
+		unlink($___MOD_TMP_FILE_DIRECTORY.$game_roomid.'_/'.$___TEMP_uid.'.setcookie');
+		foreach($___TEMP_res_setcookie as $tmp_rc_k => $tmp_rc_v) 
+			gsetcookie($tmp_rc_k, $tmp_rc_v['value'], $tmp_rc_v['life'], $tmp_rc_v['prefix']);
 	}
 	
 	__SOCKET_DEBUGLOG__("已载入回应文件。");

@@ -5,6 +5,8 @@ namespace skill82
 
 	$ragecost=5;
 	
+	$wep_skillkind_req = 'wk';
+	
 	function init() 
 	{
 		define('MOD_SKILL82_INFO','club;battle;');
@@ -54,12 +56,12 @@ namespace skill82
 		else
 		{
 			$rcost = get_rage_cost82($pa);
-			if ( $pa['rage']>=$rcost && \weapon\get_skillkind($pa,$pd,$active) == 'wk')
+			if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,82) )
 			{
 				eval(import_module('logger'));
 				if ($active)
-					$log.="<span class=\"lime\">你对{$pd['name']}发动了技能「解牛」！</span><br>";
-				else  $log.="<span class=\"lime\">{$pa['name']}对你发动了技能「解牛」！</span><br>";
+					$log.="<span class=\"lime b\">你对{$pd['name']}发动了技能「解牛」！</span><br>";
+				else  $log.="<span class=\"lime b\">{$pa['name']}对你发动了技能「解牛」！</span><br>";
 				$pa['rage']-=$rcost;
 				addnews ( 0, 'bskill82', $pa['name'], $pd['name'] );
 			}
@@ -84,7 +86,7 @@ namespace skill82
 		{
 			eval(import_module('logger'));
 			$d=get_dmg82($pa);
-			$log.='<span class="yellow">「解牛」附加了'.$d.'点伤害！</span><br>';
+			$log.='<span class="yellow b">「解牛」附加了'.$d.'点伤害！</span><br>';
 			$ret += $d;
 			$pa['mult_words_fdmgbs'] = \attack\add_format($d, $pa['mult_words_fdmgbs']);
 		}
@@ -107,7 +109,7 @@ namespace skill82
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill82') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「解牛」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「解牛」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

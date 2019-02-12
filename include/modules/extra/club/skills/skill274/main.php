@@ -3,14 +3,15 @@
 namespace skill274
 {
 	//附加伤害比例
-	$factor = array(10,16,22,28);
+	$factor = array(10,20,30,40);
 	$npc_factor = 2;
 	//升级所需技能点数值
 	$upgradecost = array(3,5,7,-1);
 	
 	$ragecost=30;
-	$skill274_factor_pc = 40;//附加对面总面板攻击力25%的最终伤害
-	$skill274_factor_npc = 75;
+	$wepk_req='WN';
+//	$skill274_factor_pc = 40;//附加对面总面板攻击力25%的最终伤害
+//	$skill274_factor_npc = 75;
 	$skill274_factor_maxhp = 40;//不超过对方mhp
 	$skill274_263up = 30;//格斗触发概率+10%
 	
@@ -71,10 +72,10 @@ namespace skill274
 			else
 			{
 				$rcost = get_rage_cost274($pa);
-				if ( $pa['rage']>=$rcost && $pa['wep_kind']=='N')
+				if ( !\clubbase\check_battle_skill_unactivatable($pa,$pd,274) )
 				{
 					eval(import_module('logger'));
-					$log .= \battle\battlelog_parser($pa,$pd,$active,"<span class=\"lime\"><:pa_name:>对<:pd_name:>发动了技能「截拳」！</span><br>");
+					$log .= \battle\battlelog_parser($pa,$pd,$active,"<span class=\"lime b\"><:pa_name:>对<:pd_name:>发动了技能「截拳」！</span><br>");
 					$pa['rage']-=$rcost;
 					$pa['skill274_flag'] = 1;
 					addnews ( 0, 'bskill274', $pa['name'], $pd['name'] );
@@ -143,7 +144,7 @@ namespace skill274
 			eval(import_module('logger'));
 			$v = get_skill274_dmg($pa, $pd, $active);
 			if($v) {
-				$log.=\battle\battlelog_parser($pa,$pd,$active,'你如流水一般的灵活攻击使<:pd_name:>额外受到<span class="yellow">'.$v.'</span>点伤害！<br>');
+				$log.=\battle\battlelog_parser($pa,$pd,$active,'你如流水一般的灵活攻击使<:pd_name:>额外受到<span class="yellow b">'.$v.'</span>点伤害！<br>');
 				$ret += $v;
 				$pa['mult_words_fdmgbs'] = \attack\add_format($v, $pa['mult_words_fdmgbs']);
 			}
@@ -193,7 +194,7 @@ namespace skill274
 		eval(import_module('sys','player'));
 		
 		if($news == 'bskill274') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"clan\">{$a}对{$b}发动了技能<span class=\"yellow\">「截拳」</span></span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">{$a}对{$b}发动了技能<span class=\"yellow b\">「截拳」</span></span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

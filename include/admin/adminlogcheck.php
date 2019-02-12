@@ -29,15 +29,15 @@ foreach($adminlogdata as $aval){
 		elseif('delgm'==$o) $show_o = '删除权限';
 		elseif('editgm'==$o) $show_o = '修改权限';
 		$p2=(int)$p2;
-		$show_p = '账户 <span class="clan">'.$p1.'</span> → <span class="yellow">'.$p2.'权限</span>';
+		$show_p = '账户 <span class="cyan b">'.$p1.'</span> → <span class="yellow b">'.$p2.'权限</span>';
 	}elseif('editbanlist'==$o) {
 		$show_o = '修改屏蔽词/IP';
 		$nmlimit = gdecode($p1,1);$iplimit = gdecode($p2,1);
 		$show_p = '用户名屏蔽：<br>'.htmlentities($nmlimit).'<br>IP屏蔽：<br>'.htmlentities($iplimit);
-	}elseif('configmng'==$o || 'gamecfgmng'==$o || 'systemmng'==$o){
+	}elseif('configmng'==$o || 'gamecfgmng'==$o || 'globalgamemng'==$o || 'systemmng'==$o){
 		$show_o = $lang[$o];
 //		if('configmng'==$o) $show_o = '底层参数设置';
-//		elseif('systemmng'==$o) $show_o = '全局参数设置';
+//		elseif('globalgamemng'==$o) $show_o = '全局参数设置';
 //		elseif('gamecfgmng'==$o) $show_o = '游戏参数设置';
 		$edlist = gdecode($p1,1);
 		foreach($edlist as $edk => $edv){
@@ -69,7 +69,7 @@ foreach($adminlogdata as $aval){
 			if('I'==$p3) $show_o = '立刻增加禁区';
 			elseif('L'==$p3) $show_o = '60s后增加禁区';
 		}
-		$show_gnum = adminlog_parse_gnum($a1,$a2);
+		$show_gnum = adminlog_parse_gnum($p1,$p2);
 	}elseif(in_array($o, array('killpc', 'livepc', 'delpc', 'delcp', 'editpc', 'killnpc', 'livenpc', 'delnpc', 'delncp', 'editnpc'))){
 		if(strpos($o, 'kill')===0) {
 			$show_o = '杀死';
@@ -86,7 +86,7 @@ foreach($adminlogdata as $aval){
 		if(strpos($o, 'edit')===0){
 			list($a1,$a2) = explode('_',$p1);
 			$show_gnum = adminlog_parse_gnum($a1,$a2);
-			$show_p = '<span class="yellow">'.$p2.'</span> 修改内容：<br>';
+			$show_p = '<span class="yellow b">'.$p2.'</span> 修改内容：<br>';
 			$diff = gdecode($p3,1);
 			foreach($diff as $dk => $dv){
 				if(isset($lang[$dk])) $dk = $lang[$dk];
@@ -99,8 +99,12 @@ foreach($adminlogdata as $aval){
 			}
 		}else{
 			$show_gnum = adminlog_parse_gnum($p1,$p2);
-			$show_p = '<span class="yellow">'.$p3.'</span>';
+			$show_p = '<span class="yellow b">'.$p3.'</span>';
 		}
+	}elseif('downloadurdata'==$o) {
+		$show_o = '下载用户数据库';
+	}elseif('uploadurdata'==$o) {
+		$show_o = '上传并覆盖用户数据库';
 	}elseif(in_array($o, array('banur','unbanur','delur','delur2','editur'))){
 		if('banur'==$o) {
 			$show_o = '封禁账户';
@@ -113,18 +117,22 @@ foreach($adminlogdata as $aval){
 		}elseif('editur'==$o) {
 			$show_o = '修改账户数据';
 		}
-		$show_p = '<span class="yellow">'.$p1.'</span>';
+		$show_p = '<span class="yellow b">'.$p1.'</span>';
 		if('editur'==$o) {
 			$show_p .= ' 修改内容：<br>';
 			$cont = gdecode($p2,1);
 			foreach($cont as $ck => $cv){
+				if(is_array($cv)) $cv = json_encode($cv);
 				if(isset($lang[$ck])) $ck = $lang[$ck];
 				if('gender'==$ck) $ck='默认性别';
 				elseif('gold'==$ck) $ck='切糕';
 //				elseif('motto'==$ck) $ck='口头禅';
 //				elseif('lastword'==$ck) $ck='遗言';
-				elseif('a_achievements'==$ck) $ck='成就';
-				if(is_array($cv)) $cv = json_encode($cv);
+				elseif('a_achievements'==$ck || 'cardlist'==$ck) {
+					if('a_achievements'==$ck) $ck='成就';
+					else $ck='卡片';
+					$cv = '<a title="'.str_replace('"',"'",$cv).'">悬浮查看</a>';
+				}
 				$show_p .= $ck.' → '.$cv.'<br>';
 			}
 		}

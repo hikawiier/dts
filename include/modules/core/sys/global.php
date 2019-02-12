@@ -5,14 +5,14 @@ namespace sys
 	//文件进程锁，对game表如果有操作，建议在操作前加锁
 	//由于代码兼容问题，现在不是采用flock，而是直接生成一个文件，判定此文件是否存在
 	//如果本进程已经加过锁则不会进行任何操作
-	function process_lock($locktype = LOCK_EX) {//可使用LOCK_SH LOCK_EX LOCK_UN
+	function process_lock($non_blocking=false) {//可使用LOCK_SH LOCK_EX LOCK_UN
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
 		$dir = GAME_ROOT.'./gamedata/tmp/processlock/';
-		$file = 'process_'.$groomid.'.nlk';
+		$file = 'process_'.(int)$room_id.'.nlk';
 		$res = NULL;
 		if(empty($plock)) {
-			$lstate = check_lock($dir, $file, 5000);
+			$lstate = check_lock($dir, $file, 10000);
 			if(!$lstate) {
 				$res = create_lock($dir, $file);
 			}
@@ -31,46 +31,6 @@ namespace sys
 			release_lock($dir, $file);
 			$plock = NULL;
 		}
-	}
-	
-	//循环判断锁是否存在，如果存在则挂起10毫秒之后继续判定，直到时间耗尽，起到阻塞作用
-	//返回true表示锁存在，false表示锁不存在
-	//如果加了$timeout，会阻塞到时间耗尽或者锁释放为止。$timeout时间是毫秒
-	function check_lock($dirname, $filename, $timeout=0)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$sleept = 0;
-		$res = file_exists($dirname.$filename);
-		while($res){
-			usleep(10000);
-			$sleept += 10000;
-			if($sleept > $timeout*1000) break;
-			$res = file_exists($dirname.$filename);
-		}
-		return $res;
-	}
-	
-	//用于判定/生成锁
-	//如果文件存在，生成并返回true
-	//如果文件已经存在，返回false
-	function create_lock($dirname, $filename)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if(!file_exists($dirname)) mymkdir($dirname);
-		if(!file_exists($dirname.$filename)) {
-			touch($dirname.$filename);
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	//清除生成的锁
-	function release_lock($dirname, $filename)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if(!file_exists($dirname)) mymkdir($dirname);
-		if(file_exists($dirname.$filename)) unlink($dirname.$filename);
 	}
 	
 	/*
@@ -196,14 +156,15 @@ namespace sys
 		//这尼玛写的太坑了吧…… 不管了直接import map模块进来了……
 		eval(import_module('map'));
 		if(strpos($n,'death11') === 0  || strpos($n,'death32') === 0) {
-			$result = $db->query("SELECT lastword FROM {$gtablepre}users WHERE username = '$a'");
-			$e = $lastword = $db->result($result, 0);
+			$result = $db->query("SELECT lastword FROM {$tablepre}players WHERE name = '$a'");
+			$r = $db->fetch_array($result);
+			$e = $lastword = $r['lastword'];
 			$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,recv,msg) VALUES ('3','$t','【{$plsinfo[$c]}】 $a','','$lastword')");
 		}	elseif(strpos($n,'death15') === 0 || strpos($n,'death16') === 0) {
-			$result = $db->query("SELECT lastword FROM {$gtablepre}users WHERE username = '$a'");
-			$e = $lastword = $db->result($result, 0);
-			$result = $db->query("SELECT pls FROM {$tablepre}players WHERE name = '$a' AND type = '0'");
-			$place = $db->result($result, 0);
+			$result = $db->query("SELECT lastword,pls FROM {$tablepre}players WHERE name = '$a'");
+			$r = $db->fetch_array($result);
+			$e = $lastword = $r['lastword'];
+			$place = $r['pls'];
 			$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,recv,msg) VALUES ('3','$t','【{$plsinfo[$place]}】 $a','','$lastword')");
 		}
 		$db->query("INSERT INTO {$tablepre}newsinfo (`time`,`news`,`a`,`b`,`c`,`d`,`e`) VALUES ('$t','$n','$a','$b','$c','$d','$e')");
@@ -240,21 +201,23 @@ namespace sys
 		if(0 == $chat['type']) {
 			$premsg .= ' class="chat0">';
 		} elseif(1 == $chat['type']) {
-			$premsg .= ' class="clan chat1">';
+			$premsg .= ' class="cyan b chat1">';
 		} elseif(3 == $chat['type']) {
-			$premsg .= ' class="red chat3">';
+			$premsg .= ' class="red b chat3">';
 			if ($chat['msg']){
 			} else {
 				$msg = '【'.$chatinfo[$chat['type']].'】'.$chat['send'].'什么都没说就死去了 ('.date("H:i:s",$chat['time']).')';
 			}
 		} elseif(4 == $chat['type']) {
-			$premsg .= ' class="yellow chat4">';
+			$premsg .= ' class="yellow b chat4">';
 		} elseif(5 == $chat['type']) {
-			$premsg .= ' class="yellow chat5">';
+			$premsg .= ' class="yellow b chat5">';
 			$msg = '【'.$chatinfo[$chat['type']].'】'.$chat['msg'].'('.date("H:i:s",$chat['time']).')';
 		} elseif(6 == $chat['type']) {
-			$premsg .= ' class="lime chat6">';
-			$msg = '【'.$chatinfo[$chat['type']].'】'.$chat['msg'].'('.date("H:i:s",$chat['time']).')';
+			$premsg .= ' class="lime b chat6">';
+			$sender = '';
+			if(!empty($chat['send'])) $sender = $chat['send'].'：';
+			$msg = '【'.$chatinfo[$chat['type']].'】'.$sender.$chat['msg'].'('.date("H:i:s",$chat['time']).')';
 		}
 		return $premsg.$msg.$postmsg;
 	}
@@ -266,7 +229,11 @@ namespace sys
 		eval(import_module('sys', 'input'));
 
 		$limit = $limit ? $limit : $chatlimit;
-		$result = $db->query("SELECT * FROM {$ctablepre}chat WHERE cid>'$last' AND (recv='' OR (type='1' AND recv='$team') OR (type!='1' AND recv='$chatpid')) ORDER BY cid desc LIMIT $limit");
+		
+		if('all' == $team)
+			$result = $db->query("SELECT * FROM {$ctablepre}chat WHERE cid>'$last' ORDER BY cid desc LIMIT $limit");
+		else
+			$result = $db->query("SELECT * FROM {$ctablepre}chat WHERE cid>'$last' AND (recv='' OR (type='1' AND recv='$team') OR (type!='1' AND recv='$chatpid')) ORDER BY cid desc LIMIT $limit");
 		
 		if(!$db->num_rows($result)){$chatdata = array('lastcid' => $last, 'msg' => array());return $chatdata;}
 		

@@ -5,24 +5,24 @@
 家教
 </span>
 {template MOD_CLUBBASE_SKILLDESC_MID1}
-<td class=b3><span style="margin-top:8px; margin-bottom:8px; display:block;">
+<td class="skilldesc_left b3"><span class="skilldesc">
 <!--{eval $skill55_nchoice=(int)\skillbase\skill_getvalue(55,'l');}-->
 <!--{if $skill55_nchoice==0}-->
 学习任意一个非限定技能<br>
-可以随意变更学习的技能，但每次变更技能需花费<span class="yellow">$skill55_need</span>元<br>
+可以随意变更学习的技能，但每次变更技能需花费<span class="yellow b">$skill55_need</span>元<br>
 <!--{else}-->
-你当前习得的技能是“<span class="yellow">$clubskillname[$skill55_nchoice]</span>”<br>
-可以重新学习一个技能，但这将花费<span class="yellow">$skill55_need</span>元<br>
+你当前习得的技能是“<span class="yellow b">$clubskillname[$skill55_nchoice]</span>”<br>
+可以重新学习一个技能，但这将花费<span class="yellow b">$skill55_need</span>元<br>
 <!--{/if}-->
 
 <!--{eval \bubblebox\bubblebox_set_style('id:learntable55;height:620;width:655;cancellable:1;margin-right:8;');}-->
 {template MOD_BUBBLEBOX_START}
 <p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
 以下是你可以学习的称号技能列表。少数技能不可以被学习，因此没有显示。<br>
-<span class="yellow">请注意使用“查看”按钮查看技能时，技能的解锁条件没有显示。</span>请阅读帮助以获得完整的技能解锁要求。<br>
+<span class="yellow b">请注意使用“查看”按钮查看技能时，技能的解锁条件没有显示。</span>请阅读帮助以获得完整的技能解锁要求。<br>
 少数几个技能出于游戏平衡原因，相对原版技能有所削弱，也请注意查看。<br>
 <!--{if $skill55_nchoice!=0}-->
-本次学习将花费<span class="yellow">$skill55_need</span>元，并失去目前已习得的技能<span class="yellow">$clubskillname[$skill55_nchoice]</span>。<br>
+本次学习将花费<span class="yellow b">$skill55_need</span>元，并失去目前已习得的技能<span class="yellow b">$clubskillname[$skill55_nchoice]</span>。<br>
 <!--{/if}-->
 <br>
 </p>
@@ -36,7 +36,7 @@
 {template MOD_BUBBLEBOX_END}
 
 </span></td>
-<td class=b3 width=96>
+<td class="skilldesc_right b3">
 <!--{if $skill55_nchoice==0 || $money>=$skill55_need}-->
 <input type="button" style="width:46px" onclick="bubblebox_show('learntable55');" value="学习">
 <!--{else}-->
@@ -44,9 +44,12 @@
 <!--{/if}-->
 </td>
 {template MOD_CLUBBASE_SKILLDESC_MID2}
-<!--{if !isset($___TEMP_THIS_SKILL_ACQUIRED) || !$___TEMP_THIS_SKILL_ACQUIRED}-->
-<span class="yellow">
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
 3级时解锁
+<!--{if !empty($GLOBALS['___IN_HELP'])}-->
+<input type="button" style="width:46px;margin-right:25px;float:right;" onclick="bubblebox_show('learntable55');" value="学习">
+<!--{/if}-->
 </span>
 <!--{/if}-->
 {template MOD_CLUBBASE_SKILLDESC_END}

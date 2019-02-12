@@ -21,12 +21,6 @@ namespace weapon
 		return $ret;
 	}
 	
-	function get_att_multiplier(&$pa,&$pd,$active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		return 1.0;
-	}
-	
 	function get_internal_att(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -41,16 +35,39 @@ namespace weapon
 		return $pa['wepe']*2;		//维持奇葩的老设定，实际计算效果是面板数值*2
 	}
 	
+	//攻击力计算基础值，会自动生成$pa['att_words']也就是攻击力计算的式子
+	function get_att_base(&$pa,&$pd,$active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$internal_att = get_internal_att($pa,$pd,$active);
+		$external_att = get_external_att($pa,$pd,$active);
+		$pa['att_words'] = $internal_att;
+		$pa['att_words'] = \attack\add_format($external_att, $pa['att_words'],0);
+		return $internal_att + $external_att;
+	}
+	
+	//攻击力计算加成值，返回一个数组，这个数组应该是乘算
+	function get_att_multiplier(&$pa,&$pd,$active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(!isset($pa['att_m_words'])) $pa['att_m_words'] = '';
+		return Array();
+	}
+	
+	//攻击力计算变化值
+	function get_att_change(&$pa,&$pd,$active,$att)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return $att;
+	}
+	
 	function get_att(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		return get_internal_att($pa,$pd,$active)+get_external_att($pa,$pd,$active);
-	}
-	
-	function get_def_multiplier(&$pa,&$pd,$active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		return 1.0;
+		$ret = get_att_base($pa,$pd,$active);
+		list($ret, $null, $pa['att_m_words']) = \attack\apply_multiplier($ret, get_att_multiplier($pa,$pd,$active), NULL, $pa['att_words']);
+		$ret = get_att_change($pa,$pd,$active,$ret);
+		return $ret;
 	}
 	
 	function get_internal_def(&$pa,&$pd,$active)
@@ -59,11 +76,38 @@ namespace weapon
 		return $pd['def'];
 	}
 	
-	function get_def(&$pa,&$pd,$active)
+	//防御力计算基础值
+
+	function get_def_base(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$pd['internal_def'] = get_internal_def($pa,$pd,$active);
+		$pd['def_words'] = $pd['internal_def'];
 		return $pd['internal_def'];
+	}
+	
+	//防御力计算加成值，返回一个数组，这个数组应该是乘算
+	function get_def_multiplier(&$pa,&$pd,$active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if(!isset($pd['def_m_words'])) $pd['def_m_words'] = '';
+		return Array();
+	}
+	
+	//防御力计算变化值
+	function get_def_change(&$pa,&$pd,$active,$def)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return $def;
+	}
+	
+	function get_def(&$pa,&$pd,$active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = get_def_base($pa,$pd,$active);
+		list($ret, $null, $pd['def_m_words']) = \attack\apply_multiplier($ret, get_def_multiplier($pa,$pd,$active), NULL, $pd['def_words']);
+		$ret = get_def_change($pa,$pd,$active,$ret);
+		return $ret;
 	}
 	
 	function get_skill_by_kind(&$pa, &$pd, $active, $wep_skillkind)
@@ -181,8 +225,8 @@ namespace weapon
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('weapon'));
-		$pa['fin_att']=get_att($pa,$pd,$active)*get_att_multiplier($pa,$pd,$active);
-		$pd['fin_def']=get_def($pa,$pd,$active)*get_def_multiplier($pa,$pd,$active);
+		$pa['fin_att']=get_att($pa,$pd,$active);
+		$pd['fin_def']=get_def($pa,$pd,$active);
 		$att_pow=$pa['fin_att']; $def_pow=$pd['fin_def']; $ws=$pa['fin_skill']; $wp_kind=$pa['wep_kind'];
 		if($def_pow <= 0) $def_pow = 1;
 		$damage = ($att_pow/$def_pow)*$ws*$skill_dmg[$wp_kind];
@@ -258,7 +302,7 @@ namespace weapon
 		$fixed_dmg=get_fixed_dmg($pa, $pd, $active);
 		if ($fixed_dmg>0) {
 			$o_fixed_dmg = $fixed_dmg;
-			list($fixed_dmg, $mult_words, $mult_words_fxddmg) = \attack\apply_multiplier($fixed_dmg, get_fixed_dmg_multiplier($pa, $pd, $active), 'yellow');
+			list($fixed_dmg, $mult_words, $mult_words_fxddmg) = \attack\apply_multiplier($fixed_dmg, get_fixed_dmg_multiplier($pa, $pd, $active), 'yellow b');
 
 		}
 		if(!empty($mult_words_fxddmg)) $pa['mult_words_phydmgbs'] = $mult_words_prmdmg.'+'.$mult_words_fxddmg;
@@ -296,7 +340,7 @@ namespace weapon
 		$multiplier = get_physical_dmg_multiplier($pa, $pd, $active);
 		$dmg = get_physical_dmg($pa, $pd, $active);
 		
-		$primary_dmg_color = 'yellow';
+		$primary_dmg_color = 'yellow b';
 		list($fin_dmg, $mult_words, $mult_words_phydmg) = \attack\apply_multiplier($dmg, $multiplier, '<:fin_dmg:>', $pa['mult_words_phydmgbs']);
 		$mult_words_phydmg = \attack\equalsign_format($fin_dmg, $mult_words_phydmg, '<:fin_dmg:>');
 //		if(strpos($mult_words_phydmgbs,'+')!==false || strpos($mult_words_phydmgbs,'×')!==false) 
@@ -305,16 +349,16 @@ namespace weapon
 		$log .= '造成了'.$mult_words_phydmg.'点物理伤害！<br>';
 //		if(empty($pa['primary_dmg_log_flag'])) $log .= '造成了'.$mult_words.'点物理伤害！<br>';
 //		elseif($fin_dmg != $dmg) $log .= '加成后的物理伤害：'.$mult_words.'点。<br>';
-//		else $primary_dmg_color = 'red';
+//		else $primary_dmg_color = 'red b';
 //		$log = str_replace('<:primary_dmg:>', $primary_dmg_color, $log);
 		
-		$replace_color = 'red';
+		$replace_color = 'red b';
 		
 		$fin_dmg_change = get_physical_dmg_change($pa, $pd, $active, $fin_dmg);
 		if($fin_dmg_change != $fin_dmg) {
 			$fin_dmg = $fin_dmg_change;
-			$log .= "总物理伤害：<span class=\"red\">{$fin_dmg}</span>。<br>";
-			$replace_color = 'yellow';
+			$log .= "总物理伤害：<span class=\"red b\">{$fin_dmg}</span>。<br>";
+			$replace_color = 'yellow b';
 		}
 		$log = str_replace('<:fin_dmg:>', $replace_color, $log);//如果有伤害变化，那么前面的台词显示黄色，否则显示红色（最终值）
 		
@@ -387,11 +431,11 @@ namespace weapon
 		else $attwords = $attinfo[$pa['wep_kind']];
 		if ($active)
 		{
-			$log .= "使用{$pa['wep']}<span class=\"yellow\">{$attwords}</span>{$pd['name']}！<br>";
+			$log .= "使用{$pa['wep']}<span class=\"yellow b\">{$attwords}</span>{$pd['name']}！<br>";
 		}
 		else  
 		{
-			$log .= "{$pa['name']}使用{$pa['wep']}<span class=\"yellow\">{$attwords}</span>你！<br>";
+			$log .= "{$pa['name']}使用{$pa['wep']}<span class=\"yellow b\">{$attwords}</span>你！<br>";
 		}
 		
 		$pd['deathmark']=$wepdeathstate[$pa['wep_kind']];
@@ -409,11 +453,11 @@ namespace weapon
 		eval(import_module('weapon','logger'));
 		if ($active)
 			if ($wepimprate[$pa['wep_kind']]<1000)
-				$log .= "你的<span class=\"red\">{$pa['wep']}</span>使用过度，已经损坏，无法再装备了！<br>";
-			else  $log .= "你的<span class=\"red\">{$pa['wep']}</span>用光了！<br>";
+				$log .= "你的<span class=\"red b\">{$pa['wep']}</span>使用过度，已经损坏，无法再装备了！<br>";
+			else  $log .= "你的<span class=\"red b\">{$pa['wep']}</span>用光了！<br>";
 		else  if ($wepimprate[$pa['wep_kind']]<1000)
-				$log .= "{$pa['name']}的<span class=\"red\">{$pa['wep']}</span>使用过度，已经损坏，无法再装备了！<br>";
-			else  $log .= "{$pa['name']}的<span class=\"red\">{$pa['wep']}</span>用光了！<br>";
+				$log .= "{$pa['name']}的<span class=\"red b\">{$pa['wep']}</span>使用过度，已经损坏，无法再装备了！<br>";
+			else  $log .= "{$pa['name']}的<span class=\"red b\">{$pa['wep']}</span>用光了！<br>";
 			
 		$pa['wep'] = '拳头';
 		$pa['wepk'] = 'WN';
@@ -667,7 +711,7 @@ namespace weapon
 				${$eqp.'e'} = $itme;
 				${$eqp.'s'} = $itms;
 				${$eqp.'sk'} = $itmsk;
-				$log .= "装备了<span class=\"yellow\">$itm</span>。<br>";
+				$log .= "装备了<span class=\"yellow b\">$itm</span>。<br>";
 				$itm = $itmk = $itmsk = '';
 				$itme = $itms = 0;
 			} else {
@@ -676,7 +720,7 @@ namespace weapon
 				swap(${$eqp.'e'},$itme);
 				swap(${$eqp.'s'},$itms);
 				swap(${$eqp.'sk'},$itmsk);
-				$log .= "卸下了<span class=\"red\">$itm</span>，装备了<span class=\"yellow\">${$eqp}</span>。<br>";
+				$log .= "卸下了<span class=\"red b\">$itm</span>，装备了<span class=\"yellow b\">${$eqp}</span>。<br>";
 			}
 			return;
 		}

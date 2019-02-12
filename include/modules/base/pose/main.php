@@ -23,7 +23,7 @@ namespace pose
 		$npose=(int)$npose;
 		if ($pose_player_usable[$npose])
 		{
-			$log .= "基础姿态变为<span class=\"yellow\">$poseinfo[$npose]</span>。<br> ";
+			$log .= "基础姿态变为<span class=\"yellow b\">$poseinfo[$npose]</span>。<br> ";
 			$pose = $npose;
 		}
 		else  $log .= "这个姿势太奇怪啦！<br> ";
@@ -104,7 +104,9 @@ namespace pose
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','pose'));
 		//echo "姿态修正：+".$pose_active_obbs[$ldata['pose']].'%+'.$pose_dactive_obbs[$edata['pose']].'% <br>';
-		return $chprocess($ldata,$edata)+$pose_active_obbs[$ldata['pose']]+$pose_dactive_obbs[$edata['pose']];
+		$add = $pose_active_obbs[$ldata['pose']]+$pose_dactive_obbs[$edata['pose']];
+		$ldata['active_words'] = \attack\add_format($add, $ldata['active_words'],0);
+		return $chprocess($ldata,$edata)+$add;
 	}
 	
 	function get_att_multiplier(&$pa,&$pd,$active)
@@ -112,7 +114,10 @@ namespace pose
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','pose'));
 		//改为全部生效
-		return $chprocess($pa,$pd,$active)*(1+$pose_attack_modifier[$pa['pose']]/100);
+		$ret = $chprocess($pa,$pd,$active);
+		$var = 1+$pose_attack_modifier[$pa['pose']]/100;
+		array_unshift($ret, $var);
+		return $ret;
 //		if (!$pa['is_counter'])		//姿态的进攻加成在主动或先制攻击时才有用
 //		{
 //			return $chprocess($pa,$pd,$active)*(1+$pose_attack_modifier[$pa['pose']]/100);
@@ -125,7 +130,10 @@ namespace pose
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','pose'));
 		//姿态的防御加成是始终生效的
-		return $chprocess($pa,$pd,$active)*(1+$pose_defend_modifier[$pd['pose']]/100);
+		$ret = $chprocess($pa,$pd,$active);
+		$var = 1+$pose_defend_modifier[$pd['pose']]/100;
+		array_unshift($ret, $var);
+		return $ret;
 	}
 	
 	function calculate_rest_upsp($rtime)
