@@ -27,7 +27,7 @@ namespace radar
 			$log .= '仪器使用失败！<br>';
 			return;
 		}
-		//生命探测器无法显示隐藏区域
+		//plsinfo修改标记
 		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 
 		$existing_npctp = array();

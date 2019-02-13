@@ -290,9 +290,12 @@ namespace itemmain
 		
 		eval(import_module('sys','map','itemmain'));
 		if ($xmode & 16) {	//地图道具
-			//从plsinfo中除去隐藏地图
-			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
+			//plsinfo修改标记
+			if($hidden_area)
+			{
+				$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
+			}			
 			$iqry = '';
 			$itemlist = get_itemfilecont();
 			$in = sizeof($itemlist);

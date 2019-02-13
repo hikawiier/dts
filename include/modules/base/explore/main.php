@@ -29,13 +29,14 @@ namespace explore
 		eval(import_module('sys','player','map','logger'));
 		
 		$plsnum = sizeof($plsinfo);
-		if(($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum) && !in_array($moveto,$hidden_arealist))){
+		if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&!array_search($moveto,$hidden_arealist)){
 			$log .= '请选择正确的移动地点。<br>';
 			return;
 		} elseif($pls == $moveto){
 			$log .= '相同地点，不需要移动。<br>';
 			return;
 		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack && !in_array($moveto,$hidden_arealist)){
+			//plsinfo修改标记
 			$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
 			return;
 		} elseif(in_array($moveto,$hidden_arealist)){
@@ -95,6 +96,7 @@ namespace explore
 		eval(import_module('sys','player','map','logger'));
 		
 		if(array_search($pls,$arealist) <= $areanum && !$hack && !in_array($pls,$hidden_arealist)){
+			//plsinfo修改标记
 			$log .= $plsinfo[$pls].'是禁区，还是赶快逃跑吧！<br>';
 			return;
 		}

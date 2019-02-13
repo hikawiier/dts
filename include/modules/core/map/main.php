@@ -18,6 +18,7 @@ namespace map
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
+		//$plsinfo修改标记
 		$hag_name = array_search($pls,$hidden_areagroup);
 		if(array_search($pno,$hidden_areagroup)==$hag_name)
 		{
@@ -85,6 +86,8 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
 		$plsnum = sizeof($plsinfo) - 1;
+		//plsinfo修改标记
+		if($hidden_area) $plsnum = sizeof($plsinfo)-sizeof($hidden_area)-1;
 		if($areanum >= $plsnum) 
 		{
 			\sys\gameover($atime,'end1');
@@ -107,8 +110,8 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
-			//排除隐藏地区
-			$arealist = array_diff($arealist,$hidden_arealist);
+			//涉及到$plsinfo的随机内容要排除隐藏地区
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
@@ -165,8 +168,6 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			//排除隐藏地区
-			$arealist = array_diff($arealist,$hidden_arealist);
 			$plsnum = sizeof($plsinfo);
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
@@ -212,7 +213,7 @@ namespace map
 		if(!$atime){
 			$atime = $areatime;
 		}
-		//排除隐藏地区
+		//plsinfo修改标记
 		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		$timediff = $atime - $now;
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息

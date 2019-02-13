@@ -31,6 +31,8 @@ namespace skill452
 		if (\skillbase\skill_query(452,$pd) && check_unlocked452($pd) && $pa['dmg_dealt']>=150 && $pd['hp']>0 && $pd['tactic']==4)
 		{
 			eval(import_module('logger','map','sys'));
+			//plsinfo修改标记
+			if($hidden_area) $plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo) - 1;
 			$pls452 = $arealist[rand($areanum+1,$plsnum)];	
 			if ($areanum+1 < $plsnum){

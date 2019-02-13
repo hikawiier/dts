@@ -14,13 +14,29 @@ namespace campfire_hiddenarea
 		$map_noitemdrop_arealist[] = 95;
 		$map_noitemdrop_arealist[] = 94;
 	}	
-	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
+	function rs_game($xmode = 0) {
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		$chprocess($xmode);		
+		eval(import_module('sys','map','campfire_hiddenarea'));
+		if (($xmode & 2)&&$hidden_arealist) {
+			//隐藏地区时对禁区初始化的判断
+			//plsinfo修改标记
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
+			$plsnum = sizeof($plsinfo);
+			$arealist = range(1,$plsnum-1);
+			shuffle($arealist);
+			array_unshift($arealist,0);
+		}
+	}
+/*	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('map'));	
 		$ret = $chprocess($no_dangerous_zone, $type);
-		$ret = array_diff($ret, $hidden_arealist);
+		//$ret = array_diff($ret, $hidden_arealist);
+		//$ret = array_diff($ret, array_flip($plsinfo));
+		print_r($ret);
 		return $ret;
-	}
+	}*/
 	function parse_itmuse_desc($n, $k, $e, $s, $sk)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -41,7 +57,7 @@ namespace campfire_hiddenarea
 		{
 			$pls_available = \map\get_safe_plslist();//如果只能移动到危险区域，就移动到危险区域
 			shuffle($pls_available);
-			$tpls = $pls_available[0];
+			$tpls = $pls_available[0];			
 		}
 		else
 		{
