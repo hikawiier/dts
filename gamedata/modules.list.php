@@ -329,6 +329,7 @@ ex_def_down,extra/attr/ex_def_down/,1
 campfire_powerarmor,campfire/campfire_extra/campfire_powerarmor/,1
 skill33,extra/club/skills/skill33/,1
 tactic,base/tactic/,1
+campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
 wepchange,extra/attr/wepchange/,1
 blessstone,extra/attr/blessstone/,1
 skill77,extra/club/skills/skill77/,1

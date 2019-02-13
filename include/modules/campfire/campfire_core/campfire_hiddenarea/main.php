@@ -129,10 +129,12 @@ namespace campfire_hiddenarea
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
-
-		if($b>=0) $b = $plsinfo[$b];
-		if($c>=0) $c = $plsinfo[$c];
-
+		
+		if($news == 'kgtp_ydtp' || $news == 'kgtp_tpth' || $news == 'kgtp_bfh' || $news == 'kgtp_n')
+		{
+			if($b>=0) $b = $plsinfo[$b];
+			if($c>=0) $c = $plsinfo[$c];
+		}	
 		if($news == 'kgtp_ydtp') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">位于{$b}的{$a}尝试进行传送，但又回到了原地，真是遗憾。</span><br>\n";
 		elseif($news == 'kgtp_tpth') 

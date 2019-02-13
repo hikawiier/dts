@@ -1,7 +1,7 @@
 campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
 campfire_item_kghf,campfire/campfire_base/campfireitem/campfire_item_kghf/,1
-campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,1
 campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
+campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
 campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
 campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
