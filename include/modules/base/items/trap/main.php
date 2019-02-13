@@ -18,6 +18,8 @@ namespace trap
 		
 		eval(import_module('sys','map','itemmain','trap'));
 		if ($xmode & 16) {	//地图陷阱初始化
+			//从plsinfo中除去隐藏地图
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
 			$iqry = '';
 			$itemlist = get_trapfilecont();

@@ -38,6 +38,18 @@ namespace campfire_hiddenarea
 	}
 	
 	/*-----函数部分-----*/
+	//模块 base/npc
+	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		$ret = $chprocess($no_dangerous_zone, $type);
+		//隐藏区域判定
+		eval(import_module('map'));		
+		$ret = array_diff($ret,$hidden_area);
+		if($no_dangerous_zone && 1 == $type)
+			$ret = array_diff($ret, array(21,26,33));
+		return $ret;
+	}
+	
 	//模块 base/event 
 	function event()
 	{
@@ -66,7 +78,6 @@ namespace campfire_hiddenarea
 	}
 	
 	//模块 core/map
-	//检查一个地区是否可进入，包含解禁和hack两种情况
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
@@ -81,19 +92,6 @@ namespace campfire_hiddenarea
 		}
 		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;
 	}
-	//非禁区域列表。如果$no_dangerous_zone开启，则再排除掉SCP、英灵殿等危险地区
-	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
-		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		eval(import_module('sys','map'));
-		//排除隐藏地区
-		$arealist = array_diff($arealist,$hidden_arealist);
-		if($areanum+1 > sizeof($arealist)) return array();
-		else {
-			$r = array_slice($arealist,$areanum+1);
-			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
-			return $r;
-		}
-	}
 	//单次禁区增加
 	function add_once_area($atime) {
 		$arealist = array_diff($arealist,$hidden_arealist);
@@ -106,8 +104,22 @@ namespace campfire_hiddenarea
 		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 	}	
 	
-	//base/explore
-	
+	//模块bass/npc
+		//非禁区域列表。如果$no_dangerous_zone开启，则再排除掉SCP、英灵殿等危险地区
+	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+			eval(import_module('sys','map'));
+			//排除隐藏地区
+			$arealist = array_diff($arealist,$hidden_arealist);
+		if($areanum+1 > sizeof($arealist)) return array();
+			else {
+				$r = array_slice($arealist,$areanum+1);
+				if($no_dangerous_zone) $r = array_diff($r, array(32,34));
+				return $r;
+			}
+	}
+
+	//模块base/explore	
 	function move($moveto = 99) {
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if(($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum) && !in_array($moveto,$hidden_arealist))){

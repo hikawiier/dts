@@ -289,7 +289,9 @@ namespace itemmain
 		$chprocess($xmode);
 		
 		eval(import_module('sys','map','itemmain'));
-		if ($xmode & 16) {	//地图道具初始化
+		if ($xmode & 16) {	//地图道具
+			//从plsinfo中除去隐藏地图
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
 			$iqry = '';
 			$itemlist = get_itemfilecont();

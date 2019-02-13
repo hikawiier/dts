@@ -61,8 +61,6 @@ namespace map
 	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map'));
-		//排除隐藏地区
-		$arealist = array_diff($arealist,$hidden_arealist);
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);

@@ -121,6 +121,8 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map','player','logger'));
+		//涉及到地区的随机内容要排除隐藏地区
+		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		if($hack)
 		{
 			$pls = rand(0,sizeof($plsinfo)-1);

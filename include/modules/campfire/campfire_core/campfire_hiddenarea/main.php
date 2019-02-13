@@ -8,10 +8,19 @@ namespace campfire_hiddenarea
 		//新的道具类别
 		$iteminfo['kgrt'] = '传送道具';
 		//不会有物品掉落的地区列表
-		$map_noitemdrop_arealist[] = 99;
 		$map_noitemdrop_arealist[] = 98;
-		$map_noitemdrop_arealist[] = 97;	
+		$map_noitemdrop_arealist[] = 97;
+		$map_noitemdrop_arealist[] = 96;	
+		$map_noitemdrop_arealist[] = 95;
+		$map_noitemdrop_arealist[] = 94;
 	}	
+	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
+		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		eval(import_module('map'));	
+		$ret = $chprocess($no_dangerous_zone, $type);
+		$ret = array_diff($ret, $hidden_arealist);
+		return $ret;
+	}
 	function parse_itmuse_desc($n, $k, $e, $s, $sk)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -30,7 +39,7 @@ namespace campfire_hiddenarea
 		eval(import_module('sys','player','map','logger'));		
 		if($tpto==99)
 		{
-			$pls_available = \map\get_safe_plslist(0);//如果只能移动到危险区域，就移动到危险区域
+			$pls_available = \map\get_safe_plslist();//如果只能移动到危险区域，就移动到危险区域
 			shuffle($pls_available);
 			$tpls = $pls_available[0];
 		}
@@ -44,19 +53,19 @@ namespace campfire_hiddenarea
 		}	
 		elseif($tpls == $npls)
 		{
-			addnews($now,'kgtp_background',$name,$npls);
+			addnews($now,'kgtp_ydtp',$name,$npls);
 		}
 		elseif(array_search($tpls,$hidden_arealist))
 		{
-			addnews($now,'kgtp_tptounknown',$name,$npls);
+			addnews($now,'kgtp_tpth',$name,$npls);
 		}
 		elseif(array_search($npls,$hidden_arealist))
 		{
-			addnews($now,'kgtp_backfromunknown',$name,$tpls);
+			addnews($now,'kgtp_bfh',$name,$tpls);
 		}
 		else
 		{
-			addnews($now,'kgtp_normal',$name,$npls,$tpls);
+			addnews($now,'kgtp_n',$name,$npls,$tpls);
 		}
 	}
 	function itemuse(&$theitem)
@@ -105,16 +114,16 @@ namespace campfire_hiddenarea
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
 
-		if($b) $b = $plsinfo[$b];
-		if($c) $c = $plsinfo[$c];
+		if($b>=0) $b = $plsinfo[$b];
+		if($c>=0) $c = $plsinfo[$c];
 
-		if($news == 'kgtp_background') 
+		if($news == 'kgtp_ydtp') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">位于{$b}的{$a}尝试进行传送，但又回到了原地，真是遗憾。</span><br>\n";
-		elseif($news == 'kgtp_tptounknown') 
+		elseif($news == 'kgtp_tpth') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本位于{$b}的{$a}从幻境中离奇消失了！</span><br>\n";
-		elseif($news == 'kgtp_backfromunknown') 
+		elseif($news == 'kgtp_bfh') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本从幻境中消失的{$a}又回到了{$b}！</span><br>\n";
-		elseif($news == 'kgtp_normal') 
+		elseif($news == 'kgtp_n') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本位于{$b}的{$a}忽然出现在了{$c}！</span><br>\n";
 
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
