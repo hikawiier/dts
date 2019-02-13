@@ -39,7 +39,6 @@ item_slip,extra/item_extra/item_slip/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
 campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
-campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 instance8,extra/instance/instance8_proud/,1
@@ -518,6 +517,7 @@ skill362,extra/activities/lunany2018/skill362/,1
 skill365,extra/activities/aprilfool2018/skill365/,1
 skill505,extra/card/skills/skill505/,1
 skill366,extra/activities/aprilfool2018/skill366/,1
+campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,0
 gtype5,extra/instance/gtype5/main/,0
 glowbutton,extra/misc/glowbutton/,0
 halloween2017,extra/activities/halloween2017/main/,0
