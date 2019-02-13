@@ -1,9 +1,9 @@
 <?php
 
-namespace campfire_item_kgrt
+namespace campfire_hiddenarea
 {
 	////////// MODULE HEADER START ///////////////
-	$___MODULE_dependency = 'sys player campfire_hiddenarea map itemmain logger';
+	$___MODULE_dependency = 'sys player map itemmain logger';
 	$___MODULE_dependency_optional = '';
 	$___MODULE_conflict = '';
 	$___MODULE_codelist = 'main.php';

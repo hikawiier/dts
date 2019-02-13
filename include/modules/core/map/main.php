@@ -17,16 +17,15 @@ namespace map
 	//检查一个地区是否可进入，包含解禁和hack两种情况
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player'));
-		foreach(array_keys($hidden_areagroup) as $han){
-			if((in_array($pls,$hidden_areagroup[$han]))&&(in_array($pno,$hidden_areagroup[$han]))))
-			{
-				$enter_hidden_area_flag = true;
-			}
-			else
-			{
-				$enter_hidden_area_flag = false;
-			}
+		eval(import_module('sys','player','map'));
+		$hag_name = array_search($pls,$hidden_areagroup);
+		if(array_search($pno,$hidden_areagroup)==$hag_name)
+		{
+			$enter_hidden_area_flag = true;
+		}
+		else
+		{
+			$enter_hidden_area_flag = false;
 		}
 		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;
 	}
@@ -62,9 +61,9 @@ namespace map
 	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map'));
-		if($areanum+1 > sizeof($arealist)) return array();
 		//排除隐藏地区
 		$arealist = array_diff($arealist,$hidden_arealist);
+		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
 			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
@@ -215,6 +214,8 @@ namespace map
 		if(!$atime){
 			$atime = $areatime;
 		}
+		//排除隐藏地区
+		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		$timediff = $atime - $now;
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';

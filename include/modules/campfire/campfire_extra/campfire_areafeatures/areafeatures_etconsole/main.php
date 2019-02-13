@@ -258,9 +258,10 @@ namespace areafeatures_etconsole
 	}
 	function reset_game()
 	{
-		if (eval(__MAGIC__)) return $___RET_VALUE; 
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		$chprocess();		
 		eval(import_module('sys'));
-		//重设控制台功能
+		//重设连斗解除判断
 		$bancombo = 0;
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
@@ -315,9 +316,9 @@ namespace areafeatures_etconsole
 		elseif($c_order=='radar')
 		{
 			$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br><span class='yellow'>当界面上的图像稳定下来时，你发现上面显示出了一排数据。</span><br>";
-			$mms = $c_radar ? $c_radar : 9;
+			$mms = $c_radar ? $c_radar : 4;
 			$mode = 'radar';
-			\radar\newradar($mms);		
+			\radar\use_radar($mms);		
 		}
 	}
 	function areafeatures_etconsole_find($findtype,$findnm,$npctype)

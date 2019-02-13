@@ -3,8 +3,7 @@
 namespace campfire_itemmain
 {
 	function init() 
-	{
-		eval(import_module('itemmain'));
+	{	
 	}
 	function get_alone_card_skill(&$pa=NULL)
 	{

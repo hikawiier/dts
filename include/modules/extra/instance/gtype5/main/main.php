@@ -12,7 +12,7 @@ namespace gtype5
 		if (room_check_subroom($room_prefix)) return $chprocess();//小房间不会进入此模式
 		
 		if(check_room_start_gtype5()) $gametype = 5;
-		
+	
 		$chprocess();
 	}
 	

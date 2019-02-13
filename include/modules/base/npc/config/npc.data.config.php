@@ -2828,7 +2828,7 @@ namespace npc
 		0 => array
 			(
 			'name' => '死于毒酱包的亡灵',
-			'icon' => 250,
+			'icon' => 10051,
 			'wep' => '更改菜谱后的不甜酱包',
 			'wepk' => 'WC',
 			'wepe' => 168,
@@ -2853,7 +2853,7 @@ namespace npc
 		1 => array
 			(
 			'name' => '死于地雷改造的亡灵',
-			'icon' => 249,
+			'icon' => 10052,
 			'wep' => '便携式☆大打击☆',
 			'wepk' => 'WD',
 			'wepe' => 136,
@@ -2879,7 +2879,7 @@ namespace npc
 		2 => array
 			(
 			'name' => '死于献祭的亡灵',
-			'icon' => 248,
+			'icon' => 10053,
 			'wep' => '吸取生命力的结界',
 			'wepk' => 'WF',
 			'wepe' => 173,
@@ -2905,7 +2905,7 @@ namespace npc
 		3 => array
 			(
 			'name' => '死于鱼弹袭击的亡灵',
-			'icon' => 247,
+			'icon' => 10054,
 			'wep' => '虎纹鲨鱼',
 			'wepk' => 'WG',
 			'wepe' => 145,

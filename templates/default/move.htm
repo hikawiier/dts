@@ -1,9 +1,21 @@
 <option value="main">■ 移动 ■</option>
 <optgroup label="移动地点列表：">
-<!--{loop $plsinfo $key $value}-->
-<!--{if (array_search($key,$arealist) > $areanum || $hack)}-->
-	<!--{if $pls == $key}--><optgroup label="■ 现在位置 ■">
-	<!--{else}--><option value="$key">$value($xyinfo[$key])</option>
+<!--{if (in_array($pls,$hidden_arealist))}-->
+	<!--{loop array_keys($hidden_areagroup) $hag_name}-->
+		<!--{if in_array($pls,$hidden_areagroup[$hag_name])}-->
+			<!--{loop $hidden_areagroup[$hag_name] $hag_num}-->
+			<!--{if $pls == $hag_num}--><optgroup label="■ 现在位置 ■">
+			<!--{else}--><option value="$hag_num">$plsinfo[$hag_num]($xyinfo[$hag_num])</option>
+			<!--{/if}-->
+			<!--{/loop}-->
+		<!--{/if}-->
+	<!--{/loop}-->
+<!--{else}-->
+	<!--{loop $plsinfo $key $value}-->
+	<!--{if ((array_search($key,$arealist) > $areanum || $hack) && (!in_array($key,$hidden_arealist)))}-->
+		<!--{if $pls == $key}--><optgroup label="■ 现在位置 ■">
+		<!--{else}--><option value="$key">$value($xyinfo[$key])</option>
+		<!--{/if}-->
 	<!--{/if}-->
+	<!--{/loop}-->
 <!--{/if}-->
-<!--{/loop}-->

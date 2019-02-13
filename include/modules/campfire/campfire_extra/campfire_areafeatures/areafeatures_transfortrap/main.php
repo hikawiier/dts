@@ -107,7 +107,7 @@ namespace areafeatures_transfortrap
 				}
 				addnews($now,'ct_fail',$name,$citm['itm'],'陷阱','爆炸物',$fail_dmg);
 			}
-			\itemmain\itms_reduce($citm,1);
+			\itemmain\itms_reduce($citm,$citms);
 			if($itms0)
 			{
 				\itemmain\itemget();
@@ -144,7 +144,7 @@ namespace areafeatures_transfortrap
 					\player\load_playerdata($sdata);
 				}
 			}
-			\itemmain\itms_reduce($citm,1);
+			\itemmain\itms_reduce($citm,$citms);
 			if($itms0)
 			{
 				\itemmain\itemget();
