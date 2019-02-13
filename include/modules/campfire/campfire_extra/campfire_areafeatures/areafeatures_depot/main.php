@@ -143,7 +143,7 @@ namespace areafeatures_depot
 		}
 		$money -= $saveitem_cost;
 		$log.="你成功将道具<span class='yellow'>{${'itm'.$i}}</span>存进了仓库内！<br>同时你也不得不支付了手续费<span class='yellow'>{$saveitem_cost}</span>元。<br>";
-		addnews($now,'areafeatures_depot_save',$name,${'itm'.$i});
+		addnews($now,'af_ds',$name,${'itm'.$i});
 		$idpt[$idpt_num]['itm'] = ${'itm'.$i}; ${'itm'.$i}='';
 		$idpt[$idpt_num]['itmk'] = ${'itmk'.$i}; ${'itmk'.$i}='';
 		$idpt[$idpt_num]['itme'] = ${'itme'.$i}; ${'itme'.$i}=0;
@@ -183,7 +183,7 @@ namespace areafeatures_depot
 		$itmsk0= $idpt[$i]['itmsk'];
 		unset($idpt[$i]);
 		$log.="你成功将道具<span class='yellow'>{$itm0}</span>从仓库中取了出来！<br>同时你也不得不支付了保管费<span class='yellow'>{$loaditem_cost}</span>元……你感觉自己的心在滴血。<br>";
-		addnews($now,'areafeatures_depot_load',$name,$itm0);
+		addnews($now,'af_dl',$name,$itm0);
 		\itemmain\itemget();
 		sort($idpt);
 		$idpt = change_areafeatures_depot('encode',$idpt);
@@ -194,9 +194,9 @@ namespace areafeatures_depot
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
-		if($news == 'areafeatures_depot_save') 
+		if($news == 'af_ds') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}向位于精灵中心的仓库中存入了道具<span class='yellow'>{$b}</span>。</span><br>\n";
-		if($news == 'areafeatures_depot_load') 
+		if($news == 'af_dl') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}从位于精灵中心的仓库中取出了道具<span class='yellow'>{$b}</span>。</span><br>\n";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
