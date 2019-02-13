@@ -13,7 +13,9 @@ namespace campfire_hiddenarea
 		$map_noitemdrop_arealist[] = 96;	
 		$map_noitemdrop_arealist[] = 95;
 		$map_noitemdrop_arealist[] = 94;
-	}	
+
+	}
+/*	
 	function rs_game($xmode = 0) {
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		$chprocess($xmode);		
@@ -28,6 +30,7 @@ namespace campfire_hiddenarea
 			array_unshift($arealist,0);
 		}
 	}
+*/
 /*	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('map'));	

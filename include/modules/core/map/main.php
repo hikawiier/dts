@@ -61,7 +61,7 @@ namespace map
 	//非禁区域列表。如果$no_dangerous_zone开启，则再排除掉SCP、英灵殿等危险地区
 	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		eval(import_module('sys','map'));
+		eval(import_module('sys'));
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
@@ -168,6 +168,8 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
+			//plsinfo修改标记
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
