@@ -216,20 +216,31 @@ namespace areafeatures_etconsole
 	function areafeatures_etconsole_bancombo()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','itemmain','logger'));	
+		eval(import_module('sys','player','itemmain','logger','gameflow_combo'));	
 		
 		if($bancombo==0)
 		{
 			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			$bancombo = 1;
+			if($gamestate == 40) 
+			{
+				$gamestate = 30;
+				$ctobc = true;
+			}
 			save_gameinfo();
 			addnews($now,'gsc_bancombo',$name);
+			if($ctobc)
+			{
+				addnews($now,'gsc_ctobc',$name);
+				kg_systemputchat($now,'bancombo');
+			}
 		}				
 		elseif($bancombo==1)
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>但你仔细一看，原来角落里还闪烁着一行暗红色的字体：<br><span class='red'>“即使解除了连斗的判断……在2次禁区增加后，幻境也会关闭进入，这样只剩一人幸存的话游戏就结束了……<br>一定要记住……啊……！”</span>";
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>但你仔细一看，原来角落里还闪烁着一行暗红色的字体：<br><span class='red'>“即使解除了连斗的判断……在2次禁区增加后，幻境也会关闭进入，这样只剩一人幸存的话游戏就结束了……<br>一定要记住……啊……！”<br></span>";
 			$bancombo = 0;
 			save_gameinfo();
+			\gameflow_combo\checkcombo();
 			addnews($now,'gsc_recombo',$name);
 		}
 		else
@@ -263,6 +274,16 @@ namespace areafeatures_etconsole
 		eval(import_module('sys'));
 		//重设连斗解除判断
 		$bancombo = 0;
+	}
+	function kg_systemputchat($time,$type,$msg = ''){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if(!$time){$time = $now;}
+		if($type == 'bancombo'){
+			$msg = '游戏已解除连斗状态！';
+		}
+		$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,msg) VALUES ('5','$time','','$msg')");
+		return;
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{
@@ -529,17 +550,19 @@ namespace areafeatures_etconsole
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'gsc_cwth') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，将天气变成了{$wthinfo[$b]}！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了位于无月之影的控制台，将天气变成了{$wthinfo[$b]}！</span><br>\n";
 		if($news == 'gsc_hack') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，将禁区全部解除了！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了无月之影控制台的便携子端，将禁区全部解除了！</span><br>\n";
 		if($news == 'gsc_addarea') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了无月之影控制台的便携子端，使禁区的到来提前至{$b}秒后！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了无月之影控制台的便携子端，使禁区的到来提前至{$b}秒后！</span><br>\n";
 		if($news == 'gsc_recombo') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，恢复了幻境的连斗检测机制！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了位于无月之影的控制台，恢复了幻境的连斗检测机制！</span><br>\n";
 		if($news == 'gsc_bancombo') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，关闭了幻境的连斗检测机制！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了位于无月之影的控制台，关闭了幻境的连斗检测机制！</span><br>\n";
+		if($news == 'gsc_ctobc') 
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red b\">游戏已解除连斗状态！</span><br>\n";
 		if($news == 'gsc_exnpc') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}使用了位于无月之影的控制台，使大量未经测试的危险NPC被释放了！</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">{$a}使用了位于无月之影的控制台，使大量未经测试的危险NPC被释放了！</span><br>\n";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 	/*==========无月之影特殊功能：areafeatures_etconsole功能部分结束==========*/
