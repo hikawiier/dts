@@ -25,6 +25,9 @@ namespace itemshop
 		14 => '林苍月的提示',
 		15 => 'Key社纪念品专卖',
 	);
+	
+	//campfire MOD新增
+	$shop_tag_list[18]='恶鱼特供';
 }
 
 ?>

@@ -31,15 +31,6 @@ namespace campfire_hiddenarea
 		}
 	}
 */
-/*	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
-		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		eval(import_module('map'));	
-		$ret = $chprocess($no_dangerous_zone, $type);
-		//$ret = array_diff($ret, $hidden_arealist);
-		//$ret = array_diff($ret, array_flip($plsinfo));
-		print_r($ret);
-		return $ret;
-	}*/
 	function parse_itmuse_desc($n, $k, $e, $s, $sk)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;

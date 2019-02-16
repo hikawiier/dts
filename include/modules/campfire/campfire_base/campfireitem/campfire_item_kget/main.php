@@ -112,6 +112,8 @@ namespace campfire_item_kget
 				}
 			}
 		}
+		$log.="{$itm}该怎么用呢？<br>";
+		return;
 	}
 	function itemuse(&$theitem)
 	{
