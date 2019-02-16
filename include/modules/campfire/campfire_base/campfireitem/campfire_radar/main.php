@@ -1,13 +1,9 @@
 <?php
 
-namespace radar
-{
-	global $radardata, $radar_npctplist;
-	
+namespace campfire_radar
+{	
 	function init()
 	{
-		eval(import_module('itemmain'));
-		$iteminfo['ER'] = '探测仪器';
 	}
 	
 	//探测仪器的属性数字代表其类型
@@ -18,6 +14,8 @@ namespace radar
 	//4:感应生命探测器，可以看所有地图，并可以知道电波幽灵、全息实体、DF、英灵殿NPC的位置和名字
 	//5:避难所生命探测器，可以看所有地图，每次使用后15s自己在当前地图的先制率+3%
 	
+	//99:幻境控制终端，看就完事了
+	
 	function use_radar($radarsk = 0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -27,6 +25,8 @@ namespace radar
 			$log .= '仪器使用失败！<br>';
 			return;
 		}
+		//plsinfo修改标记
+		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		$existing_npctp = array();
 		//第一轮循环，得到原始的存活角色数据
 		$radardata_raw = array();
@@ -41,10 +41,10 @@ namespace radar
 			//通常状态下只有存活的才记录
 			if($cdhp) {
 				$radardata_raw[$cdpls][$cdtype]['num'] ++;
-				if(in_array($cdtype, array(0, 2, 5, 7, 11, 14, 20, 21, 22, 45, 46))) $radardata_raw[$cdpls][$cdtype]['namelist'][] = $cdname;
+				if(in_array($cdtype, array(0, 2, 5, 7, 11, 14, 20, 21, 22, 45, 46, 1005))) $radardata_raw[$cdpls][$cdtype]['namelist'][] = $cdname;
 			}
 		}
-		$radar_npctplist = get_radar_npc_type_list($radarsk, $existing_npctp);
+		$radar_npctplist = \radar\get_radar_npc_type_list($radarsk, $existing_npctp);
 		//第二轮循环，形成显示用数据
 		$radardata = array();
 		foreach($plsinfo as $plsi => $plsn) {
@@ -58,8 +58,9 @@ namespace radar
 				foreach($radar_npctplist as $typei){
 					if(!empty($radardata_raw[$plsi][$typei]['num'])) {
 						$radardata[$plsi][$typei]['num'] = $radardata_raw[$plsi][$typei]['num'];
-						if(3 == $radarsk && !in_array($typei, array(6, 90))) $radardata[$plsi][$typei]['namelist'] = radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
-						elseif(4 == $radarsk && in_array($typei, array(21,45,46))) $radardata[$plsi][$typei]['namelist'] = radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
+						if(3 == $radarsk && !in_array($typei, array(6, 90))) $radardata[$plsi][$typei]['namelist'] = \radar\radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
+						elseif(4 == $radarsk && in_array($typei, array(21,45,46))) $radardata[$plsi][$typei]['namelist'] = \radar\radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
+						elseif(99 == $radarsk && !in_array($typei, array(6, 90))) $radardata[$plsi][$typei]['namelist'] = \radar\radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
 					}else{
 						$radardata[$plsi][$typei]['num'] = '-';
 					}
@@ -68,7 +69,7 @@ namespace radar
 		}
 		
 		$log .= '白色数字：该区域内的人数<br><span class="yellow b">黄色数字</span>：自己所在区域的人数<br><span class="red b">×</span>：禁区<br>';
-		if($radarsk == 3 || $radarsk == 4) $log .= '鼠标悬停于带[ ]的数字可查看NPC名字列表。<br>';
+		if($radarsk == 3 || $radarsk == 4 || $radarsk == 99) $log .= '鼠标悬停于带[ ]的数字可查看NPC名字列表。<br>';
 		$log .= '<br>';
 		//避难所探测器增加buff，不会显示特殊指令页面
 		if(5 == $radarsk) {
@@ -93,61 +94,26 @@ namespace radar
 		$main = MOD_RADAR_RADAR;
 		return;
 	}
-	
-	function radar_parse_namelist($arr){
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if(empty($arr)) return '';
-		else return str_replace('"',"'",implode('<br>',$arr));
-	}
-	
+
 	function get_radar_npc_type_list($radarsk, $existing_npctp=array()){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		//基本显示：玩家、杂兵、全息幻象、豆腐、猴子、幻影执行官、职人、女主
-		$ret = Array(0,90,2,5,6,7,11,14);
+		eval(import_module('sys','radar'));
+		$ret = $chprocess($radarsk, $existing_npctp);
+		//基本显示：*篝火新增 虚拟体-v,虚拟体-c,残留碎片
+		$ret = array_merge($ret,array(1005));
 		if(!empty($existing_npctp)){
-			//如果幻影执行官没入场，不会显示执行官
-			if(!in_array(7, $existing_npctp)) $ret = array_diff($ret, array(7));
-			//感应探测器额外显示幽灵、实体、DF、英灵殿
-			if(4==$radarsk) {
-				foreach(Array(12,45,46,21) as $tv) {
+			//如果执行官、虚拟体类NPC未进场不会显示
+			if(!in_array(1001, $existing_npctp)) $ret = array_diff($ret, array(1001));
+			if(!in_array(1002, $existing_npctp)) $ret = array_diff($ret, array(1002));
+			//感应探测器额外显示
+			if(99==$radarsk) {
+				foreach(Array(1001,1002) as $tv) {
 					if(in_array($tv, $existing_npctp)) $ret[] = $tv;
 				}
 			}
 		}
 		return $ret;
 	}
-
-	function itemuse(&$theitem) 
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		
-		eval(import_module('sys','player','itemmain','logger'));
-		
-		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
-		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
-		
-		if (strpos ( $itmk, 'ER' ) === 0) {//雷达
-			if ($itme > 0) {
-				$log .= "使用了<span class=\"red b\">$itm</span>。<br>";
-				$skill84_state = \skill84\check_skill84_state($sdata);
-				use_radar ( $itmsk );
-				if(5 != $itmsk || !$skill84_state){//避难所探测器生效中不需要消耗电力
-					$itme--;
-					$log .= "消耗了<span class=\"yellow b\">$itm</span>的电力。<br>";
-					if ($itme <= 0) {
-						$log .= $itm . '的电力用光了，请使用电池充电。<br>';
-					}
-				}
-			} else {
-				$itme = 0;
-				$log .= $itm . '没有电了，请先充电。<br>';
-			}
-			return;
-		}
-		$chprocess($theitem);
-	}
-	
 }
 
 ?>

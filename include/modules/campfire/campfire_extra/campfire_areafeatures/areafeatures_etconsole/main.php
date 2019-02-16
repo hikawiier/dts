@@ -234,7 +234,7 @@ namespace areafeatures_etconsole
 			if($ctobc)
 			{
 				addnews($now,'gsc_ctobc',$name);
-				kg_systemputchat($now,'bancombo');
+				\sys\systemputchat($now,'bancombo','警告：连斗状态已被解除！');
 			}
 		}				
 		elseif($bancombo==1)
@@ -276,51 +276,6 @@ namespace areafeatures_etconsole
 		eval(import_module('sys'));
 		//重设连斗解除判断
 		$bancombo = 0;
-	}
-	function kg_systemputchat($time,$type,$msg = ''){
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		if(!$time){$time = $now;}
-		if($type == 'bancombo'){
-			$msg = '游戏已解除连斗状态！';
-		}
-		$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,msg) VALUES ('5','$time','','$msg')");
-		return;
-	}
-	function get_radar_existing_npctp()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player'));
-		$existing_npctp = array();
-		//第一轮循环，得到原始的存活角色数据
-		$radardata_raw = array();
-		$result = $db->query("SELECT name,type,pls,hp FROM {$tablepre}players");
-		while($cd = $db->fetch_array($result)) {
-			$cdtype = $cd['type'];
-			if(!in_array($cdtype, $existing_npctp)) $existing_npctp[] = $cdtype;
-		}
-		return $existing_npctp;
-	}
-
-	function get_radar_npc_type_list($radarsk, $existing_npctp=array()){
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','radar','areafeatures_etconsole'));
-		$ret = $chprocess($radarsk, $existing_npctp=array());
-		//基本显示：*篝火新增 虚拟体-v,虚拟体-c,残留碎片
-		$ret = array_merge($ret,array(1001,1002,1005));
-		$existing_npctp = get_radar_existing_npctp();
-		if(!empty($existing_npctp)){
-			//如果虚拟体类NPC未进场不会显示
-			if(!in_array(1001, $existing_npctp)) $ret = array_diff($ret, array(1001));
-			if(!in_array(1002, $existing_npctp)) $ret = array_diff($ret, array(1002));
-			//感应探测器额外显示 暂无
-		/*	if(4==$radarsk) {
-				foreach(Array(12,45,46,21) as $tv) {
-					if(in_array($tv, $existing_npctp)) $ret[] = $tv;
-				}
-			}*/
-		}
-		return $ret;
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{
@@ -374,7 +329,7 @@ namespace areafeatures_etconsole
 		elseif($c_order=='radar')
 		{
 			$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br><span class='yellow'>当界面上的图像稳定下来时，你发现上面显示出了一排数据。</span><br>";
-			$mms = $c_radar ? $c_radar : 4;
+			$mms = $c_radar ? $c_radar : 99;
 			$mode = 'radar';
 			\radar\use_radar($mms);		
 		}

@@ -308,6 +308,7 @@ pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1
 skill20,extra/club/skills/skill20/,1
+campfire_radar,campfire/campfire_base/campfireitem/campfire_radar/,1
 empowers,base/items/empowers/,1
 skill70,extra/club/skills/skill70/,1
 skill246,extra/club/skills/skill246/,1
