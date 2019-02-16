@@ -5,7 +5,7 @@ namespace campfire_item_kgrt
 	function init() 
 	{
 		eval(import_module('itemmain'));
-		$iteminfo['kgrt'] = '传送道具';
+		$iteminfo['kgrt'] = '传送设备';
 	}
 	
 	function itemuse_kgrt(&$theitem)

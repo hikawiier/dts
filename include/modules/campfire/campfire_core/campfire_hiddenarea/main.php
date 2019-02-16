@@ -131,11 +131,11 @@ namespace campfire_hiddenarea
 		}	
 		if($news == 'kgtp_ydtp') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">位于{$b}的{$a}尝试进行传送，但又回到了原地，真是遗憾。</span><br>\n";
-		elseif($news == 'kgtp_tpth') 
+		if($news == 'kgtp_tpth') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本位于{$b}的{$a}从幻境中离奇消失了！</span><br>\n";
-		elseif($news == 'kgtp_bfh') 
+		if($news == 'kgtp_bfh') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本从幻境中消失的{$a}又回到了{$b}！</span><br>\n";
-		elseif($news == 'kgtp_n') 
+		if($news == 'kgtp_n') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">在一阵短暂的空间扭曲之后，原本位于{$b}的{$a}忽然出现在了{$c}！</span><br>\n";
 
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);

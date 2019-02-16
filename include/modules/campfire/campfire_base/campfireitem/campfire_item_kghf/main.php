@@ -11,7 +11,7 @@ namespace campfire_item_kghf
 	function itemuse_kghf(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','itemmain','logger','skillbase','skill2900'));
+		eval(import_module('sys','player','itemmain','logger','skillbase'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
