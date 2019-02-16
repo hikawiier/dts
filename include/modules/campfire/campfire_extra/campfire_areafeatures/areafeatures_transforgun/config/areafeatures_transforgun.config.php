@@ -2,7 +2,14 @@
 
 namespace areafeatures_transforgun
 {
-	//areafeatures_transforgun - 枪械部件的属性稀有度信息
+	//areafeatures_transforgun
+	//手动改造的成功率最大值
+	$notools_succ = 75;
+	//工坊改造的成功率最大值
+	$area_succ = 99;
+	//在工坊上改造可增加成功率
+	$area_addsucc = 20;
+	//枪械部件的属性稀有度信息
 	$sk_rarity = Array(
 		'z' => 1,
 		'x' => 1,

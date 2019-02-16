@@ -117,7 +117,7 @@ namespace areafeatures_transforgun
 			elseif($wg>200 && $wg<=300){$base_repairsucc_obbs = 50+(($wg-200)*0.18);}
 			elseif($wg>300 && $wg<=400){$base_repairsucc_obbs = 68+(($wg-300)*0.14);}
 			else{$base_repairsucc_obbs = 82+(($wg-400)*0.1);}
-			$base_repairsucc_obbs = min(99,$base_repairsucc_obbs);	
+			$base_repairsucc_obbs += $area_addsucc;
 			
 			if($r_sk=='addwepe')
 			{
@@ -126,7 +126,10 @@ namespace areafeatures_transforgun
 				else{$rub_add_wepe=$rub['itme'];}
 				$add_wepe = $rub_add_wepe;
 				$final_repairsucc_obbs = round($base_repairsucc_obbs  - $wepsk_rarity_obbs);
+				//最终成功率限制
+				$final_repairsucc_obbs_max = $area_succ;
 				$final_repairsucc_obbs = max(1,$final_repairsucc_obbs);
+				$final_repairsucc_obbs = min($final_repairsucc_obbs_max,$final_repairsucc_obbs);	
 				if($final_repairsucc_obbs<=25){$final_obbs_word="<span class='red'>{$final_repairsucc_obbs}%</span>";}
 				elseif($final_repairsucc_obbs>25 && $final_repairsucc_obbs<=50){$final_obbs_word="<span class='yellow'>{$final_repairsucc_obbs}%</span>";}
 				elseif($final_repairsucc_obbs>50 && $final_repairsucc_obbs<=75){$final_obbs_word="<span class='clan'>{$final_repairsucc_obbs}%</span>";}
@@ -155,7 +158,10 @@ namespace areafeatures_transforgun
 				$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
 				//最终概率
 				$final_repairsucc_obbs = round($base_repairsucc_obbs + $rubbish_add_obbs - $repairsk_reduce_obbs - $wepsk_rarity_obbs);
+				//最终成功率限制
+				$final_repairsucc_obbs_max = $area_succ;
 				$final_repairsucc_obbs = max(1,$final_repairsucc_obbs);
+				$final_repairsucc_obbs = min($final_repairsucc_obbs_max,$final_repairsucc_obbs);	
 				//$log.="开始计算：<br>打算去除的属性：{$r_sk}<br>去除失败会扣除效果：{$down_effect}<br>基础成功率{$base_repairsucc_obbs}%<br>零件增效{$rubbish_add_obbs}%<br>要抹去属性的稀有度{$repairsk_reduce_obbs}%<br>除它之外的武器属性稀有度之合{$wepsk_rarity_obbs}%<br>最终成功率{$final_repairsucc_obbs}%<br>";
 				if($final_repairsucc_obbs<=25){$final_obbs_word="<span class='red'>{$final_repairsucc_obbs}%</span>";}
 				elseif($final_repairsucc_obbs>25 && $final_repairsucc_obbs<=50){$final_obbs_word="<span class='yellow'>{$final_repairsucc_obbs}%</span>";}
@@ -267,21 +273,22 @@ namespace areafeatures_transforgun
 			elseif($wep_sk_rarity>40 && $wep_sk_rarity<=55){$wep_sk_rarity*=0.75;}
 			elseif($wep_sk_rarity>55 && $wep_sk_rarity<=70){$wep_sk_rarity*=0.7;}
 			else{$wep_sk_rarity*=0.6;}
-		}
-		$changesucc_obbs_max = $r_way=='r_local' ? 99 : 75;		
+		}	
 		$base_changesucc_obbs = 0;
 		if($wg<=100){$base_changesucc_obbs = $wg*0.28;}
 		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 28+(($wg-100)*0.22);}	
 		elseif($wg>200 && $wg<=300){$base_changesucc_obbs = 50+(($wg-200)*0.18);}
 		elseif($wg>300 && $wg<=400){$base_changesucc_obbs = 68+(($wg-300)*0.14);}
 		else{$base_changesucc_obbs = 82+(($wg-400)*0.1);}
-		$base_changesucc_obbs = min($changesucc_obbs_max,$base_changesucc_obbs);		
+		if($r_way=='r_local') $base_changesucc_obbs += $area_addsucc;	
 		$r_effect_obbs = ($r_itme+$merge_effect)/25; 
 		$r_skrarity_obbs = $rg_sk_rarity;
 		$wep_skrarity_obbs = $wep_sk_rarity;	
 		$final_changesucc_obbs = ceil($base_changesucc_obbs-$r_effect_obbs-$r_skrarity_obbs-$wep_skrarity_obbs);
+		//最终成功率限制
+		$final_changesucc_obbs_max = $r_way=='r_local' ? $area_succ : $notools_succ;	
 		$final_changesucc_obbs = max(1,$final_changesucc_obbs);		
-
+		$final_changesucc_obbs = min($final_changesucc_obbs_max,$final_changesucc_obbs);		
 		if(rand(1,100)<=$final_changesucc_obbs)
 		{
 			$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，枪械改造的工作<span class='red'>顺利完成</span>了！<br>你掂了掂手中的爱枪，感觉它变得更顺手了。<br>";
@@ -426,23 +433,24 @@ namespace areafeatures_transforgun
 			else{$wep_sk_rarity*=0.6;}
 
 		}
-		//计算安装的成功率
-		$changesucc_obbs_max = $r_way=='r_local' ? 99 : 75;//成功率上限
-		
+		//计算安装的成功率		
 		$base_changesucc_obbs = 0;
 		if($wg<=100){$base_changesucc_obbs = $wg*0.28;}//受射系熟练影响的基础成功率
 		elseif($wg>100 && $wg<=200){$base_changesucc_obbs = 28+(($wg-100)*0.22);}	
 		elseif($wg>200 && $wg<=300){$base_changesucc_obbs = 50+(($wg-200)*0.18);}
 		elseif($wg>300 && $wg<=400){$base_changesucc_obbs = 68+(($wg-300)*0.14);}
 		else{$base_changesucc_obbs = 82+(($wg-400)*0.1);}
-		$base_changesucc_obbs = min($changesucc_obbs_max,$base_changesucc_obbs);		
+		if($r_way=='r_local') $base_changesucc_obbs += $area_addsucc;
 
 		$r_effect_obbs = ($r_itme+$merge_effect)/25; //受部件效果影响的成功率
 		$r_skrarity_obbs = $rg_sk_rarity;//受部件非重复属性稀有度影响的成功率
 		$wep_skrarity_obbs = $wep_sk_rarity;//受武器属性稀有度影响的成功率		
 
 		$final_changesucc_obbs = ceil($base_changesucc_obbs-$r_effect_obbs-$r_skrarity_obbs-$wep_skrarity_obbs);
+		//最终成功率限制
+		$final_changesucc_obbs_max = $r_way=='r_local' ? $area_succ : $notools_succ;	
 		$final_changesucc_obbs = max(1,$final_changesucc_obbs);		
+		$final_changesucc_obbs = min($final_changesucc_obbs_max,$final_changesucc_obbs);	
 
 		$remake_info = Array('r_local' => '工坊改造' ,'r_item' => '手动改造');
 		$log.="你确定要使用<span class='yellow'>【{$r_itm}】</span>对武器<span class='yellow'>【{$wep}】</span>进行<span class='yellow'>{$remake_info[$r_way]}</span>吗？<br>这样做的成功率为";
