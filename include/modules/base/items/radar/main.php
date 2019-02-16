@@ -62,7 +62,7 @@ namespace radar
 					if(!empty($radardata_raw[$plsi][$typei]['num'])) {
 						$radardata[$plsi][$typei]['num'] = $radardata_raw[$plsi][$typei]['num'];
 						if(3 == $radarsk && !in_array($typei, array(6, 90))) $radardata[$plsi][$typei]['namelist'] = radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
-						elseif(4 == $radarsk && in_array($typei, array(21,45,46))) $radardata[$plsi][$typei]['namelist'] = radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
+						elseif(4 == $radarsk && in_array($typei, array(21,45,46,1005))) $radardata[$plsi][$typei]['namelist'] = radar_parse_namelist($radardata_raw[$plsi][$typei]['namelist']);
 					}else{
 						$radardata[$plsi][$typei]['num'] = '-';
 					}

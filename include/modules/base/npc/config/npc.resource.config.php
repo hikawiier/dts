@@ -200,13 +200,13 @@ namespace npc
 	);
 
 	//campfireMOD中不需要躲避禁区的NPC
-	$killzone_resistant_typelist = array_merge($killzone_resistant_typelist,Array(1001,1002,1003));
+	$killzone_resistant_typelist = array_merge($killzone_resistant_typelist,Array(1003,1004));
 	//campfireMOD新增NPC类别
 	$npc_typeinfo[1001]='虚拟体-C型';
 	$npc_typeinfo[1002]='虚拟体-V型';
 	$npc_typeinfo[1003]='错误：未授权人员';
 	$npc_typeinfo[1004]='高自律型战斗模块';
-	$npc_typeinfo[1005]='残留数据';
+	$npc_typeinfo[1005]='残留信息';
 	//campfireMOD新增NPC类别的死亡信息
 	$npc_killmsginfo[1001]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';
 	$npc_killmsginfo[1002]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';

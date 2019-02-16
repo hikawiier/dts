@@ -144,27 +144,29 @@ namespace areafeatures_etconsole
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		eval(import_module('sys','player','itemmain','logger','addnpc','npc','areafeatures_etconsole'));
 		
-		$enpc_num = sizeof($extract_npc);
-		if(!$enpc_num)
+		if(!sizeof($extract_npc))
 		{
 			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：系统中无可释放NPC。</span><br>";
 			return;
 		}
+		elseif($extract_times > sizeof($extract_npc))
+		{
+			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：数据释放参数设置错误，请联系幻境管理者！</span><br>";
+			return;
+		}
 		addnews($now,'gsc_exnpc',$name);	
-		$e_A = rand(0,$enpc_num); $e_npc_A = $e_A>0 ? $extract_npc[($e_A-1)] : $extract_npc[$e_A];
-		$eA_type=$e_npc_A['type'];$eA_sub=$e_npc_A['sub'];$eA_num=$e_npc_A['num'];
-		$eA_type_info=$npcinfo[$eA_type]; $eA_sub_info=$eA_type_info['sub'];$eA_npc_info=$eA_sub_info[$eA_sub];$eA_name=$eA_npc_info['name'];
-		\addnpc\addnpc ($eA_type,$eA_sub,$eA_num);		
-		$e_B = rand(0,$enpc_num); $e_npc_B = $e_B>0 ? $extract_npc[($e_B-1)] : $extract_npc[$e_B];
-		$eB_type=$e_npc_B['type'];$eB_sub=$e_npc_B['sub'];$eB_num=$e_npc_B['num'];
-		$eB_type_info=$npcinfo[$eB_type]; $eB_sub_info=$eB_type_info['sub'];$eB_npc_info=$eB_sub_info[$eB_sub];$eB_name=$eB_npc_info['name'];
-		\addnpc\addnpc ($eB_type,$eB_sub,$eB_num);	
-		$e_C = rand(0,$enpc_num); $e_npc_C = $e_C>0 ? $extract_npc[($e_C-1)] : $extract_npc[$e_C];
-		$eC_type=$e_npc_C['type'];$eC_sub=$e_npc_C['sub'];$eC_num=$e_npc_C['num'];
-		$eC_type_info=$npcinfo[$eC_type]; $eC_sub_info=$eC_type_info['sub'];$eC_npc_info=$eC_sub_info[$eC_sub];$eC_name=$eC_npc_info['name'];
-		\addnpc\addnpc ($eC_type,$eC_sub,$eC_num);					
-		
-		$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<br><span class='yellow'>“已释放NPC：<br>【{$npc_typeinfo[$eA_type]} {$eA_name}】 - <span class='red'>{$eA_num}</span>名<br>【{$npc_typeinfo[$eB_type]} {$eB_name}】 - <span class='red'>{$eB_num}</span>名<br>【{$npc_typeinfo[$eC_type]} {$eC_name}】 - <span class='red'>{$eC_num}</span>名<br>请小心。它们的位置分别在……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";	
+		shuffle($extract_npc); 
+		$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<br><span class='yellow b'>“已释放NPC：<br></span>";
+		for($i=0;$i<=$extract_times;$i++){
+			$enpc_list=$extract_npc[$i];
+			foreach(array_keys($enpc_list['sub']) as $enpc_sub){
+				for($z=0;$z<=$enpc_list['sub'][$enpc_sub];$z++){
+					\addnpc\addnpc ($enpc_list['type'],$enpc_sub,1);
+				}
+				$log.="【{$npc_typeinfo[$enpc_list['type']]} {$anpcinfo[$enpc_list['type']]['sub'][$enpc_sub]['name']}】 - <span class='red'>{$enpc_list['sub'][$enpc_sub]}</span>名<br>";
+			}
+		}
+		$log.="<span class='yellow b'>请小心。它们的位置分别在……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 		foreach(Array(1,2,3,4,5,6) as $i)
 		{
 			if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
@@ -284,6 +286,41 @@ namespace areafeatures_etconsole
 		}
 		$db->query("INSERT INTO {$tablepre}chat (type,`time`,send,msg) VALUES ('5','$time','','$msg')");
 		return;
+	}
+	function get_radar_existing_npctp()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player'));
+		$existing_npctp = array();
+		//第一轮循环，得到原始的存活角色数据
+		$radardata_raw = array();
+		$result = $db->query("SELECT name,type,pls,hp FROM {$tablepre}players");
+		while($cd = $db->fetch_array($result)) {
+			$cdtype = $cd['type'];
+			if(!in_array($cdtype, $existing_npctp)) $existing_npctp[] = $cdtype;
+		}
+		return $existing_npctp;
+	}
+
+	function get_radar_npc_type_list($radarsk, $existing_npctp=array()){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','radar','areafeatures_etconsole'));
+		$ret = $chprocess($radarsk, $existing_npctp=array());
+		//基本显示：*篝火新增 虚拟体-v,虚拟体-c,残留碎片
+		$ret = array_merge($ret,array(1001,1002,1005));
+		$existing_npctp = get_radar_existing_npctp();
+		if(!empty($existing_npctp)){
+			//如果虚拟体类NPC未进场不会显示
+			if(!in_array(1001, $existing_npctp)) $ret = array_diff($ret, array(1001));
+			if(!in_array(1002, $existing_npctp)) $ret = array_diff($ret, array(1002));
+			//感应探测器额外显示 暂无
+		/*	if(4==$radarsk) {
+				foreach(Array(12,45,46,21) as $tv) {
+					if(in_array($tv, $existing_npctp)) $ret[] = $tv;
+				}
+			}*/
+		}
+		return $ret;
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{

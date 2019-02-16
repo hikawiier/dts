@@ -6,7 +6,7 @@
 DROP TABLE IF EXISTS bra_players;
 CREATE TABLE bra_players (
   `pid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `type` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `type` smallint(5) unsigned NOT NULL DEFAULT '0',
   `name` char(15) NOT NULL DEFAULT '',
   `pass` char(32) NOT NULL DEFAULT '',
   `ip` char(15) NOT NULL DEFAULT '',

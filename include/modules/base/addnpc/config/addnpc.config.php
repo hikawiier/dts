@@ -563,9 +563,9 @@ namespace addnpc
 
 	//campfireMOD新增addnpc
 	$anpcinfo[1001]=array
-		(
+	(
 		'mode' => 1,
-		'num' => 60,
+		'num' => 1,
 		'pass' => 'bra',
 		'bid' => 0,
 		'inf' => '',
@@ -659,10 +659,10 @@ namespace addnpc
 			),
 		),
 	);
-$anpcinfo[1002]=array
-		(
+	$anpcinfo[1002]=array
+	(
 		'mode' => 1,
-		'num' => 12,
+		'num' => 1,
 		'pass' => 'bra',
 		'bid' => 0,
 		'inf' => '',
@@ -755,8 +755,8 @@ $anpcinfo[1002]=array
 			),
 		),
 	);
-$anpcinfo[1003]=array
-		(
+	$anpcinfo[1003]=array
+	(
 		'mode' => 1,
 		'num' => 1,
 		'pass' => 'bra',
@@ -819,8 +819,8 @@ $anpcinfo[1003]=array
 			),
 		),
 	);
-$anpcinfo[1004]=array
-		(
+	$anpcinfo[1004]=array
+	(
 		'mode' => 1,
 		'num' => 4,
 		'pass' => 'bra',
