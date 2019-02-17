@@ -8,7 +8,7 @@ namespace itemmain
 		global $item_equip_list;
 		$equip_list=array_merge($equip_list,$item_equip_list);
 	}
-	
+	//campfire MOD修改标识
 	//1:一般可合并道具  2:食物  0:不可合并
 	function check_mergable($ik){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
