@@ -200,7 +200,8 @@ namespace npc
 	);
 
 	//campfireMOD中不需要躲避禁区的NPC
-	$killzone_resistant_typelist = array_merge($killzone_resistant_typelist,Array(1003,1004));
+	$campfire_killzone_resistant_typelist=Array(1003,1004);
+	$killzone_resistant_typelist = $killzone_resistant_typelist+$campfire_killzone_resistant_typelist;
 	//campfireMOD新增NPC类别
 	$campfire_npc_typeinfo = Array
 	(
@@ -210,7 +211,7 @@ namespace npc
 		1004 => '高自律型战斗模块',
 		1005 => '残留信息',		
 	);
-	$npc_typeinfo = array_merge($campfire_npc_typeinfo,$npc_typeinfo);
+	$npc_typeinfo = $npc_typeinfo+$campfire_npc_typeinfo;
 	//campfireMOD新增NPC类别的击杀信息
 	$campfire_npc_killmsginfo = Array
 	(
@@ -222,7 +223,7 @@ namespace npc
 		1004 => 'MISSION：ALL COMPLETED',
 		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
 	);
-	$npc_killmsginfo = array_merge($campfire_npc_killmsginfo,$npc_killmsginfo);
+	$npc_killmsginfo = $npc_killmsginfo+$campfire_npc_killmsginfo;
 	//campfireMOD新增NPC类别的死亡信息
 	$campfire_npc_lwinfo = Array
 	(
@@ -234,7 +235,7 @@ namespace npc
 		1004 => 'WARNING：DEFINDING MOUDUEL MISSING...',
 		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
 	);
-	$npc_lwinfo = array_merge($campfire_npc_lwinfo,$npc_lwinfo);
+	$npc_lwinfo = $npc_lwinfo+$campfire_npc_lwinfo;
 }
 
 ?>

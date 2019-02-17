@@ -421,8 +421,12 @@ $mixinfo = array
 
 	);	
 	//篝火-道具：
-	$mixinfo[]=array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),);
-	$mixinfo[]=array('class' => 'item', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),);
+	$campfire_mixinfo=Array
+	(
+		array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
+		array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),),
+	);
+	$mixinfo = $mixinfo+$campfire_mixinfo;
 }
 
 ?>
