@@ -202,20 +202,39 @@ namespace npc
 	//campfireMOD中不需要躲避禁区的NPC
 	$killzone_resistant_typelist = array_merge($killzone_resistant_typelist,Array(1003,1004));
 	//campfireMOD新增NPC类别
-	$npc_typeinfo[1001]='虚拟体-C型';
-	$npc_typeinfo[1002]='虚拟体-V型';
-	$npc_typeinfo[1003]='错误：未授权人员';
-	$npc_typeinfo[1004]='高自律型战斗模块';
-	$npc_typeinfo[1005]='残留信息';
+	$campfire_npc_typeinfo = Array
+	(
+		1001 => '虚拟体-C型',
+		1002 => '虚拟体-V型',
+		1003 => '错误：未授权人员',
+		1004 => '高自律型战斗模块',
+		1005 => '残留信息',		
+	);
+	$npc_typeinfo = array_merge($campfire_npc_typeinfo,$npc_typeinfo);
+	//campfireMOD新增NPC类别的击杀信息
+	$campfire_npc_killmsginfo = Array
+	(
+		1001 => '1BF52:KILLING MOUDULE LOADING SUCCEED',
+		1002 => '1BF52:KILLING MOUDULE LOADING SUCCEED',
+		1003 => Array(
+			'Mr.Lein' => '无须遗憾……你将成为这盔甲的一部分，而它将为这噩梦般的一切划上句号……',
+		),
+		1004 => 'MISSION：ALL COMPLETED',
+		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
+	);
+	$npc_killmsginfo = array_merge($campfire_npc_killmsginfo,$npc_killmsginfo);
 	//campfireMOD新增NPC类别的死亡信息
-	$npc_killmsginfo[1001]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';
-	$npc_killmsginfo[1002]='1BF52:ERROR_COULD_NOT_FIND_THE_ENER....';
-	$npc_killmsginfo[1003]=Array(
-			'Mr.Lein' => '很惭愧，就做了一点微小的工作，谢谢大家！',
-		);
-	$npc_killmsginfo[1004]='WARNING：DEFINDING MOUDUEL MISSING...';
-	$npc_killmsginfo[1005]='活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！';		
-	
+	$campfire_npc_lwinfo = Array
+	(
+		1001 => '1BF52:ERROR_COULD_NOT_FIND_THE_ENER....',
+		1002 => '1BF52:ERROR_COULD_NOT_FIND_THE_ENER....',
+		1003 => Array(
+			'Mr.Lein' => '……采集到足够的数据样本了……',
+		),
+		1004 => 'WARNING：DEFINDING MOUDUEL MISSING...',
+		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
+	);
+	$npc_lwinfo = array_merge($campfire_npc_lwinfo,$npc_lwinfo);
 }
 
 ?>
