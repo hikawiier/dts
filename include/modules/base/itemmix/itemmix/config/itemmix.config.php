@@ -426,7 +426,7 @@ $mixinfo = array
 		array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
 		array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),),
 	);
-	$mixinfo = $mixinfo+$campfire_mixinfo;
+	$mixinfo = array_merge($mixinfo,$campfire_mixinfo);
 }
 
 ?>
