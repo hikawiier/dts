@@ -3,6 +3,7 @@ bubblebox,extra/misc/bubblebox/,1
 sys,core/sys/,1
 map,core/map/,1
 bmp_util,extra/misc/bmp_util/,1
+campfire_core,campfire/campfire_core/main/,1
 gameflow_base,core/gameflow/gameflow_base/,1
 player,core/player/,1
 gameflow_antiafk,core/gameflow/gameflow_antiafk/,1

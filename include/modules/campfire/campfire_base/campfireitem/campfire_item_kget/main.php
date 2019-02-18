@@ -7,6 +7,23 @@ namespace campfire_item_kget
 		eval(import_module('itemmain'));
 		$iteminfo['kget'] = '精密仪器';
 	}
+	
+	function parse_itmuse_desc($n, $k, $e, $s, $sk){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = $chprocess($n, $k, $e, $s, $sk);
+		if(strpos($k,'kget')===0){
+			if ($n == '动力装甲修复工具') {
+				$ret .= '可以恢复动力装甲类防具的耐久值，需要消耗金属材料填充';
+			}elseif ($n == '便携式控制中心子端') {
+				$ret .= '幻境控制系统的移动子端，可解除禁区或使禁区提前到来，且内置最高级的电子雷达';
+			}elseif ($n == '再启动指令集') {
+				$ret .= '使用后能达到使游戏重新开始的效果，但需要满足以下条件：使用者为唯一幸存、尚未选择称号、且游戏开始超过10分钟';
+			}
+		}
+		return $ret;
+	}
+	
+	
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
@@ -111,6 +128,33 @@ namespace campfire_item_kget
 					return;
 				}
 			}
+			return;
+		}
+		if($itm=='再启动指令集')
+		{
+			//条件：非房间模式，使用者为唯一幸存者，不能有职业，游戏处于进行状态下，已开局超过10分钟
+			if($gametype>=10)
+			{
+				$log.="房间内不可使用！<br>";
+				return;
+			}
+			if($alivenum==1 && $gamestate < 30 && $gamestate >= 20 && $now>=$starttime+600 &&!$club)
+			{
+				$hp = 0;
+				$state = 202;
+				\player\update_sdata(); $sdata['sourceless'] = 1; $sdata['attackwith'] = '';
+				\player\kill($sdata,$sdata);
+				\player\player_save($sdata);
+				\player\load_playerdata($sdata);
+				$gamestate = 40;
+				addnews($time,'combo');
+				save_gameinfo();
+			}
+			else
+			{
+				$log.="{$itm}的使用条件未满足。<br>";
+			}
+			return;
 		}
 		$log.="{$itm}该怎么用呢？<br>";
 		return;
@@ -127,6 +171,14 @@ namespace campfire_item_kget
 			return;
 		}
 		$chprocess($theitem);
+	}
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player'));
+		if($news == 'death1002') 
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>向系统中枢发送了重启指令，并登出了幻境系统！";
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 }
 

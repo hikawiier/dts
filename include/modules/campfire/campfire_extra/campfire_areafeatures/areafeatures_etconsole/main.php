@@ -220,13 +220,19 @@ namespace areafeatures_etconsole
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		eval(import_module('sys','player','itemmain','logger','gameflow_combo'));	
 		
+		if($gamestate==10 || $gamestate==15)
+		{
+			$log.="该模式下无法使用限制解除功能。<br>";
+			return;	
+		}
+		
 		if($bancombo==0)
 		{
 			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
 			$bancombo = 1;
 			if($gamestate == 40) 
 			{
-				$gamestate = 30;
+				$gamestate = 31;
 				$ctobc = true;
 			}
 			save_gameinfo();

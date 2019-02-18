@@ -3,7 +3,7 @@
 namespace areafeatures_transfortrap
 {
 	function init()
-	{
+	{		
 	}
 	function act()
 	{
@@ -38,7 +38,7 @@ namespace areafeatures_transfortrap
 	function change_trap($i,$cway)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','itemmain','logger','areafeatures_transforgun'));
+		eval(import_module('sys','player','itemmain','logger'));
 		if($pls!=31)
 		{
 			$log.="<span class='red'>该地区不存在陷阱改造工作台，请重新输入指令。</span><br>";
@@ -99,7 +99,7 @@ namespace areafeatures_transfortrap
 				else
 				{
 					$hp = 0;
-					$state = 98;
+					$state = 1001;
 					\player\update_sdata(); $sdata['sourceless'] = 1; $sdata['attackwith'] = '';
 					\player\kill($sdata,$sdata);
 					\player\player_save($sdata);
@@ -138,7 +138,7 @@ namespace areafeatures_transfortrap
 				else
 				{
 					$hp = 0;
-					$state = 98;
+					$state = 201;
 					\player\update_sdata(); $sdata['sourceless'] = 1; $sdata['attackwith'] = '';
 					\player\kill($sdata,$sdata);
 					\player\player_save($sdata);
@@ -161,7 +161,7 @@ namespace areafeatures_transfortrap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
-		if($news == 'death98') 
+		if($news == 'death201') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造易爆物品时失误被炸死，实在是喜大普奔！{$e0}";
 		if($news == 'ct_succ') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功将<span class='yellow'>{$c}【{$b}】</span>改造成了<span class='yellow'>{$d}</span>……细作吃矛！</span><br>\n";

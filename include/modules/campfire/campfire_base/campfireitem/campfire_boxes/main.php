@@ -7,6 +7,7 @@ namespace campfire_boxes
 		eval(import_module('itemmain'));
 		$iteminfo['kggb'] = '军火箱';
 		$iteminfo['kgab'] = '弹药箱';
+		$iteminfo['kgpb'] = '精密组件包';
 	}
 
 	function itemuse(&$theitem) 
@@ -30,6 +31,17 @@ namespace campfire_boxes
 			\itemmain\itemget();	
 			return;
 		} elseif(strpos ( $itmk, 'kggb' ) === 0){
+			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
+			$file = __DIR__.'/config/kggbbox.config.php';
+			$plist1 = openfile($file);
+			$rand1 = rand(0,count($plist1)-1);
+			list($in,$ik,$ie,$is,$isk) = explode(',',$plist1[$rand1]);
+			$itm0 = $in;$itmk0=$ik;$itme0=$ie;$itms0=$is;$itmsk0=$isk;
+			addnews($now,'present',$name,$itm,$in);
+			\itemmain\itms_reduce($theitem);
+			\itemmain\itemget();	
+			return;
+		} elseif(strpos ( $itmk, 'kgpb' ) === 0){
 			$log.="你打开了<span class=\"yellow\">$itm</span>。<br>";
 			$file = __DIR__.'/config/kggbbox.config.php';
 			$plist1 = openfile($file);
