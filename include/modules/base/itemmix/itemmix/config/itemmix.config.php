@@ -425,6 +425,9 @@ $mixinfo = array
 	(
 		array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
 		array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),),
+		array('class' => 'hidden', 'stuff' => array('荣耀','光辉','虔诚','奉献'),'result' => array('Untainted Glory','A',1,1,'hL'),),
+		array('class' => 'hidden', 'stuff' => array('荣耀','光辉'),'result' => array('Untainted Glory','A',1,1,'h'),),
+		array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',1,1,'L'),),
 	);
 	$mixinfo = array_merge($mixinfo,$campfire_mixinfo);
 }

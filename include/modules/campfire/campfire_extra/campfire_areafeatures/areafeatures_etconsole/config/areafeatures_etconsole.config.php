@@ -11,21 +11,42 @@ namespace areafeatures_etconsole
 			'type' => 1001, //NPC种类
 			'sub' => Array //NPC的小类与每类生成的数量
 			(
-				0 => 3,
-				1 => 3,
-				2 => 3,
+				0 => 2,
+				1 => 1,
 			),
 		),
 		1 => Array(
+			'type' => 1001, 
+			'sub' => Array 
+			(
+				1 => 2,
+				2 => 1,
+			),
+		),
+		2 => Array(
+			'type' => 1001, 
+			'sub' => Array 
+			(
+				0 => 1,
+				2 => 2,
+			),
+		),
+		3 => Array(
 			'type' => 1002, 
-			'sub' => Array //NPC的小类与每类生成的数量
+			'sub' => Array 
 			(
 				0 => 1,
 				1 => 1,
+			),
+		),
+		4 => Array(
+			'type' => 1002, 
+			'sub' => Array 
+			(
 				2 => 1,
 				3 => 1,
 			),
-		),
+		),				
 	);
 }
 
