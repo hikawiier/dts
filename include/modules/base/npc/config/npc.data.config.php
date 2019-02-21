@@ -2911,7 +2911,7 @@ namespace npc
 			'wepe' => 145,
 			'weps' => 200,
 			'wepsk' => 'i',
-			'itm1' => '手贱是原罪',
+			'itm1' => '哇嘎力马死',
 			'itmk1' => 'ME',
 			'itme1' => 12,
 			'itms1' => 4,
