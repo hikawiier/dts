@@ -154,8 +154,8 @@ namespace areafeatures_transforgun
 				if($rub['itm']=='某种机械设备'){$rubbish_add_obbs=18;}
 				elseif($rub['itm']=='非法枪械部件'){$rubbish_add_obbs=23;}
 				else{$rubbish_add_obbs=0;}
-				//要摘除属性的稀有度，一发和多重为特判的50
-				$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
+				//要摘除属性的稀有度，一发和多重为特判的37
+				//$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
 				//最终概率
 				$final_repairsucc_obbs = round($base_repairsucc_obbs + $rubbish_add_obbs - $repairsk_reduce_obbs - $wepsk_rarity_obbs);
 				//最终成功率限制

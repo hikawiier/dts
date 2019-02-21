@@ -232,7 +232,7 @@ namespace areafeatures_etconsole
 			$bancombo = 1;
 			if($gamestate == 40) 
 			{
-				$gamestate = 31;
+				$gamestate = 30;
 				$ctobc = true;
 			}
 			save_gameinfo();

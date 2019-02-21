@@ -177,7 +177,7 @@ namespace campfire_item_kget
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'death202') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>向系统中枢发送了重启指令，并登出了幻境系统！";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>向系统中枢发送了重启指令，并登出了幻境系统！";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e);
 	}
 }
