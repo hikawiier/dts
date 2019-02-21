@@ -41,7 +41,7 @@ namespace campfire_radar
 			//通常状态下只有存活的才记录
 			if($cdhp) {
 				$radardata_raw[$cdpls][$cdtype]['num'] ++;
-				if(in_array($cdtype, array(0, 2, 5, 7, 11, 14, 20, 21, 22, 45, 46, 1005))) $radardata_raw[$cdpls][$cdtype]['namelist'][] = $cdname;
+				if(in_array($cdtype, array(0, 2, 5, 7, 11, 14, 20, 21, 22, 45, 46, 1002, 1005))) $radardata_raw[$cdpls][$cdtype]['namelist'][] = $cdname;
 			}
 		}
 		$radar_npctplist = \radar\get_radar_npc_type_list($radarsk, $existing_npctp);
