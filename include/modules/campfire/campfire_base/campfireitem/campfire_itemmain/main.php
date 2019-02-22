@@ -74,15 +74,7 @@ namespace campfire_itemmain
 		
 		if(strpos($itm,'自适应型溶剂')!==false && $itmk=='Y')
 		{
-			if($club==18 || $club==17)
-			{
-				$log.="你感觉自己的胃在看到试剂的第一眼时就开始不断抽搐，这东西究竟有多恶心啊……还是不要随便喝了。<br>";
-				return;
-			}
-			if (defined('MOD_CLUBBASE')) \clubbase\club_lost();
-			$club = 18;
-			if (defined('MOD_CLUBBASE')) \clubbase\club_acquire($club);
-			get_alone_card_skill();	
+			$clever_flag = true;
 			if(strpos($itm,'TA-00'))
 			{
 				$add_skillpoint = round($lvl*2+3);	
@@ -97,9 +89,23 @@ namespace campfire_itemmain
 			}
 			else
 			{
-				$add_skillpoint = 1;	
+				$add_skillpoint = rand(1,3);	
+				$clever_flag = false;
+			}
+			if(($club==18 || $club==17) && $clever_flag)
+			{
+				$log.="你感觉自己的胃在看到试剂的第一眼时就开始不断抽搐，这东西究竟有多恶心啊……还是不要随便喝了。<br>";
+				return;
 			}
 			$log.="你看着面前散发着不祥气息的粉色试剂，皱着眉头将它一饮而尽。<br>没有想象中的那么难喝，尝起来似乎是草莓味的……<br><span class='lime b'>你感觉自己好像变得更聪明了，又好像没有。</span><br>";
+			if($clever_flag)
+			{
+				if (defined('MOD_CLUBBASE')) \clubbase\club_lost();
+				$club = 18;
+				if (defined('MOD_CLUBBASE')) \clubbase\club_acquire($club);
+				get_alone_card_skill();	
+				$log.="你的称号变为了<span class='yellow b'>{$clubinfo[18]}</span>！<br>";
+			}			
 			$skillpoint+=$add_skillpoint;
 			$log.="你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
 			\itemmain\itms_reduce($theitem);
