@@ -5,6 +5,23 @@ namespace campfire_itemmain
 	function init() 
 	{	
 	}
+	function parse_itmuse_desc($n, $k, $e, $s, $sk){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = $chprocess($n, $k, $e, $s, $sk);
+		if(strpos($k,'Y')===0 || strpos($k,'Z')===0){
+			if ($n == '自适应型溶剂TA-E3') {
+				$ret .= '能够将你的称号转变为天赋异禀，并返还较少的技能点';
+			}elseif ($n == '自适应型溶剂TA-C3') {
+				$ret .= '能够将你的称号转变为天赋异禀，并返还全部的技能点';
+			}elseif ($n == '自适应型溶剂TA-00') {
+				$ret .= '能够将你的称号转变为天赋异禀，并获得更多的技能点';
+			}elseif (strpos($n,'自适应型溶剂')!==false) {
+				$ret .= '似乎能让你变得更有智慧的神秘溶剂';
+			}
+		}
+		return $ret;
+	}
+	
 	function get_alone_card_skill(&$pa=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -68,21 +85,23 @@ namespace campfire_itemmain
 			get_alone_card_skill();	
 			if(strpos($itm,'TA-00'))
 			{
-				$skillpoint += round($lvl+$lvl/2+3);	
+				$add_skillpoint = round($lvl*2+3);	
 			}
 			elseif(strpos($itm,'TA-C3'))
 			{
-				$skillpoint = round($lvl+$lvl/2+3);	
+				$add_skillpoint = round($lvl)+3;	
 			}
 			elseif(strpos($itm,'TA-E3'))
 			{
-				$skillpoint = $lvl+3;	
+				$add_skillpoint = round($lvl/2)+3;	
 			}
 			else
 			{
-				$skillpoint += 3;	
+				$add_skillpoint = 1;	
 			}
-			$log.="你看着面前散发着不祥气息的粉色试剂，皱着眉头将它一饮而尽。<br>没有想象中的那么难喝，尝起来似乎是草莓味的……<br><span class='lime'>你感觉自己好像变得更聪明了，又好像没有。</span><br>";
+			$log.="你看着面前散发着不祥气息的粉色试剂，皱着眉头将它一饮而尽。<br>没有想象中的那么难喝，尝起来似乎是草莓味的……<br><span class='lime b'>你感觉自己好像变得更聪明了，又好像没有。</span><br>";
+			$skillpoint+=$add_skillpoint;
+			$log.="你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
 			\itemmain\itms_reduce($theitem);
 			return;
 		}

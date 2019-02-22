@@ -5,17 +5,17 @@ namespace campfire_powerarmor
 	//蠢
 	$nosta = '∞';
 	//最多能抵消多少百分比的伤害
-	$max_pa_reduce_dmg_per = 99;
-	//每件动力装甲带来的减伤比例
+	$max_pa_reduce_dmg_per = 80;
+	//每件动力装甲带来的减伤比例，乘以4后必须小于等于上面的总百分比
 	$once_pa_reduce_dmg_per = Array(
-		'T' => 25,
-		'S' => 22,
-		'A' => 17,
-		'B' => 12,
-		'C' => 5,
+		'T' => 20,
+		'S' => 17,
+		'A' => 13,
+		'B' => 9,
+		'C' => 4,
 		'O' => 3,
 	);
-	//每点耐久可以抵消多少点伤害
+	//抵消伤害的系数（实际抵消值=装甲效果*系数/100）
 	$once_pas_reduce_dmg  = Array(
 		'T' => 10,
 		'S' => 8,
@@ -26,12 +26,12 @@ namespace campfire_powerarmor
 	);
 	//身体装甲可以降低多少倍的耐久消耗
 	$bpa_reduce_pas_cost_per = Array(
-		'T' => 3,
-		'S' => 2.5,
-		'A' => 2,
-		'B' => 1.75,
-		'C' => 1.5,
-		'O' => 1.25,
+		'T' => 2,
+		'S' => 1.85,
+		'A' => 1.65,
+		'B' => 1.45,
+		'C' => 1.25,
+		'O' => 1.05,
 	);
 	//头部装甲，作战/强袭/偷袭时增加先攻率
 	$hpa_add_acitve_obbs = Array(
