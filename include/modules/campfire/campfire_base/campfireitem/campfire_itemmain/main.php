@@ -72,7 +72,7 @@ namespace campfire_itemmain
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
-		if(strpos($itm,'自适应型溶剂')!==false && $itmk=='Y')
+		if(strpos($itm,'自适应型溶剂')!==false && $itmk=='Z')
 		{
 			$clever_flag = true;
 			if(strpos($itm,'TA-00'))
