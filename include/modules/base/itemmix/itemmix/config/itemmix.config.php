@@ -430,7 +430,7 @@ $mixinfo = array
 		array('class' => 'item', 'stuff' => array('自适应型溶剂TA-C3','自适应型溶剂TA-C3','自适应型溶剂TA-C3'),'result' => array('自适应型溶剂TA-00','Z',1,1,'x'),),
 		array('class' => 'hidden', 'stuff' => array('荣耀','光辉','虔诚','奉献'),'result' => array('Untainted Glory','A',1000,1000,'hL'),),
 		array('class' => 'hidden', 'stuff' => array('荣耀','光辉'),'result' => array('Untainted Glory','A',1000,1000,'h'),),
-		array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',1000,1000'L'),),
+		array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',1000,1000,'L'),),
 	);
 	$mixinfo = array_merge($mixinfo,$campfire_mixinfo);
 }
