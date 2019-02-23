@@ -48,6 +48,12 @@ namespace campfire_areafeatures
 					return;
 				}
 				$wep_skind = $wepsk ? \itemmain\get_itmsk_array($wepsk) : Array();
+				$name_list='';
+				foreach($repair_item_effect as $item_name => $item_succ_obbs)
+				{
+					if($item_succ_obbs=='e') $item_succ_obbs='效果x10';
+					$name_list.="<span class='yellow b'>【{$item_name}:<span class='lime b'>{$item_succ_obbs}%</span>】";
+				}
 				//F前：areafeatures_transforgun
 				ob_clean();
 				include template(MOD_AREAFEATURES_TRANSFORGUN_LP_AREAFEATURES_TRANSFORGUN);

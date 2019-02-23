@@ -36,6 +36,6 @@
 <!--{/loop}-->
 </select></a>
 <br>
-<span class="grey">当你装备<span class="yellow">远程武器/重型枪械/枪刃/重炮</span>的情况下，选择一种武器上存在的<span class="yellow">属性</span>或是选择<span class="yellow">增加武器效果</span>，可以通过消耗<span class="yellow">一堆废铁（不增加成功率/等同于其效果）/某种机械设备（增加18%成功率/增加35效果）/非法枪械部件（增加23%成功率/增加45效果）</span>中任意一种道具，将该属性从武器上<span class="yellow">抹除</span>或是使武器效果增加<span class="yellow">等同于部件效果</span>的数值。<br>提交后将<span class="red">直接开始修复作业，无法得知成功率，也没有重新确认的机会。</span>请慎重选择。<br>修复失败会导致武器<span class='red'>下降大量效果</span>，除此之外没有别的损失。</span><br>
+<span class="grey">当你装备<span class="yellow">远程武器/重型枪械/枪刃/重炮</span>的情况下，选择一种武器上存在的<span class="yellow">属性</span>或是选择<span class="yellow">增加武器效果</span>，可以通过消耗枪械类武器、或是{$name_list}中任意一种素材，将该属性从武器上<span class="yellow">抹除</span>或是使武器效果增加<span class="yellow">等同于部件效果</span>的数值。（最大增加不会超过武器效果的<span class='red'>$max_adding_item_effect</span>%。）<br>提交后将<span class="red">直接开始修复作业，无法得知成功率，也没有重新确认的机会。</span>请慎重选择。<br>修复失败会导致武器下降最多不超过武器效果<span class='red'>$max_down_wepe</span>%的值，除此之外没有别的损失。</span><br>
 <br><br>
 <input type="button" class="cmdbutton" name="submit" id="提交操作" value="提交操作" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

@@ -82,8 +82,29 @@ namespace areafeatures_etconsole
 				$log.="areafeatures_etconsolecwth菜单指令选择错误，如果遇到了BUG，请您将这句话转述给管理员。<br>";
 			}
 		}
+		elseif($areafeatures_etconsole== 'areafeatures_etconsole_findthings_mob')
+		{
+			$finding = substr($command,1);
+			if($command=='cfindpc' || $command=='cfinditm'  || $command=='cfindtrap') 
+			{
+				areafeatures_etconsole_find($finding,$findingname,'',1);
+			}	
+			elseif($command=='cfindnpc')
+			{
+				areafeatures_etconsole_find($finding,$findingname,$findingnpctype,1);
+			}					
+			else
+			{
+				ob_clean();
+				include template(MOD_AREAFEATURES_ETCONSOLE_MOBGSC_CMD);
+				$cmd = ob_get_contents();
+				ob_clean();
+				return;	
+			}				
+		}	
 		elseif($areafeatures_etconsole== 'areafeatures_etconsole_findthings')
 		{
+			
 			if($pls!=0)
 			{
 				$log.="该地图没有areafeatures_etconsolecwth功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
@@ -124,7 +145,7 @@ namespace areafeatures_etconsole
 			{
 				$log.="你思考了一下，把子端放回了包裹内。<br>还是等到需要的时候再来操作它吧。<br>";
 			}
-			elseif($mob_flag && (($command=='gsc_addarea') || ($command =='gsc_hack') || ($command =='gsc_radar')))
+			elseif($mob_flag && (($command=='gsc_addarea') || ($command =='gsc_hack') || ($command =='gsc_radar') || ($command =='gsc_searching')))
 			{
 				$gsc_order = substr($command,4);
 				areafeatures_etconsole_mob($gsc_order,$radar_mmn);
@@ -286,9 +307,9 @@ namespace areafeatures_etconsole
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','map','logger'));	
+		eval(import_module('sys','player','map','logger','npc'));	
 		
-		if($c_order!=='addarea' && $c_order!=='hack' && $c_order!=='radar')
+		if($c_order!=='addarea' && $c_order!=='hack' && $c_order!=='radar' && $c_order!=='searching')
 		{
 			$log.="当你提交了操作后，一个大大的error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：无效的功能类别，请重新选择子端功能。</span><br>";
 			return;
@@ -339,8 +360,17 @@ namespace areafeatures_etconsole
 			$mode = 'radar';
 			\radar\use_radar($mms);		
 		}
+		elseif($c_order=='searching')
+		{
+			$mob_searching_flag = 1;
+			ob_clean();
+			include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE_FIND);
+			$cmd = ob_get_contents();
+			ob_clean();
+			return;
+		}		
 	}
-	function areafeatures_etconsole_find($findtype,$findnm,$npctype)
+	function areafeatures_etconsole_find($findtype,$findnm,$npctype,$usingmob=0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		eval(import_module('sys','player','map','logger','itemmain','npc'));	
@@ -359,16 +389,20 @@ namespace areafeatures_etconsole
 			$log.= "当你提交了操作后，一个大大error出现在了画面上，虽然你是一个不讲鹰语的战狼，但是“错误”这个单词你还是认识的。<br><span class='yellow'>画面下方的错误原因中写着：查找NPC信息时，必须正确选择NPC所属的类别。</span><br>";
 			return;
 		}
+		$ending_words = '你只来得及将这些信息记下，控制台就因<span class="red">能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>';
+		$ending_words_b = '然而这时，控制台忽然因<span class="red">能源不足</span>而自动休眠了……真是祸不单行啊……<br>';
 		if($findtype=='findpc')
 		{
 			$findpc_data = \player\fetch_playerdata($findnm);
 			if($findpc_data && $findpc_data['state']<5)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm}<br>·<span class='yellow'>所处位置：</span>{$plsinfo[$findpc_data['pls']]}<br>·<span class='yellow'>持有武器：</span>{$findpc_data['wep']}<br>·<span class='yellow'>持有金钱：</span>{$findpc_data['money']}元<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm}<br>·<span class='yellow'>所处位置：</span>{$plsinfo[$findpc_data['pls']]}<br>·<span class='yellow'>持有武器：</span>{$findpc_data['wep']}<br>·<span class='yellow'>持有金钱：</span>{$findpc_data['money']}元<br>";
+				if(!$usingmob) $log.=$ending_words;
 			}
 			else
 			{
-				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，玩家【{$findnm}】并不存在于系统中，或是他已经死了。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，玩家【{$findnm}】并不存在于系统中，或是他已经死了。</span><br>";
+				if(!$usingmob) $log.=$ending_words_b;
 			}
 		}
 		elseif($findtype=='findnpc')
@@ -390,21 +424,23 @@ namespace areafeatures_etconsole
 			$fn_num = sizeof($fn_data_array);
 			if($fn_num==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";	
+				$log.="当你提交了操作后，屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>·<span class='yellow'>{$plsinfo[$fn_data_array[0]]}</span> －＞ 存在<span class='clan'>1</span>名符合条件的对象<br>";	
+				if(!$usingmob) $log.=$ending_words;	
 			}
 			elseif($fn_num>1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>";
+				$log.="当你提交了操作后，屏幕上立即显示出了一组数据：<br>·<span class='yellow'>查询对象：</span>{$findnm_info}<br>";
 				$fn_array = array_count_values($fn_data_array);
 				foreach(array_keys($fn_array) as $fn_pls)
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$fn_pls]}</span> －＞ 存在<span class='clan'>{$fn_array[$fn_pls]}</span>名符合条件的对象<br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+				if(!$usingmob) $log.=$ending_words;
 			}
 			else
 			{
-				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你的查询目标，【{$findnm_info}】并不存在于系统中，或是他已经死了。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你的查询目标，【{$findnm_info}】并不存在于系统中，或是他已经死了。</span><br>";
+				if(!$usingmob) $log.=$ending_words_b;
 			}
 		}
 		elseif($findtype=='finditm')
@@ -417,7 +453,8 @@ namespace areafeatures_etconsole
 			$fi_num = sizeof($fi_data_array);
 			if($fi_num==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的道具：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$fi_data_array[0]]}</span> －＞ 存在数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+				$log.="当你提交了操作后，屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的道具：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$fi_data_array[0]]}</span> －＞ 存在数量：<span class='clan'>1</span><br>";
+				if(!$usingmob) $log.=$ending_words;
 			}
 			elseif($fi_num>1)
 			{
@@ -427,11 +464,12 @@ namespace areafeatures_etconsole
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$fi_pls]}</span> －＞ 存在数量：<span class='clan'>{$fi_array[$fi_pls]}</span><br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+				if(!$usingmob) $log.=$ending_words;
 			}
 			else
 			{
-				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，道具【{$findnm}】并不存在于地图上。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，道具【{$findnm}】并不存在于地图上。</span><br>";
+				if(!$usingmob) $log.=$ending_words_b;
 			}
 		}
 		elseif($findtype=='findtrap')
@@ -444,7 +482,8 @@ namespace areafeatures_etconsole
 			$ftnum = sizeof($ftdata_array);
 			if($ftnum==1)
 			{
-				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的已埋设陷阱：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$ft_data_array[0]]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>1</span><br>你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";				
+				$log.="当你提交了操作后，控制台的屏幕上立即显示出了一组数据：<br>·<span class='yellow'>符合条件的已埋设陷阱：</span>{$findnm}<br>·<span class='yellow'>{$plsinfo[$ft_data_array[0]]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>1</span><br>";
+				if(!$usingmob) $log.=$ending_words;	
 			}
 			elseif($ftnum>1)
 			{
@@ -454,21 +493,29 @@ namespace areafeatures_etconsole
 				{
 					$log.="·<span class='yellow'>{$plsinfo[$ftpls]}</span> －＞ 已埋设的{$findnm}数量：<span class='clan'>{$ftarray[$ftpls]}</span><br>";
 				}
-				$log.="你只来得及将这些信息记下，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+				if(!$usingmob) $log.=$ending_words;
 			}
 			else
 			{
-				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，地图上不存在已经被埋设的陷阱【{$findnm}】。</span><br>然而这时，控制台忽然因<span class='red'>能源不足</span>而自动休眠了……真是祸不单行啊……<br>";
+				$log.="当你提交了操作后，控制台的屏幕上显示出了一个令人失望的结果。<br><span class='yellow'>显而易见的，你所查询的对象，地图上不存在已经被埋设的陷阱【{$findnm}】。</span><br>";
+				if(!$usingmob) $log.=$ending_words_b;
 			}
 		}
-		foreach(Array(1,2,3,4,5,6) as $i)
+		if($usingmob)
 		{
-			if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
-			{					
-				$core['itme']=&${'itme'.$i};$core['itms']=&${'itms'.$i};
-				$core['itm']=&${'itm'.$i};$core['itmk']=&${'itmk'.$i};$core['itmsk']=&${'itmsk'.$i};
-				\itemmain\itms_reduce($core);
-				break;
+			$log.="<br>一番操作后，你将子机收回了背包中。<br>";
+		}	
+		if(!$usingmob)
+		{
+			foreach(Array(1,2,3,4,5,6) as $i)
+			{
+				if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
+				{					
+					$core['itme']=&${'itme'.$i};$core['itms']=&${'itms'.$i};
+					$core['itm']=&${'itm'.$i};$core['itmk']=&${'itmk'.$i};$core['itmsk']=&${'itmsk'.$i};
+					\itemmain\itms_reduce($core);
+					break;
+				}
 			}
 		}
 	}

@@ -1,9 +1,15 @@
 你按下了写有资料查找功能的按钮。<br>
-控制台上的画面闪烁了一下，随即出现了一些选项和输入框。<br>
+屏幕上的画面闪烁了一下，随即出现了一些选项和输入框。<br>
 你打算怎么做呢？<br><br>
+<!--{if !$mob_searching_flag}-->
 <input type="hidden" name="areafeatures_etconsole" value="areafeatures_etconsole_findthings">
 <input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【取出能量核心】</a>
 <br><br>
+<!--{elseif $mob_searching_flag}-->
+<input type="hidden" name="areafeatures_etconsole" value="areafeatures_etconsole_findthings_mob">
+<input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【返回子机主界面】</a>
+<br><br>
+<!--{/if}-->
 <input type="radio" name="command" id="cfindnpc" value="cfindnpc"><a onclick=sl('cfindnpc'); href="javascript:void(0);" onmouseover="status=' ';return true;">【查找某NPC的位置】</a><br>
 <input type="radio" name="command" id="cfinditm" value="cfinditm"><a onclick=sl('cfinditm'); href="javascript:void(0);" onmouseover="status=' ';return true;">【查找物品数量及位置】</a><br>
 <input type="radio" name="command" id="cfindtrap" value="cfindtrap"><a onclick=sl('cfindtrap'); href="javascript:void(0);" onmouseover="status=' ';return true;">【查找陷阱数量及位置】</a><br>

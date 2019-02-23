@@ -76,7 +76,7 @@ namespace areafeatures_transforgun
 		$rubbish_flag = false;
 		for($i=1;$i<=6;$i++)
 		{
-			if((strpos(${'itm'.$i},'一堆废铁')!==false || strpos(${'itm'.$i},'某种机械设备')!==false || strpos(${'itm'.$i},'非法枪械部件')!==false) && (${'itms'.$i}>0))
+			if((in_array(${'itm'.$i},array_keys($repair_item_effect))||(${'itmk'.$i}=='WG')||(${'itmk'.$i}=='WJ')||(${'itmk'.$i}=='WGK')||(${'itmk'.$i}=='WDG')) && (${'itms'.$i}>0))
 			{
 				$rubbish_flag = $i;
 				break;
@@ -110,8 +110,8 @@ namespace areafeatures_transforgun
 			elseif($wep_sk_rarity>55 && $wep_sk_rarity<=70){$wep_sk_rarity*=0.7;}
 			else{$wep_sk_rarity*=0.6;}
 			$wepsk_rarity_obbs = $wep_sk_rarity;
+			$repairsk_reduce_obbs = $sk_rarity[$r_sk];
 			//基础成功率
-			$base_repairsucc_obbs = 0;
 			if($wg<=100){$base_repairsucc_obbs = $wg*0.28;}
 			elseif($wg>100 && $wg<=200){$base_repairsucc_obbs = 28+(($wg-100)*0.22);}	
 			elseif($wg>200 && $wg<=300){$base_repairsucc_obbs = 50+(($wg-200)*0.18);}
@@ -121,9 +121,12 @@ namespace areafeatures_transforgun
 			
 			if($r_sk=='addwepe')
 			{
-				if($rub['itm']=='某种机械设备'){$rub_add_wepe=35;}
-				elseif($rub['itm']=='非法枪械部件'){$rub_add_wepe=45;}
-				else{$rub_add_wepe=$rub['itme'];}
+				if($repair_item_effect[$rub['itm']]=='e') $rub_add_wepe = $rub['itme'];//废铁加值等于效果
+				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK') $rub_add_wepe = round($rub['itme']/2);//枪加值等于效果/2
+				else $rub_add_wepe=round($repair_item_effect[$rub['itm']]*10);//其他判定
+				//给一个效果阙值的限制
+				$max_adding_effect = round($wepe*($max_adding_item_effect/100));
+				$rub_add_wepe = min($rub_add_wepe,$max_adding_effect);
 				$add_wepe = $rub_add_wepe;
 				$final_repairsucc_obbs = round($base_repairsucc_obbs  - $wepsk_rarity_obbs);
 				//最终成功率限制
@@ -151,11 +154,11 @@ namespace areafeatures_transforgun
 			else
 			{
 				//零件增益
-				if($rub['itm']=='某种机械设备'){$rubbish_add_obbs=18;}
-				elseif($rub['itm']=='非法枪械部件'){$rubbish_add_obbs=23;}
-				else{$rubbish_add_obbs=0;}
-				//要摘除属性的稀有度，一发和多重为特判的37
-				//$repairsk_reduce_obbs = ($r_sk=='o' || $r_sk=='j') ? 37 : $sk_rarity[$r_sk];
+				if($repair_item_effect[$rub['itm']]=='e') $rubbish_add_obbs = round($rub['itme']/10);//废铁加值等于效果/10
+				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK') $rubbish_add_obbs = round($rub['itme']/15);//枪械加值等于效果/15
+				else $rubbish_add_obbs=$repair_item_effect[$rub['itm']];//其他判定
+				//给一个限制
+				$rubbish_add_obbs = min($rubbish_add_obbs,$max_repair_item_effect);
 				//最终概率
 				$final_repairsucc_obbs = round($base_repairsucc_obbs + $rubbish_add_obbs - $repairsk_reduce_obbs - $wepsk_rarity_obbs);
 				//最终成功率限制
@@ -177,7 +180,7 @@ namespace areafeatures_transforgun
 				}
 				else
 				{
-					$down_effect = round(($wep_sk_rarity+$repairsk_reduce_obbs) * ($wepe/200));
+					$down_effect = round($wep_sk_rarity+$repairsk_reduce_obbs+$wepe*$max_down_wepe/150);
 					$wepe -= $down_effect;
 					$log.="虽然你尽可能让自己小心的操作，但还是出现了操作上的失误。<br>这样看来，枪械的修复工作<span class='red'>彻底失败</span>了。<br>但是，经过了改造时的测量，你计算出了本次修复工作的理论成功率为{$final_obbs_word}。<br>希望下次能够成功吧……<br>";
 					$log.="<br><span class='yellow'>你的武器<span class='lime'>【{$wep}】</span>在经过修复后发生了如下改变：</span><br>";
@@ -185,11 +188,24 @@ namespace areafeatures_transforgun
 					addnews($now,'repair_fail',$name,$itemspkinfo[$r_sk],$wep);
 				}
 			}
-			\itemmain\itms_reduce($rub);
+			if ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK')
+			{
+				$rub['itm']='';$rub['itmk']='';$rub['itmsk']='';
+				$rub['itme']=0;$rub['itms']=0;
+			}	
+			else
+			{
+				\itemmain\itms_reduce($rub);
+			}
 		}
 		else
 		{
-			$log.="<span class='red'>你身上没有可以用来修复枪械的零件，请保证身上至少拥有【一堆废铁】【某种机械设备】【非法枪械部件】中的任意一种道具！</span><br>";
+			$name_list='';
+			foreach(array_keys($repair_item_effect) as $item_name)
+			{
+				$name_list.="【{$item_name}】";
+			}	
+			$log.="<span class='red'>你身上没有可以用来修复枪械的零件或枪械，请保证身上携带着枪械，或至少拥有{$name_list}中的任意一种道具！</span><br>";
 			return;
 		}
 	}
