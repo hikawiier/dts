@@ -17,7 +17,7 @@ namespace campfire_item_kget
 			}elseif ($n == '便携式控制中心子端') {
 				$ret .= '幻境控制系统的移动子端，可解除禁区或使禁区提前到来，且内置最高级的电子雷达';
 			}elseif ($n == '再启动指令集') {
-				$ret .= '使用后能达到使游戏重新开始的效果，但需要满足以下条件：使用者为唯一幸存、尚未选择称号、且游戏开始超过10分钟';
+				$ret .= '使用后能达到使游戏重新开始的效果，但需要满足一定的条件';
 			}
 		}
 		return $ret;
@@ -132,13 +132,33 @@ namespace campfire_item_kget
 		}
 		if($itm=='再启动指令集')
 		{
-			//条件：非房间模式，使用者为唯一幸存者，不能有职业，游戏处于进行状态下，已开局超过10分钟
-			if($gametype>=10)
+			//条件：非房间模式（除荣耀、极速模式外），使用者为唯一幸存者
+			if($gametype>=10 & $gametype!=18 && $gametype!=19)
 			{
-				$log.="房间内不可使用！<br>";
+				$log.="当前模式下不可使用！<br>";
 				return;
 			}
-			if($alivenum==1 && $gamestate < 30 && $gamestate >= 20 && $now>=$starttime+600 &&!$club)
+			if($alivenum>1)
+			{
+				$log.="场上还存在其他幸存者，你无法提交该指令！<br>";
+				return;
+			}
+			$restart_flag = false;
+			//条件A：可入场状态，游戏开始10分钟后可用，使用者不能有职业（用来区分新入场玩家）
+			if($gamestate<30 && $gamestate>=20 && $now>=$starttime+600 && !$club)
+			{
+				$restart_flag=true;
+			}
+			//条件B：不可入场状态，游戏开始30分钟后可用
+			elseif($gamestate>=30 && $gamestate<40 && $now>=$starttime+1800)
+			{
+				$restart_flag=true;
+			}
+			else
+			{
+				$log.="{$itm}的使用条件未满足。<br>";
+			}
+			if($restart_flag)
 			{
 				$hp = 0;
 				$state = 202;
@@ -149,10 +169,6 @@ namespace campfire_item_kget
 				$gamestate = 40;
 				addnews($time,'combo');
 				save_gameinfo();
-			}
-			else
-			{
-				$log.="{$itm}的使用条件未满足。<br>";
 			}
 			return;
 		}
