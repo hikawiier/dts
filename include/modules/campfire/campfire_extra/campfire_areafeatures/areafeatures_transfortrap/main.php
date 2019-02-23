@@ -69,14 +69,15 @@ namespace areafeatures_transfortrap
 		{
 			if(rand(1,100)<=$change_succ_obbs)
 			{
-				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，陷阱的改造工作就<span class='red'>顺利完成</span>了！<br>";
+				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>";
 				if(strpos($citm['itmk'],'TNc')!==false)
 				{
-					$itm0 = '便携式'.$citm['itm'];
+					$log.="<span class='lime b'>但就在你放松警惕之时，你手中的爆炸物忽然裂成了两半！</span><br>看来只能祈祷它奇迹般的效果没有被分成两份了……<br>";
+					$itm0 = '便携式★两发失效神话★';
 					$itmk0 = 'WD';
 					$itme0 = round(32675*(rand(85,135)/100));
-					$itms0 = '∞';
-					$itmsk0 = 'nxd';
+					$itms0 = 2;
+					$itmsk0 = 'nyVxd';
 				}
 				else
 				{
@@ -86,6 +87,7 @@ namespace areafeatures_transfortrap
 					$itms0 = $citm['itms'];
 					$itmsk0 = 'd';
 				}
+				$log.="这样看来，陷阱的改造工作就<span class='red'>顺利完成</span>了！<br>";
 				addnews($now,'ct_succ',$name,$citm['itm'],'陷阱','爆炸物');
 			}
 			else
