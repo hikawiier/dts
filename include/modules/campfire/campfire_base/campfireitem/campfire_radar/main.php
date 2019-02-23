@@ -107,7 +107,7 @@ namespace campfire_radar
 			if(!in_array(1002, $existing_npctp)) $ret = array_diff($ret, array(1002));
 			//感应探测器额外显示
 			if(99==$radarsk) {
-				foreach(Array(1001,1002) as $tv) {
+				foreach(Array(21,45,46,1001,1002) as $tv) {
 					if(in_array($tv, $existing_npctp)) $ret[] = $tv;
 				}
 			}
