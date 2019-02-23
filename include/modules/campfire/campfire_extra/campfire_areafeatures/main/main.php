@@ -52,7 +52,7 @@ namespace campfire_areafeatures
 				foreach($repair_item_effect as $item_name => $item_succ_obbs)
 				{
 					if($item_succ_obbs=='e') $item_succ_obbs='效果x10';
-					$name_list.="<span class='yellow b'>【{$item_name}:<span class='lime b'>{$item_succ_obbs}%</span>】";
+					$name_list.="<span class='yellow b'>【{$item_name}:<span class='lime b'>{$item_succ_obbs}%</span>】</span>";
 				}
 				//F前：areafeatures_transforgun
 				ob_clean();
