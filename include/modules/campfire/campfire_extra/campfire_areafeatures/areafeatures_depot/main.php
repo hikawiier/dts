@@ -134,6 +134,12 @@ namespace areafeatures_depot
 			$log.="<span class='red'>你身上的钱不足以支付储存道具的手续费！</span><br>";
 			return;
 		}
+		if(strpos(${'itmsk'.$i},'O')!==false)
+		{
+			$log.="<span class='red'>你尝试着将诅咒道具扔进仓库，但仓库又立刻将它吐了出来！</span><br>";
+			return;
+		}
+			
 		$idpt = change_areafeatures_depot('decode',$areafeatures_depot);
 		$idpt_num = sizeof($idpt);
 		if($idpt_num+1>$max_saveitem_num)
