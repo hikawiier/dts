@@ -18,10 +18,10 @@ namespace campfire_item_kget
 				$ret .= '幻境控制系统的移动子端，可解除禁区或使禁区提前到来，且内置最高级的电子雷达';
 			}elseif ($n == '再启动指令集') {
 				$ret .= '使用后能达到使游戏重新开始的效果，但需要满足一定的条件';
-			}elseif ($n == '迷你纺织者「睡美人」') {
+			}elseif (strpos($n,'纺织者')!==false) {
 				$ret .= '可以增加身体防具的效果值，需要消耗针线包填充';
 			}elseif (strpos($n,'寻物者')!==false) {
-				$ret .= '能够帮助你寻找道具的小型装置，需要为它设定目标地点与目标道具的名字';
+				$ret .= '能够控制灵能人形为你寻找道具，但你需要为它设定目标地点与目标道具的名字';
 			}
 		}
 		return $ret;
@@ -49,20 +49,25 @@ namespace campfire_item_kget
 			}
 			return;
 		}
-		elseif($uec_cmd == 'searching_AI_order')
+		elseif($uec_cmd == 'searching_ai_order')
 		{
 			if($command=='menu')
 			{
-				$log.="你将寻物者放回了背包内，等到以后有需要的时候再用吧。<br>";
+				$log.="你悻悻的将圆盘收回了背包内……刚才真是吓死个人了。<br>";
 			}
 			elseif($command=='scai_sc')
 			{
-				if((!$scai_pls) || (in_array($scai_pls,$hidden_arealist)))
+				if(!in_array($scai_pls,array_keys($plsinfo)) || (in_array($scai_pls,$hidden_arealist)))
 				{
 					$log.="地图参数选择错误。<br>";
 				}	
 				else
 				{
+					if($scai_item==浮☆云)
+					{
+						$log.="在听到你的指令后，那空灵的声音沉默了。<br><span class='grey b'>“这个……太……危险……我……去不了……”</span><br>你本还想多问两句，但人形已变回原本的模样了。<br>";
+						return;
+					}					
 					$scai_itemnum = \skill1999\check_iteminmap1999($scai_item,$scai_pls);
 					if($scai_itemnum)
 					{
@@ -70,7 +75,7 @@ namespace campfire_item_kget
 					}
 					else
 					{
-					$log.="该地图上无此道具，机器人也很难办。<br>";
+					$log.="你听到那空灵的声音再次响起：<br><span class='grey b'>“这个……我……找……不……到……”</span><br>你本还想多问两句，但人形已经变回原本的模样了。<br>";
 					}	
 				}
 			}
@@ -95,13 +100,12 @@ namespace campfire_item_kget
 		\skillbase\skill_setvalue(1999,'spls',$p,$pa);
 		\skillbase\skill_setvalue(1999,'starttime',$now,$pa);
 		\skillbase\skill_setvalue(1999,'lasttime',$lasttime,$pa);	
-		$log.="你在控制面板上输入了参数后，寻物者便一溜小跑着离开了。<br>……<br>寻物者开始在<span class='lime b'>【{$plsinfo[$p]}】</span>为你寻找<span class='lime b'>【{$i}】</span>，这大概需要<span class='yellow b'>{$lasttime}</span>秒。<br>";
+		$log.="你在充满诡异风格的圆盘上规划出路线，圆盘上的人偶便化身寻物者，消散于无形。<br>……<br>寻物者开始在<span class='lime b'>【{$plsinfo[$p]}】</span>为你寻找<span class='lime b'>【{$i}】</span>，这大概需要<span class='yellow b'>{$lasttime}</span>秒。<br>";
 		for($i=0;$i<=6;$i++)
 		{
 			if(${'itms'.$i} && strpos(${'itm'.$i},'寻物者')!==false)
 			{
-				${'itm'.$i}=''; ${'itmk'.$i}='';
-				${'itme'.$i}=0;${'itms'.$i}=0; ${'itmsk'.$i}='';
+				${'itme'.$i}--;
 				break;
 			}
 		}
@@ -232,7 +236,7 @@ namespace campfire_item_kget
 			}
 			return;
 		}
-		elseif($itm=='迷你纺织者「睡美人」')
+		elseif(strpos($itm,'纺织者')!==false)
 		{
 			//判定是否填充针线
 			if($itme==0)
@@ -280,11 +284,17 @@ namespace campfire_item_kget
 		}
 		elseif(strpos($itm,'寻物者')!==false)
 		{
+			//本来是一个寻物机器人，但现在已经变成……
 			if (\skillbase\skill_query(1999))
 			{
 				$log.="你已经派出去一个寻物者了，等等它吧。<br>";
 				return;
 			}
+			elseif($itme<1)
+			{
+				$log.="你仔细端详起这块颇有份量的铜制圆盘，上面刻有许多歪歪扭扭难以辨识的诡异符号。<br>你发现隐藏在这些符号旁，黄铜的表面刻着许多道彼此交错、形状均匀的浅槽。如果将这些奇妙的纹理汇聚在一起，似乎能拼凑出一副地图来。<br>灵光一现！你忽然想到，如果能用棋子一样的东西安装在凹槽上，也许就能让这丢不掉的圆盘产生些变化。<br>";
+				return;
+			}	
 			else
 			{
 				ob_clean();

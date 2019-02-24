@@ -77,7 +77,7 @@ namespace areafeatures_transfortrap
 					$itmk0 = 'WD';
 					$itme0 = round(32675*(rand(85,135)/100));
 					$itms0 = 2;
-					$itmsk0 = 'nyVxd';
+					$itmsk0 = 'nyVvdj';
 				}
 				else
 				{

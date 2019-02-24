@@ -17,6 +17,8 @@ namespace campfire_itemmain
 				$ret .= '能够将你的称号转变为天赋异禀，并获得更多的技能点';
 			}elseif (strpos($n,'自适应型溶剂')!==false) {
 				$ret .= '似乎能让你变得更有智慧的神秘溶剂';
+			}elseif (strpos($n,'灵能人形')!==false) {
+				$ret .= '被注入了神秘力量的小纸人……有什么办法能让它动起来吗？';
 			}
 		}
 		return $ret;
@@ -109,6 +111,33 @@ namespace campfire_itemmain
 			$skillpoint+=$add_skillpoint;
 			$log.="你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
 			\itemmain\itms_reduce($theitem);
+			return;
+		}
+		elseif(strpos($itm,'灵能人形')!==false)
+		{
+			$scai_flag = false;
+			for($i=0;$i<=6;$i++)
+			{
+				if(${'itms'.$i} && strpos(${'itm'.$i},'寻物者')!==false)
+				{
+					$scai_flag = true;
+					if(${'itme'.$i}<5)
+					{
+						$log.="你将人形插在了黄铜圆盘的凹槽上，看起来正合适。<br><span class='yellow b'>寻物者的数量增加了！</span><br>";
+						${'itme'.$i}++;
+						\itemmain\itms_reduce($theitem);
+					}
+					else
+					{
+						$log.="<span class='red b'>寻物者的数量已经达到上限了！</span><br>";
+					}	
+					break;
+				}
+			}
+			if(!$scai_flag)
+			{
+				$log.="你翻了翻背包，看起来没有用得上这东西的地方。<br>";
+			}	
 			return;
 		}
 		$chprocess($theitem);
