@@ -20,6 +20,8 @@ namespace campfire_item_kget
 				$ret .= '使用后能达到使游戏重新开始的效果，但需要满足一定的条件';
 			}elseif ($n == '迷你纺织者「睡美人」') {
 				$ret .= '可以增加身体防具的效果值，需要消耗针线包填充';
+			}elseif (strpos($n,'寻物者')!==false) {
+				$ret .= '能够帮助你寻找道具的小型装置，需要为它设定目标地点与目标道具的名字';
 			}
 		}
 		return $ret;
@@ -29,7 +31,7 @@ namespace campfire_item_kget
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','campfire_item_kget','input'));
+		eval(import_module('sys','player','logger','map','campfire_item_kget','input','skill1999'));
 		if($uec_cmd == 'choose_repair_aimner')
 		{
 			if($command=='menu')
@@ -47,8 +49,64 @@ namespace campfire_item_kget
 			}
 			return;
 		}
+		elseif($uec_cmd == 'searching_AI_order')
+		{
+			if($command=='menu')
+			{
+				$log.="你将寻物者放回了背包内，等到以后有需要的时候再用吧。<br>";
+			}
+			elseif($command=='scai_sc')
+			{
+				if((!$scai_pls) || (in_array($scai_pls,$hidden_arealist)))
+				{
+					$log.="地图参数选择错误。<br>";
+				}	
+				else
+				{
+					$scai_itemnum = \skill1999\check_iteminmap1999($scai_item,$scai_pls);
+					if($scai_itemnum)
+					{
+						searching_AI($scai_item,$scai_pls,$scai_itemnum);
+					}
+					else
+					{
+					$log.="该地图上无此道具，机器人也很难办。<br>";
+					}	
+				}
+			}
+			else
+			{
+				$log.="选项参数错误。<br>";
+			}	
+			return;			
+		}	
 		$chprocess();
 	}
+	function searching_AI($i,$p,$inum)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','itemmain','logger','map'));
+		//计算用时，地图上有多少件道具搜索时长+2s
+		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$p'");
+		$plsitemnum = $db->num_rows($result);
+		$lasttime = max(round($plsitemnum/$inum),1);
+		\skillbase\skill_acquire(1999);		
+		\skillbase\skill_setvalue(1999,'sitm',$i,$pa);
+		\skillbase\skill_setvalue(1999,'spls',$p,$pa);
+		\skillbase\skill_setvalue(1999,'starttime',$now,$pa);
+		\skillbase\skill_setvalue(1999,'lasttime',$lasttime,$pa);	
+		$log.="你在控制面板上输入了参数后，寻物者便一溜小跑着离开了。<br>……<br>寻物者开始在<span class='lime b'>【{$plsinfo[$p]}】</span>为你寻找<span class='lime b'>【{$i}】</span>，这大概需要<span class='yellow b'>{$lasttime}</span>秒。<br>";
+		for($i=0;$i<=6;$i++)
+		{
+			if(${'itms'.$i} && strpos(${'itm'.$i},'寻物者')!==false)
+			{
+				${'itm'.$i}=''; ${'itmk'.$i}='';
+				${'itme'.$i}=0;${'itms'.$i}=0; ${'itmsk'.$i}='';
+				break;
+			}
+		}
+		return;
+	}	
 	function repair_powered_armor($kind)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -81,7 +139,7 @@ namespace campfire_item_kget
 	function itemuse_kget(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','itemmain','input','logger','areafeatures_etconsole'));
+		eval(import_module('sys','player','itemmain','input','map','logger','areafeatures_etconsole'));
 		
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
@@ -93,7 +151,7 @@ namespace campfire_item_kget
 			ob_clean();
 			return;
 		}
-		if($itm=='动力装甲修复工具')
+		elseif($itm=='动力装甲修复工具')
 		{
 			if($itme)
 			{
@@ -132,7 +190,7 @@ namespace campfire_item_kget
 			}
 			return;
 		}
-		if($itm=='再启动指令集')
+		elseif($itm=='再启动指令集')
 		{
 			//条件：非房间模式（除荣耀、极速模式外），使用者为唯一幸存者
 			if($gametype>=10 & $gametype!=18 && $gametype!=19)
@@ -174,7 +232,7 @@ namespace campfire_item_kget
 			}
 			return;
 		}
-		if($itm=='迷你纺织者「睡美人」')
+		elseif($itm=='迷你纺织者「睡美人」')
 		{
 			//判定是否填充针线
 			if($itme==0)
@@ -220,8 +278,28 @@ namespace campfire_item_kget
 			}
 			return;
 		}
-		$log.="{$itm}该怎么用呢？<br>";
-		return;
+		elseif(strpos($itm,'寻物者')!==false)
+		{
+			if (\skillbase\skill_query(1999))
+			{
+				$log.="你已经派出去一个寻物者了，等等它吧。<br>";
+				return;
+			}
+			else
+			{
+				ob_clean();
+				include template(MOD_CAMPFIRE_ITEM_KGET_SEARCHING_AI_ORDER);
+				$cmd = ob_get_contents();
+				ob_clean();
+				return;
+			}				
+		}	
+		else
+		{
+			$log.="{$itm}该怎么用呢？<br>";
+			return;
+		}	
+		
 	}
 	function itemuse(&$theitem)
 	{

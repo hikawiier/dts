@@ -31,6 +31,14 @@ namespace campfire_hiddenarea
 		}
 	}
 */
+	function get_normal_pls()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('map'));
+		$p = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
+		return $p;
+	}
+
 	function parse_itmuse_desc($n, $k, $e, $s, $sk)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;

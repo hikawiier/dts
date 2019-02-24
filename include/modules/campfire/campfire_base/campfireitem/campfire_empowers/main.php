@@ -101,7 +101,7 @@ namespace campfire_empowers
 				if (use_skysoul($itm,'锻者')) \itemmain\itms_reduce($theitem);
 				return;
 			}
-			elseif ($itm == '天空熔炉的锻者之魂') 
+			elseif ($itm == '天空熔炉的祝祷之魂') 
 			{
 				if (use_skysoul($itm,'祝祷')) \itemmain\itms_reduce($theitem);
 				return;

@@ -1,13 +1,13 @@
 <?php
 
-namespace campfire_item_kget
+namespace skill1999
 {
 	////////// MODULE HEADER START ///////////////
-	$___MODULE_dependency = 'sys player itemmain logger input map campfire_hiddenarea areafeatures_etconsole skill1999';
+	$___MODULE_dependency = 'skillbase player itemmain sys logger bufficons';
 	$___MODULE_dependency_optional = '';
 	$___MODULE_conflict = '';
 	$___MODULE_codelist = 'main.php';
-	$___MODULE_templatelist = 'choose_repair_aimmer searching_ai_order';
+	$___MODULE_templatelist = '';
 	////////// MODULE HEADER END /////////////////
 	require __INIT_MODULE__(__NAMESPACE__,__DIR__);
 }
