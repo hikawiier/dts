@@ -94,8 +94,8 @@ namespace campfire_item_kget
 		//计算用时，地图上有多少件道具搜索时长+2s
 		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$p'");
 		$plsitemnum = $db->num_rows($result);
-		$time_rand = rand(100,125);
-		$lasttime = round($plsitemnum*$time_rand/100);
+		$time_rand = rand(10,13);
+		$lasttime = round($plsitemnum*$time_rand/10);
 		if($inum) $lasttime=round($lasttime/$inum);
 		$lasttime = max($lasttime,1);
 		\skillbase\skill_acquire(1999);		
