@@ -34,6 +34,7 @@ namespace skill1999
 		eval(import_module('sys','player','itemmain','map'));
 		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$p' AND itm = '$i'");
 		$inum = $db->num_rows($result);
+		if(!$inum) $inum=0;	
 		if($kind==0) return $inum;
 		else return $result;
 	}

@@ -67,7 +67,8 @@ namespace campfire_item_kget
 				}	
 				else
 				{
-					if($scai_item==浮☆云)
+					$scai_itemnum = \skill1999\check_iteminmap1999($scai_item,$scai_pls);
+					if($scai_item=='浮☆云')
 					{
 						$log.="在听到你的指令后，那空灵的声音沉默了。<br><span class='grey b'>“这个……太……危险……我……去不了……”</span><br>你本还想多问两句，但人形已变回原本的模样了。<br>";
 						return;
@@ -93,7 +94,10 @@ namespace campfire_item_kget
 		//计算用时，地图上有多少件道具搜索时长+2s
 		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$p'");
 		$plsitemnum = $db->num_rows($result);
-		$lasttime = max(round($plsitemnum*rand(100,125)/100/$inum),1);
+		$time_rand = rand(100,125);
+		$lasttime = round($plsitemnum*$time_rand/100);
+		if($inum) $lasttime=round($lasttime/$inum);
+		$lasttime = max($lasttime,1);
 		\skillbase\skill_acquire(1999);		
 		\skillbase\skill_setvalue(1999,'sitm',$i,$pa);
 		\skillbase\skill_setvalue(1999,'spls',$p,$pa);
