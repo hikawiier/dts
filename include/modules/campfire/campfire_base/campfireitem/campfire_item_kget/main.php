@@ -60,6 +60,10 @@ namespace campfire_item_kget
 				if(!in_array($scai_pls,array_keys($plsinfo)) || (in_array($scai_pls,$hidden_arealist)))
 				{
 					$log.="地图参数选择错误。<br>";
+				}
+				elseif(!$scai_item)
+				{
+					$log.="你没有填写道具名。<br>";
 				}	
 				else
 				{
@@ -67,15 +71,10 @@ namespace campfire_item_kget
 					{
 						$log.="在听到你的指令后，那空灵的声音沉默了。<br><span class='grey b'>“这个……太……危险……我……去不了……”</span><br>你本还想多问两句，但人形已变回原本的模样了。<br>";
 						return;
-					}					
-					$scai_itemnum = \skill1999\check_iteminmap1999($scai_item,$scai_pls);
-					if($scai_itemnum)
-					{
-						searching_AI($scai_item,$scai_pls,$scai_itemnum);
 					}
 					else
 					{
-					$log.="你听到那空灵的声音再次响起：<br><span class='grey b'>“这个……我……找……不……到……”</span><br>你本还想多问两句，但人形已经变回原本的模样了。<br>";
+						searching_AI($scai_item,$scai_pls,$scai_itemnum);
 					}	
 				}
 			}
@@ -94,7 +93,7 @@ namespace campfire_item_kget
 		//计算用时，地图上有多少件道具搜索时长+2s
 		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$p'");
 		$plsitemnum = $db->num_rows($result);
-		$lasttime = max(round($plsitemnum/$inum),1);
+		$lasttime = max(round($plsitemnum*rand(100,125)/100/$inum),1);
 		\skillbase\skill_acquire(1999);		
 		\skillbase\skill_setvalue(1999,'sitm',$i,$pa);
 		\skillbase\skill_setvalue(1999,'spls',$p,$pa);
@@ -292,7 +291,7 @@ namespace campfire_item_kget
 			}
 			elseif($itme<1)
 			{
-				$log.="你仔细端详起这块颇有份量的铜制圆盘，上面刻有许多歪歪扭扭难以辨识的诡异符号。<br>你发现隐藏在这些符号旁，黄铜的表面刻着许多道彼此交错、形状均匀的浅槽。如果将这些奇妙的纹理汇聚在一起，似乎能拼凑出一副地图来。<br>灵光一现！你忽然想到，如果能用棋子一样的东西安装在凹槽上，也许就能让这丢不掉的圆盘产生些变化。<br>";
+				$log.="你端详起这块颇有份量的铜制圆盘，上面刻有许多道彼此交错、形状均匀的浅槽，奇妙的纹理交织在一起，好似一副地图。<br>仔细一看，你发现在浅槽的起点与终点处，皆有着大小均匀的圆形凹陷，根据你多年来玩解谜游戏的经验，你判断这凹陷应该<span class='yellow b'>是用于镶嵌某物的底座</span>。<br>你开始仔细端详凹陷的尺寸，灵光一现！你忽然想起了曾在商店中看过的道具<span class='yellow b'>雏人形</span>。<br>";
 				return;
 			}	
 			else

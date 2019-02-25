@@ -41,7 +41,7 @@ namespace skill1999
 	function activate1999()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('skill1999','player','logger','sys','itemmain'));
+		eval(import_module('skill1999','player','logger','sys','itemmain','map'));
 		\player\update_sdata();
 		if (!\skillbase\skill_query(1999) || !check_unlocked1999($sdata))
 		{
@@ -63,11 +63,11 @@ namespace skill1999
 		$sitemnum = check_iteminmap1999($sitm,$spls,0);
 		if($sitemnum <= 0)
 		{
-			$log.="你召回了寻物者，但它似乎什么也没带回来。<br>……是被人捷足先登了吗？<br>你愤怒的踢了它一脚，那原本就破破烂烂的人偶这下直接倒在地上，再也不动了。<br>";
+			$log.="你召回了寻物者，但它似乎什么也没带回来。<br>……是<span class='yellow b'>{$plsinfo[$spls]}</span>已经没有<span class='yellow b'>{$sitm}</span>了吗？<br>你愤怒的踢了它一脚，那原本就破破烂烂的人偶这下直接倒在地上，再也不动了。<br>";
 		}
 		else
 		{
-			$log.="你召回了寻物者，它似乎为你带回了什么东西。<br>但当你从它手中接过{$sitm}后，那原本就破破烂烂的人偶便直接倒在了地上。<br>……是已经没用了吗？<br>";
+			$log.="你召回了寻物者，它似乎为你带回了什么东西。<br>但当你从它手中接过<span class='yellow b'>{$sitm}</span>后，那原本就破破烂烂的人偶便直接倒在了地上。<br>……是已经没用了吗？<br>";
 			$sitemno = rand(0,$sitemnum-1);
 			$db->data_seek($result,$sitemno);
 			$smi=$db->fetch_array($result);
@@ -130,7 +130,7 @@ namespace skill1999
 		eval(import_module('sys','player','map'));
 		
 		if($news == 'bskill1999') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"cyan b\">寻物者为{$a}找来了原本位于{$plsinfo[$c]}的<span class=\"yellow b\">{$b}</span>！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime b\">寻物者为{$a}找来了原本位于{$plsinfo[$c]}的<span class=\"yellow b\">{$b}</span>！</span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

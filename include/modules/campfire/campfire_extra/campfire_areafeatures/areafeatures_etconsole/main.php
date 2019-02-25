@@ -362,11 +362,28 @@ namespace areafeatures_etconsole
 		}
 		elseif($c_order=='searching')
 		{
-			$mob_searching_flag = 1;
-			ob_clean();
-			include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE_FIND);
-			$cmd = ob_get_contents();
-			ob_clean();
+			$mob_searching_flag = 0;
+			foreach(Array(1,2,3,4,5,6) as $i)
+			{
+				if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
+				{					
+					$core['itme']=&${'itme'.$i};$core['itms']=&${'itms'.$i};
+					$core['itm']=&${'itm'.$i};$core['itmk']=&${'itmk'.$i};$core['itmsk']=&${'itmsk'.$i};
+					$mob_searching_flag = $i;
+					break;
+				}
+			}
+			if($mob_searching_flag)
+			{
+				ob_clean();
+				include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE_FIND);
+				$cmd = ob_get_contents();
+				ob_clean();
+			}
+			else			
+			{
+				$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br>当界面上的图像稳定下来时，一个大大error出现在了画面上，画面下方的错误原因中写着：<br><span class='yellow'>没有用于远程链接的能量核心！</span><br>";
+			}	
 			return;
 		}		
 	}
@@ -505,17 +522,14 @@ namespace areafeatures_etconsole
 		{
 			$log.="<br>一番操作后，你将子机收回了背包中。<br>";
 		}	
-		if(!$usingmob)
+		foreach(Array(1,2,3,4,5,6) as $i)
 		{
-			foreach(Array(1,2,3,4,5,6) as $i)
-			{
-				if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
-				{					
-					$core['itme']=&${'itme'.$i};$core['itms']=&${'itms'.$i};
-					$core['itm']=&${'itm'.$i};$core['itmk']=&${'itmk'.$i};$core['itmsk']=&${'itmsk'.$i};
-					\itemmain\itms_reduce($core);
-					break;
-				}
+			if(${'itm'.$i}=='能量核心' && ${'itms'.$i}>0)
+			{					
+				$core['itme']=&${'itme'.$i};$core['itms']=&${'itms'.$i};
+				$core['itm']=&${'itm'.$i};$core['itmk']=&${'itmk'.$i};$core['itmsk']=&${'itmsk'.$i};
+				\itemmain\itms_reduce($core);
+				break;
 			}
 		}
 	}
