@@ -26,7 +26,7 @@ namespace areafeatures_depot
 			}
 			elseif($command == 'areafeatures_depot_load')
 			{
-				$saveitem_list = change_areafeatures_depot('decode',$areafeatures_depot);
+				$saveitem_list = areafeatures_depot_getlist($name);
 				ob_clean();
 				include template(MOD_AREAFEATURES_DEPOT_LP_AREAFEATURES_DEPOT_LOAD);
 				$cmd = ob_get_contents();
@@ -83,38 +83,18 @@ namespace areafeatures_depot
 		$chprocess();
 	}
 	/*==========精灵中心特殊功能：areafeatures_depot功能部分开始==========*/
-	function change_areafeatures_depot($idpt_way,$idpt_info)
+	function areafeatures_depot_getlist($n)
 	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		//使用json_encode功能转换
-		if($idpt_way=='encode')
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		eval(import_module('sys'));		
+		$iarr = Array();		
+		$result = $db->query("SELECT * FROM {$tablepre}itemdepot WHERE itmowner='$n'");
+		while($i = $db->fetch_array($result)) 
 		{
-			$idpt_info = json_encode($idpt_info,JSON_UNESCAPED_UNICODE);
+			$iarr[] = $i;
 		}
-		elseif($idpt_way=='decode')
-		{
-			if(!$idpt_info)
-			{
-				$idpt_info = Array();
-				//装有道具的仓库格式应该是：
-				//$idpt_info = Array(
-				//	0 => Array(
-				//		'itm' => $itm,
-				//		'itmk' => $itmk,
-				//		'itme' => $itme,
-				//		'itms' => $itms,
-				//		'itmsk' => $itmsk,
-				//	),
-				//);
-				//以此类推
-			}
-			else
-			{
-				$idpt_info = json_decode($idpt_info,true);
-			}
-		}
-		return $idpt_info;
-	}
+		return $iarr;
+	}	
 	function areafeatures_depot_save($i)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
@@ -140,7 +120,7 @@ namespace areafeatures_depot
 			return;
 		}
 			
-		$idpt = change_areafeatures_depot('decode',$areafeatures_depot);
+		$idpt = areafeatures_depot_getlist($name);
 		$idpt_num = sizeof($idpt);
 		if($idpt_num+1>$max_saveitem_num)
 		{
@@ -149,16 +129,12 @@ namespace areafeatures_depot
 		}
 		$money -= $saveitem_cost;
 		$log.="你成功将道具<span class='yellow'>{${'itm'.$i}}</span>存进了仓库内！<br>同时你也不得不支付了手续费<span class='yellow'>{$saveitem_cost}</span>元。<br>";
+		$itm=&${'itm'.$i};$itmk=&${'itmk'.$i};$itmsk=&${'itmsk'.$i};
+		$itme=&${'itme'.$i};$itms=&${'itms'.$i};
 		addnews($now,'af_ds',$name,${'itm'.$i});
-		$idpt[$idpt_num]['itm'] = ${'itm'.$i}; ${'itm'.$i}='';
-		$idpt[$idpt_num]['itmk'] = ${'itmk'.$i}; ${'itmk'.$i}='';
-		$idpt[$idpt_num]['itme'] = ${'itme'.$i}; ${'itme'.$i}=0;
-		$idpt[$idpt_num]['itms'] = ${'itms'.$i}; ${'itms'.$i}=0;
-		$idpt[$idpt_num]['itmsk'] = ${'itmsk'.$i}; ${'itmsk'.$i}='';
-		sort($idpt);
-		$idpt = change_areafeatures_depot('encode',$idpt);
-		$areafeatures_depot = $idpt;
-		\player\player_save(\player\fetch_playerdata_by_pid($pid));
+		$db->query("INSERT INTO {$tablepre}itemdepot (itm, itmk, itme, itms, itmsk ,itmowner, itmpw) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$name', '')");
+		$itm='';$itmk='';$itmsk='';
+		$itme=0;$itms=0;
 	}
 	function areafeatures_depot_load($i)
 	{
@@ -174,7 +150,7 @@ namespace areafeatures_depot
 			$log.="<span class='red'>你身上的钱不足以支付取出道具的保管费……卧槽竟然二次收费，奸商啊！</span><br>";
 			return;
 		}
-		$idpt = change_areafeatures_depot('decode',$areafeatures_depot);
+		$idpt = areafeatures_depot_getlist($name);
 		$idpt_num = sizeof($idpt);		
 		if(!is_numeric($i) || $i>$max_saveitem_num || $i<0 || ($idpt[$i]['itms']<=0 && $idpt[$i]['itms']!=='∞'))
 		{
@@ -187,14 +163,11 @@ namespace areafeatures_depot
 		$itme0= $idpt[$i]['itme'];
 		$itms0= $idpt[$i]['itms'];
 		$itmsk0= $idpt[$i]['itmsk'];
-		unset($idpt[$i]);
+		$iid = $idpt[$i]['iid'];
+		$db->query("DELETE FROM {$tablepre}itemdepot WHERE iid='$iid'");
 		$log.="你成功将道具<span class='yellow'>{$itm0}</span>从仓库中取了出来！<br>同时你也不得不支付了保管费<span class='yellow'>{$loaditem_cost}</span>元……你感觉自己的心在滴血。<br>";
 		addnews($now,'af_dl',$name,$itm0);
 		\itemmain\itemget();
-		sort($idpt);
-		$idpt = change_areafeatures_depot('encode',$idpt);
-		$areafeatures_depot = $idpt;
-		\player\player_save(\player\fetch_playerdata_by_pid($pid));
 	}
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e)
 	{

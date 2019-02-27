@@ -8,6 +8,14 @@ namespace campfire_powerarmor
 		//装甲分为T,S,A,B,C,O六个等级，在类别后面加上对应字母来区分，例如“DBPT”就是T等级的身体装甲
 		//没有等级的装甲默认为O等级
 		//不同级别的装甲差别主要体现在各个功能的数值上
+		/*
+		头部装甲：增加你的先攻率（仅在主动攻击时生效）、遇敌率（作战、偷袭、强袭姿态下）以及道具发现率（探索姿态下）
+		身体装甲：获得技能【护盾】（为你提供额外的减伤效果与护盾值，主动发动，发动时无法卸下装备），
+				  在同时装备身体装甲与头部装甲、且装甲未被破坏时，你不会受到致死伤害。
+		手部装甲：增加你的命中率，并额外附加取决于防具效果的电气伤害；
+		腿部装甲：降低你移动和探索时消耗的体力，降低敌人的命中率，增加你的回避率。
+		*/
+		
 		//防具上的属性仅仅用作识别，不具有实际效果
 		$itemspkinfo['^01099'] = 'T级';		
 		$itemspkinfo['^01098'] = 'S级';	
@@ -106,7 +114,7 @@ namespace campfire_powerarmor
 		}
 	}	
 	
-	function apply_total_damage_modifier_limit(&$pa,&$pd,$active)
+	function apply_total_damage_modifier_insurance(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);
@@ -145,7 +153,7 @@ namespace campfire_powerarmor
 		else  return $chprocess();
 	}
 	//手部动力装甲增加命中率
-	function get_hitrate(&$pa,&$pd,$active)		
+	function get_hitrate_multiplier(&$pa,&$pd,$active)		
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('campfire_powerarmor'));

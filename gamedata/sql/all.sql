@@ -301,7 +301,6 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `itme6` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `itms6` char(5) NOT NULL DEFAULT '0',
   `itmsk6` varchar(40) NOT NULL DEFAULT '',
-  `areafeatures_depot` varchar(8000) NOT NULL default '',
   `searchmemory` text NOT NULL,
   `nskill` text NOT NULL,
   `nskillpara` text NOT NULL,
@@ -393,6 +392,27 @@ CREATE TABLE IF NOT EXISTS `acbra2_users` (
   PRIMARY KEY (`uid`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `acbra2_itemdepot`
+--
+
+DROP TABLE IF EXISTS `acbra2_itemdepot`;
+CREATE TABLE IF NOT EXISTS `acbra2_itemdepot` (
+  `iid` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `itm` char(30) NOT NULL DEFAULT '',
+  `itmk` char(5) NOT NULL DEFAULT '',
+  `itme` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `itms` char(5) NOT NULL DEFAULT '0',
+  `itmsk` char(5) NOT NULL DEFAULT '',
+  `itmowner` char(15) NOT NULL DEFAULT '',
+  `itmpw` char(5) NOT NULL DEFAULT '',
+  PRIMARY KEY (`iid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
