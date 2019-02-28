@@ -200,7 +200,7 @@ namespace campfire_item_kget
 		elseif($itm=='再启动指令集')
 		{
 			//条件：非房间模式（除荣耀、极速模式外），使用者为唯一幸存者
-			if($gametype>=10 & $gametype!=18 && $gametype!=19)
+			if($gametype>=10 && $gametype!=18 && $gametype!=19)
 			{
 				$log.="当前模式下不可使用！<br>";
 				return;

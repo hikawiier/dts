@@ -247,28 +247,28 @@ namespace areafeatures_etconsole
 			return;	
 		}
 		
-		if($bancombo==0)
+		if(!$gamevars['bancombo'])
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
-			$bancombo = 1;
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>但你仔细一看，原来角落里还闪烁着一行暗红色的字体：<br><span class='red'>“即使解除了连斗的判断……在2次禁区增加后，幻境也会关闭进入，这样只剩一人幸存的话游戏就结束了……<br>一定要记住……啊……！”<br></span>";
+			$gamevars['bancombo'] = 1;
 			if($gamestate == 40) 
 			{
 				$gamestate = 30;
 				$ctobc = true;
 			}
-			save_gameinfo();
+			\sys\save_gameinfo();
 			addnews($now,'gsc_bancombo',$name);
 			if($ctobc)
 			{
 				addnews($now,'gsc_ctobc',$name);
-				\sys\systemputchat($now,'bancombo','警告：连斗状态已被解除！');
+				\sys\systemputchat($now,'bancombo');
 			}
 		}				
-		elseif($bancombo==1)
+		elseif($gamevars['bancombo'])
 		{
-			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已开启连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以开……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>但你仔细一看，原来角落里还闪烁着一行暗红色的字体：<br><span class='red'>“即使解除了连斗的判断……在2次禁区增加后，幻境也会关闭进入，这样只剩一人幸存的话游戏就结束了……<br>一定要记住……啊……！”<br></span>";
-			$bancombo = 0;
-			save_gameinfo();
+			$log.="当你提交了操作后，控制台的屏幕上显示出了黄色的反馈信息。<span class='yellow'>“已关闭连斗检测相关机制，请刷新页面进行确认，重复提交本功能，可以解……”</span><br>你还没来得及阅读完下文，控制台就因<span class='red'>能源不足</span>而自动休眠了……这坑爹的能量核心是假的吧……<br>";
+			$gamevars['bancombo'] = 0;
+			\sys\save_gameinfo();
 			\gameflow_combo\checkcombo();
 			addnews($now,'gsc_recombo',$name);
 		}
@@ -288,10 +288,17 @@ namespace areafeatures_etconsole
 			}
 		}
 	}
+	function systemputchat($time,$type,$msg = ''){
+		eval(import_module('sys'));
+		if($type == 'bancombo'){
+			$msg = '警告：连斗状态已被临时管理者解除！';
+		}
+		$chprocess($time,$type,$msg);
+	}
 	function checkcombo($time){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','map','gameflow_combo'));
-		if($bancombo == 1){
+		eval(import_module('sys'));
+		if($gamevars['bancombo']){
 			return;
 		}
 		$chprocess($time);
@@ -302,7 +309,8 @@ namespace areafeatures_etconsole
 		$chprocess();		
 		eval(import_module('sys'));
 		//重设连斗解除判断
-		$bancombo = 0;
+		$gamevars['bancombo'] = 0;
+		\sys\save_gameinfo();
 	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{

@@ -6,6 +6,7 @@ campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
 campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
 campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
+campfire_itemextra,campfire/campfire_base/campfireitem/campfire_itemextra/,1
 areafeatures_depot,campfire/campfire_extra/campfire_areafeatures/areafeatures_depot/,1
 areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatures_transforgun/,1
 areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
