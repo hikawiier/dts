@@ -430,6 +430,7 @@ $mixinfo = array
 		array('class' => 'wk_pr', 'stuff' => array('★女王细剑★','神之操控','■DeathNote■'),'result' => array('「女王蔷薇」','WK',2333,'∞','HNnrpc'),),
 		array('class' => 'wk_pr', 'stuff' => array('「女王蔷薇」','龙虎旗帜','悲叹之种'),'result' => array('「皇家蔷薇」','WK',7777,'∞','BNnrpc'),),
 		array('class' => 'wk_pr', 'stuff' => array('「皇家蔷薇」','★Unlimited Blade Works★','最终战术『神谕』'),'result' => array('「青蔷薇」','WK',122221,'∞','BNnrkcV'),),
+		array('class' => 'hidden', 'stuff' => array('「青蔷薇」','黑色雏菊'),'result' => array('「黑蔷薇」','WK',122221,'∞','BNnrcvV'),),
 		array('class' => 'wk_pr', 'stuff' => array('「黑蔷薇」','无法推卸的命运','破灭未来的残光'),'result' => array('「蔷薇凋敝之日」','WKG',211112,'∞','BNnrcvV'),),
 		array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
 		array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),),
