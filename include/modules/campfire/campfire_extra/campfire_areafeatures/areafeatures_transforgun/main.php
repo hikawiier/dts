@@ -63,7 +63,7 @@ namespace areafeatures_transforgun
 			$log.="<span class='red'>该地区不存在改造工作台，请重新输入指令。</span><br>";
 			return;
 		}
-		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WGK')
+		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WKG')
 		{
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;
@@ -76,7 +76,7 @@ namespace areafeatures_transforgun
 		$rubbish_flag = false;
 		for($i=1;$i<=6;$i++)
 		{
-			if((in_array(${'itm'.$i},array_keys($repair_item_effect))||(${'itmk'.$i}=='WG')||(${'itmk'.$i}=='WJ')||(${'itmk'.$i}=='WGK')||(${'itmk'.$i}=='WDG')) && (${'itms'.$i}>0))
+			if((in_array(${'itm'.$i},array_keys($repair_item_effect))||(${'itmk'.$i}=='WG')||(${'itmk'.$i}=='WJ')||(${'itmk'.$i}=='WKG')||(${'itmk'.$i}=='WDG')) && (${'itms'.$i}>0))
 			{
 				$rubbish_flag = $i;
 				break;
@@ -122,7 +122,7 @@ namespace areafeatures_transforgun
 			if($r_sk=='addwepe')
 			{
 				if($repair_item_effect[$rub['itm']]=='e') $rub_add_wepe = $rub['itme'];//废铁加值等于效果
-				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK') $rub_add_wepe = round($rub['itme']/2);//枪加值等于效果/2
+				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WKG') $rub_add_wepe = round($rub['itme']/2);//枪加值等于效果/2
 				else $rub_add_wepe=round($repair_item_effect[$rub['itm']]*10);//其他判定
 				//给一个效果阙值的限制
 				$max_adding_effect = round($wepe*($max_adding_item_effect/100));
@@ -155,7 +155,7 @@ namespace areafeatures_transforgun
 			{
 				//零件增益
 				if($repair_item_effect[$rub['itm']]=='e') $rubbish_add_obbs = round($rub['itme']/10);//废铁加值等于效果/10
-				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK') $rubbish_add_obbs = round($rub['itme']/15);//枪械加值等于效果/15
+				elseif ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WKG') $rubbish_add_obbs = round($rub['itme']/15);//枪械加值等于效果/15
 				else $rubbish_add_obbs=$repair_item_effect[$rub['itm']];//其他判定
 				//给一个限制
 				$rubbish_add_obbs = min($rubbish_add_obbs,$max_repair_item_effect);
@@ -188,7 +188,7 @@ namespace areafeatures_transforgun
 					addnews($now,'repair_fail',$name,$itemspkinfo[$r_sk],$wep);
 				}
 			}
-			if ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WGK')
+			if ($rub['itmk']=='WG' || $rub['itmk']=='WJ' || $rub['itmk']=='WDG'|| $rub['itmk']=='WKG')
 			{
 				$rub['itm']='';$rub['itmk']='';$rub['itmsk']='';
 				$rub['itme']=0;$rub['itms']=0;
@@ -228,7 +228,7 @@ namespace areafeatures_transforgun
 			$log.="<span class='red'>要使用的枪械配件选择错误，请重新输入指令。</span><br>";
 			return;
 		}
-		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WGK')
+		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WKG')
 		{
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;
@@ -382,7 +382,7 @@ namespace areafeatures_transforgun
 			$log.="<span class='red'>要使用的枪械配件选择错误，请重新输入指令。{$i}</span><br>";
 			return;
 		}
-		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WGK')
+		if($wepk!=='WG' && $wepk!=='WJ' && $wepk!=='WDG' && $wepk!=='WKG')
 		{
 			$log.="<span class='red'>你所装备的武器不是远程武器或重型枪械，无法对其进行改造！</span><br>";
 			return;

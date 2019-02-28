@@ -9,7 +9,7 @@ namespace campfire_empowers
 		$ret = $chprocess($n, $k, $e, $s, $sk);
 		if(strpos($k,'Y')===0 || strpos($k,'Z')===0){
 			if ($n == '天空熔炉的远古之魂') {
-				$ret .= '固定强化手中武器的效果值1.5倍';
+				$ret .= '固定强化手中武器的效果值1.5倍，若武器耐久度为∞，则提升2.25倍';
 			}elseif ($n == '天空熔炉的锻者之魂') {
 				$ret .= '将手中武器的类别转化为熟练类别，并使其恢复原初的种类';
 			}elseif ($n == '天空熔炉的祝祷之魂') {
@@ -34,16 +34,19 @@ namespace campfire_empowers
 		$frk = array('WG'=>'WJ','WC'=>'WB');
 		arsort ( $skill );
 		$skill_keys = array_keys ( $skill );
+		$wepknum = strlen($wepk);
 		$nowsk = substr ( $wepk, 0, 2 );
 		$maxsk = $skill_keys [0];
 		if($stp=='远古')
 		{
-			$wepe += ceil ( $wepe / 1.5 );
+			//效果判断
+			$add_wepe = $weps=='∞' ? 2.25 : 1.5;
+			$wepe += ceil ( $wepe / $add_wepe );
 			$kind = "提高了{$wep}的<span class=\"yellow\">攻击力</span>！";
 		}
 		elseif($stp=='锻者')
 		{
-			if ($skill [$nowsk] != $skill [$maxsk]) 
+			if (($skill [$nowsk] != $skill [$maxsk]) && $wepknum<3)
 			{
 				$wepk = $maxsk;
 				$kind = "将{$wep}的类别变化成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";
