@@ -289,6 +289,7 @@ namespace areafeatures_etconsole
 		}
 	}
 	function systemputchat($time,$type,$msg = ''){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
 		if($type == 'bancombo'){
 			$msg = '警告：连斗状态已被临时管理者解除！';
