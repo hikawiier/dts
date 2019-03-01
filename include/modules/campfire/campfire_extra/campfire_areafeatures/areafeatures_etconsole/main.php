@@ -304,15 +304,6 @@ namespace areafeatures_etconsole
 		}
 		$chprocess($time);
 	}
-	function reset_game()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;		
-		$chprocess();		
-		eval(import_module('sys'));
-		//重设连斗解除判断
-		$gamevars['bancombo'] = 0;
-		\sys\save_gameinfo();
-	}
 	function areafeatures_etconsole_mob($c_order,$c_radar)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	

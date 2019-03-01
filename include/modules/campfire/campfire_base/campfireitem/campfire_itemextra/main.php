@@ -11,7 +11,20 @@ namespace campfire_itemextra
 		'「黑蔷薇」' => Array
 		(
 			0 => Array('「青蔷薇」'),
-			1 => Array('黑色方块','黑色雏菊','黑色磨刀石','黑板擦','黑魔法-权利','黑魔法-奇技','黑色終曲『HONOUR』','黑色连衣裙'),
+			1 => Array('黑色方块','黑色雏菊','黑磨刀石','黑板擦','黑魔法-权利','黑魔法-奇技','黑色終曲『HONOUR』','黑色连衣裙'),
+		),
+	);
+	$mix_hitem_info = Array(
+		'「黑蔷薇」' => Array
+		(
+			'黑色方块' => '为漆黑所覆盖之物',
+			'黑色雏菊' => '为漆黑所覆盖之物',
+			'黑磨刀石' => '磨砺灵魂的砥石',
+			'黑板擦' => '抹去一切痕迹之物',
+			'黑魔法-权利' => '破坏与冲动的力量',
+			'黑魔法-奇技' => '破坏与冲动的力量',
+			'黑色終曲『HONOUR』' => '为漆黑的律动所覆盖之物',
+			'黑色连衣裙' => '少女的裙摆',
 		),
 	);
 	
@@ -21,10 +34,30 @@ namespace campfire_itemextra
 		$item_slip_metagame_list['「黑蔷薇」'] = Array('「黑蔷薇」','WK',1222221,'∞','BNnrpvV');
 	}
 	
+	function mix_hitem_info($kind,$rand_result)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('campfire_itemextra'));
+		$info = '';
+		//触发隐藏合成时载入提示信息
+		if(in_array($kind,array_keys($mix_hlist_arr)))
+		{
+			if($kind == '「黑蔷薇」')
+			{
+				$kind2 = $rand_result[1];
+				$kind_h =  $mix_hitem_info[$kind];
+				$keywords = $kind_h[$kind2];
+				$info = '塔纳托斯隐匿于'.$keywords.'中……';
+			}
+			$info = "<span class='grey b'>{$info}</span><br>";
+		}
+		return $info;
+	}
+	
 	function itemmix_success()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('item_slip','sys','campfire_itemextra'));
+		eval(import_module('item_slip','sys','campfire_itemextra','logger'));
 		//从合成结果判断，如果合成的是随机生成的合成，那么在合成成功后删除该合成
 		if(in_array($itm0,array_keys($mix_hlist_arr)))
 		{
@@ -61,6 +94,8 @@ namespace campfire_itemextra
 						$stuff[] = $nowv;
 					}
 				}
+				$hinfo = mix_hitem_info($hin,$stuff);
+				if($hinfo) $log .= $hinfo;
 				$cont = implode('+',$stuff).'='.$hin;
 				$cont_html = '<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -74,8 +109,8 @@ namespace campfire_itemextra
 				\sys\save_gameinfo();
 			}else{
 				$ret = $gamevars['campfire_metagame'];
-			}					
-		}	
+			}
+		}
 		$chprocess();
 	}	
 	
