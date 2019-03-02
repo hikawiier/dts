@@ -50,6 +50,6 @@
 <!--{/if}-->
 </select></a>
 <br>
-<span class="grey">在背包中选择一种<span class="yellow">爆炸物</span>，提交后可以将该爆炸物改造成<span class="yellow">可放置的陷阱</span>。<br>陷阱的效果为<span class="yellow">武器效果乘以耐久（耐久大于5或为∞均按5处理）</span>，但耐久固定为<span class="yellow">1</span>。<br>改造失败的概率为<span class="red">$change_fail_obbs</span>%。若改造失败，会导致玩家受到<span class="red">与武器效果相关的伤害</span>，严重者还会导致<span class="red">死亡</span>！</span><br>
+<span class="grey">在背包中选择一种<span class="yellow">爆炸物</span>，提交后可以将该爆炸物改造成<span class="yellow">可放置的陷阱</span>。<br>陷阱的效果为<span class="yellow">武器效果乘以耐久的一半（耐久大于5或为∞均按2.5处理）</span>，但耐久固定为<span class="yellow">1</span>。<br>改造失败的概率为<span class="red">$change_fail_obbs</span>%。若改造失败，会导致玩家受到<span class="red">与武器效果相关的伤害</span>，严重者还会导致<span class="red">死亡</span>！</span><br>
 <br><br>
 <input type="button" class="cmdbutton" name="submit" id="提交操作" value="提交操作" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

@@ -3,6 +3,9 @@
 namespace areafeatures_transforgun
 {
 	//areafeatures_transforgun
+	//属于枪械武器的列表
+	//不要怪我这么写……请看$dualwep_iteminfo
+	$gun_weapon_arr = Array('WG','WJ','WGK','WKG','WFG','WGF','WDG','WGD','WFJ','WJF','WDJ','WJD');
 	//手动改造的成功率最大值
 	$notools_succ = 75;
 	//工坊改造的成功率最大值

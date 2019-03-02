@@ -42,9 +42,9 @@ namespace campfire_areafeatures
 			}
 			elseif($lp_cmd=='lp_areafeatures_transforgun')
 			{
-				if($wepk!='WG' && $wepk!='WJ' && $wepk!='WDG' && $wepk!='WKG')
+				if(!in_array($wepk,$gun_weapon_arr))
 				{
-					$log.="你身上没有装备枪械类武器，为什么要使用枪械改造台？<br>";
+					$log.="你的武器不属于枪械，为什么要使用枪械改造台？<br>";
 					return;
 				}
 				$wep_skind = $wepsk ? \itemmain\get_itmsk_array($wepsk) : Array();

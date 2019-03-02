@@ -194,7 +194,7 @@
 			<li><font class="lime">【改造爆炸物】</font>：<br>
 				- 当玩家背包内存在一种<font class="yellow b">类型为爆炸物</font>的武器时，可在改造菜单中选择它。<br>
 				- 改造可以将该爆炸物<font class="red b">全部</font>改造成<font class="yellow b">陷阱</font>；<br>
-				- 陷阱的效果等于<font class="yellow b">武器效果乘以耐久（耐久大于5或为∞均按5处理）</font>，耐久固定为<font class="yellow b">1</font>；<br>
+				- 陷阱的效果等于<font class="yellow b">武器效果乘以耐久的一半（耐久大于5或为∞均按2.5处理）</font>，耐久固定为<font class="yellow b">1</font>；<br>
 				- 改造失败会会导致玩家受到<font class="red b">与爆炸物效果相关的伤害</font>，严重者还会导致<font class="red b">死亡</font>；<br>
 				- 改造的成功率与玩家的<font class="yellow b">爆系熟练</font>有关。</li>
 		</ul>
@@ -233,7 +233,7 @@
 			- 可在商店中购买的<font class="grey b">诅咒</font>道具，需要使用【灵能人形】进行填充。使用后可控制寻物者帮助你搜索地图上的道具。</li>
 			<li><font class="yellow b">再启动指令集</font>：<br>
 			- 在商店中购买的道具，仅在场上只剩下一名幸存者的非房间模式（或荣誉/极速模式）下才可使用，可以快速结束游戏。<br>
-				- 附加条件A：允许加入游戏时，游戏已开局10分钟以上，使用者未选择称号；<br>
+				- 附加条件A：允许加入游戏时，游戏已开局10分钟以上；<br>
 				- 附加条件B：不可加入游戏时，游戏已开局30分钟以上。<br></li>
 		</ul>
 	</p>
@@ -327,11 +327,11 @@
 			<li><font class="yellow b">金属材料</font>：<br>
 			- 0禁起售。有着奇妙纹理的金属棒，似乎是以特殊工艺压制而成，是动力装甲修复工具所使用的素材。</li>	
 			<li><font class="yellow b">天空熔炉的锻者之魂</font>：<br>
-			- 1禁起售。<font class="yellow b">消耗品</font>。可将当前装备武器更改为<font class="yellow b">熟练度最高的类别</font>。</li>	
+			- 1禁起售。<font class="yellow b">消耗品</font>。可将当前装备武器更改为<font class="yellow b">熟练度最高的类别</font>。若一次消耗两个该道具，可将武器的类别转变为其上位系别！</li>	
 			<li><font class="yellow b">天空熔炉的远古之魂</font>：<br>
-			- 1禁起售。<font class="yellow b">消耗品</font>。可固定增加当前装备武器的<font class="yellow b">1.5倍效果</font>。</li>	
+			- 1禁起售。<font class="yellow b">消耗品</font>。可固定增加当前装备武器的<font class="yellow b">1.5倍效果</font>。若武器的耐久值为无限，则效果增加量提升至2.25倍。</li>	
 			<li><font class="yellow b">天空熔炉的祝祷之魂</font>：<br>
-			- 1禁起售。<font class="yellow b">消耗品</font>。可使当前装备武器的<font class="yellow b">类别发生奇妙的变化</font>。</li>	
+			- 1禁起售。<font class="yellow b">消耗品</font>。可使当前装备武器的<font class="yellow b">类别发生奇妙的变化</font>。能使你的武器变为双系武器。</li>	
 		</ul>	
 	</p>
 	<hr><a name="属性"></a>
@@ -348,6 +348,19 @@
 <hr><a name="更新日志"></a>
 <p>
 	<font size="3" class="seagreen b">更新日志（按时间轴倒序）：</font><br>
+	<h3>2019年03月02日</h3>
+		<p>数据调整：</p>
+		<ul>
+			<li>调整了陷阱改造功能的成功率计算方式，现在改造失败的概率比以前略微增加了一点</li>
+			<li>削弱了由爆炸物改装成的陷阱效果，由原来的效果x耐久转为效果x耐久的一半</li>
+			<li>天空熔炉的远古之魂效果增加：一次消耗两个该道具可将武器的类别转变为上位系别</li>
+			<li>天空熔炉的祝祷之魂效果变更：可将武器的类别转变为双系武器（取决于第一、第二熟练度）</li>
+			<li>1禁出售的远古之魂数量上调至4个、祝祷之魂的数量上调至2个</li>
+		</ul>
+		<p>问题修正：</p>
+		<ul>
+			<li>现在枪械改造可以对所有包含有射系类别的双系武器进行改造了</li>
+		</ul>	
 	<h3>2019年03月01日</h3>
 		<p>数据调整：</p>
 		<ul>

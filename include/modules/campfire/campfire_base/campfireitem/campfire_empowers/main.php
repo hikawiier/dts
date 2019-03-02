@@ -7,36 +7,49 @@ namespace campfire_empowers
 	function parse_itmuse_desc($n, $k, $e, $s, $sk){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$ret = $chprocess($n, $k, $e, $s, $sk);
-		if(strpos($k,'Y')===0 || strpos($k,'Z')===0){
+		if(strpos($k,'EI')===0){
 			if ($n == '天空熔炉的远古之魂') {
-				$ret .= '固定强化手中武器的效果值1.5倍，若武器耐久度为∞，则提升2.25倍';
+				$ret .= '<br>固定增加1.5倍武器效果值<br>若武器耐久度为无限，则效果提升量为2.25倍';
 			}elseif ($n == '天空熔炉的锻者之魂') {
-				$ret .= '将手中武器的类别转化为熟练类别，并使其恢复原初的种类';
+				$ret .= '<br>固定将武器类别转化为熟练类别<br>若一次消耗两个锻者之魂，可使武器发生质变';
 			}elseif ($n == '天空熔炉的祝祷之魂') {
-				$ret .= '锤锻你的武器，使其质变';
+				$ret .= '<br>祝福你的武器，令它的攻击面得到拓展';
 			}
 		}
 		return $ret;
 	}
 	
-	function use_skysoul($itm,$stp='')
+	function use_skysoul($itm,$stp='',&$itms)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','itemmain','logger','empowers'));
+		eval(import_module('sys','player','itemmain','logger','empowers','dualwep','weapon'));
 		
 		if (! $weps || ! $wepe) 
 		{
 			$log .= '请先装备武器。<br>';
 			return 0;
 		}
-		$skill = array ('WP' => $wp, 'WK' => $wk, 'WG' => $wg, 'WC' => $wc, 'WD' => $wd, 'WF' => $wf );
-		$frk = array('WG'=>'WJ','WC'=>'WB');
+		//判定哪个是最擅长系，只看纸面数字
+		$skill = array();
+		foreach($skillinfo as $skiv){
+			$skill[$skiv] = ${$skiv};
+		}
 		arsort ( $skill );
-		$skill_keys = array_keys ( $skill );
-		$wepknum = strlen($wepk);
-		$nowsk = substr ( $wepk, 0, 2 );
+		$skill_keys = array_keys($skill);
+		$nowsk = $skillinfo[substr($wepk,1,1)];
+		//双系只要有任一系擅长就不会改擅长的那系
+		$sec_wepk = \dualwep\get_sec_attack_method($sdata, 1);
+		if($sec_wepk) {
+			$secsk = $skillinfo[$sec_wepk];
+			if(${$secsk} > ${$nowsk}) $nowsk = $secsk;
+		}
 		$maxsk = $skill_keys [0];
+		$sec_maxsk = $skill_keys [1];
+		//正常改系列表
+		$changek = array('wp' => 'WP', 'wk' => 'WK', 'wg' => 'WG', 'wc' => 'WC', 'wd' => 'WD', 'wf' => 'WF');
+		//进阶改系列表
+		$evo_changek = array('WG' => 'WJ', 'WC' => 'WB', 'WFG' => 'WFJ', 'WGF' => 'WJF', 'WDG' => 'WDJ', 'WGD' => 'WJD', 'WFC'=>'WFB','WCF'=>'WBF');
 		if($stp=='远古')
 		{
 			//效果判断
@@ -46,11 +59,17 @@ namespace campfire_empowers
 		}
 		elseif($stp=='锻者')
 		{
-			if (($skill [$nowsk] != $skill [$maxsk]) && $wepknum<3)
+			if ($skill [$nowsk] != $skill [$maxsk])
 			{
-				$wepk = $maxsk;
+				$wepk = $changek[$maxsk]. substr($wepk,2);
 				$kind = "将{$wep}的类别变化成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";
 			}
+			elseif ((in_array($wepk,array_keys($evo_changek))) && $itms>=2)
+			{
+				$wepk = $evo_changek[$wepk];
+				$kind = "将{$wep}的类别变化成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";
+				$itms--;
+			}	
 			else
 			{
 				$log .= "你的武器类别和你的最高熟练系别相同，无法改造！<br>";
@@ -59,14 +78,21 @@ namespace campfire_empowers
 		}
 		elseif($stp=='祝祷')
 		{
-			if (in_array($nowsk,array_keys($frk))) 
+			//获取你最熟悉的武器类别
+			$wepk_a = substr($changek[$maxsk],1);
+			//第二熟悉的武器类别
+			$wepk_b = substr($changek[$sec_maxsk],1);
+			//这是什么傻屌判断
+			$new_wepk_a = 'W'.$wepk_a.$wepk_b;
+			$new_wepk_b = 'W'.$wepk_b.$wepk_a;
+			if (in_array($new_wepk_a,array_keys($dualwep_iteminfo)) && $new_wepk_a!==$wepk && $new_wepk_b!==$wepk) 
 			{
-				$wepk = $frk[$nowsk];
+				$wepk = $new_wepk_a;
 				$kind = "将{$wep}的类别变化成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";
 			}
 			else
 			{
-				$log .= "你的武器无法再进行锤锻了！……也许你可以尝试一下锻者之魂？<br>";
+				$log .= "你的武器无法再受到祝福了！……也许你可以尝试一下锻者之魂？<br>";
 				return 0;
 			}
 		}
@@ -92,21 +118,21 @@ namespace campfire_empowers
 		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
 		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 		
-		if (strpos ( $itmk, 'Y' ) === 0 || strpos ( $itmk, 'Z' ) === 0) 
+		if (strpos ( $itmk, 'EI' ) === 0) 
 		{
 			if ($itm == '天空熔炉的远古之魂') 
 			{
-				if (use_skysoul($itm,'远古')) \itemmain\itms_reduce($theitem);
+				if (use_skysoul($itm,'远古',$itms)) \itemmain\itms_reduce($theitem);
 				return;
 			}
 			elseif ($itm == '天空熔炉的锻者之魂') 
 			{
-				if (use_skysoul($itm,'锻者')) \itemmain\itms_reduce($theitem);
+				if (use_skysoul($itm,'锻者',$itms)) \itemmain\itms_reduce($theitem);
 				return;
 			}
 			elseif ($itm == '天空熔炉的祝祷之魂') 
 			{
-				if (use_skysoul($itm,'祝祷')) \itemmain\itms_reduce($theitem);
+				if (use_skysoul($itm,'祝祷',$itms)) \itemmain\itms_reduce($theitem);
 				return;
 			}
 		}

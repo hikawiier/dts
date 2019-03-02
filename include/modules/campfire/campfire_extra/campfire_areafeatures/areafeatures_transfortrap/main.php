@@ -2,6 +2,8 @@
 
 namespace areafeatures_transfortrap
 {
+	//地雷改造成功率最大值 
+	$max_transtrap_succ_obbs = 90;
 	function init()
 	{		
 	}
@@ -61,8 +63,12 @@ namespace areafeatures_transfortrap
 			$log.="<span class='red'>该道具已被改造过，不可重复改造！</span><br>";
 			return;
 		}
+		//初始成功率
 		$change_succ_obbs = round($wd*0.35);
-		
+		//地雷效果每增加50点降低1%成功率
+		$reduce_transtrap_obbs = round($citm['itme']/50);
+		$change_succ_obbs = $change_succ_obbs>$reduce_transtrap_obbs ? $change_succ_obbs-$reduce_transtrap_obbs : 1;
+		$change_succ_obbs = min($max_transtrap_succ_obbs,$change_succ_obbs);
 		$log.="你将要改造的易爆品放在了工作台上，开始小心翼翼的拆解它……<br>";
 		$log.="…………<br>";
 		if($cway=='ttd')
@@ -123,7 +129,7 @@ namespace areafeatures_transfortrap
 				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>这样看来，爆炸物的改造工作就<span class='red'>顺利完成</span>了！<br>";
 				$itm0 = '埋设式'.$citm['itm'];
 				$itmk0 = 'TN';
-				$itme0 = ($citm['itms']>5 || $citm['itms']=='∞') ? round($citm['itme']*5) : round($citm['itme']*$citm['itms']);
+				$itme0 = ($citm['itms']>5 || $citm['itms']=='∞') ? round($citm['itme']*2.5) : round($citm['itme']*$citm['itms']/2);
 				$itms0 = 1;
 				$itmsk0 = '';
 				addnews($now,'ct_succ',$name,$citm['itm'],'爆炸物','陷阱');

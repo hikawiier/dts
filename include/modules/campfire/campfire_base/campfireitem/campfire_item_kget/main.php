@@ -211,8 +211,8 @@ namespace campfire_item_kget
 				return;
 			}
 			$restart_flag = false;
-			//条件A：可入场状态，游戏开始10分钟后可用，使用者不能有职业（用来区分新入场玩家）
-			if($gamestate<30 && $gamestate>=20 && $now>=$starttime+600 && !$club)
+			//条件A：可入场状态，游戏开始10分钟后可用
+			if($gamestate<30 && $gamestate>=20 && $now>=$starttime+600)
 			{
 				$restart_flag=true;
 			}

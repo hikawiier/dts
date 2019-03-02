@@ -3,7 +3,7 @@
 namespace campfire_empowers
 {
 	////////// MODULE HEADER START ///////////////
-	$___MODULE_dependency = 'sys player itemmain logger armor dualwep empowers';
+	$___MODULE_dependency = 'sys player itemmain logger armor dualwep empowers weapon';
 	$___MODULE_dependency_optional = '';
 	$___MODULE_conflict = '';
 	$___MODULE_codelist = 'main.php';
