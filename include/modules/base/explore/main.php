@@ -29,16 +29,32 @@ namespace explore
 		eval(import_module('sys','player','map','logger'));
 		
 		$plsnum = sizeof($plsinfo);
-		if(($moveto == 'main')||($moveto < 0 )||($moveto >= $plsnum)){
+		if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&!array_search($moveto,$hidden_arealist)){
 			$log .= '请选择正确的移动地点。<br>';
 			return;
 		} elseif($pls == $moveto){
 			$log .= '相同地点，不需要移动。<br>';
 			return;
-		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack){
+		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack && !in_array($moveto,$hidden_arealist)){
+			//plsinfo修改标记
 			$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
 			return;
+		} elseif(in_array($moveto,$hidden_arealist)){
+			$hag_name = array_search($pls,$hidden_areagroup);
+			if(array_search($moveto,$hidden_areagroup)==$hag_name)
+			{
+				$enter_hidden_area_flag = true;
+			}
+			else
+			{
+				$enter_hidden_area_flag = false;
+			}
+			if(!$enter_hidden_area_flag){
+				$log .= "地图上没有{$plsinfo[$moveto]}啊？是不是你看错了？{$hag_name}<br>";
+				return;
+			}
 		}
+		
 		
 		$movesp=max(calculate_move_sp_cost(),1);
 		
@@ -79,7 +95,8 @@ namespace explore
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger'));
 		
-		if(array_search($pls,$arealist) <= $areanum && !$hack){
+		if(array_search($pls,$arealist) <= $areanum && !$hack && !in_array($pls,$hidden_arealist)){
+			//plsinfo修改标记
 			$log .= $plsinfo[$pls].'是禁区，还是赶快逃跑吧！<br>';
 			return;
 		}

@@ -416,7 +416,8 @@ namespace event
 		}elseif ($pls==34){//英灵殿
 			if (($art!='Untainted Glory')&&($gamestate != 50)&&($gametype!=2)){
 				$rpls=-1;
-				while ($rpls<0 || $arealist[$rpls]==34){
+				//增加了隐藏区域相关判定，标记一下
+				while ($rpls<0 || $arealist[$rpls]==34 || !array_search($rpls,$arealist)){
 					if($hack){$rpls = rand(0,sizeof($plsinfo)-1);}
 					else {$rpls = rand($areanum+1,sizeof($plsinfo)-1);}
 				} 

@@ -48,6 +48,8 @@ if(!file_exists($writefile) || filemtime($mixfile) > filemtime($writefile)){
 		'madoka'=> array('最终战术系道具','yellow b'),
 		'item'=> array('其他道具','yellow b'),
 		);
+
+	$mixclass['wk_pr'] = array('斩系武器（蔷薇系列）','yellow b');	
 	$mixhelpinfo = '';
 	foreach($mixitem as $class => $list){
 		$classname = $mixclass[$class][0];

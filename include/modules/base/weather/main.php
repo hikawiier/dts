@@ -121,6 +121,8 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map','player','logger'));
+		//plsinfo修改标记
+		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		if($hack)
 		{
 			$pls = rand(0,sizeof($plsinfo)-1);

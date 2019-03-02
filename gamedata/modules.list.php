@@ -3,6 +3,7 @@ bubblebox,extra/misc/bubblebox/,1
 sys,core/sys/,1
 map,core/map/,1
 bmp_util,extra/misc/bmp_util/,1
+campfire_core,campfire/campfire_core/main/,1
 gameflow_base,core/gameflow/gameflow_base/,1
 player,core/player/,1
 gameflow_antiafk,core/gameflow/gameflow_antiafk/,1
@@ -28,13 +29,22 @@ item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
 item_addarea,extra/item_extra/item_addarea/,1
+campfire_item_kghf,campfire/campfire_base/campfireitem/campfire_item_kghf/,1
+areafeatures_depot,campfire/campfire_extra/campfire_areafeatures/areafeatures_depot/,1
+areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatures_transforgun/,1
+areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
+campfire_hiddenarea,campfire/campfire_core/campfire_hiddenarea/,1
+skill1999,campfire/campfire_extra/campfire_skills/skill1999/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 item_slip,extra/item_extra/item_slip/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
+campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
+campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 instance8,extra/instance/instance8_proud/,1
+campfire_itemextra,campfire/campfire_base/campfireitem/campfire_itemextra/,1
 itemmix_overlay,base/itemmix/itemmix_overlay/,1
 team,base/team/,1
 battle,base/battle/,1
@@ -252,6 +262,7 @@ club15,extra/club/clubs/club15/,1
 skill518,extra/card/skills/skill518/,1
 skill84,extra/club/skills/skill84/,1
 skill1005,extra/instance/gtype5/skill1005/,1
+campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
 skill273,extra/club/skills/skill273/,1
@@ -302,9 +313,11 @@ pose,base/pose/,1
 skill1,base/skills/skill1/,1
 skill600,extra/club/skills/skill600/,1
 skill20,extra/club/skills/skill20/,1
+campfire_radar,campfire/campfire_base/campfireitem/campfire_radar/,1
 empowers,base/items/empowers/,1
 skill70,extra/club/skills/skill70/,1
 skill246,extra/club/skills/skill246/,1
+campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
 ex_phy_def,extra/attr/ex_phy_def/,1
 rage,extra/attr/rage/,1
 skill30,extra/club/skills/skill30/,1
@@ -319,8 +332,10 @@ ex_direct,extra/attr/ex_direct/,1
 ex_seckill,extra/attr/ex_seckill/,1
 ex_cursed,extra/attr/ex_cursed/,1
 ex_def_down,extra/attr/ex_def_down/,1
+campfire_powerarmor,campfire/campfire_extra/campfire_powerarmor/,1
 skill33,extra/club/skills/skill33/,1
 tactic,base/tactic/,1
+campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
 wepchange,extra/attr/wepchange/,1
 blessstone,extra/attr/blessstone/,1
 skill77,extra/club/skills/skill77/,1
@@ -431,6 +446,7 @@ tutorial,extra/instance/instance7_tutorial/tutorial/,1
 skill329,extra/activities/nationalday2017/skill329/,1
 skill512,extra/card/skills/skill512/,1
 addnpc_event,extra/misc/addnpc_event/,1
+areafeatures_etconsole,campfire/campfire_extra/campfire_areafeatures/areafeatures_etconsole/,1
 skill228,extra/club/skills/skill228/,1
 skill236,extra/club/skills/skill236/,1
 skill237,extra/club/skills/skill237/,1
@@ -455,6 +471,8 @@ randmix,extra/misc/randmix/,1
 skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
+campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
 skill36,extra/club/skills/skill36/,1
 skill38,extra/club/skills/skill38/,1
 skill34,extra/club/skills/skill34/,1
@@ -512,5 +530,6 @@ skill362,extra/activities/lunany2018/skill362/,1
 skill365,extra/activities/aprilfool2018/skill365/,1
 skill505,extra/card/skills/skill505/,1
 skill366,extra/activities/aprilfool2018/skill366/,1
+campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,0
 glowbutton,extra/misc/glowbutton/,0
 halloween2017,extra/activities/halloween2017/main/,0

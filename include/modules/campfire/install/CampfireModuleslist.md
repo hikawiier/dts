@@ -1,0 +1,17 @@
+campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
+campfire_item_kghf,campfire/campfire_base/campfireitem/campfire_item_kghf/,1
+campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
+campfire_radar,campfire/campfire_base/campfireitem/campfire_radar/,1
+campfire_empowers,campfire/campfire_base/campfireitem/campfire_empowers/,1
+campfire_ammunition,campfire/campfire_base/campfireitem/campfire_ammunition/,1
+campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
+campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
+campfire_itemextra,campfire/campfire_base/campfireitem/campfire_itemextra/,1
+areafeatures_depot,campfire/campfire_extra/campfire_areafeatures/areafeatures_depot/,1
+areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatures_transforgun/,1
+areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
+areafeatures_etconsole,campfire/campfire_extra/campfire_areafeatures/areafeatures_etconsole/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
+campfire_powerarmor,campfire/campfire_extra/campfire_powerarmor/,1
+campfire_hiddenarea,campfire/campfire_core/campfire_hiddenarea/,1
+campfire_core,campfire/campfire_core/main/,1

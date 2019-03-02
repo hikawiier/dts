@@ -8,7 +8,7 @@ namespace itemmain
 		global $item_equip_list;
 		$equip_list=array_merge($equip_list,$item_equip_list);
 	}
-	
+	//campfire MOD修改标识
 	//1:一般可合并道具  2:食物  0:不可合并
 	function check_mergable($ik){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -289,8 +289,13 @@ namespace itemmain
 		$chprocess($xmode);
 		
 		eval(import_module('sys','map','itemmain'));
-		if ($xmode & 16) {	//地图道具初始化
+		if ($xmode & 16) {	//地图道具
 			$plsnum = sizeof($plsinfo);
+			//plsinfo修改标记
+			if($hidden_area)
+			{
+				$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
+			}			
 			$iqry = '';
 			$itemlist = get_itemfilecont();
 			$in = sizeof($itemlist);

@@ -17,8 +17,18 @@ namespace map
 	//检查一个地区是否可进入，包含解禁和hack两种情况
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		return !check_in_forbidden_area($pno) || $hack;
+		eval(import_module('sys','player','map'));
+		//$plsinfo修改标记
+		$hag_name = array_search($pls,$hidden_areagroup);
+		if(array_search($pno,$hidden_areagroup)==$hag_name)
+		{
+			$enter_hidden_area_flag = true;
+		}
+		else
+		{
+			$enter_hidden_area_flag = false;
+		}
+		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;
 	}
 
 	function init_areatiming(){
@@ -51,7 +61,7 @@ namespace map
 	//非禁区域列表。如果$no_dangerous_zone开启，则再排除掉SCP、英灵殿等危险地区
 	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		eval(import_module('sys','map'));
+		eval(import_module('sys'));
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
@@ -76,6 +86,8 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
 		$plsnum = sizeof($plsinfo) - 1;
+		//plsinfo修改标记
+		if($hidden_area) $plsnum = sizeof($plsinfo)-sizeof($hidden_area)-1;
 		if($areanum >= $plsnum) 
 		{
 			\sys\gameover($atime,'end1');
@@ -98,6 +110,8 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
+			//涉及到$plsinfo的随机内容要排除隐藏地区
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
@@ -154,6 +168,8 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
+			//plsinfo修改标记
+			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
 			$arealist = range(1,$plsnum-1);
 			shuffle($arealist);
@@ -199,6 +215,8 @@ namespace map
 		if(!$atime){
 			$atime = $areatime;
 		}
+		//plsinfo修改标记
+		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		$timediff = $atime - $now;
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';
