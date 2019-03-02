@@ -27,6 +27,7 @@ namespace radar
 			$log .= '仪器使用失败！<br>';
 			return;
 		}
+		
 		$existing_npctp = array();
 		//第一轮循环，得到原始的存活角色数据
 		$radardata_raw = array();

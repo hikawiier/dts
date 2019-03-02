@@ -74,6 +74,7 @@ skill2,base/skills/skill2/,1
 skill3,base/skills/skill3/,1
 item_uv,base/items/item_uv/,1
 npcchat_bubble,extra/misc/npcchat_bubble/,1
+gtype5,extra/instance/gtype5/main/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1
@@ -260,6 +261,7 @@ skill516,extra/card/skills/skill516/,1
 club15,extra/club/clubs/club15/,1
 skill518,extra/card/skills/skill518/,1
 skill84,extra/club/skills/skill84/,1
+skill1005,extra/instance/gtype5/skill1005/,1
 campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
@@ -378,6 +380,12 @@ skill463,extra/card/skills/skill463/,1
 skill465,extra/card/skills/skill465/,1
 skill478,extra/card/skills/skill478/,1
 skill272,extra/club/skills/skill272/,1
+skill521,extra/card/skills/skill521/,1
+skill522,extra/card/skills/skill522/,1
+skill523,extra/card/skills/skill523/,1
+skill524,extra/card/skills/skill524/,1
+skill525,extra/card/skills/skill525/,1
+skill526,extra/card/skills/skill526/,1
 ex_phy_nullify,extra/attr/ex_phy_nullify/,1
 skill232,extra/club/skills/skill232/,1
 skill432,extra/card/skills/skill432/,1
@@ -523,6 +531,5 @@ skill365,extra/activities/aprilfool2018/skill365/,1
 skill505,extra/card/skills/skill505/,1
 skill366,extra/activities/aprilfool2018/skill366/,1
 campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,0
-gtype5,extra/instance/gtype5/main/,0
 glowbutton,extra/misc/glowbutton/,0
 halloween2017,extra/activities/halloween2017/main/,0
