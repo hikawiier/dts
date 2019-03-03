@@ -87,7 +87,7 @@ namespace achievement_base{
 	$ach_show_num_per_row = 3;
 	
 	//campfire MOD修改标识
-	$achtype[98] = '拓展成就';
+	$achtype[98] = '篝火模组包成就';
 	$achlist[98] = Array(1800);
 }
 ?>

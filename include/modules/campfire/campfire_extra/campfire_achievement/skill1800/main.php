@@ -24,7 +24,7 @@ namespace skill1800
 	
 	//各级给的切糕奖励
 	$ach1800_qiegao_prize = array(
-		1 => 233,
+		1 => 444,
 	);
 	
 	//各级给的卡片奖励
