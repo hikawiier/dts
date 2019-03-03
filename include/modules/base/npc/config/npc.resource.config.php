@@ -217,24 +217,24 @@ namespace npc
 	//campfireMOD新增NPC类别的击杀信息
 	$campfire_npc_killmsginfo = Array
 	(
-		1001 => '1BF52:KILLING MOUDULE LOADING SUCCEED',
-		1002 => '1BF52:KILLING MOUDULE LOADING SUCCEED',
+		1001 => '1BF52:MEME COLLECTED;',
+		1002 => '1BF52:MEME COLLECTED',
 		1003 => Array(
-			'Mr.Lein' => '无须遗憾……你将成为这盔甲的一部分，而它将为这噩梦般的一切划上句号……',
+			'Mr.Lein' => '采集到不错的样本了。',
 		),
-		1004 => 'MISSION：ALL COMPLETED',
-		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
+		1004 => 'MISSION：BATTLE DATA UPLOADING...',
+		1005 => '好好感受我的怨念吧！',
 	);
 	$npc_killmsginfo = $npc_killmsginfo+$campfire_npc_killmsginfo;
 	//campfireMOD新增NPC类别的死亡信息
 	$campfire_npc_lwinfo = Array
 	(
-		1001 => '1BF52:ERROR_COULD_NOT_FIND_THE_ENER....',
-		1002 => '1BF52:ERROR_COULD_NOT_FIND_THE_ENER....',
+		1001 => '1BF52:ERROR_COULD_NOT_FIND_...',
+		1002 => '1BF52:ERROR_COULD_NOT_FIND_...',
 		1003 => Array(
-			'Mr.Lein' => '……采集到足够的数据样本了……',
+			'Mr.Lein' => '还没采集到足够的数据样本……不过……这样也不赖……',
 		),
-		1004 => 'WARNING：DEFINDING MOUDUEL MISSING...',
+		1004 => 'WARNING：BAT...',
 		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
 	);
 	$npc_lwinfo = $npc_lwinfo+$campfire_npc_lwinfo;

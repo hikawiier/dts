@@ -29,7 +29,7 @@ namespace skill1800
 	
 	//各级给的卡片奖励
 	$ach1800_card_prize = array(
-		1 => 122,
+		1 => 2000,
 	);
 	
 	function init() 

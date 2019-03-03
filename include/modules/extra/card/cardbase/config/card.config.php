@@ -3138,5 +3138,29 @@ $cards = array(
 //		)
 //	),
 );
+
+$packlist[] = 'Horizon of Campfire';
+$packdesc['Horizon of Campfire'] ='篝火模组包提供的扩展卡集，大部分与篝火模组新增的内容有关，也包含一些篝火模组的剧情设定。';
+$campfire_cardindex= Array
+(
+);
+$cardindex = array_merge($cardindex,$campfire_cardindex);
+$campfire_cards = Array
+(
+	2000 => array(
+		'name' => '命运的表里',
+		'rare' => 'S',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '不幸是幸运的影子',
+		'effect' => '获得技能「唯心」：你的所有防御类属性失效率加倍，但在攻击时触发贯穿类属性的概率加倍',
+		'energy' => 60,
+		'valid' => array(
+			'skills' => array(
+				'1900' => '1', 
+			),
+		),
+	),
+);
+$cards = $cards + $campfire_cards;
 }
 ?>

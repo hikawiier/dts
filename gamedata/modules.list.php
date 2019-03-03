@@ -43,6 +43,7 @@ campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
+campfire_corpse,campfire/campfire_base/campfire_corpse/,1
 instance8,extra/instance/instance8_proud/,1
 campfire_itemextra,campfire/campfire_base/campfireitem/campfire_itemextra/,1
 itemmix_overlay,base/itemmix/itemmix_overlay/,1

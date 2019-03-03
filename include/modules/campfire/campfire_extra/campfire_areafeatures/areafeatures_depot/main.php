@@ -26,7 +26,7 @@ namespace areafeatures_depot
 			}
 			elseif($command == 'areafeatures_depot_load')
 			{
-				$saveitem_list = areafeatures_depot_getlist($name);
+				$saveitem_list = areafeatures_depot_getlist($name,$type);
 				ob_clean();
 				include template(MOD_AREAFEATURES_DEPOT_LP_AREAFEATURES_DEPOT_LOAD);
 				$cmd = ob_get_contents();
@@ -83,18 +83,42 @@ namespace areafeatures_depot
 		$chprocess();
 	}
 	/*==========精灵中心特殊功能：areafeatures_depot功能部分开始==========*/
-	function areafeatures_depot_getlist($n)
+	function rs_game($xmode)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		$chprocess($xmode);		
+		eval(import_module('sys','areafeatures_depot'));
+		if ($xmode & 8) {	//仓库内储存的道具初始化		
+			foreach($npc_depot as $nd_num => $nd_arr)
+			{
+				foreach($nd_arr['itm'] as $nd_itm_arr)
+				{
+					$ditm = $nd_itm_arr['itm'];$ditmk = $nd_itm_arr['itmk'];$ditmsk = $nd_itm_arr['itmsk'];
+					$ditme = $nd_itm_arr['itme'];$ditms = $nd_itm_arr['itms'];
+					$dname = $nd_arr['name'];$dtype = $nd_arr['type'];
+					$db->query("INSERT INTO {$tablepre}itemdepot (itm, itmk, itme, itms, itmsk ,itmowner, itmpw) VALUES ('$ditm', '$ditmk', '$ditme', '$ditms', '$ditmsk', '$dname', '$dtype')");
+				}
+			}
+		}
+	}
+	function areafeatures_depot_getlist($n,$t)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		eval(import_module('sys'));		
 		$iarr = Array();		
-		$result = $db->query("SELECT * FROM {$tablepre}itemdepot WHERE itmowner='$n'");
-		while($i = $db->fetch_array($result)) 
+		$depot = $db->query("SELECT * FROM {$tablepre}itemdepot WHERE itmowner='$n' AND itmpw='$t'");
+		while($i = $db->fetch_array($depot)) 
 		{
 			$iarr[] = $i;
 		}
 		return $iarr;
 	}	
+	function areafeatures_depot_changeowner($n,$t,$tn,$tt)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		eval(import_module('sys'));		
+		$db->query("UPDATE {$tablepre}itemdepot SET itmowner='$tn',itmpw='$tt' WHERE itmowner='$n' AND itmpw=$t");
+	}
 	function areafeatures_depot_save($i)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
@@ -120,7 +144,7 @@ namespace areafeatures_depot
 			return;
 		}
 			
-		$idpt = areafeatures_depot_getlist($name);
+		$idpt = areafeatures_depot_getlist($name,$type);
 		$idpt_num = sizeof($idpt);
 		if($idpt_num+1>$max_saveitem_num)
 		{
@@ -132,7 +156,7 @@ namespace areafeatures_depot
 		$itm=&${'itm'.$i};$itmk=&${'itmk'.$i};$itmsk=&${'itmsk'.$i};
 		$itme=&${'itme'.$i};$itms=&${'itms'.$i};
 		addnews($now,'af_ds',$name,${'itm'.$i});
-		$db->query("INSERT INTO {$tablepre}itemdepot (itm, itmk, itme, itms, itmsk ,itmowner, itmpw) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$name', '')");
+		$db->query("INSERT INTO {$tablepre}itemdepot (itm, itmk, itme, itms, itmsk ,itmowner, itmpw) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$name', '$type')");
 		$itm='';$itmk='';$itmsk='';
 		$itme=0;$itms=0;
 	}
@@ -150,7 +174,7 @@ namespace areafeatures_depot
 			$log.="<span class='red'>你身上的钱不足以支付取出道具的保管费……卧槽竟然二次收费，奸商啊！</span><br>";
 			return;
 		}
-		$idpt = areafeatures_depot_getlist($name);
+		$idpt = areafeatures_depot_getlist($name,$type);
 		$idpt_num = sizeof($idpt);		
 		if(!is_numeric($i) || $i>$max_saveitem_num || $i<0 || ($idpt[$i]['itms']<=0 && $idpt[$i]['itms']!=='∞'))
 		{

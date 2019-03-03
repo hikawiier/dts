@@ -1,6 +1,9 @@
 <!--{if $gametype!=2 || $w_type>0}-->
 <br>
 <input type="hidden" name="mode" value="corpse">
+<!--{if $w_can_changedepot}-->
+<input type="radio" name="command" id="changedepot" value="changedepot"><a onclick=sl('changedepot'); href="javascript:void(0);" >搜寻储物</a><br>
+<!--{/if}-->
 <!--{if $w_can_destroy}-->
 <input type="radio" name="command" id="destroy" value="destroy" <!--{if $default_selection == 'destroy'}-->checked<!--{/if}-->><a onclick=sl('destroy'); href="javascript:void(0);" >销毁尸体</a><br>
 <!--{/if}-->
