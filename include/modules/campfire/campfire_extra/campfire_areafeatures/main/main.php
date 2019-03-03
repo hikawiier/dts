@@ -64,7 +64,7 @@ namespace campfire_areafeatures
 			elseif($lp_cmd=='lp_areafeatures_transfortrap')
 			{
 				//和田：areafeatures_transfortrap
-				$change_fail_obbs = max(0,round(100-($wd*0.35)));
+				$change_fail_obbs = min(90,round($wd*0.35));
 				ob_clean();
 				include template(MOD_AREAFEATURES_TRANSFORTRAP_LP_AREAFEATURES_TRANSFORTRAP);
 				$cmd = ob_get_contents();

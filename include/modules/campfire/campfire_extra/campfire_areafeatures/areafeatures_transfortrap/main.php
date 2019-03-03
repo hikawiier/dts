@@ -73,10 +73,11 @@ namespace areafeatures_transfortrap
 		$log.="…………<br>";
 		if($cway=='ttd')
 		{
+			if(strpos($citm['itmk'],'TNc')!==false) $qiji_flag = true;
 			if(rand(1,100)<=$change_succ_obbs)
 			{
 				$log.="<span class='yellow'>“呼……”</span><br>完成了手中精密的工作，你如释重负般长吁了一口气。<br>";
-				if(strpos($citm['itmk'],'TNc')!==false)
+				if($qiji_flag)
 				{
 					$log.="<span class='lime b'>但就在你放松警惕之时，你手中的爆炸物忽然裂成了两半！</span><br>看来只能祈祷它奇迹般的效果没有被分成两份了……<br>";
 					$itm0 = '便携式★两发失效神话★';
@@ -84,6 +85,7 @@ namespace areafeatures_transfortrap
 					$itme0 = round(32675*(rand(85,135)/100));
 					$itms0 = 2;
 					$itmsk0 = 'nyVvdj';
+					
 				}
 				else
 				{
@@ -103,17 +105,17 @@ namespace areafeatures_transfortrap
 				if($hp>$fail_dmg)
 				{
 					$hp -= $fail_dmg;
+					addnews($now,'ct_fail',$name,$citm['itm'],'陷阱','爆炸物',$fail_dmg);
 				}
 				else
 				{
 					$hp = 0;
-					$state = 1001;
+					$state = !empty($qiji_flag) ? 203 : 201;
 					\player\update_sdata(); $sdata['sourceless'] = 1; $sdata['attackwith'] = '';
 					\player\kill($sdata,$sdata);
 					\player\player_save($sdata);
 					\player\load_playerdata($sdata);
-				}
-				addnews($now,'ct_fail',$name,$citm['itm'],'陷阱','爆炸物',$fail_dmg);
+				}				
 			}
 			$citm['itms'] = 1;
 			\itemmain\itms_reduce($citm);
@@ -170,7 +172,9 @@ namespace areafeatures_transfortrap
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		if($news == 'death201') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造易爆物品时失误被炸死，实在是喜大普奔！{$e0}";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造易爆物品时失误被炸死，实在是喜大普奔！";
+		if($news == 'death203') 
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造★一发逆转神话★时失误被炸死……看来人的好运也是有极限的……";
 		if($news == 'ct_succ') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功将<span class='yellow'>{$c}【{$b}】</span>改造成了<span class='yellow'>{$d}</span>……细作吃矛！</span><br>\n";
 		if($news == 'ct_fail') 
