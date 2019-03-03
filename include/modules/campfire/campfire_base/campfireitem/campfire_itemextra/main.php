@@ -2,6 +2,8 @@
 
 namespace campfire_itemextra
 {
+	//用于放置和道具相关的杂项内容的模块
+	//现在包括 ：购买道具、堆叠道具、隐藏合成
 	//合成成功后可以触发隐藏合成的内容
 	$mix_sh_arr = Array(
 		//合成 青蔷薇后，可以开启 黑蔷薇的隐藏合成
@@ -33,7 +35,9 @@ namespace campfire_itemextra
 		eval(import_module('item_slip'));
 		$item_slip_metagame_list['「黑蔷薇」'] = Array('「黑蔷薇」','WK',1222221,'∞','BNnrpvV');
 	}
+	//堆叠道具部分
 	
+	//隐藏合成部分
 	function mix_hitem_info($kind,$rand_result)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;

@@ -85,7 +85,12 @@ namespace campfire_empowers
 			//这是什么傻屌判断
 			$new_wepk_a = 'W'.$wepk_a.$wepk_b;
 			$new_wepk_b = 'W'.$wepk_b.$wepk_a;
-			if (in_array($new_wepk_a,array_keys($dualwep_iteminfo)) && $new_wepk_a!==$wepk && $new_wepk_b!==$wepk) 
+			if(!in_array($new_wepk_a,array_keys($dualwep_iteminfo)))
+			{
+				$log .= "你的武器无法再受到祝福了！……也许是因为不存在与你【最高熟练度】与【次高熟练度】相匹配的双系武器……？<br>";
+				return 0;
+			}	
+			if ($new_wepk_a!==$wepk && $new_wepk_b!==$wepk) 
 			{
 				$wepk = $new_wepk_a;
 				$kind = "将{$wep}的类别变化成了<span class=\"yellow\">{$iteminfo[$wepk]}</span>！";

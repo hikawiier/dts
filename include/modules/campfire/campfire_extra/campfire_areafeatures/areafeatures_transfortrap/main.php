@@ -100,7 +100,7 @@ namespace areafeatures_transfortrap
 			}
 			else
 			{
-				$fail_dmg = strpos($citm['itmk'],'TNc')!==false ? round(32675*(rand(55,95)/100)) : round($citm['itme']*(rand(55,95)/100));
+				$fail_dmg = $qiji_flag ? round(32675*(rand(55,95)/100)) : round($citm['itme']*(rand(55,95)/100));
 				$log.="正当你谨慎的拆开道具的外壳时，你听到了“滴”的一声……<br>在下一个瞬间，你就被爆炸带来的巨大冲击力掀翻在地。<br><span class='yellow'>在猛烈的爆炸中，你受到了<span class='red'>{$fail_dmg}</span>点伤害！</span><br>";
 				if($hp>$fail_dmg)
 				{
@@ -111,6 +111,12 @@ namespace areafeatures_transfortrap
 				{
 					$hp = 0;
 					$state = !empty($qiji_flag) ? 203 : 201;
+					//成就判断
+					if($qiji_flag) 
+					{
+						\skillbase\skill_acquire(1800);
+						\skillbase\skill_setvalue(1800, 'cnt', 203);
+					}						
 					\player\update_sdata(); $sdata['sourceless'] = 1; $sdata['attackwith'] = '';
 					\player\kill($sdata,$sdata);
 					\player\player_save($sdata);
@@ -174,7 +180,7 @@ namespace areafeatures_transfortrap
 		if($news == 'death201') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造易爆物品时失误被炸死，实在是喜大普奔！";
 		if($news == 'death203') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造★一发逆转神话★时失误被炸死……看来人的好运也是有极限的……";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow\">$a</span>在改造★一发逆转神话★时失误被炸死……这算是不幸……还是幸运呢？";
 		if($news == 'ct_succ') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"lime\">{$a}成功将<span class='yellow'>{$c}【{$b}】</span>改造成了<span class='yellow'>{$d}</span>……细作吃矛！</span><br>\n";
 		if($news == 'ct_fail') 

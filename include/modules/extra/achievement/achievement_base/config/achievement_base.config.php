@@ -85,5 +85,9 @@ namespace achievement_base{
 	
 	//成就页面每行几个成就窗格
 	$ach_show_num_per_row = 3;
+	
+	//campfire MOD修改标识
+	$achtype[98] = '拓展成就';
+	$achlist[98] = Array(1800);
 }
 ?>
