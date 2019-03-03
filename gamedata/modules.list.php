@@ -439,6 +439,7 @@ skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
 skill265,extra/club/skills/skill265/,1
 skill507,extra/card/skills/skill507/,1
+skill1900,campfire/campfire_extra/campfire_skills/skill1900/,1
 skill43,extra/club/skills/skill43/,1
 itemnumlist,extra/item_extra/itemnumlist/,1
 skill56,extra/club/skills/skill56/,1

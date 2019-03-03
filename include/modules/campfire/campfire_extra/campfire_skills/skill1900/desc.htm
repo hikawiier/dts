@@ -1,0 +1,19 @@
+<!--{eval eval(import_module('skill1900'));}-->
+<!--{eval $___TEMP_SKILL_ID=1900;}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+$clubskillname[$___TEMP_SKILL_ID]
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+你的防御、抹消属性的<span class='red'>失效</span>率与<span class='red'>被贯穿</span>率变为原本的2倍<br>
+同时<span class='yellow'>贯穿</span>敌方防御、抹消属性的概率也<span class='yellow'>提升</span>至原本的2倍
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

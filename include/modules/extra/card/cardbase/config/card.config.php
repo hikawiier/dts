@@ -3156,7 +3156,7 @@ $campfire_cards = Array
 		'energy' => 60,
 		'valid' => array(
 			'skills' => array(
-				'1900' => '1', 
+				'1900' => '0', 
 			),
 		),
 	),
