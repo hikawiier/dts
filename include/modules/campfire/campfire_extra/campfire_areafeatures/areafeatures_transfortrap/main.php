@@ -40,7 +40,7 @@ namespace areafeatures_transfortrap
 	function change_trap($i,$cway)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','itemmain','logger'));
+		eval(import_module('sys','player','itemmain','logger','areafeatures_transfortrap'));
 		if($pls!=31)
 		{
 			$log.="<span class='red'>该地区不存在陷阱改造工作台，请重新输入指令。</span><br>";
