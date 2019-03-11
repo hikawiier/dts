@@ -219,7 +219,28 @@
 它们之中有的背负着一段过去的历史，有的则藏有秘密，如果想了解更多，还是到游戏中直接体验一下吧！<br>
 <input class="cmdbutton" onclick="bubblebox_show('campfire_npc');" value="点击这里查看" type="button">
 
-<!--{eval \bubblebox\bubblebox_set_style('id:i98_npc;height:560;width:772;cancellable:1;margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:10px;');}-->
+<!--{eval \bubblebox\bubblebox_set_style('id:i98_npc_normal;height:560;width:772;cancellable:1;margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:10px;');}-->
+{template MOD_BUBBLEBOX_START}
+<p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
+幕间狂想模式 NPC简介：<br><br>
+</p>
+<p><span class="lime">常规NPC简介</span>：</p>
+<p>你再熟悉不过的普通NPC，可能发生了一点点的变化……？</p>
+<br>
+<!--{loop Array(1,9,2,5,45,90) $key}-->
+<!--{eval \npcinfo\npcinfo_get_npc_description_all($key, $npcinfo_instance98);}-->
+<!--{/loop}-->
+<br>
+<p><span class="lime">武神 NPC简介</span>：</p>
+<p>你再熟悉不过的武神NPC，可能发生了一点点的变化……？</p>
+<br>
+<!--{loop Array(21) $key}-->
+<!--{eval \npcinfo\npcinfo_get_npc_description_all($key, $npcinfo_instance98);}-->
+<!--{/loop}-->
+<br>
+{template MOD_BUBBLEBOX_END}
+
+<!--{eval \bubblebox\bubblebox_set_style('id:i98_npc_extra;height:560;width:772;cancellable:1;margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:10px;');}-->
 {template MOD_BUBBLEBOX_START}
 <p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
 幕间狂想模式 NPC简介：<br><br>
@@ -246,4 +267,5 @@
 <p><span class="lime b">幕间狂想模式 相关NPC简介</span>：</p>
 在<span class="yellow b">幕间狂想模式</span>中添加的额外NPC。<br>
 虽然看起来和一般游戏模式中的NPC相似，但却进行了许多奇怪调整的NPC。想要了解更多的话，不妨直接进入游戏体验一下？<br>
-<input class="cmdbutton" onclick="bubblebox_show('i98_npc');" value="点击这里查看" type="button">
+<input class="cmdbutton" onclick="bubblebox_show('i98_npc_normal');" value="点此查看通常NPC介绍" type="button">
+<input class="cmdbutton" onclick="bubblebox_show('i98_npc_extra');" value="点此查看BOSS类NPC介绍" type="button">

@@ -68,6 +68,10 @@ namespace instance98
 				'itmk1' => 'Y',
 				'itme1' => 1,
 				'itms1' => 1,
+				'itm2' => '黑色碎片',
+				'itmk2' => 'Y',
+				'itme2' => 1,
+				'itms2' => 1,
 				'description' => '红杀将军 看起来像是红暮的女性，坐镇于无月之影的BOSS（？）。 <span class="linen b">"……红暮真可爱呀，我是说真正的红暮。"</span>',
 				),
 			),
@@ -163,7 +167,7 @@ namespace instance98
 			'itme4' => 200,
 			'itms4' => 300,
 			'itmsk4' => 'kj',
-			'description' => '全息幻象 立华 奏-改，手持优秀的殴系武器，当然你也可以当成是掉落。顺便也会掉增加歌魂的道具，以及原DN刀。',
+			'description' => '全息幻象 立华 奏-改，手持优秀的殴系武器，当然你也可以当成是掉落。顺便也会掉增加歌魂的道具。',
 			),
 		2 => array
 			(
@@ -2116,7 +2120,7 @@ namespace instance98
 				'weps' => 150,
 				'wepsk' => 'N',
 				'itm2' => '余裕！',
-				'itmk2' => 'HH',
+				'itmk2' => 'MH',
 				'itme2' => 5,
 				'itms2' => 1,
 				'description' => '“触手爷爷你不得好死啊……！”<br>他终于露出本性了。<br>进化后的杂兵，但还是杂兵，大概作用是能给你提供更多的钱。',
