@@ -33,11 +33,11 @@ namespace skill1906
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $tritm, $damage);
 		eval(import_module('player','logger','skill1906'));
-		if ($pa['hp']<=round($pa['mhp']*0.1) && \skillbase\skill_query(1906,$pd))
+		if ($pd['hp']<=round($pd['mhp']*0.1) && \skillbase\skill_query(1906,$pa))
 		{
-			$log.="<span class=\"cyan b\">对方的陷阱将你炸得眼冒金星！</span><br>";
+			$log.="<span class=\"cyan b\">但是你被炸得眼冒金星，一下子晕了过去！</span><br>";
 			$stun_time = rand($min_stun_time1906,$max_stun_time1906);
-			\skill602\set_stun_period($stun_time,$pa);
+			\skill602\set_stun_period($stun_time,$pd);
 		}
 	}
 	

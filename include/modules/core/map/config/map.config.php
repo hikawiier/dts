@@ -13,7 +13,7 @@ namespace map
 	//玩家激活结束时的增加禁区的回数，相当于已经进行的小时数/间隔时间，〉0
 	$arealimit = 2;
 	//是否激活自动躲避禁区
-	$areaesc = 0;
+	$areaesc = 1;
 	
 	$plsinfo = Array(
 		0=>'无月之影',

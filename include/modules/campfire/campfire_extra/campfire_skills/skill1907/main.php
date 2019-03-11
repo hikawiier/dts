@@ -7,7 +7,7 @@ namespace skill1907
 	$trap_area1907 = Array(92,93,94);
 	$trap_areanum1907 = sizeof($trap_area1907);
 	//每次行动会触发伏计的概率
-	$trap_set_obbs1907 = 15;
+	$trap_set_obbs1907 = 3;
 	function init() 
 	{
 		define('MOD_SKILL1907_INFO','card;unique;');

@@ -26,14 +26,18 @@ namespace skill1904
 		return 1;
 	}
 	
-	function get_trap_final_damage_change(&$pa, &$pd, $tritm, $damage)
+	function get_trap_final_damage_modifier_down(&$pa, &$pd, $tritm, $damage)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$chprocess($pa, $pd, $tritm, $damage);
-		if (\skillbase\skill_query(1904, $pd)) {
-			if($damage>=$pa['hp']) $damage = $pa['hp']>1 ? $pa['hp']-1 : 1;
+		if (!\skillbase\skill_query(1904,$pa)) return $chprocess($pa,$pd,$tritm,$damage);
+		eval(import_module('logger'));
+		$z=$chprocess($pa,$pd,$tritm,$damage);
+		if ($z>=$pd['hp'])
+		{
+			$z=$pd['hp']-1;
+			$log .= "你感觉自己被炸了个七荤八素，六神无主。<br>然而出于设置陷阱者的<span class=\"yellow b\">仁慈</span>，你竟然没被炸死，真是可喜可贺！<br>";
 		}
-		return $damage;
+		return $z;
 	}
 	
 	function check_damage_limit1904(&$pa,&$pd,$active)
