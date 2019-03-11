@@ -29,7 +29,7 @@ namespace explore
 		eval(import_module('sys','player','map','logger'));
 		
 		$plsnum = sizeof($plsinfo);
-		if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&!array_search($moveto,$hidden_arealist)){
+		if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&(!in_array($moveto,$hidden_arealist))){
 			$log .= '请选择正确的移动地点。<br>';
 			return;
 		} elseif($pls == $moveto){

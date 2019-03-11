@@ -114,7 +114,7 @@ namespace campfire_powerarmor
 		}
 	}	
 	
-	function apply_total_damage_modifier_insurance(&$pa,&$pd,$active)
+	function apply_total_damage_modifier_limit(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);

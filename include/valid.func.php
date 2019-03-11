@@ -135,6 +135,16 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 		$arf = '挑战者靴子';$arfk = 'DF'; $arfe = 37; $arfs = 5; $arfsk = '';
 		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 3;$itmsk[5] = '';
 	}
+
+	//幕间狂想模式开局发全身装备
+	elseif(19==$gametype){
+		$arb = '黑熊战甲-B';$arbk = 'DBP'; $arbe = 66; $arbs = 10; $arbsk = '^kgpa^z';
+		$arh = '黑熊战甲-H';$arhk = 'DHP'; $arhe = 66; $arhs = 10; $arhsk = '^kgpa^z';
+		$ara = '黑熊战甲-A';$arak = 'DAP'; $arae = 66; $aras = 10; $arask = '^kgpa^z';
+		$arf = '黑熊战甲-F';$arfk = 'DFP'; $arfe = 66; $arfs = 10; $arfsk = '^kgpa^z';
+		$itm[4] = '生命探测器'; $itmk[4] = 'ER'; $itme[4] = 3; $itms[4] = 1;$itmsk[4] = '';
+		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 3;$itmsk[5] = '';
+	}
 	
 	//除错模式专用卡（软件测试工程师）
 	if (1==$gametype){

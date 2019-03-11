@@ -202,7 +202,7 @@ namespace npc
 	);
 
 	//campfireMOD中不需要躲避禁区的NPC
-	$campfire_killzone_resistant_typelist=Array(1003,1004);
+	$campfire_killzone_resistant_typelist=Array(1003,1004,1006);
 	$killzone_resistant_typelist = $killzone_resistant_typelist+$campfire_killzone_resistant_typelist;
 	//campfireMOD新增NPC类别
 	$campfire_npc_typeinfo = Array
@@ -212,6 +212,8 @@ namespace npc
 		1003 => '错误：未授权人员',
 		1004 => '高自律型战斗模块',
 		1005 => '残留信息',		
+		1006 => '机械降神',
+		1007 => '第八识',
 	);
 	$npc_typeinfo = $npc_typeinfo+$campfire_npc_typeinfo;
 	//campfireMOD新增NPC类别的击杀信息
@@ -236,8 +238,20 @@ namespace npc
 		),
 		1004 => 'WARNING：BAT...',
 		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
+		1006 => Array(
+			'黑熊王' => '雪崩！',
+		),
+		1007 => '你做完后，你的心理得到什么样的满足感，你自己清楚！',
 	);
 	$npc_lwinfo = $npc_lwinfo+$campfire_npc_lwinfo;
+	//新增复活信息
+	$campfire_npc_revive_info= Array
+	(
+		1006 => Array(
+			'黑熊王' => '活了！',
+		),
+	);
+	$npc_revive_info = $npc_revive_info + $campfire_npc_revive_info;
 }
 
 ?>

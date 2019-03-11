@@ -8,6 +8,8 @@ namespace campfire_areafeatures
 		19 => 'areafeatures_depot',
 		28 => 'areafeatures_transforgun',
 		31 => 'areafeatures_transfortrap',
+		95 => 'areafeatures_teleport95',
+		98 => 'areafeatures_teleport98',
 	);
 }
 

@@ -264,6 +264,12 @@ skill518,extra/card/skills/skill518/,1
 skill84,extra/club/skills/skill84/,1
 skill1005,extra/instance/gtype5/skill1005/,1
 campfire_itemmain,campfire/campfire_base/campfireitem/campfire_itemmain/,1
+skill1901,campfire/campfire_extra/campfire_skills/skill1901/,1
+skill1902,campfire/campfire_extra/campfire_skills/skill1902/,1
+skill1903,campfire/campfire_extra/campfire_skills/skill1903/,1
+skill1905,campfire/campfire_extra/campfire_skills/skill1905/,1
+skill1907,campfire/campfire_extra/campfire_skills/skill1907/,1
+skill1904,campfire/campfire_extra/campfire_skills/skill1904/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
 skill273,extra/club/skills/skill273/,1
@@ -449,6 +455,7 @@ skill329,extra/activities/nationalday2017/skill329/,1
 skill512,extra/card/skills/skill512/,1
 addnpc_event,extra/misc/addnpc_event/,1
 areafeatures_etconsole,campfire/campfire_extra/campfire_areafeatures/areafeatures_etconsole/,1
+skill1906,campfire/campfire_extra/campfire_skills/skill1906/,1
 skill228,extra/club/skills/skill228/,1
 skill236,extra/club/skills/skill236/,1
 skill237,extra/club/skills/skill237/,1
@@ -473,8 +480,8 @@ randmix,extra/misc/randmix/,1
 skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
+instance98,campfire/campfire_extra/campfire_instance/instance98_interlude/,1
 campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
-campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
 skill36,extra/club/skills/skill36/,1
 skill38,extra/club/skills/skill38/,1
 skill34,extra/club/skills/skill34/,1
@@ -526,6 +533,7 @@ searchmemory,extra/searchmemory/,1
 skill503,extra/card/skills/skill503/,1
 skill351,extra/achievement/skills/skill351/,1
 skill352,extra/achievement/skills/skill352/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
 skill363,extra/achievement/skills/skill363/,1
 instance5,extra/instance/instance5/,1
 skill361,extra/activities/lunany2018/skill361/,1

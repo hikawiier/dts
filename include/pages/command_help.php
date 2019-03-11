@@ -269,10 +269,12 @@ OVERLAY_HELP_WRITE_CONTENT;
 $npcfile = GAME_ROOT.'./include/modules/base/npc/config/npc.data.config.php';
 $npcfile_i8 = GAME_ROOT.'./include/modules/extra/instance/instance8_proud/config/npc.data.config.php';
 $npcfile_i9 = GAME_ROOT.'./include/modules/extra/instance/instance9_rush/config/npc.data.config.php';
+$npcfile_i98 = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
 $npcfile_av = GAME_ROOT.'./include/modules/base/addnpc/config/addnpc.config.php';
 $npcfile_ev = GAME_ROOT.'./include/modules/extra/club/skills/skill21/config/evonpc.config.php';
 include $npcfile_i8;
 include $npcfile_i9;
+include $npcfile_i98;
 include $npcfile_av;
 include $npcfile_ev;
 $enpcinfo_show = array();
@@ -290,7 +292,7 @@ $need_refresh = 0;
 if(!file_exists($writefile)){
 	$need_refresh = 1;
 }else{
-	foreach(array($npcfile, $npcfile_i8, $npcfile_i9, $npcfile_av, $npcfile_ev, $srcfile ) as $fv){
+	foreach(array($npcfile, $npcfile_i8, $npcfile_i9, $npcfile_i98, $npcfile_av, $npcfile_ev, $srcfile ) as $fv){
 		if(filemtime($fv) > filemtime($writefile)) $need_refresh = 1;
 	}
 }

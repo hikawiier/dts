@@ -4,16 +4,11 @@ namespace campfire_hiddenarea
 {
 	function init() 
 	{
-		eval(import_module('itemmain'));
+		eval(import_module('itemmain','map'));
 		//新的道具类别
 		$iteminfo['kgrt'] = '传送道具';
 		//不会有物品掉落的地区列表
-		$map_noitemdrop_arealist[] = 98;
-		$map_noitemdrop_arealist[] = 97;
-		$map_noitemdrop_arealist[] = 96;	
-		$map_noitemdrop_arealist[] = 95;
-		$map_noitemdrop_arealist[] = 94;
-
+		$map_noitemdrop_arealist = $map_noitemdrop_arealist+$hidden_arealist;
 	}
 /*	
 	function rs_game($xmode = 0) {

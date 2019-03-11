@@ -167,6 +167,7 @@ namespace sys
 	
 	//campfire MOD修改标记
 	$gstate[31] = '禁止激活';
+	$gtinfo[98] = '<font class="brickred">幕间狂想</font>';
 	//死亡类型
 	$stateinfo[201] = '改造失败';
 	$stateinfo[202] = '连接中断';

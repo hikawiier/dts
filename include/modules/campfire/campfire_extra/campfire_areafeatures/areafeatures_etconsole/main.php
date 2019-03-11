@@ -299,7 +299,7 @@ namespace areafeatures_etconsole
 	function checkcombo($time){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
-		if($gamevars['bancombo']){
+		if($gamevars['bancombo'] && $alivenum>0){
 			return;
 		}
 		$chprocess($time);
@@ -339,7 +339,6 @@ namespace areafeatures_etconsole
 		{
 			$log.="当你提交了操作后，便携子端的界面开始闪烁，像是在发送信号，<br><span class='yellow'>当界面上的图像稳定下来时，你发现禁区已经解除了。</span><br>";
 			$hack = 1;
-			\map\movehtm();		
 			save_gameinfo();
 			addnews($now,'gsc_hack',$name);
 		}
@@ -347,11 +346,9 @@ namespace areafeatures_etconsole
 		{
 			$log.="当你提交了操作后，便携子端的界面开始显示倒计时，<br><span class='yellow'>禁区还有30秒就要到来了，赶紧找个安全的地方躲一躲吧。<br>";
 			$areatime = $now + 30;
-			$sec = $areatime - $now;
-			\map\movehtm();
 			save_gameinfo();
-			$areatime += $areahour * 60;
 			addnews($now,'gsc_addarea',$name,$sec);
+			\sys\systemputchat($now,'gsc_addarea','禁区的到来被提前至30秒后！');
 		}
 		elseif($c_order=='radar')
 		{
@@ -569,7 +566,7 @@ namespace areafeatures_etconsole
 		eval(import_module('sys','player','logger','itemmain','areafeatures_etconsole'));		
 		$crm_lose_flag = false;
 		$have_corebar_flag = false;
-		$crmdata = cache_fetch_npcdata('红暮',1);
+		$crmdata = cache_fetch_npcdata('',1);
 		if($crmdata['hp']<=0)
 		{
 			$crm_lose_flag = true;
@@ -595,11 +592,12 @@ namespace areafeatures_etconsole
 		}		
 		return 1;
 	}
-	function cache_fetch_npcdata($nnm,$ntype)
+	function cache_fetch_npcdata($nnm,$ntype=0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
-		$result = $db->query("SELECT * FROM {$tablepre}players WHERE name = '$nnm' AND type = '$ntype'");
+		if($nnm) $result = $db->query("SELECT * FROM {$tablepre}players WHERE name = '$nnm' AND type = '$ntype'");
+		else $result = $db->query("SELECT * FROM {$tablepre}players WHERE type = '$ntype'");
 		if(!$db->num_rows($result)) return NULL;
 		$npcdata = $db->fetch_array($result);
 		return $npcdata;

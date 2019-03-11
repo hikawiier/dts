@@ -28,6 +28,7 @@ function init_item_place()
 		'evonpc' => GAME_ROOT.'./include/modules/extra/club/skills/skill21/config/evonpc.config.php',
 		'wepchange' => GAME_ROOT.'./include/modules/extra/attr/wepchange/config/wepchange.config.php',
 	);
+	$iplacefilelist['npc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
 	$iplacefiledata = array();
 	foreach($iplacefilelist as $ipfkey => $ipfval){
 		if($ipfkey == 'mixitem') {
@@ -38,6 +39,7 @@ function init_item_place()
 			if($ipfkey == 'npc') $varname = 'npcinfo';
 			elseif($ipfkey == 'npc_i8') $varname = 'npcinfo_instance8';
 			elseif($ipfkey == 'npc_i9') $varname = 'npcinfo_instance9';
+			elseif($ipfkey == 'npc_i98') $varname = 'npcinfo_instance98';
 			elseif($ipfkey == 'addnpc') $varname = 'anpcinfo';
 			elseif($ipfkey == 'evonpc') $varname = 'enpcinfo';
 			if(!empty($varname)) $iplacefiledata[$ipfkey] = $$varname;
@@ -194,6 +196,7 @@ function init_item_place()
 								if(strpos($ipdkey, '_')!==false){
 									if($ipdkey == 'npc_i8') $idata = '<span class=cyan>荣耀模式</span>：'.$idata;
 									elseif($ipdkey == 'npc_i9') $idata = '<span class=rdd>极速模式</span>：'.$idata;
+									elseif($ipdkey == 'npc_i98') $idata = '<span class=brickred>幕间狂想模式</span>：'.$idata;
 								}
 							}
 							if(empty($iplacedata[$iname])) $iplacedata[$iname] = array();

@@ -218,3 +218,32 @@
 在<span class="yellow b">篝火模组</span>中添加的额外NPC。<br>
 它们之中有的背负着一段过去的历史，有的则藏有秘密，如果想了解更多，还是到游戏中直接体验一下吧！<br>
 <input class="cmdbutton" onclick="bubblebox_show('campfire_npc');" value="点击这里查看" type="button">
+
+<!--{eval \bubblebox\bubblebox_set_style('id:i98_npc;height:560;width:772;cancellable:1;margin-top:20px;margin-bottom:20px;margin-left:20px;margin-right:10px;');}-->
+{template MOD_BUBBLEBOX_START}
+<p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
+幕间狂想模式 NPC简介：<br><br>
+</p>
+<p><span class="lime">机械降神 NPC简介</span>：</p>
+<p>穿着黑熊人偶装，伫立在云之阶梯的顶端，静候玩家到来的迷之生物。<br>
+是将玩家卷入这场奇怪的游戏中的幕后黑手，击败他就能解除这场游戏的精神锁定吗？<br>
+但在他身上似乎还藏着其他的秘密……<br></p>
+<br>
+<!--{loop Array(1006) $key}-->
+<!--{eval \npcinfo\npcinfo_get_npc_description_all($key, $npcinfo_instance98);}-->
+<!--{/loop}-->
+<br>
+<p><span class="lime">第八识 NPC简介</span>：</p>
+<p>沉睡在“幻境”数据结构底层的代码聚合体。<br>
+虽然有着高度相似的外表，但行动模式却截然不同，击败他们，就能了解这一切发生的原因了吗……？<br></p>
+<br>
+<!--{loop Array(1007) $key}-->
+<!--{eval \npcinfo\npcinfo_get_npc_description_all($key, $npcinfo_instance98);}-->
+<!--{/loop}-->
+<br>
+{template MOD_BUBBLEBOX_END}
+
+<p><span class="lime b">幕间狂想模式 相关NPC简介</span>：</p>
+在<span class="yellow b">幕间狂想模式</span>中添加的额外NPC。<br>
+虽然看起来和一般游戏模式中的NPC相似，但却进行了许多奇怪调整的NPC。想要了解更多的话，不妨直接进入游戏体验一下？<br>
+<input class="cmdbutton" onclick="bubblebox_show('i98_npc');" value="点击这里查看" type="button">

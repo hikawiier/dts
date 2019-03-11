@@ -7,6 +7,9 @@ namespace opening
 	
 	//游戏中剧情所适用的游戏模式
 	$opening_by_shootings_gametype = array(0, 4, 1, 18, 19, 5);
+
+	//campfire MOD修改标识
+	$opening_by_shootings_gametype[] = 98;
 }
 
 ?>

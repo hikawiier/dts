@@ -8,7 +8,7 @@ namespace campfire_areafeatures
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','itemmain','campfire_areafeatures','areafeatures_etconsole','areafeatures_transforgun','areafeatures_depot','areafeatures_transfortrap','input'));
+		eval(import_module('sys','player','logger','itemmain','map','instance98','campfire_areafeatures','areafeatures_etconsole','areafeatures_transforgun','areafeatures_depot','areafeatures_transfortrap','input'));
 		if ($mode == 'command' && $command == 'campfire_areafeatures')	
 		{
 			//判断该地区是否有该功能
@@ -71,6 +71,35 @@ namespace campfire_areafeatures
 				ob_clean();
 				return;
 			}
+			elseif(strpos($lp_cmd,'teleport')!==false)
+			{
+				if(strpos($lp_cmd,'98')!==false)
+				{
+					$randpls = rand($areanum+1,sizeof($arealist));
+					while($randpls==34) $randpls = rand($areanum+1,sizeof($arealist));
+					$pls = $arealist[$randpls];
+					$log.="你回到了甬道的尽头，推开了那扇厚重的木门。<br>在那一刹那，一股白色的光芒将你包裹了进去。<br>那强光刺得你闭上了眼。<br>当你反应过来的时候，你发现自己已身处<span class=\"yellow b\">{$plsinfo[$pls]}</span>。<br>";
+					return;
+				}
+				elseif(strpos($lp_cmd,'95')!==false)
+				{
+					if(\instance98\living_npc(1006))
+					{
+						$log.="在击败这里的敌人前，你无法翻越过云之阶。<br>";
+						return;
+					}	
+					ob_clean();
+					include template(MOD_INSTANCE98_TELEPORT_CONFIRM);
+					$cmd = ob_get_contents();
+					ob_clean();
+					return;
+				}
+				else
+				{
+					$log.="该地图没有{$lp_name}功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
+					return;
+				}	
+			}	
 			else
 			{
 				$log.="该地图没有{$lp_name}功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";

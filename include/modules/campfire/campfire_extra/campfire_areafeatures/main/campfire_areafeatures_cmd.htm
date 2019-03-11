@@ -1,4 +1,4 @@
-<!--{eval eval(import_module('campfire_areafeatures'));}-->
+<!--{eval eval(import_module('campfire_areafeatures','instance98'));}-->
 <!--{if in_array($pls,array_keys($campfire_areafeatures_map))}-->
 	该地区可使用的特殊功能：<br>
 	<!--{if $pls == 0}-->	
@@ -9,5 +9,11 @@
 		<input type="button" class="bigbutton" id="lp_areafeatures_transforgun" name="lp_areafeatures_transforgun" value="枪械改造工作台" onclick="$('command').value='campfire_areafeatures';$('subcmd').name='lp_cmd';$('subcmd').value='lp_areafeatures_transforgun';postCmd('gamecmd','command.php');this.disabled=true;">
 	<!--{elseif $pls == 31}-->	
 		<input type="button" class="bigbutton" id="lp_areafeatures_transfortrap" name="lp_areafeatures_transfortrap" value="陷阱改装工作台" onclick="$('command').value='campfire_areafeatures';$('subcmd').name='lp_cmd';$('subcmd').value='lp_areafeatures_transfortrap';postCmd('gamecmd','command.php');this.disabled=true;">
+	<!--{elseif $pls == 98 && $gametype==98}-->	
+		<input type="button" class="bigbutton" id="lp_areafeatures_teleport98" name="lp_areafeatures_teleport98" value="离开英灵殿" onclick="$('command').value='campfire_areafeatures';$('subcmd').name='lp_cmd';$('subcmd').value='lp_areafeatures_teleport98';postCmd('gamecmd','command.php');this.disabled=true;">
+	<!--{elseif $pls == 95 && $gametype==98}-->	
+		<input type="button" class="bigbutton" id="lp_areafeatures_teleport95" name="lp_areafeatures_teleport95" value="穿过云层" onclick="$('command').value='campfire_areafeatures';$('subcmd').name='lp_cmd';$('subcmd').value='lp_areafeatures_teleport95';postCmd('gamecmd','command.php');this.disabled=true;" <!--{if \instance98\living_npc(1006)}-->disabled<!--{/if}-->>	
+	<!--{else}-->	
+		■■■■■■■
 	<!--{/if}--> 
 <!--{/if}--> 

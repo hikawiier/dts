@@ -15,12 +15,12 @@ namespace campfire_powerarmor
 	);
 	//抵消伤害的系数（实际抵消值=装甲效果*系数/100）
 	$once_pas_reduce_dmg  = Array(
-		'T' => 100,
-		'S' => 80,
-		'A' => 60,
-		'B' => 40,
-		'C' => 30,
-		'O' => 10,
+		'T' => 10,
+		'S' => 8,
+		'A' => 6,
+		'B' => 4,
+		'C' => 3,
+		'O' => 1,
 	);
 	//身体装甲可以降低多少倍的耐久消耗
 	$bpa_reduce_pas_cost_per = Array(
