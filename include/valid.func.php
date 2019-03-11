@@ -138,12 +138,13 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 
 	//幕间狂想模式开局发全身装备
 	elseif(98==$gametype){
-		$arb = '黑熊战甲-B';$arbk = 'DBP'; $arbe = 66; $arbs = 60; $arbsk = 'z';
-		$arh = '黑熊战甲-H';$arhk = 'DHP'; $arhe = 66; $arhs = 60; $arhsk = 'z';
-		$ara = '黑熊战甲-A';$arak = 'DAP'; $arae = 66; $aras = 60; $arask = 'z';
-		$arf = '黑熊战甲-F';$arfk = 'DFP'; $arfe = 66; $arfs = 60; $arfsk = 'z';
+		$arb = '黑熊战甲-B';$arbk = 'DBPC'; $arbe = 66; $arbs = 66; $arbsk = 'zA';
+		$arh = '黑熊战甲-H';$arhk = 'DHPC'; $arhe = 66; $arhs = 66; $arhsk = 'za';
+		$ara = '黑熊战甲-A';$arak = 'DAPC'; $arae = 66; $aras = 66; $arask = 'zH';
+		$arf = '黑熊战甲-F';$arfk = 'DFPC'; $arfe = 66; $arfs = 66; $arfsk = 'zM';
+		$itms[1] = 60; $itms[2] = 60;
 		$itm[4] = '生命探测器'; $itmk[4] = 'ER'; $itme[4] = 3; $itms[4] = 1;$itmsk[4] = '';
-		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 3;$itmsk[5] = '';
+		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 15;$itmsk[5] = '';
 	}
 	
 	//除错模式专用卡（软件测试工程师）
