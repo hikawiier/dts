@@ -4,6 +4,7 @@ namespace skill1902
 {
 	//使对手先手率降低100
 	$skill_1902_obbs = 100;
+	$min_skill_1902_obbs =15;
 	
 	function init() 
 	{
@@ -59,7 +60,7 @@ namespace skill1902
 		if(\skillbase\skill_query(1902,$pa))
 		{
 			$skill1902_var = (int)\skillbase\skill_getvalue(1902,'var',$pa);
-			$skill1902_var = min(150,max(1,$skill1902_var/2));
+			$skill1902_var = min(150,max($min_skill_1902_obbs,$skill1902_var/2));
 			\skillbase\skill_setvalue(1902,'var',$skill1902_var,$pa);
 		}
 	}

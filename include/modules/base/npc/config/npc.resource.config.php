@@ -250,6 +250,7 @@ namespace npc
 		1006 => Array(
 			'黑熊王' => '活了！',
 		),
+		1007 => '哈哈！玩家！你牛！但我更牛! ',
 	);
 	$npc_revive_info = $npc_revive_info + $campfire_npc_revive_info;
 }
