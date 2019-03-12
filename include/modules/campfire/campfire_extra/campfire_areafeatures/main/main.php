@@ -28,7 +28,6 @@ namespace campfire_areafeatures
 					include template(MOD_AREAFEATURES_ETCONSOLE_LP_AREAFEATURES_ETCONSOLE);
 					$cmd = ob_get_contents();
 					ob_clean();
-					return;
 				}
 			}
 			elseif($lp_cmd=='lp_areafeatures_depot')
@@ -38,7 +37,6 @@ namespace campfire_areafeatures
 				include template(MOD_AREAFEATURES_DEPOT_LP_AREAFEATURES_DEPOT);
 				$cmd = ob_get_contents();
 				ob_clean();
-				return;
 			}
 			elseif($lp_cmd=='lp_areafeatures_transforgun')
 			{
@@ -59,7 +57,6 @@ namespace campfire_areafeatures
 				include template(MOD_AREAFEATURES_TRANSFORGUN_LP_AREAFEATURES_TRANSFORGUN);
 				$cmd = ob_get_contents();
 				ob_clean();
-				return;
 			}
 			elseif($lp_cmd=='lp_areafeatures_transfortrap')
 			{
@@ -69,7 +66,6 @@ namespace campfire_areafeatures
 				include template(MOD_AREAFEATURES_TRANSFORTRAP_LP_AREAFEATURES_TRANSFORTRAP);
 				$cmd = ob_get_contents();
 				ob_clean();
-				return;
 			}
 			elseif(strpos($lp_cmd,'teleport')!==false)
 			{
@@ -79,7 +75,6 @@ namespace campfire_areafeatures
 					while($randpls==34) $randpls = rand($areanum+1,sizeof($arealist));
 					$pls = $arealist[$randpls];
 					$log.="你回到了甬道的尽头，推开了那扇厚重的木门。<br>在那一刹那，一股白色的光芒将你包裹了进去。<br>那强光刺得你闭上了眼。<br>当你反应过来的时候，你发现自己已身处<span class=\"yellow b\">{$plsinfo[$pls]}</span>。<br>";
-					return;
 				}
 				elseif(strpos($lp_cmd,'95')!==false)
 				{
@@ -92,19 +87,13 @@ namespace campfire_areafeatures
 					include template(MOD_INSTANCE98_TELEPORT_CONFIRM);
 					$cmd = ob_get_contents();
 					ob_clean();
-					return;
 				}
-				else
-				{
-					$log.="该地图没有{$lp_name}功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
-					return;
-				}	
 			}	
 			else
 			{
 				$log.="该地图没有{$lp_name}功能，如果遇到了BUG，请您将这句话转述给管理员。<br>";
+				return;
 			}
-			return;
 		}
 		$chprocess();
 	}

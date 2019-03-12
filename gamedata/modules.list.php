@@ -7,6 +7,7 @@ campfire_core,campfire/campfire_core/main/,1
 gameflow_base,core/gameflow/gameflow_base/,1
 player,core/player/,1
 gameflow_antiafk,core/gameflow/gameflow_antiafk/,1
+campfire_bgm,campfire/campfire_extra/campfire_bgm/,1
 logger,base/logger/,1
 skillbase,base/skillbase/,1
 replay,extra/misc/replay/,1

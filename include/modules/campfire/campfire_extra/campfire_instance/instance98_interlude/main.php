@@ -40,11 +40,21 @@ namespace instance98
 		{
 			if(strpos('游戏解除钥匙',$theitem['itm'])!==false)
 			{
-				$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>狂风卷起，你神情庄重，静候接下来的变化。<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br>
-				<span class='linen b'>“可恨啊！你作为一个触手，就这样就满足了吗！”</span><br>你听到有声音打破了沉默的氛围，而且那声音听起来耳熟极了。<br><span class='linen b'>“有点挑战精神好不好？？我在<span class='yellow b'>英灵殿</span>等你。”</span><br>你刚想多问两句，但手中的游戏解除钥匙忽然爆炸了！<br>你的蛋疼度增加了<span class='yellow'>233</span>点。<br>看来只能去英灵殿看看了……？<br>";
-				\itemmain\itms_reduce($theitem);
-				$gamevars['valhalla'] = 1;
-				\sys\save_gameinfo();
+				$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
+				狂风卷起，你神情庄重，静候接下来的变化。<br>……<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br><br>
+				<span class='linen b'>“可恨啊！你作为一个触手，就这样就满足了吗！”</span><br>你听到有声音打破了沉默的氛围，而且那声音听起来耳熟极了。<br>
+				<span class='linen b'>“有点挑战精神好不好？？我在<span class='yellow b'>英灵殿</span>等你。”</span><br>
+				你还想再问两句，但手中的游戏解除钥匙忽然爆炸了！<br>
+				<span class='yellow'>你的怒气增加了100点！</span><br><br>
+				看来只能去英灵殿看看了……？<br>";
+				if(!$gamevars['valhalla'])
+				{
+					$gamevars['valhalla'] = 1;
+					\sys\save_gameinfo();
+					addnews($now, 'valopen98',$name);
+				}
+				$rage=100;
+				\itemmain\itms_reduce($theitem);				
 				return;
 			}
 			elseif(strpos('黑熊键刃',$theitem['itm'])!==false)
@@ -162,9 +172,7 @@ namespace instance98
 			else
 			{
 				$log.="teleport_confirm相关：所输入的指令无效。{$command}<br>";
-				return;
 			}				
-			return;
 		}
 		$chprocess();
 	}
@@ -227,6 +235,16 @@ namespace instance98
 		}else return $chprocess();
 	}
 	
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','map'));
+		
+		if($news == 'valopen98') 
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"brickred b\">{$a}使用了游戏解除钥匙，通往英灵殿的道路被开启了！</span></li>";
+		
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
+	}
 }
 
 ?>
