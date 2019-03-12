@@ -185,7 +185,7 @@ namespace itemshop
 			$log .= '你的钱不够，不能购买此物品！<br><br>';
 			$mode = 'command';
 			return;
-		} elseif( ($shopiteminfo['itms']==='∞' || !preg_match('/^(WC|WD|WF|Y|B|C|TN|GA|GB|H|P|V|M|X|p|ygo|kgab|kggb|kgpb|EI)/',$shopiteminfo['itmk']) )&&$bnum>1) {
+		} elseif( ($shopiteminfo['itms']==='∞' || !preg_match('/^(WC|WD|WF|Y|B|C|U|TN|GA|GB|H|P|V|M|X|p|ygo|kgab|kggb|kgpb|EI)/',$shopiteminfo['itmk']) )&&$bnum>1) {
 			$log .= '此物品一次只能购买一个。<br><br>';
 			$mode = 'command';
 			return;
