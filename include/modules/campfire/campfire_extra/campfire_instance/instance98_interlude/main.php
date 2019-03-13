@@ -20,15 +20,15 @@ namespace instance98
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-60;	
+		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-120;	
 		$chprocess();
 	}
 	
-	function calculate_trap_reuse_rate()
+	function calculate_trapdef_proc_rate()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		if ($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-40;			
+		if ($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-30;			
 		$chprocess();
 	}
 	
