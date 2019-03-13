@@ -99,6 +99,8 @@ namespace campfire_powerarmor
 					$pa_reduce_dmg = $pd[$kind.'s'] > $once_pas_cost ? round($once_pa_reduce_dmg) : round($pd[$kind.'s'] * $once_pas_reduce_dmg[$lvl]);
 					$pas_cost = $pd[$kind.'s'] > $once_pas_cost ? round($once_pas_cost) : $pd[$kind.'s'];
 					//处理伤害，降低耐久
+					//单次最多降低耐久不会超过100点，这个对玩家比较吃亏 
+					$pas_cost = min(100,$pas_cost);
 					$pa['dmg_dealt'] -= $pa_reduce_dmg;
 					$mix_pa_reduce_dmg += $pa_reduce_dmg;
 					\armor\armor_hurt($pa,$pd,$active,$kind,$pas_cost);

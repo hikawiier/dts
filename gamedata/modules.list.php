@@ -480,7 +480,6 @@ randmix,extra/misc/randmix/,1
 skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
-instance98,campfire/campfire_extra/campfire_instance/instance98_interlude/,1
 campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
 skill36,extra/club/skills/skill36/,1
 skill38,extra/club/skills/skill38/,1
@@ -533,15 +532,16 @@ searchmemory,extra/searchmemory/,1
 skill503,extra/card/skills/skill503/,1
 skill351,extra/achievement/skills/skill351/,1
 skill352,extra/achievement/skills/skill352/,1
-campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
 skill363,extra/achievement/skills/skill363/,1
 instance5,extra/instance/instance5/,1
 skill361,extra/activities/lunany2018/skill361/,1
 skill362,extra/activities/lunany2018/skill362/,1
 skill365,extra/activities/aprilfool2018/skill365/,1
+instance98,campfire/campfire_extra/campfire_instance/instance98_interlude/,1
 skill505,extra/card/skills/skill505/,1
-campfire_bgm,campfire/campfire_extra/campfire_bgm/,1
 skill366,extra/activities/aprilfool2018/skill366/,1
+campfire_areafeatures,campfire/campfire_extra/campfire_areafeatures/main/,1
+campfire_bgm,campfire/campfire_extra/campfire_bgm/,1
 campfire_item_kgrt,campfire/campfire_base/campfireitem/campfire_item_kgrt/,0
 glowbutton,extra/misc/glowbutton/,0
 halloween2017,extra/activities/halloween2017/main/,0

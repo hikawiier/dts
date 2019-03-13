@@ -1,0 +1,30 @@
+<input type="hidden" id="command" name="command" value="">
+<!--{if $bear_keysword}-->
+<input type="hidden" name="mode" value="bear_branches">
+你举起了通体黝黑，散发着不详气息的键刃。<br>
+看着光滑的剑刃，你甚至生出了能看到那黑熊怪的倒影的错觉。<br>
+不对……这不是错觉……！<br>
+你回过身，本已被你击倒的黑熊怪人又重新站在了你的面前。<br>
+像是察觉到了你明显的敌意，在你掏出武器前，它抢先开口道：<br>
+<span class='linen b'>“别紧张，我只是有些话要告诉你。”</span><br>
+不知为何，你感觉它说话的语气和之前有些不同。<br>
+<span class='linen b'>“可能你也猜到了，现在的我只是保存在这把武器上的一段数据而已。”</span><br>
+<span class='linen b'>“你一直在寻找结束这场游戏的办法吧？想来你也发现了，想像以前一样杀光你的对手来结束这场游戏似乎有些困难。”</span><br>
+你对此不置可否。<br>
+<span class='linen b'>“你和你的伙伴们推断出的结论是正确的，的确，打败‘我’可以让你们离开这个游戏。”</span><br>
+<span class='linen b'>“又或者……”</span><br>
+<span class='linen b'>“难道你不想了解这一切发生的原因吗……？比如，你为什么会来到这？”</span><br>
+你有些感兴趣地抬起了头。<br>
+<span class='linen b'>“让我们做个交易吧。”</span><br>
+<span class='linen b'>“也许你对这场游戏已经感到厌倦了，又或是你觉得自己已经没有继续前进的实力了，那么我会将你和你的伙伴们送出去。不过，那样做的代价是：我不会满足你的<span class='yellow b'>‘好奇’</span>。把你们的求知欲作为交易的筹码，说不定还挺新颖的。毕竟说实话，你也不想稀里糊涂就白走这一趟吧……？”</span><br>
+<span class='linen b'>“所以另外的选择是，继续游戏，然后帮我取来一些东西，为此，你可以从我这获得一些帮助，如果你答应了，我会告诉你接下来该怎么办。”</span><br>
+黑熊人说完，便站在原地不再动弹，好像在等待着你的答复。<br>
+那么，你的选择是……？<br>
+<br>
+<input type="button" class="cmdbutton" id="branch_a" value="结束游戏" onclick="$('command').value='branch_a';postCmd('gamecmd','command.php');this.disabled=true;">&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" class="cmdbutton" id="branch_b" value="继续游戏" onclick="$('command').value='branch_b';postCmd('gamecmd','command.php');this.disabled=true;">
+<!--{elseif $way_of_life}-->
+<input type="hidden" name="mode" value="way_of_life">
+该选择支尚未完成，请等待后续更新！
+<input type="button" class="cmdbutton" id="menu" value="返回" onclick="$('command').value='menu';postCmd('gamecmd','command.php');this.disabled=true;">
+<!--{/if}-->

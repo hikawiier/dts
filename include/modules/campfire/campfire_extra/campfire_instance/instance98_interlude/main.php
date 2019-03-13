@@ -3,20 +3,41 @@
 namespace instance98
 {
 	function init() {
-		eval(import_module('skillbase','trap'));
-		$valid_skills[98] = array(1901);
-		$trap_min_obbs = 20;
-		$trap_max_obbs = 100;
+		eval(import_module('map','gameflow_combo','skillbase','trap'));
+		$valid_skills[98] = array(1901,1002);
+		$deathlimit_by_gtype[98] = 666;
 	}
 	
-	function checkcombo($time){
+	//在陷阱之海，你会很痛苦
+	function calculate_real_trap_obbs()
+	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','map','gameflow_combo'));
-		if(98 == $gametype){
-			$combonum = 666;
-			//自然进入连斗的杀人数设为666
-		}
-		$chprocess($time);
+		eval(import_module('player'));
+		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()+100;			
+		$chprocess();
+	}
+	function get_trap_escape_rate()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
+		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-60;	
+		$chprocess();
+	}
+	
+	function calculate_trap_reuse_rate()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
+		if ($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-40;			
+		$chprocess();
+	}
+	
+	function check_keep_corpse_in_searchmemory()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if(98 == $gametype) return true;
+		$chprocess();
 	}
 	
 	function addnpc_event($ntype, $nsub=0, $num=1){
@@ -31,46 +52,150 @@ namespace instance98
 		}	
 		$chprocess($ntype, $nsub, $num);
 	}
+	function story_branch_event($story,$branch)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		eval(import_module('sys','player','logger'));
+		if($story == 'bear_branches')
+		{
+			if($branch=='branch_a')
+			{
+				$state = 6;
+				$url = 'end.php';
+				\sys\gameover ( $now, 'end7', $name );
+			}
+			elseif($branch=='branch_b')
+			{
+				$log.="文本暂时没有补全，请等待后续游戏内容更新！<br>";
+			}
+			else
+			{
+				$log.="输入了错误的选择支：{$branch}。<br>";
+			}	
+			return;
+		}
+		else
+		{
+			$log.="错误的剧情判断：{$story}。<br>";
+			return;
+		}	
+	}	
 	
 	function itemuse(&$theitem)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
-		eval(import_module('sys','player','logger'));
+		eval(import_module('sys','player','logger','itemmain'));
 		if($gametype==98)
 		{
-			if(strpos('游戏解除钥匙',$theitem['itm'])!==false)
+			if(strpos($theitem['itm'],'游戏解除钥匙')!==false)
 			{
 				$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
 				狂风卷起，你神情庄重，静候接下来的变化。<br>……<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br><br>
 				<span class='linen b'>“可恨啊！你作为一个触手，就这样就满足了吗！”</span><br>你听到有声音打破了沉默的氛围，而且那声音听起来耳熟极了。<br>
 				<span class='linen b'>“有点挑战精神好不好？？我在<span class='yellow b'>英灵殿</span>等你。”</span><br>
-				你还想再问两句，但手中的游戏解除钥匙忽然爆炸了！<br>
-				<span class='yellow'>你的怒气增加了100点！</span><br><br>
-				看来只能去英灵殿看看了……？<br>";
+				你还想再问两句，但手中的游戏解除钥匙忽然<span class='red'>爆炸</span>了！<br>
+				……！？<br>";
+				\itemmain\itms_reduce($theitem);
+				$log.="<span class='yellow b'>你的怒气增加了100点！</span><br>";
+				$log.="看来只能去英灵殿看看了……？<br>";
 				if(!$gamevars['valhalla'])
 				{
 					$gamevars['valhalla'] = 1;
 					\sys\save_gameinfo();
 					addnews($now, 'valopen98',$name);
 				}
-				$rage=100;
-				\itemmain\itms_reduce($theitem);				
+				$rage=100;			
 				return;
 			}
-			elseif(strpos('黑熊键刃',$theitem['itm'])!==false)
+			elseif(strpos($theitem['itm'],'《黑熊语录》')!==false)
 			{
-				$log.="这东西该怎么用呢……？其实你知道他是干什么的，也知道他为什么不能用。<br>再耐心等等吧。<br>";
+				if(\skillbase\skill_getvalue(1003,'used_bearbook'))
+				{
+					$log.="你感觉自己暂时没法从这里学到什么新的<del>嘴臭</del>知识了。<br>也许可以将它分享给你的伙伴们看看。<br>";
+					return;
+				}	
+				$nowitme = $theitem['itme'];
+				$add_skillpoint = $theitem['itme']>1 ? rand(1,$theitem['itme']) : 1;	
+				$theitem['itme'] -= $add_skillpoint;
+				$skillpoint+=$add_skillpoint;
+				$log.="你粗略的翻看了一遍黑熊语录，饶是满腹经纶的你也感觉受益匪浅！<br>你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
+				if($theitem['itme'])
+				{
+					$log.="看起来里面还有不少值得学习的内容，你决定把它保存下来。<br>也许可以将它分享给你的伙伴们看看。<br>";
+				}
+				else
+				{
+					$log.="看起来你已经花10分钟完全搞懂里面的内容了。<br>你随手就把它丢掉了。<br>";
+					\itemmain\itms_reduce($theitem);				
+				}
+				if($add_skillpoint==$nowitme)
+				{
+					$itme0=1;$itms0=1;
+					$log.="<span class='yellow b'>你发现有张卡牌黏在了你的衣服上！大概是从书里掉出来的……？</span><br>";
+					if($add_skillpoint>50)
+					{
+						$itm0='画有熊本熊的迷之卡牌';$itmk0='VO';$itmsk='13';
+					}
+					else
+					{
+						$log.="<span class='yellow b'>但这张卡似乎已经被人用过很多次了的样子……</span><br>";
+						$itm0='本来画有熊本熊的迷之卡牌';$itmk0='VO3';$itmsk='';
+					}
+					\itemmain\itemget();
+				}
+				\skillbase\skill_setvalue(1003,'used_bearbook',1);
 				return;
-				/*$state = 6;
-				$url = 'end.php';
-				\sys\gameover ( $now, 'end7', $name );*/
-			}elseif(strpos('Way of Life',$theitem['itm'])!==false)
+			}
+			elseif(strpos($theitem['itm'],'黑熊键刃')!==false)
 			{
-				$log.="这东西该怎么用呢……？其实你知道他是干什么的，也知道他为什么不能用。<br>再耐心等等吧。<br>";
+				$bear_keysword=true;
+				ob_clean();
+				include template(MOD_INSTANCE98_STORY_BRANCH_CONFIRM);
+				$cmd = ob_get_contents();
+				ob_clean();
 				return;
-			}		
+			}
+			elseif(strpos($theitem['itm'],'Way of Life')!==false)
+			{
+				$way_of_life=true;
+				ob_clean();
+				include template(MOD_INSTANCE98_STORY_BRANCH_CONFIRM);
+				$cmd = ob_get_contents();
+				ob_clean();
+				return;
+			}
+			$chprocess($theitem);
 		}
-		$chprocess($theitem);	
+	}
+	
+	function act()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		eval(import_module('sys','player','logger','input','map','explore'));
+		if($mode == 'teleport_confirm')
+		{
+			if($command == 'menu')
+			{
+				$log.="你仔细思考了一下，自己在这边还有没办完的事情。<br>";
+			}	
+				
+			elseif($command == 'confirm') 
+			{
+				$log.="你踏上银色的阶梯，逐级向上，直到临近天穹，你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，你看到了一副奇妙的景象。<br>";
+				$pls = 94;//伪造移动
+				\explore\move_to_area(94);
+			}		
+			else
+			{
+				$log.="teleport_confirm相关：所输入的指令无效。{$command}<br>";
+			}				
+		}
+		if($mode == 'bear_branches' || $mode == 'way_of_life')
+		{
+			if($command == 'menu')	$log.="谢谢理解！<br>";
+			else	\instance98\story_branch_event($mode,$command);
+		}	
+		$chprocess();
 	}
 	
 	function living_npc($t=0)
@@ -152,31 +277,6 @@ namespace instance98
 		}	
 	}	
 	
-	function act()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger','input','map','explore'));
-		if($mode == 'teleport_confirm')
-		{
-			if($command == 'menu')
-			{
-				$log.="你仔细思考了一下，自己在这边还有没办完的事情。<br>";
-			}	
-				
-			elseif($command == 'confirm') 
-			{
-				$log.="你踏上银色的阶梯，逐级向上，直到临近天穹，你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，你看到了一副奇妙的景象。<br>";
-				$pls = 94;//伪造移动
-				\explore\move_to_area(94);
-			}		
-			else
-			{
-				$log.="teleport_confirm相关：所输入的指令无效。{$command}<br>";
-			}				
-		}
-		$chprocess();
-	}
-	
 	function get_shopconfig(){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys'));
@@ -234,6 +334,7 @@ namespace instance98
 			return $l;
 		}else return $chprocess();
 	}
+	
 	
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
 	{

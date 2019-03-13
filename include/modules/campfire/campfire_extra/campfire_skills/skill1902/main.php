@@ -4,7 +4,7 @@ namespace skill1902
 {
 	//使对手先手率降低100
 	$skill_1902_obbs = 100;
-	$min_skill_1902_obbs =15;
+	$min_skill_1902_obbs = 15;
 	
 	function init() 
 	{
@@ -56,6 +56,7 @@ namespace skill1902
 	function attack_finish(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('skill1902'));
 		$chprocess($pa,$pd,$active);
 		if(\skillbase\skill_query(1902,$pa))
 		{

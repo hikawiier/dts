@@ -326,3 +326,30 @@
 </tr>
 </table>
 <!--{/if}-->
+<!--{if $roomdata['roomtype']==11}-->
+<table CellSpacing=0 CellPadding=0 width=100%>
+	<tr>
+		<td class="b3" height=10px colspan=5>
+		</td>
+	</tr>
+	<tr>
+		<td class="b3" height=25px width=310px colspan=3>
+			<font style="color:rgb(51, 211, 12);">本模式一言以蔽之就是活在梦里。</font>
+		</td>
+	</tr>
+	<tr>
+		<td class="b3" height=40px width=250px>
+		</td>
+		<!--{eval $i=0;}-->
+		<td id="room-position-$i" class="b3" width=150px align=center style="position:relative;">
+			{template roomslot}
+		</td>
+		<td class="b3" height=40px>
+		</td>
+	</tr>
+	<tr>
+		<td class="b3" height=15px colspan=5>
+		</td>
+	</tr>
+	</table>
+	<!--{/if}-->
