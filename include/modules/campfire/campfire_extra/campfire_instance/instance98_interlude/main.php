@@ -87,7 +87,9 @@ namespace instance98
 		eval(import_module('sys','player','logger','itemmain'));
 		if($gametype==98)
 		{
-			if(strpos($theitem['itm'],'游戏解除钥匙')!==false)
+			$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
+			$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
+			if(strpos($itm,'游戏解除钥匙')!==false)
 			{
 				$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
 				狂风卷起，你神情庄重，静候接下来的变化。<br>……<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br><br>
@@ -107,19 +109,19 @@ namespace instance98
 				$rage=100;			
 				return;
 			}
-			elseif(strpos($theitem['itm'],'《黑熊语录》')!==false)
+			elseif(strpos($itm,'《黑熊语录》')!==false)
 			{
 				if(\skillbase\skill_getvalue(1003,'used_bearbook'))
 				{
 					$log.="你感觉自己暂时没法从这里学到什么新的<del>嘴臭</del>知识了。<br>也许可以将它分享给你的伙伴们看看。<br>";
 					return;
 				}	
-				$nowitme = $theitem['itme'];
-				$add_skillpoint = $theitem['itme']>1 ? rand(1,$theitem['itme']) : 1;	
-				$theitem['itme'] -= $add_skillpoint;
+				$nowitme = $itme;
+				$add_skillpoint = $itme>1 ? rand(1,$itme) : 1;	
+				$itme -= $add_skillpoint;
 				$skillpoint+=$add_skillpoint;
 				$log.="你粗略的翻看了一遍黑熊语录，饶是满腹经纶的你也感觉受益匪浅！<br>你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
-				if($theitem['itme'])
+				if($itme)
 				{
 					$log.="看起来里面还有不少值得学习的内容，你决定把它保存下来。<br>也许可以将它分享给你的伙伴们看看。<br>";
 				}
@@ -134,19 +136,19 @@ namespace instance98
 					$log.="<span class='yellow b'>你发现有张卡牌黏在了你的衣服上！大概是从书里掉出来的……？</span><br>";
 					if($add_skillpoint>50)
 					{
-						$itm0='画有熊本熊的迷之卡牌';$itmk0='VO';$itmsk='13';
+						$itm0='画有熊本熊的迷之卡牌';$itmk0='VO';$itmsk0='13';
 					}
 					else
 					{
 						$log.="<span class='yellow b'>但这张卡似乎已经被人用过很多次了的样子……</span><br>";
-						$itm0='本来画有熊本熊的迷之卡牌';$itmk0='VO3';$itmsk='';
+						$itm0='本来画有熊本熊的迷之卡牌';$itmk0='VO3';$itmsk0='';
 					}
 					\itemmain\itemget();
 				}
 				\skillbase\skill_setvalue(1003,'used_bearbook',1);
 				return;
 			}
-			elseif(strpos($theitem['itm'],'黑熊键刃')!==false)
+			elseif(strpos($itm,'黑熊键刃')!==false)
 			{
 				$bear_keysword=true;
 				ob_clean();
@@ -155,7 +157,7 @@ namespace instance98
 				ob_clean();
 				return;
 			}
-			elseif(strpos($theitem['itm'],'Way of Life')!==false)
+			elseif(strpos($itm,'Way of Life')!==false)
 			{
 				$way_of_life=true;
 				ob_clean();
