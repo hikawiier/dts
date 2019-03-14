@@ -164,8 +164,8 @@ namespace instance98
 				ob_clean();
 				return;
 			}
-			$chprocess($theitem);
 		}
+		$chprocess($theitem);
 	}
 	
 	function act()
