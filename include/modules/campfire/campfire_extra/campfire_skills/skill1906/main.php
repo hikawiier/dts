@@ -31,10 +31,11 @@ namespace skill1906
 	function get_hostagestuts1906(&$p)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
+		eval(import_module('sys','player','logger'));
 		$stt1906 = \skillbase\skill_getvalue(1906,'stt',$p);
 		$lt1906 = \skillbase\skill_getvalue(1906,'var',$p);
 		$h1906 = $stt1906+$lt1906;
+		$now_time = $now;
 		if($now<$h1906) return 1;
 		else return 0;
 	}
