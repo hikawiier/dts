@@ -24,23 +24,23 @@ namespace campfire_itemmain
 		return $ret;
 	}
 	
-	function get_alone_card_skill(&$pa=NULL)
+	function get_alone_card_skill(&$p=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player','clubbase','cardbase'));
-		$cid = ($pa == NULL || $pa['pid']==$ppid) ? $card : $pa['card'];
-		if(is_array($cards[$card]['skills']))
+		$cid = ($p == NULL || $p['pid']==$pid) ? $card : $p['card'];
+		if(is_array($cards[$cid]['valid']['skills']))
 		{
-			$card_array = $cards[$cid];  
+			$card_valid_array = $cards[$cid]['valid'];  
 		}
 		else
 		{
 			return;
 		}
-		foreach ($card_array['skills'] as $sk => $sklvl)
+		foreach ($card_valid_array['skills'] as $sk => $sklvl)
 		{
 			$flag = 0;
-			if($card_array['club'])
+			if($card_valid_array['club'])
 			{
 				foreach(array_keys($clublist) as $clubnum)
 				{
@@ -49,18 +49,27 @@ namespace campfire_itemmain
 						$flag = 1;
 					}
 				}
-			}		
-			if (defined('MOD_SKILL'.$sk) && !$flag) 
+				if(is_array($sklvl))
+				{
+					//这里可能会有BUG，如果在初始化技能时添加了2个以上的参数只能读取出第一个
+					$sk_n = (array_keys($sklvl))[0];
+					$sk_v = $sklvl[0];
+					$sk_arr_flag = 1;
+				}
+			}	
+			if (defined('MOD_SKILL'.$sk) && !$flag && !\skillbase\skill_query($sk) && !\skillbase\skill_query($sk,$p))
 			{
-				if ($pa == NULL || $pa['pid']==$ppid)
+				if ($p == NULL || $p['pid']==$pid)
 				{
 					\skillbase\skill_acquire($sk);
-					\skillbase\skill_setvalue($sk,'lvl',$sklvl);	
+					if($sk_arr_flag) \skillbase\skill_setvalue($sk,$sk_n,$sk_v);
+					else \skillbase\skill_setvalue($sk,'lvl',$sklvl);
 				}
 				else
 				{
-					\skillbase\skill_acquire($sk,$pa);
-					\skillbase\skill_setvalue($sk,'lvl',$sklvl,$pa);	
+					\skillbase\skill_acquire($sk,$p);
+					if($sk_arr_flag) \skillbase\skill_setvalue($sk,$sk_n,$sk_v,$p);
+					else \skillbase\skill_setvalue($sk,'lvl',$sklvl,$p);
 				}
 			}					
 		}
