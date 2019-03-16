@@ -32,7 +32,7 @@ namespace skill1904
 		if (!\skillbase\skill_query(1904,$pa)) return $chprocess($pa,$pd,$tritm,$damage);
 		eval(import_module('logger'));
 		$z=$chprocess($pa,$pd,$tritm,$damage);
-		if ($z>=$pd['hp'])
+		if ($z>=$pd['hp'] && $pd['hp']>1)
 		{
 			$z=$pd['hp']-1;
 			$log .= "你感觉自己被炸了个七荤八素，六神无主。<br>然而出于设置陷阱者的<span class=\"yellow b\">仁慈</span>，你竟然没被炸死，真是可喜可贺！<br>";
@@ -44,7 +44,7 @@ namespace skill1904
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player','logger','skill1904'));
-		if(($pa['dmg_dealt']>$pd['hp']) && (\skillbase\skill_query(1904,$pa)))
+		if(($pa['dmg_dealt']>$pd['hp']) && (\skillbase\skill_query(1904,$pa)) && $pd['hp']>1)
 		{
 			$pa['dmg_dealt']=$pd['hp']-1;
 			if ($active) $log .= "<span class=\"yellow b\">你如狂风骤雨般的攻击打得敌人难以招架，但出于仁慈，你给你的敌人留下了一线生机！</span><br>";

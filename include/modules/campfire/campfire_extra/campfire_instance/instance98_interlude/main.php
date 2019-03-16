@@ -14,22 +14,22 @@ namespace instance98
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
 		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()+100;			
-		$chprocess();
+		else return $chprocess();
 	}
 	function get_trap_escape_rate()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-120;	
-		$chprocess();
+		if($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()*0.1;	
+		else return $chprocess();
 	}
 	
 	function calculate_trapdef_proc_rate()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		if ($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()-30;			
-		$chprocess();
+		if ($pls == 92 || $pls == 93 || $pls == 94)	return $chprocess()*0.2;		
+		else return $chprocess();
 	}
 	
 	function check_keep_corpse_in_searchmemory()
@@ -52,10 +52,25 @@ namespace instance98
 		}	
 		$chprocess($ntype, $nsub, $num);
 	}
+	
+	function bear_keysword_event()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		eval(import_module('sys','player','logger','itemmain','map'));
+		//最大能为多少人提供帮助
+		$max_help_limits = 4;
+		if($gamevars['bear_keysword']<=$max_help_limits && !\skillbase\skill_query(1998,$sdata))
+		{
+			$log.="你获得了【守护精灵的援护】。<br>";
+			\skillbase\skill_acquire(1998);
+			$gamevars['bear_keysword'] ++;
+			\sys\save_gameinfo();
+		}
+	}
 	function story_branch_event($story,$branch)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		eval(import_module('sys','player','logger'));
+		eval(import_module('sys','player','logger','itemmain'));
 		if($story == 'bear_branches')
 		{
 			if($branch=='branch_a')
@@ -66,7 +81,20 @@ namespace instance98
 			}
 			elseif($branch=='branch_b')
 			{
-				$log.="文本暂时没有补全，请等待后续游戏内容更新！<br>";
+				$gamevars['bear_keysword'] = 1;
+				\sys\save_gameinfo();
+				addnews($now, 'bearkey',$name);
+				for($i=0;$i<=6;$i++)
+				{
+					if(${'itms'.$i} && strpos(${'itm'.$i},'黑熊键刃')!==false)
+					{
+						$itm['itm']=&${'itm'.$i}; $itm['itmk']=&${'itmk'.$i};
+						$itm['itme']=&${'itme'.$i}; $itm['itms']=&${'itms'.$i}; $itm['itmsk']=&${'itmsk'.$i};
+						$itm['itms']=1;
+						\itemmain\itms_reduce($itm);
+						break;
+					}
+				}
 			}
 			else
 			{
@@ -150,6 +178,10 @@ namespace instance98
 			}
 			elseif(strpos($itm,'黑熊键刃')!==false)
 			{
+				if(!\skillbase\skill_getvalue(1003,'used_bearkeysword'))
+				{
+					\skillbase\skill_setvalue(1003,'used_bearkeysword',1);
+				}	
 				$bear_keysword=true;
 				ob_clean();
 				include template(MOD_INSTANCE98_STORY_BRANCH_CONFIRM);
@@ -183,10 +215,12 @@ namespace instance98
 				
 			elseif($command == 'confirm') 
 			{
-				$log.="你踏上银色的阶梯，逐级向上，直到临近天穹，你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，你看到了一副奇妙的景象。<br>";
+				$log.="你踏上银色的阶梯，拾级而上，直到临近天穹。你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，呈现在你眼前的是一副奇妙的景象——<br>";
 				$pls = 94;//伪造移动
-				\explore\move_to_area(94);
-			}		
+				//\explore\move_to_area(94);
+				$log.="{$areainfo[$pls]}";
+				bear_keysword_event();
+			}
 			else
 			{
 				$log.="teleport_confirm相关：所输入的指令无效。{$command}<br>";
@@ -194,8 +228,7 @@ namespace instance98
 		}
 		if($mode == 'bear_branches' || $mode == 'way_of_life')
 		{
-			if($command == 'menu')	$log.="谢谢理解！<br>";
-			else	\instance98\story_branch_event($mode,$command);
+			\instance98\story_branch_event($mode,$command);
 		}	
 		$chprocess();
 	}
@@ -240,6 +273,27 @@ namespace instance98
 			}
 		}
 		$chprocess($moveto);
+	}
+	
+	function check_event1003()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','logger'));
+		if(\skillbase\skill_getvalue(1003,'used_bearbook'))
+		{
+			\skillbase\skill_setvalue(1003,'used_bearbook',0);
+			$log.="你感觉自己又可以继续学习黑熊语录了。<br>";
+		}
+	}
+	
+	function post_addarea_process($atime, $areaaddlist)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('player'));
+		if(\skillbase\skill_query(1003) && check_unlocked1003()){
+			check_event1003();
+		}
+		$chprocess($atime, $areaaddlist);
 	}
 	
 	function findteam(&$edata)
@@ -345,7 +399,8 @@ namespace instance98
 		
 		if($news == 'valopen98') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"brickred b\">{$a}使用了游戏解除钥匙，通往英灵殿的道路被开启了！</span></li>";
-		
+		if($news == 'bearkey') 
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"brickred b\">{$a}使用了黑熊键刃，祝你好运。</span></li>";
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}
 }

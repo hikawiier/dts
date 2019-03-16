@@ -27,17 +27,56 @@ namespace skill1906
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		return 1;
 	}
+
+	function get_hostagestuts1906(&$p)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		$stt1906 = \skillbase\skill_getvalue(1906,'stt',$p);
+		$lt1906 = \skillbase\skill_getvalue(1906,'var',$p);
+		$h1906 = $stt1906+$lt1906;
+		if($now<$h1906) return 1;
+		else return 0;
+	}
+	
+	function apply_total_damage_modifier_invincible(&$pa,&$pd,$active){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if (!\skillbase\skill_query(1906,$pd)) return $chprocess($pa,$pd,$active);
+		eval(import_module('sys','logger','skill1906'));
+		if (\skillbase\skill_query(1906,$pd) && get_hostagestuts1906($pd)){	//有人质的情况下不会受到伤害
+			$pa['dmg_dealt']=0;
+			if ($active) $log .= "<span class=\"lime b\">敌人忽然抓过虏获来的人质作为盾牌，你暴风般的攻击差点打在了人质身上！这让你不得不放弃了继续攻击的机会。</span><br>";
+			else $log .= "<span class=\"lime b\">你将虏获的人质作为盾牌，这让敌人暴风般的攻击差点打在了人质身上！敌人不得不放弃了继续攻击的机会。</span><br>";
+		}
+		$chprocess($pa,$pd,$active);
+	}
+	
+	function apply_total_damage_modifier_seckill(&$pa,&$pd,$active){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if (\skillbase\skill_query(1906,$pd) && get_hostagestuts1906($pd)){
+			//有人质的情况下跳过即死判断，就不发log了
+			$pa['seckill'] = 0;
+			return;
+		}
+		$chprocess($pa,$pd,$active);
+	}
 	
 	function post_traphit_events(&$pa, &$pd, $tritm, $damage)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $tritm, $damage);
-		eval(import_module('player','logger','skill1906'));
-		if ($pd['hp']<=round($pd['mhp']*0.1) && \skillbase\skill_query(1906,$pa))
+		eval(import_module('sys','player','logger','skill1906'));
+		if ($pd['hp']<=round($pd['mhp']*0.1) && \skillbase\skill_query(1906,$pa) && !get_hostagestuts1906($pa))
 		{
 			$log.="<span class=\"cyan b\">但是你被炸得眼冒金星，一下子晕了过去！</span><br>";
 			$stun_time = rand($min_stun_time1906,$max_stun_time1906);
 			\skill602\set_stun_period($stun_time,$pd);
+			$true_stun_time = round($stun_time/1000);
+			$now_time = $now;
+			//同时记录眩晕时间，作为保有人质的时间
+			\skillbase\skill_setvalue(1906,'stt',$now_time,$pa);
+			\skillbase\skill_setvalue(1906,'var',$true_stun_time,$pa);
 		}
 	}
 	
@@ -45,7 +84,7 @@ namespace skill1906
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa,$pd,$active);
-		if($pd['hp']<=$pd['mhp']*0.2 && \skillbase\skill_query(1906,$pa) && !empty($pa['is_hit']))
+		if($pd['hp']<=$pd['mhp']*0.2 && \skillbase\skill_query(1906,$pa) && !empty($pa['is_hit']) && !get_hostagestuts1906($pa))
 		{
 			$pa['skill1906_flag'] = 1;
 		}
@@ -56,9 +95,13 @@ namespace skill1906
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa,$pd,$active);
-		eval(import_module('logger','skill1906'));
-		
+		eval(import_module('sys','player','logger','skill1906'));
+		$now_time = $now;
 		$stun_time = rand($min_stun_time1906,$max_stun_time1906);
+		$true_stun_time = round($stun_time/1000);
+		//同时记录眩晕时间，作为保有人质的时间
+		\skillbase\skill_setvalue(1906,'stt',$now_time,$pa);
+		\skillbase\skill_setvalue(1906,'var',$true_stun_time,$pa);
 		
 		$b_log_1 = '<span class="yellow b">你一巴掌将<:pd_name:>打得失去了意识！大概需要'.($stun_time/1000).'秒才能醒来。</span><br>';
 		$b_log_2 = '<span class="yellow b">对方一巴掌将你打得失去了意识！大概需要'.($stun_time/1000).'秒才能醒来。</span><br>';

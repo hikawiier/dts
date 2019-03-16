@@ -107,7 +107,7 @@ namespace campfire_itemmain
 				if (defined('MOD_CLUBBASE')) \clubbase\club_acquire($club);
 				get_alone_card_skill();	
 				$log.="你的称号变为了<span class='yellow b'>{$clubinfo[18]}</span>！<br>";
-			}			
+			}
 			$skillpoint+=$add_skillpoint;
 			$log.="你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
 			\itemmain\itms_reduce($theitem);

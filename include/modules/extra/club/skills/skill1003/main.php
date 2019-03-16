@@ -117,7 +117,7 @@ namespace skill1003
 		$chprocess($pa,$pd,$active);
 		if (\skillbase\skill_query(1003,$pa))
 		{
-			if(in_array($pd['type'], array(1, 4, 5, 6, 7, 9, 12, 14, 15, 42, 88))){
+			if(in_array($pd['type'], array(1, 4, 5, 6, 7, 9, 12, 14, 15, 42, 88, 1006, 1007))){
 				$attacked_vip = \skillbase\skill_getvalue(1003,'attacked_vip', $pa);
 				$attacked_vip = explode(',',$attacked_vip);
 				$attacked_vip = array_filter($attacked_vip);
@@ -140,7 +140,7 @@ namespace skill1003
 			\skillbase\skill_setvalue(1003,'last_kill_active',$active,$pa);
 			if(empty($method)) $method = $pd['state'];
 			\skillbase\skill_setvalue(1003,'last_kill_method',$method,$pa);
-			if(in_array($pd['type'], array(1, 4, 5, 6, 7, 9, 12, 14, 15, 42, 88))){
+			if(in_array($pd['type'], array(1, 4, 5, 6, 7, 9, 12, 14, 15, 42, 88, 1006, 1007))){
 				$killed_vip = \skillbase\skill_getvalue(1003,'killed_vip', $pa);
 				$killed_vip = explode(',',$killed_vip);
 				$killed_vip = array_filter($killed_vip);

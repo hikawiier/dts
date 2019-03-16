@@ -35,6 +35,7 @@ areafeatures_transforgun,campfire/campfire_extra/campfire_areafeatures/areafeatu
 areafeatures_transfortrap,campfire/campfire_extra/campfire_areafeatures/areafeatures_transfortrap/,1
 campfire_hiddenarea,campfire/campfire_core/campfire_hiddenarea/,1
 skill1999,campfire/campfire_extra/campfire_skills/skill1999/,1
+skill1998,campfire/campfire_extra/campfire_skills/skill1998/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 item_slip,extra/item_extra/item_slip/,1

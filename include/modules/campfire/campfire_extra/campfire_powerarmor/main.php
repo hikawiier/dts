@@ -90,9 +90,10 @@ namespace campfire_powerarmor
 				//理论上单次装备能抵消的伤害最大值和应消耗的耐久
 				$once_pa_reduce_dmg = $max_able_reduce_dmg * ($once_pa_reduce_dmg_per[$lvl]/100);
 				$once_pas_cost = $once_pa_reduce_dmg / ($pd[$kind.'e']*$once_pas_reduce_dmg[$lvl]/100);
-				if($once_pas_cost>=1)
+				if($once_pas_cost)
 				{
 					//只有受到会消耗超过1点耐久的伤害时才会触发动力装甲抵消伤害
+					//↑傻逼设定，已经删除，请大家引以为鉴
 					//身体部位的动力甲可以低消耗抵消伤害，放在这里是为了即使达不到1点耐久也可以触发
 					if($kind=='arb')  $once_pas_cost = $once_pas_cost/$bpa_reduce_pas_cost_per[$lvl];
 					//计算实际抵消的伤害和消耗的装甲能量
@@ -101,6 +102,7 @@ namespace campfire_powerarmor
 					//处理伤害，降低耐久
 					//单次最多降低耐久不会超过100点，这个对玩家比较吃亏 
 					$pas_cost = min(100,$pas_cost);
+					$pas_cost = max(1,$pas_cost);
 					$pa['dmg_dealt'] -= $pa_reduce_dmg;
 					$mix_pa_reduce_dmg += $pa_reduce_dmg;
 					\armor\armor_hurt($pa,$pd,$active,$kind,$pas_cost);
