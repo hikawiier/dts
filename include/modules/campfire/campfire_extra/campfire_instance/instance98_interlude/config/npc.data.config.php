@@ -1456,7 +1456,7 @@ namespace instance98
 			'itmk3' => 'Z',
 			'itme3' => 1,
 			'itms3' => 1,
-			'description' => '武神 披着黑熊皮的水月，以<span class="yellow b">英灵殿中的四天王之一</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>在记忆中所向无敌的火金符已经被时代所淘汰了，所以他换了一个。',
+			'description' => '武神 披着黑熊皮的水月，以<span class="yellow b">英灵殿中的四天王之一</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>在记忆中所向无敌的火金符已经被时代所淘汰了，所以他换了一个。',
 			),
 			3 => array
 			(
@@ -1502,7 +1502,7 @@ namespace instance98
 			'arte' => 233,
 			'arts' => 233,
 			'artsk' => 'zv',
-			'description' => '武神 芬里爾《黑熊》，以<span class="yellow b">英灵殿吉祥物</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>她没有第二形态，但你应该不会因此而轻视她。',
+			'description' => '武神 芬里爾《黑熊》，以<span class="yellow b">英灵殿吉祥物</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>她没有第二形态，但你应该不会因此而轻视她。',
 			),
 			4 => array
 			(
@@ -1522,7 +1522,7 @@ namespace instance98
 			'itme1' => 4000,
 			'itms1' => '∞',
 			'itmsk1' => 'g',
-			'description' => '武神 披着黑熊皮的北京推倒你，以<span class="yellow b">英灵殿小黑熊</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>是一位孤高的拳法家……然而并没有意义！',
+			'description' => '武神 披着黑熊皮的北京推倒你，以<span class="yellow b">英灵殿小黑熊</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>是一位孤高的拳法家……然而并没有意义！',
 			),
 			5 => array
 			(
@@ -1538,7 +1538,7 @@ namespace instance98
 			'wepe' => 2600,
 			'weps' => 4000,
 			'wepsk' => 'n',
-			'description' => '武神 披着黑熊皮的BorisX，以<span class="yellow b">英灵殿四天王之一</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>他没有花哨的属性，但这不妨碍他击倒你。',
+			'description' => '武神 披着黑熊皮的BorisX，以<span class="yellow b">英灵殿四天王之一</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>他没有花哨的属性，但这不妨碍他击倒你。',
 			),
 			6 => array
 			(
@@ -1554,7 +1554,7 @@ namespace instance98
 			'wepe' => 3500,
 			'weps' => 999,
 			'wepsk' => 'rdn',
-			'description' => '武神 披着黑熊皮的Renamon，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>不是（）是（）……？',
+			'description' => '武神 披着黑熊皮的Renamon，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>不是（）是（）……？',
 			),
 			7 => array
 			(
@@ -1569,7 +1569,7 @@ namespace instance98
 			'wepe' => 3100,
 			'weps' => 999,
 			'wepsk' => 'rne',
-			'description' => '武神 披着黑熊皮的beijuzhu，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>你处在眩晕状态中，无法动弹！',
+			'description' => '武神 披着黑熊皮的beijuzhu，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>你处在眩晕状态中，无法动弹！',
 			),
 			8 => array
 			(
@@ -1586,7 +1586,7 @@ namespace instance98
 			'wepe' => 15000,
 			'weps' => 999,
 			'wepsk' => 'cdn',
-			'description' => '武神 披着黑熊皮的捂脸姬，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>她很强，但大概没有你强。',
+			'description' => '武神 披着黑熊皮的捂脸姬，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>她很强，但大概没有你强。',
 			),
 			9 => array
 			(
@@ -1602,7 +1602,7 @@ namespace instance98
 			'wepe' => 4000,
 			'weps' => 999,
 			'wepsk' => 'nre',
-			'description' => '武神 披着黑熊皮的Yoshiko-G，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，疑似为模因工厂（？）制作出的复制品。<br>他和这座大殿一样，被埋在历史的尘埃中。',
+			'description' => '武神 披着黑熊皮的Yoshiko-G，以<span class="yellow b">英灵殿阿卡林</span>为蓝本，并与挑战者们的记忆结合后的产物。<br>他和这座大殿一样，被埋在历史的尘埃中。',
 			),
 		),
 	),

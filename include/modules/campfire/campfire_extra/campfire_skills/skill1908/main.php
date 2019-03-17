@@ -45,6 +45,7 @@ namespace skill1908
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$immwep = get_immwep1908($p);
+		$w = restore_wepname1908($w);
 		if(strpos($immwep,$w)!==false) return 1;
 		else return 0;
 	}
@@ -53,8 +54,23 @@ namespace skill1908
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$sufwep = get_sufwep1908($p);
+		$w = restore_wepname1908($w);
 		if(strpos($sufwep,$w)!==false) return 1;
 		else return 0;
+	}
+	
+	function restore_wepname1908($n)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('itemmix'));
+		$itmname_ignore[] = '/\[\+[0-9]+?\]/si';
+		$n = trim($n);
+		foreach(Array($itmname_ignore) as $value)
+		{
+			$n = preg_replace($value,'',$n);
+		}
+		$n = str_replace('钉棍棒','棍棒',$n);
+		return $n;
 	}
 	
 	function check_get_immwepinfo1908(&$p,$w)
@@ -62,8 +78,9 @@ namespace skill1908
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger','skill1908'));
 		//先将它记录为唯一可造成伤害的武器
+		$log.="<span class='grey b'>{$w}的频率被记录了……</span><br>";
+		$w = restore_wepname1908($w);
 		\skillbase\skill_setvalue(1908,'suf_wep',$w,$p);
-		$log.="<span class='grey b'>{$wep}的频率被记录了……</span><br>";
 		//然后再检查该武器是否存在于技能通用的免疫武器列表中
 		if(get_immwep1908($p) || !check_imm_wepinfo1908($p,$w))
 		{

@@ -7,7 +7,7 @@ namespace skill1904
 	{
 		define('MOD_SKILL1904_INFO','feature;unique;');
 		eval(import_module('clubbase'));
-		$clubskillname[1904] = '仁慈';
+		$clubskillname[1904] = '专家';
 	}
 	
 	function acquire1904(&$pa)
@@ -35,7 +35,7 @@ namespace skill1904
 		if ($z>=$pd['hp'] && $pd['hp']>1)
 		{
 			$z=$pd['hp']-1;
-			$log .= "你感觉自己被炸了个七荤八素，六神无主。<br>然而出于设置陷阱者的<span class=\"yellow b\">仁慈</span>，你竟然没被炸死，真是可喜可贺！<br>";
+			$log .= "你感觉自己被炸了个七荤八素，六神无主。<br>然而出于设置陷阱者的<span class=\"yellow b\">职业素养</span>，你竟然没被炸死，真是可喜可贺！<br>";
 		}
 		return $z;
 	}
@@ -47,8 +47,8 @@ namespace skill1904
 		if(($pa['dmg_dealt']>$pd['hp']) && (\skillbase\skill_query(1904,$pa)) && $pd['hp']>1)
 		{
 			$pa['dmg_dealt']=$pd['hp']-1;
-			if ($active) $log .= "<span class=\"yellow b\">你如狂风骤雨般的攻击打得敌人难以招架，但出于仁慈，你给你的敌人留下了一线生机！</span><br>";
-			else $log .= "<span class=\"yellow b\">敌人如狂风骤雨般的攻击打得你的难以招架，但出于仁慈，你的敌人给你留下了一线生机！</span><br>";
+			if ($active) $log .= "<span class=\"yellow b\">你如狂风骤雨般的攻击打得敌人难以招架，但出于职业素养，你给你的敌人留下了一线生机！</span><br>";
+			else $log .= "<span class=\"yellow b\">敌人如狂风骤雨般的攻击打得你的难以招架，但出于职业素养，你的敌人给你留下了一线生机！</span><br>";
 		}
 	}	
 	

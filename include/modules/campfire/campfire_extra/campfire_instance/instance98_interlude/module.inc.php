@@ -3,7 +3,7 @@
 namespace instance98
 {
 	////////// MODULE HEADER START ///////////////
-	$___MODULE_dependency = 'sys player map gameflow_combo addnpc_event explore itemmain itemshop trap npc team input metman searchmemory ex_attr_trap';
+	$___MODULE_dependency = 'sys player map gameflow_combo addnpc_event explore itemmain itemmix itemshop trap npc team input metman searchmemory ex_attr_trap';
 	$___MODULE_dependency_optional = 'skillbase';
 	$___MODULE_conflict = '';
 	$___MODULE_codelist = 'main.php config/npc.data.config.php';
