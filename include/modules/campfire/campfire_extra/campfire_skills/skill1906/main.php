@@ -28,7 +28,7 @@ namespace skill1906
 		return 1;
 	}
 
-	function get_hostagestuts1906(&$p)
+	function get_hostagestuts1906($p)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger'));
@@ -73,6 +73,7 @@ namespace skill1906
 			$log.="<span class=\"cyan b\">但是你被炸得眼冒金星，一下子晕了过去！</span><br>";
 			$stun_time = rand($min_stun_time1906,$max_stun_time1906);
 			\skill602\set_stun_period($stun_time,$pd);
+			\skillbase\skill_setvalue(602,'stn',$pa['pid'],$pd);
 			$true_stun_time = round($stun_time/1000);
 			$now_time = $now;
 			//同时记录眩晕时间，作为保有人质的时间
@@ -101,8 +102,6 @@ namespace skill1906
 		$stun_time = rand($min_stun_time1906,$max_stun_time1906);
 		$true_stun_time = round($stun_time/1000);
 		//同时记录眩晕时间，作为保有人质的时间
-		\skillbase\skill_setvalue(1906,'stt',$now_time,$pa);
-		\skillbase\skill_setvalue(1906,'var',$true_stun_time,$pa);
 		
 		$b_log_1 = '<span class="yellow b">你一巴掌将<:pd_name:>打得失去了意识！大概需要'.($stun_time/1000).'秒才能醒来。</span><br>';
 		$b_log_2 = '<span class="yellow b">对方一巴掌将你打得失去了意识！大概需要'.($stun_time/1000).'秒才能醒来。</span><br>';
@@ -116,6 +115,9 @@ namespace skill1906
 				$log .= $b_log_2;
 				$e_log = str_replace('<:pd_name:>', $pd['name'], $b_log_1);
 			}
+			\skillbase\skill_setvalue(1906,'stt',$now_time,$pa);
+			\skillbase\skill_setvalue(1906,'var',$true_stun_time,$pa);
+			\skillbase\skill_setvalue(602,'stn',$pa['pid'],$pd);
 		}elseif(!empty($pd['skill1906_flag'])){
 			\skill602\set_stun_period($stun_time,$pa);
 			if($active) {
@@ -125,6 +127,9 @@ namespace skill1906
 				$log .= str_replace('<:pd_name:>', $pa['name'], $b_log_1);
 				$e_log = $b_log_2;
 			}
+			\skillbase\skill_setvalue(1906,'stt',$now_time,$pd);
+			\skillbase\skill_setvalue(1906,'var',$true_stun_time,$pd);
+			\skillbase\skill_setvalue(602,'stn',$pd['pid'],$pa);
 		}
 		if(!empty($e_log)){
 			if($active && !$pd['type']) $pd['battlelog'].=$e_log;

@@ -508,7 +508,7 @@ $roomtypelist = Array(
 	),
 );
 
-$roomtypelist[]=Array(
+/*$roomtypelist[]=Array(
 		'name' => '<font class="brickred b">幕间狂想</font>',
 		'gtype' => 98, //对应的游戏模式编号
 		'available' => true,
@@ -531,7 +531,7 @@ $roomtypelist[]=Array(
 			0 => '挑战者',
 		),
 		'show-team-leader' => 0,	//是否显示“队长”标签（如队伍大于1人设为1）
-);
+);*/
 	
 /* End of file roommng.config.php */
 /* Location: /include/roommng/roommng.config.php */

@@ -442,7 +442,7 @@ $mixinfo = array
 		array('class' => 'item', 'stuff' => array('自适应型溶剂TA-C3','自适应型溶剂TA-C3','自适应型溶剂TA-C3'),'result' => array('自适应型溶剂TA-00','Z',1,1,'x'),),
 		array('class' => 'item', 'stuff' => array('沸腾之血','被冰封的结晶'),'result' => array('挑战者之印','Y',1,1,''),),
 		array('class' => 'item', 'stuff' => array('『寻熊者』','黑色碎片'),'result' => array('黑熊键刃','Y',1,1,'x'),),
-		array('class' => 'item', 'stuff' => array('红之怒火','蓝之希望','绿之顺服'),'result' => array('Way of Life','Y',1,1,'x'),),
+		array('class' => 'item', 'stuff' => array('Blockade','Tear down this wall','War games'),'result' => array('Way of Life','Y',1,1,'x'),),
 		array('class' => 'hidden', 'stuff' => array('荣耀','光辉','虔诚','奉献'),'result' => array('Untainted Glory','A',1000,1000,'hL'),),
 		array('class' => 'hidden', 'stuff' => array('荣耀','光辉'),'result' => array('Untainted Glory','A',1000,1000,'h'),),
 		array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',1000,1000,'L'),),

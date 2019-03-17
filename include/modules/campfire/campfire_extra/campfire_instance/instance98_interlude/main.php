@@ -59,14 +59,16 @@ namespace instance98
 		eval(import_module('sys','player','logger','itemmain','map'));
 		//最大能为多少人提供帮助
 		$max_help_limits = 4;
-		if($gamevars['bear_keysword']<=$max_help_limits && !\skillbase\skill_query(1998,$sdata))
+		$gamevars['bear_keysword'] =(int)$gamevars['bear_keysword'];
+		if($gamevars['bear_keysword'] && $gamevars['bear_keysword']<=$max_help_limits && !\skillbase\skill_query(1998,$sdata))
 		{
 			$log.="你获得了【守护精灵的援护】。<br>";
 			\skillbase\skill_acquire(1998);
-			$gamevars['bear_keysword'] ++;
+			$gamevars['bear_keysword'] += 1;
 			\sys\save_gameinfo();
 		}
 	}
+	
 	function story_branch_event($story,$branch)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
@@ -325,6 +327,14 @@ namespace instance98
 			$ct = floor(getmicrotime()*1000);
 			\skillbase\skill_setvalue(602,'end',$ct,$edata); 
 			\player\player_save($edata);
+			$stn = (int)\skillbase\skill_getvalue(602,'stn',$edata);
+			if($stn)
+			{
+				$edata = \player\fetch_playerdata_by_pid($stn);
+				$log.="<span class=\"yellow b\">现在那个邪恶的家伙没有人质可用了！</span>";
+				\skillbase\skill_setvalue(1906,'var',0,$edata);
+				\player\player_save($edata);
+			}
 			return;
 		}
 		else

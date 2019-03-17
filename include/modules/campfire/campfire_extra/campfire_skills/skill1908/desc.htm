@@ -1,0 +1,36 @@
+<!--{eval $___TEMP_SKILL_ID=1908;}-->
+<!--{eval eval(import_module('clubbase','skill1908'));$skill1908_imm = \skill1908\get_immwep1908($who);$skill1908_suf = \skill1908\get_sufwep1908($who);}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+$clubskillname[$___TEMP_SKILL_ID]
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+当你受到某武器的攻击时，将其记录。在之后的战斗中，只有该武器能对你造成伤害，且该武器将无法对其他该技能的持有者造成伤害。<br>
+不会对其他技能持有者造成伤害的武器列表：
+<span class='clan b'>
+<!--{if $skill1908_imm}-->
+$skill1908_imm
+<!--{else}-->
+暂无
+<!--{/if}-->
+</span>
+<br>
+能对你造成伤害的武器：
+<span class='red b'>
+<!--{if $skill1908_suf}-->
+$skill1908_suf
+<!--{else}-->
+暂无
+<!--{/if}-->
+</span>
+<br>
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}
