@@ -8,7 +8,7 @@ namespace skill1903
 	
 	function init() 
 	{
-		define('MOD_SKILL1903_INFO','card;unique;locked;');
+		define('MOD_SKILL1903_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1903] = '清洗';
 	}

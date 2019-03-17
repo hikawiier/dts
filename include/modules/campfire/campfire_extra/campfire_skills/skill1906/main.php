@@ -7,7 +7,7 @@ namespace skill1906
 	$max_stun_time1906 = 300000;
 	function init() 
 	{
-		define('MOD_SKILL1906_INFO','card;unique;');
+		define('MOD_SKILL1906_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1906] = '虏获';
 	}

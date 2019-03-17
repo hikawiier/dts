@@ -2,11 +2,12 @@
 
 namespace skill1901
 {
+	$coolingtime1901 = 5;
 	function init() 
 	{
 		define('MOD_SKILL1901_INFO','card;unique;');
 		eval(import_module('clubbase'));
-		$clubskillname[1901] = '溯源';
+		$clubskillname[1901] = '耦合';
 	}
 	
 	function acquire1901(&$pa)
@@ -35,14 +36,23 @@ namespace skill1901
 		return (int)\skillbase\skill_getvalue(1901,'rmtime',$pa);
 	}
 	
+	function get_coolingtime1901()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('skill1901'));
+		return $coolingtime1901;
+	}
+	
 	function add_area_once1901()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
-		$areatime = $now + 30;
+		eval(import_module('sys','skill1901'));
+		$ct = get_coolingtime1901();
+		$areatime = $now + $ct;
+		$awlog = "由于不可抗力，禁区的到来被提前至{$ct}秒后！";
 		save_gameinfo();
-		addnews($now, 'addarea1901');
-		\sys\systemputchat($now,'addarea1901','由于不可抗力，禁区的到来被提前至30秒后！');
+		addnews($now, 'addarea1901',$ct);
+		\sys\systemputchat($now,'addarea1901',$awlog);
 	}
 	
 	function check_time_reduce1901()
@@ -84,11 +94,12 @@ namespace skill1901
 	function revive_check(&$pa, &$pd, $rkey)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','logger'));
+		eval(import_module('sys','player','map','logger','skill1901'));
 		$ret = $chprocess($pa, $pd, $rkey);
 		//说起来现在其他的复活技能，被弓类武器击杀是无法复活的
 		//在增加禁区前的30秒内无法复活
-		if('skill1901' == $rkey && in_array($pd['state'],Array(20,21,22,23,24,25,27,29,39,40,41,43)) && $areatime>$now+30){
+		$ct = get_coolingtime1901();
+		if('skill1901' == $rkey && in_array($pd['state'],Array(20,21,22,23,24,25,27,29,39,40,41,43)) && $areatime>$now+$ct){
 			if(get_remaintime1901($pd) > 0)
 			$ret = true;
 			add_area_once1901();
@@ -162,7 +173,7 @@ namespace skill1901
 		if($news == 'revival1901') 
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"brickred b\">{$a}被奇妙的力量所指引，从死亡的边缘爬了回来！</span></li>";
 		if($news == 'addarea1901') 
-			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red b\">由于不可抗力，禁区的到来被提前至30秒后！</span></li>";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"red b\">由于不可抗力，禁区的到来被提前至{$a}秒后！</span></li>";
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}

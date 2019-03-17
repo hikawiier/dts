@@ -5,7 +5,7 @@ namespace skill1904
 	
 	function init() 
 	{
-		define('MOD_SKILL1904_INFO','card;feature;');
+		define('MOD_SKILL1904_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1904] = '仁慈';
 	}

@@ -1,14 +1,14 @@
 <!--{eval $___TEMP_SKILL_ID=1901;}-->
-<!--{eval eval(import_module('clubbase','sys','map'));$skill1901_r = \skill1901\get_remaintime1901($who);}-->
+<!--{eval eval(import_module('clubbase','sys','map','skill1901'));$skill1901_r = \skill1901\get_remaintime1901($who);}-->
 {template MOD_CLUBBASE_SKILLDESC_START}
 <span>
 $clubskillname[$___TEMP_SKILL_ID]
 </span>
 {template MOD_CLUBBASE_SKILLDESC_MID1}
 <td class="skilldesc_left b3"><span class="skilldesc">
-<span class='grey'>生命于字节中诞生……又重归于字节。</span><br>
+<span class='grey'>我的存在依赖于你的存在……</span><br>
 在游戏增加全部禁区之前，你能以使禁区提前到来为代价多次复活。<br>
-但在禁区增加的前30秒，该技能会因幻境系统的自检机制而失效。<br>
+但在禁区增加的前{$coolingtime1901}秒，该技能会因幻境系统的自检机制而失效。<br>
 <!--{if $areatime>$now+30}-->
 当前还可复活次数：<span class="<!--{if $skill1901_r > 0}-->lime b<!--{else}-->red b<!--{/if}-->">{$skill1901_r}</span>次
 <!--{else}-->

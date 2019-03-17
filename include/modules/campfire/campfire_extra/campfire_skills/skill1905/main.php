@@ -6,7 +6,7 @@ namespace skill1905
 	$type1905 = Array(1007);
 	function init() 
 	{
-		define('MOD_SKILL1905_INFO','card;feature;');
+		define('MOD_SKILL1905_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1905] = '均衡';
 	}

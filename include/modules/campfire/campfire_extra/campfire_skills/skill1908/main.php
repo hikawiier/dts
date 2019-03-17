@@ -6,7 +6,7 @@ namespace skill1908
 	$type1908 = Array(1007);
 	function init() 
 	{
-		define('MOD_SKILL1908_INFO','card;feature;');
+		define('MOD_SKILL1908_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1908] = '调谐';
 	}

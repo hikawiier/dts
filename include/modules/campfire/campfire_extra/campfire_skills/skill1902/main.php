@@ -8,7 +8,7 @@ namespace skill1902
 	
 	function init() 
 	{
-		define('MOD_SKILL1902_INFO','card;unique;');
+		define('MOD_SKILL1902_INFO','unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1902] = '灵动';
 	}

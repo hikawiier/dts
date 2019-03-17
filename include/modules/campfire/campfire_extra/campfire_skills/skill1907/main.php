@@ -10,7 +10,7 @@ namespace skill1907
 	$trap_set_obbs1907 = 12;
 	function init() 
 	{
-		define('MOD_SKILL1907_INFO','card;unique;');
+		define('MOD_SKILL1907_INFO','feature;unique;');
 		eval(import_module('clubbase'));
 		$clubskillname[1907] = '伏技';
 	}
