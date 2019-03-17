@@ -46,7 +46,7 @@ namespace skill1998
 				$itm['itm']=&${'itm'.$i}; $itm['itmk']=&${'itmk'.$i};
 				$itm['itme']=&${'itme'.$i}; $itm['itms']=&${'itms'.$i}; $itm['itmsk']=&${'itmsk'.$i};
 				$metal_flag += $itm['itme']*$itm['itms'];	
-				$itm['itm']='宛如不醒之梦';$itm['itme']=5000;
+				$itm['itm']='宛如不醒之梦';$itm['itme']=50000;
 				$itm['itms']='∞';$itm['itmsk']='x';
 				$log.="你的补给品发生了微妙的变化！<br>";
 				break;

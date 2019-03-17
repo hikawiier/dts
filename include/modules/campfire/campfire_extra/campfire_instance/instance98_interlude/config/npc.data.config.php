@@ -2442,7 +2442,7 @@ namespace instance98
 			'wepk' => 'WG',
 			'wepe' => 17760704,
 			'weps' => 177674,
-			'wepsk' => 'rndyb',
+			'wepsk' => 'Lrndyb',
 			'artk' => 'Ac',
 			'arb' => 'NATO',
 			'arh' => 'Voice of America',

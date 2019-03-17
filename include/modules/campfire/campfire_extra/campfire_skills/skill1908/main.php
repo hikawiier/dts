@@ -121,6 +121,7 @@ namespace skill1908
 		eval(import_module('sys','logger','skill1908'));
 		if (\skillbase\skill_query(1908,$pd))
 		{	
+			$pa['immwep']=0;
 			if((!get_immwep1908($pd) && !get_sufwep1908($pd)) || (get_immwep1908($pd) && !get_sufwep1908($pd) && !check_imm_wepinfo1908($pd,$pa['wep'])) || (get_immwep1908($pd) && get_sufwep1908($pd) && check_suf_wepinfo1908($pd,$pa['wep'])))
 			{
 				//能造成伤害但不属于sufwep的情况下				
@@ -129,9 +130,21 @@ namespace skill1908
 			else
 			{	
 				$pa['dmg_dealt']=0;
+				$pa['immwep']=1;
 				if ($active) $log .= "<span class=\"lime b\">你的攻击迅猛刚烈，然而却像打在了棉花上一样没有产生任何效果。</span><br>";
 				else $log .= "<span class=\"lime b\">敌人的攻击迅猛刚烈，然而却像打在了棉花上一样没有产生任何效果。</span><br>";
 			}	
+		}
+		$chprocess($pa,$pd,$active);
+	}
+	
+	function apply_total_damage_modifier_seckill(&$pa,&$pd,$active){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if ($pa['immwep']){
+			//免疫的情况下跳过即死判断，就不发log了
+			$pa['seckill'] = 0;
+			return;
 		}
 		$chprocess($pa,$pd,$active);
 	}
