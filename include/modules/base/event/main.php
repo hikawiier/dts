@@ -237,6 +237,12 @@ namespace event
 		} elseif($pls == 31) { //太鼓实验室
 		} elseif($pls == 32) { //SCP实验室
 		} elseif($pls == 33) { //雏菊之丘
+			//campfireMOD修改：幕间狂想模式下不会触发篝相关事件
+			if(98 == $gametype)
+			{
+				$log .= '在山丘上，你尝试着寻找记忆中那个熟悉的身影……但目光所及之处，仅有野花在风中摇曳。<br>';
+				return;
+			}
 			$result = $db->query("SELECT pid,hp FROM {$tablepre}players WHERE type=4");
 			if(!$db->num_rows($result)) $flag = 0;//篝未加入战场，正常处理事件；
 			else{

@@ -77,7 +77,7 @@ namespace campfire_powerarmor
 		//动力装甲抵消伤害,判定减伤的过程
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('logger','armor','campfire_powerarmor'));
-		//先获取装备中的动力装甲信息
+		//先获取装备中的动力装甲信息，这里的$pa_kind指的是powerarmor_kind……卧槽这是谁想出来的缩写
 		$pa_kind_array = get_pa_kind_array($pd);
 		if (sizeof($pa_kind_array))
 		{
@@ -118,7 +118,7 @@ namespace campfire_powerarmor
 		}
 	}	
 	
-	function apply_total_damage_modifier_limit(&$pa,&$pd,$active)
+	function apply_total_damage_modifier_insurance(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);

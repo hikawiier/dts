@@ -2,7 +2,7 @@
 
 namespace skill1901
 {
-	$coolingtime1901 = 5;
+	$coolingtime1901 = 1;
 	function init() 
 	{
 		define('MOD_SKILL1901_INFO','card;unique;');
@@ -48,11 +48,11 @@ namespace skill1901
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','skill1901'));
 		$ct = get_coolingtime1901();
-		$areatime = $now + $ct;
 		$awlog = "由于不可抗力，禁区的到来被提前至{$ct}秒后！";
-		save_gameinfo();
 		addnews($now, 'addarea1901',$ct);
 		\sys\systemputchat($now,'addarea1901',$awlog);
+		$areatime = $now + $ct;
+		save_gameinfo();
 	}
 	
 	function check_time_reduce1901()
@@ -113,7 +113,7 @@ namespace skill1901
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $rkey);
 		if('skill1901' == $rkey){
-			//$pd['hp']=$pd['mhp'];
+			$pd['hp']=$pd['mhp'];
 			$pd['skill1901_flag']=1;
 			$rmtime = (int)\skillbase\skill_getvalue(1901,'rmtime',$pd);
 			\skillbase\skill_setvalue(1901,'rmtime',$rmtime-1,$pd);

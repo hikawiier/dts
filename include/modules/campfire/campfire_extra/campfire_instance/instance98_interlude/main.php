@@ -46,8 +46,8 @@ namespace instance98
 		//请虚拟主播义义乌退群罢
 		if(98 == $gametype && $ntype == 42)
 		{
-			$result = $db->query("SELECT cid FROM {$tablepre}chat WHERE send='一一五'");
-			if(!$result) \sys\addchat(6, '来英灵殿吧，本小姐今天就要……哎哎哎……怎么突然黑屏了？！', '一一五');
+			//$result = $db->query("SELECT cid FROM {$tablepre}chat WHERE send='一一五'");
+			//if(!$result) \sys\addchat(6, '来英灵殿吧，本小姐今天就要……哎哎哎……怎么突然黑屏了？！', '一一五');
 			return;
 		}	
 		$chprocess($ntype, $nsub, $num);
@@ -121,12 +121,12 @@ namespace instance98
 			$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 			if(strpos($itm,'游戏解除钥匙')!==false)
 			{
-				$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
+				/*$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
 				狂风卷起，你神情庄重，静候接下来的变化。<br>……<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br><br>
 				<span class='linen b'>“可恨啊！你作为一个触手，就这样就满足了吗！”</span><br>你听到有声音打破了沉默的氛围，而且那声音听起来耳熟极了。<br>
 				<span class='linen b'>“有点挑战精神好不好？？我在<span class='yellow b'>英灵殿</span>等你。”</span><br>
 				你还想再问两句，但手中的游戏解除钥匙忽然<span class='red'>爆炸</span>了！<br>
-				……！？<br>";
+				……！？<br>";*/
 				\itemmain\itms_reduce($theitem);
 				$log.="<span class='yellow b'>你的怒气增加了100点！</span><br>";
 				$log.="看来只能去英灵殿看看了……？<br>";
@@ -137,6 +137,24 @@ namespace instance98
 					addnews($now, 'valopen98',$name);
 				}
 				$rage=100;			
+				return;
+			}
+			elseif($itm == '破灭之诗')
+			{
+				$rp = 0;
+				$log .= '在你唱出那单一的旋律的霎那，<br>尚未成形的虚拟世界发生了剧烈的颤抖……<br>';
+				eval(import_module('weather'));
+				$log .= '世界响应着这旋律，产生了异变……<br>';
+				\weather\wthchange( $itm,$itmsk);
+				addnews ($now , 'thiphase', $name);
+				$hack = 1;
+				$log .= '因为破灭之歌的作用，全部锁定被打破了！<br>';
+				//\map\movehtm();
+				addnews($now,'hackb',$name);
+				\sys\systemputchat($now,'hack');
+				save_gameinfo();
+				$itm = $itmk = $itmsk = '';
+				$itme = $itms = 0;
 				return;
 			}
 			elseif(strpos($itm,'《黑熊语录》')!==false)
@@ -242,14 +260,14 @@ namespace instance98
 		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE type=$t AND hp > 0");
 		$npcnum = $db->num_rows($result);
 		return $npcnum;
-	}	
+	}
 	
 	function move($moveto = 99) {
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','instance98','map','player','logger'));
 		if(98 == $gametype)
 		{
-			$ban ="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<br>“<span class=\"linen b\">要进入<span class=\"yellow b\">{$plsinfo[$moveto]}</span>，你必须先通过<span class=\"yellow b\">{$plsinfo[$moveto+1]}</span>的试炼！你懂不懂RPG的啊！</span>”<br>";
+			//$ban ="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<br>“<span class=\"linen b\">要进入<span class=\"yellow b\">{$plsinfo[$moveto]}</span>，你必须先通过<span class=\"yellow b\">{$plsinfo[$moveto+1]}</span>的试炼！你懂不懂RPG的啊！</span>”<br>";
 			if($moveto==34)
 			{
 				if($gamevars['valhalla'])
@@ -264,7 +282,7 @@ namespace instance98
 					$randpls = rand($areanum+1,sizeof($arealist));
 					while($randpls==34) $randpls = rand($areanum+1,sizeof($arealist));
 					$pls = $arealist[$randpls];
-					$log.="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<span class=\"linen b\">“你还没有进入这里的资格，快滚！”</span><br>一股未知的力量包围了你，当你反应过来的时候，发现自己正身处<span class=\"yellow b\">{$plsinfo[$pls]}</span>。<br>";
+					//$log.="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<span class=\"linen b\">“你还没有进入这里的资格，快滚！”</span><br>一股未知的力量包围了你，当你反应过来的时候，发现自己正身处<span class=\"yellow b\">{$plsinfo[$pls]}</span>。<br>";
 					return;
 				}
 			}
@@ -358,6 +376,15 @@ namespace instance98
 		eval(import_module('sys','instance98'));
 		if (98 == $gametype){
 			return $npcinfo_instance98;
+		}else return $chprocess();
+	}
+	
+	function get_enpcinfo()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','instance98'));
+		if (98 == $gametype){
+			return $enpcinfo_instance98;
 		}else return $chprocess();
 	}
 	

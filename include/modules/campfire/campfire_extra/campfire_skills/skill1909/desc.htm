@@ -1,0 +1,22 @@
+<!--{eval eval(import_module('skill1909'));}-->
+<!--{eval $___TEMP_SKILL_ID=1909;}-->
+<!--{eval $clv = (int)\skillbase\skill_getvalue(1909,'lvl',$who); }-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+<span class="red b">自爆</span>
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+<span class="yellow b">专有特性</span> 当你受到致命伤害时会引爆体内的信息炸弹。<br>
+当该伤害不足以致敌人死亡时，信息炸弹会对敌人造成与你所受伤害相同的伤害。<br>
+当该伤害足以击杀敌人时，溢出的信息会干扰幻境系统的正常运行，并使禁区提前到来。<br>
+当前还可引爆次数：<span class='red b'>$clv</span>次<br>
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

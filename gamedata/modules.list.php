@@ -272,6 +272,7 @@ skill1905,campfire/campfire_extra/campfire_skills/skill1905/,1
 skill1907,campfire/campfire_extra/campfire_skills/skill1907/,1
 skill1908,campfire/campfire_extra/campfire_skills/skill1908/,1
 skill1904,campfire/campfire_extra/campfire_skills/skill1904/,1
+skill1909,campfire/campfire_extra/campfire_skills/skill1909/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
 skill273,extra/club/skills/skill273/,1
