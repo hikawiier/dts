@@ -42,6 +42,7 @@ item_slip,extra/item_extra/item_slip/,1
 itemmix_sync,base/itemmix/itemmix_sync/,1
 campfire_boxes,campfire/campfire_base/campfireitem/campfire_boxes/,1
 campfire_item_kgrg,campfire/campfire_base/campfireitem/campfire_item_kgrg/,1
+campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
 enemy,base/enemy/,1
 gameflow_duel,core/gameflow/gameflow_duel/,1
 campfire_corpse,campfire/campfire_base/campfire_corpse/,1
@@ -483,7 +484,6 @@ randmix,extra/misc/randmix/,1
 skill57,extra/club/skills/skill57/,1
 skill436,extra/card/skills/skill436/,1
 smartmix,extra/misc/smartmix/,1
-campfire_item_kget,campfire/campfire_base/campfireitem/campfire_item_kget/,1
 skill36,extra/club/skills/skill36/,1
 skill38,extra/club/skills/skill38/,1
 skill34,extra/club/skills/skill34/,1

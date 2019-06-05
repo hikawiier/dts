@@ -1,12 +1,20 @@
 <!--{eval $___TEMP_SKILL_ID=1901;}-->
-<!--{eval eval(import_module('clubbase','sys','map','skill1901'));$skill1901_r = \skill1901\get_remaintime1901($who);}-->
+<!--{eval eval(import_module('clubbase','sys','map','skill1901'));$skill1901_r = \skill1901\get_remaintime1901($who); $skill1901_key = \skill1901\get_key1901($who);}-->
 {template MOD_CLUBBASE_SKILLDESC_START}
 <span>
-$clubskillname[$___TEMP_SKILL_ID]
+<!--{if !$skill1901_key}-->
+权能
+<!--{else}-->
+<span class='red b'>耦合</span>
+<!--{/if}-->
 </span>
 {template MOD_CLUBBASE_SKILLDESC_MID1}
 <td class="skilldesc_left b3"><span class="skilldesc">
+<!--{if !$skill1901_key}-->
+<span class='grey'>这是属于你的高贵权力……</span><br>
+<!--{else}-->
 <span class='grey'>我的存在依赖于你的存在……</span><br>
+<!--{/if}-->
 在游戏增加全部禁区之前，你能以使禁区提前到来为代价多次复活<br>
 但在禁区增加的前{$coolingtime1901}秒，该技能会因幻境系统的自检机制而失效<br>
 <!--{if $areatime>$now+30}-->

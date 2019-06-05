@@ -29,6 +29,7 @@ function init_item_place()
 		'wepchange' => GAME_ROOT.'./include/modules/extra/attr/wepchange/config/wepchange.config.php',
 	);
 	$iplacefilelist['npc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
+	$iplacefilelist['evonpc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/evonpc.config.php';
 	$iplacefiledata = array();
 	foreach($iplacefilelist as $ipfkey => $ipfval){
 		if($ipfkey == 'mixitem') {
@@ -40,6 +41,7 @@ function init_item_place()
 			elseif($ipfkey == 'npc_i8') $varname = 'npcinfo_instance8';
 			elseif($ipfkey == 'npc_i9') $varname = 'npcinfo_instance9';
 			elseif($ipfkey == 'npc_i98') $varname = 'npcinfo_instance98';
+			elseif($ipfkey == 'evonpc_i98') $varname = 'enpcinfo_instance98';
 			elseif($ipfkey == 'addnpc') $varname = 'anpcinfo';
 			elseif($ipfkey == 'evonpc') $varname = 'enpcinfo';
 			if(!empty($varname)) $iplacefiledata[$ipfkey] = $$varname;

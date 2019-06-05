@@ -2,12 +2,12 @@
 
 namespace skill1901
 {
-	$coolingtime1901 = 1;
+	$coolingtime1901 = 3;
 	function init() 
 	{
-		define('MOD_SKILL1901_INFO','card;unique;');
+		define('MOD_SKILL1901_INFO','card;unique;feature;');
 		eval(import_module('clubbase'));
-		$clubskillname[1901] = '耦合';
+		$clubskillname[1901] = '权能';
 	}
 	
 	function acquire1901(&$pa)
@@ -16,6 +16,7 @@ namespace skill1901
 		eval(import_module('sys','map'));
 		//理论上现有剩下的最大复活次数
 		$now_rmtime = floor((sizeof($arealist)-$areanum-1)/$areaadd);
+		\skillbase\skill_setvalue(1901,'key','0',$pa);
 		\skillbase\skill_setvalue(1901,'rmtime',$now_rmtime,$pa);
 	}
 	
@@ -34,6 +35,12 @@ namespace skill1901
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		return (int)\skillbase\skill_getvalue(1901,'rmtime',$pa);
+	}
+	
+	function get_key1901(&$pa = NULL)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return \skillbase\skill_getvalue(1901,'key',$pa);
 	}
 	
 	function get_coolingtime1901()

@@ -17,12 +17,12 @@ namespace campfire_powerarmor
 		*/
 		
 		//防具上的属性仅仅用作识别，不具有实际效果
-		$itemspkinfo['^01099'] = 'T级';		
-		$itemspkinfo['^01098'] = 'S级';	
-		$itemspkinfo['^01097'] = 'A级';	
-		$itemspkinfo['^01096'] = 'B级';	
-		$itemspkinfo['^01095'] = 'C级';	
-		$itemspkinfo['^01094'] = 'O级';	
+		$itemspkinfo['^01099'] = '<span class="gold b">装甲</span>';		
+		$itemspkinfo['^01098'] = '<span class="purple b">装甲</span>';	
+		$itemspkinfo['^01097'] = '<span class="lightblue b">装甲</span>';
+		$itemspkinfo['^01096'] = '<span class="evergreen b">装甲</span>';	
+		$itemspkinfo['^01095'] = '<span class="b">装甲</span>';	
+		$itemspkinfo['^01094'] = '<span class="grey b">装甲</span>';	
 	}
 	//获取装备中的动力装甲信息（任意对象）
 	function get_pa_kind_array($pad)
@@ -79,46 +79,49 @@ namespace campfire_powerarmor
 		eval(import_module('logger','armor','campfire_powerarmor'));
 		//先获取装备中的动力装甲信息，这里的$pa_kind指的是powerarmor_kind……卧槽这是谁想出来的缩写
 		$pa_kind_array = get_pa_kind_array($pd);
-		if (sizeof($pa_kind_array))
+		if($pa_kind_array)
 		{
-			$mix_pa_reduce_dmg = 0;
-			//最多能抵消多少伤害
-			$max_able_reduce_dmg = $pa['dmg_dealt']*($max_pa_reduce_dmg_per/100);
-			//开始抵消伤害
+			$AllparReduceDmg = 0;
+			//每个部分的分别判定开始
 			foreach($pa_kind_array as $kind => $lvl)
 			{
-				//理论上单次装备能抵消的伤害最大值和应消耗的耐久
-				$once_pa_reduce_dmg = $max_able_reduce_dmg * ($once_pa_reduce_dmg_per[$lvl]/100);
-				$once_pas_cost = $once_pa_reduce_dmg / ($pd[$kind.'e']*$once_pas_reduce_dmg[$lvl]/100);
-				if($once_pas_cost)
-				{
-					//只有受到会消耗超过1点耐久的伤害时才会触发动力装甲抵消伤害
-					//↑傻逼设定，已经删除，请大家引以为鉴
-					//身体部位的动力甲可以低消耗抵消伤害，放在这里是为了即使达不到1点耐久也可以触发
-					if($kind=='arb')  $once_pas_cost = $once_pas_cost/$bpa_reduce_pas_cost_per[$lvl];
-					//计算实际抵消的伤害和消耗的装甲能量
-					$pa_reduce_dmg = $pd[$kind.'s'] > $once_pas_cost ? round($once_pa_reduce_dmg) : round($pd[$kind.'s'] * $once_pas_reduce_dmg[$lvl]);
-					$pas_cost = $pd[$kind.'s'] > $once_pas_cost ? round($once_pas_cost) : $pd[$kind.'s'];
-					//处理伤害，降低耐久
-					//单次最多降低耐久不会超过100点，这个对玩家比较吃亏 
-					$pas_cost = min(100,$pas_cost);
-					$pas_cost = max(1,$pas_cost);
-					$pa['dmg_dealt'] -= $pa_reduce_dmg;
-					$mix_pa_reduce_dmg += $pa_reduce_dmg;
-					\armor\armor_hurt($pa,$pd,$active,$kind,$pas_cost);
-				}	
+				//该部位的装甲每点耐久可以抵消多少伤害
+				$par_sReduceDmg = $pd[$kind.'e']*($once_pas_reduce_dmg[$lvl]/100);
+				//该部位的装甲 不考虑耐久 理论最大减伤值
+				$parReduceDmgTH = $pa['dmg_dealt'] * ($once_pa_reduce_dmg_per[$lvl]/100);
+				//该部位的装甲 实际可以提供的减伤值
+				$par_S = $kind=='arb' ? $pd[$kind.'s'] * $bpa_reduce_pas_cost_per[$lvl] : $pd[$kind.'s'];
+				$parReduceDmgRA = $par_S * $par_sReduceDmg;
+				//实际减伤大于理论减伤时 插一个过量防御的旗 没有这个旗的情况下 等于装备的耐久值不够或者正好
+				if($parReduceDmgRA > $parReduceDmgTH) $overReduceDmgFlag=true;
+				//最终减伤数值
+				$parReduceDmg = $overReduceDmgFlag ? $parReduceDmgTH : $parReduceDmgRA;
+				//最终削减防具耐久数值，只有减伤数值大于每点耐久可抵消的伤害值时才会判断
+				$parReduce_s = 0;
+				if($parReduceDmg > $par_sReduceDmg) $parReduce_s = $overReduceDmgFlag ? round($parReduceDmg/$par_sReduceDmg) : $pd[$kind.'s'];
+				if($kind=='arb') $parReduce_s = round($parReduce_s/$bpa_reduce_pas_cost_per[$lvl]); 
+				//单次处理减伤事件所造成的耐久降低不会超过 100 点
+				$parReduce_s = min(100,$parReduce_s);
+				//处理防具耐久降低的事件
+				if($parReduce_s) \armor\armor_hurt($pa,$pd,$active,$kind,$parReduce_s);
+				//累加减伤数值
+				$AllparReduceDmg += $parReduceDmg;
 			}
+			//装甲系统最高能够提供的减伤数值
+			$AllparReduceDmgMax = $pa['dmg_dealt']*($max_pa_reduce_dmg_per/100);
+			$AllparReduceDmg = min($AllparReduceDmg,$AllparReduceDmgMax);
+			$pa['dmg_dealt'] -= $AllparReduceDmg;
 			//发log
-			if($mix_pa_reduce_dmg)
+			if($AllparReduceDmg)
 			{
 				if ($active)
-					$log .= "<span class='yellow b'>{$pd['name']}身上穿戴的动力装甲抵消了<span class='red b'>{$mix_pa_reduce_dmg}</span>点伤害！</span><br>";
-				else  $log .= "<span class='yellow b'>你身上穿戴的动力装甲抵消了<span class='red b'>{$mix_pa_reduce_dmg}</span>点伤害！</span><br>";
-			}		
+					$log .= "<span class='brickred b'>{$pd['name']}所穿戴的装甲为其抵消了<span class='brickred b'>{$AllparReduceDmg}点伤害！<br>";
+				else  $log .= "<span class='brickred b'>你穿戴的装甲为你抵消了<span class='brickred b'>{$AllparReduceDmg}点伤害！<br>";
+			}
 		}
 	}	
 	
-	function apply_total_damage_modifier_insurance(&$pa,&$pd,$active)
+	function apply_total_damage_modifier_limit(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);
@@ -184,28 +187,6 @@ namespace campfire_powerarmor
 		if ($pa_confirm_flag) 
 			return $chprocess()-$fpa_reduce_explore_cost[$pa_confirm_flag];
 		else  return $chprocess();
-	}
-		
-	//已废弃，用来获取重复的属性数量
-	function get_ex_num_array($ex_array,$ex_nm)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;		
-		$ex_array_num = array_count_values($ex_array);
-		return $ex_array_num[$ex_nm];
-	}
-	//已废弃，用来获取某属性都存在于哪些部位的装备上，但是感觉太蠢了
-	function get_ex_place(&$pa, &$pd, $active,$ex_nm)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;		
-		$ex_aa = Array();
-		foreach(array('wep','arb','arh','ara','arf','art') as $armor)
-		{
-			if($pd[$armor.'s'] && strpos($pd[$armor.'sk'],$ex_nm)!==false)
-			{
-				array_push($ex_aa,$armor);
-			}
-		}
-		return $ex_aa;
 	}
 }
 

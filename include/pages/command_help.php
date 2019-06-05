@@ -270,15 +270,23 @@ $npcfile = GAME_ROOT.'./include/modules/base/npc/config/npc.data.config.php';
 $npcfile_i8 = GAME_ROOT.'./include/modules/extra/instance/instance8_proud/config/npc.data.config.php';
 $npcfile_i9 = GAME_ROOT.'./include/modules/extra/instance/instance9_rush/config/npc.data.config.php';
 $npcfile_i98 = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
+$enpcfile_i98 = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/evonpc.config.php';
 $npcfile_av = GAME_ROOT.'./include/modules/base/addnpc/config/addnpc.config.php';
 $npcfile_ev = GAME_ROOT.'./include/modules/extra/club/skills/skill21/config/evonpc.config.php';
 include $npcfile_i8;
 include $npcfile_i9;
 include $npcfile_i98;
+include $enpcfile_i98;
 include $npcfile_av;
 include $npcfile_ev;
 $enpcinfo_show = array();
 foreach ($enpcinfo as $enkey => $enval){
+	$enpcinfo_show[$enkey] = array('sub' => array());
+	foreach($enval as $enval2){
+		$enpcinfo_show[$enkey]['sub'][] = $enval2;
+	}
+}
+foreach ($enpcinfo_instance98 as $enkey => $enval){
 	$enpcinfo_show[$enkey] = array('sub' => array());
 	foreach($enval as $enval2){
 		$enpcinfo_show[$enkey]['sub'][] = $enval2;
@@ -292,7 +300,7 @@ $need_refresh = 0;
 if(!file_exists($writefile)){
 	$need_refresh = 1;
 }else{
-	foreach(array($npcfile, $npcfile_i8, $npcfile_i9, $npcfile_i98, $npcfile_av, $npcfile_ev, $srcfile ) as $fv){
+	foreach(array($npcfile, $npcfile_i8, $npcfile_i9, $npcfile_i98, $enpcfile_i98, $npcfile_av, $npcfile_ev, $srcfile ) as $fv){
 		if(filemtime($fv) > filemtime($writefile)) $need_refresh = 1;
 	}
 }
