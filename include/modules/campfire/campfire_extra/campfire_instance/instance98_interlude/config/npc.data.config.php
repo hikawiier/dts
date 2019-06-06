@@ -2196,7 +2196,7 @@ namespace instance98
 			'itme3' => 1,
 			'itms3' => 4,
 			'itmsk3' => '',
-			'description' => "迷之怨灵 死于毒酱包的亡灵，在某个平行宇宙中因误食了剧毒酱包而死的可怜人。<br><span class='yellow'>“这是合成了的……咬一口没关系吧……？”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
+			'description' => "迷之怨灵 死于毒酱包的亡灵，在某个时空帧中因误食了剧毒酱包而死的可怜人。<br><span class='yellow'>“这是合成了的……咬一口没关系吧……？”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 			),
 		1 => array
 			(
@@ -2222,7 +2222,7 @@ namespace instance98
 			'itme3' => 1,
 			'itms3' => 4,
 			'itmsk3' => '',
-			'description' => "迷之怨灵 死于地雷改造的亡灵，在某个平行宇宙中因改造陷阱失误被炸死的可怜人。<br><span class='yellow'>“终于攒够买雷的钱了，等我把它改成爆炸物头名就死定啦！”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
+			'description' => "迷之怨灵 死于地雷改造的亡灵，在某个时空帧中因改造陷阱失误被炸死的可怜人。<br><span class='yellow'>“终于攒够买雷的钱了，等我把它改成爆炸物头名就死定啦！”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 			),
 		2 => array
 			(
@@ -2248,7 +2248,7 @@ namespace instance98
 			'itme3' => 1,
 			'itms3' => 4,
 			'itmsk3' => '',
-			'description' => "迷之怨灵 死于献祭的亡灵，在某个平行宇宙中因被系统坑害而死的可怜人。<br><span class='yellow'>“这么中二的剧情，看不下去啊，直接点就是了……卧槽我怎么死了！？”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
+			'description' => "迷之怨灵 死于献祭的亡灵，在某个时空帧中因被系统坑害而死的可怜人。<br><span class='yellow'>“这么中二的剧情，看不下去啊，直接点就是了……卧槽我怎么死了！？”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 			),
 		3 => array
 			(
@@ -2274,7 +2274,7 @@ namespace instance98
 			'itme3' => 1,
 			'itms3' => 4,
 			'itmsk3' => '',
-			'description' => "迷之怨灵 死于鱼弹袭击的亡灵，在某个平行宇宙中因忽然出现的乱七八糟的NPC而死的可怜人。<br><span class='yellow'>“这NPC！之前没见过啊！看起来好蠢啊，摸一下试试……”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
+			'description' => "迷之怨灵 死于鱼弹袭击的亡灵，在某个时空帧中因忽然出现的乱七八糟的NPC而死的可怜人。<br><span class='yellow'>“这NPC！之前没见过啊！看起来好蠢啊，摸一下试试……”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 			),
 		),
 	);
@@ -2417,7 +2417,7 @@ namespace instance98
 			'arte' => 42,
 			'arts' => 139,
 			'artsk' => 'h',
-			'description' => '机械降神 ■，在大殿外的夜空下，挡住你去路的一位老朋友，又或者是新面孔。也许这取决于你怎么看这件事了。<br><span class="brickred b">它没有你想象中那么强大，但你能打败它吗？</span>',
+			'description' => '机械降神 ■，挡住你去路的一位老朋友，又或者是新面孔，这就要看你的理解了。<br><span class="brickred b">它没有你想象中那么强大，但你能打败它吗？</span>',
 			),
 		),
 	);
@@ -2433,7 +2433,7 @@ namespace instance98
 		'killnum' => 0,
 		'teamID' => '',
 		'teamPass' => '',
-		'gd' => 'r',
+		'gd' => 'f',
 		'mhp' => 65535,
 		'msp' => 800,
 		'att' => 5120,
@@ -2496,13 +2496,13 @@ namespace instance98
 			'icon' => 'campfire_98/blue.jpg',
 			'pls' => 94,
 			'club' => 24,
-			'mhp' => 29925,
+			'mhp' => 9925,
 			'skills' => array('1908'=>'0','1905'=>'0','1902'=>'0','403'=>'4','432'=>'0','489'=>'0','508'=>'0','513'=>'0','510'=>'2','50'=>'0','254'=>'0','61'=>'0'),
 			'wep' => 'Solidarity',
 			'wepk' => 'WG',
 			'wepe' => 17760704,
 			'weps' => 177674,
-			'wepsk' => 'Lrndyb',
+			'wepsk' => 'Lnb',
 			'artk' => 'Ac',
 			'arb' => 'NATO',
 			'arh' => 'Voice of America',
@@ -2514,7 +2514,7 @@ namespace instance98
 			'itme1' => 1,
 			'itms1' => 1,
 			'itmsk1' => 'k',
-			'description' => '第八识 权能，她的攻击灵动迅捷，如同暴风骤雨般将你淹没，但却未必会杀死你；她的防御同样滴水不漏。面对她时，要做好与她鏖战的心理准备。',
+			'description' => '第八识 权能，她的攻击灵动迅捷，如同急风骤雨，却未必会致你于死地；她的防御同样滴水不漏。面对她时，要做好与她鏖战的心理准备。',
 			),
 			2 => array
 			(

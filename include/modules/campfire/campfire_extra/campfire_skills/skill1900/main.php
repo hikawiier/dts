@@ -35,7 +35,7 @@ namespace skill1900
 			$ret *= 2;
 		//攻击者拥有唯心技能，提高攻击者的贯穿率	
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret *= 2;
+			$ret *= 4;
 		}
 		return $ret;
 	}
@@ -50,7 +50,7 @@ namespace skill1900
 			$ret *= 2;
 		//攻击者拥有唯心技能，提高攻击者的属穿率	
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret *= 2;
+			$ret *= 4;
 		}
 		return $ret;
 	}
@@ -64,7 +64,7 @@ namespace skill1900
 			$ret = 200-$ret*2;
 		//攻击者拥有唯心技能，其属性防御失效率变高
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret = 200-$ret*2;
+			$ret = 200-$ret*4;
 		}
 		return $ret;
 	}
@@ -78,7 +78,7 @@ namespace skill1900
 			$ret = 200-$ret*2;
 		//攻击者拥有唯心技能，其物理防御失效率变高
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret = 200-$ret*2;
+			$ret = 200-$ret*4;
 		}
 		return $ret;
 	}
@@ -92,7 +92,7 @@ namespace skill1900
 			$ret = 200-$ret*2;
 		//攻击者拥有唯心技能，其物抹失效率变高
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret = 200-$ret*2;
+			$ret = 200-$ret*4;
 		}
 		return $ret;
 	}
@@ -106,7 +106,7 @@ namespace skill1900
 			$ret = 200-$ret*2;
 		//攻击者拥有唯心技能，其属抹失效率变高
 		}elseif(\skillbase\skill_query(1900,$pa) && \skill1900\check_unlocked1900($pa)) {
-			$ret = 200-$ret*2;
+			$ret = 200-$ret*4;
 		}
 		return $ret;
 	}	

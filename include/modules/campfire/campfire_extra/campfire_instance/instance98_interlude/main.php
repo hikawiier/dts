@@ -69,6 +69,31 @@ namespace instance98
 		}
 	}
 	
+	function check_can_destroy($edata)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys'));
+		if($gametype==98 && $edata['type']==1006) return false;
+		return $chprocess($edata);
+	}
+	
+	function getcorpse_action(&$edata, $item)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		eval(import_module('sys','player','logger','corpse'));
+		//捡起黑精灵的武器时 改变道具类型
+		if($item == 'wep' && $edata['wep'] == '邻接之路『前向星』')
+		{
+			$edata['wep'] = '无名的光矢';
+			$edata['wepk'] = 'GA';
+			$edata['wepe'] = 1;
+			$edata['weps'] = 1;
+			$edata['wepsk'] = 'O';
+			$log.="当你触碰到那把长弓的瞬间，一声微不可察的叹息在你的耳边响起。<br>而当你回过神来，却发现自己碰到的只是一根散发着些微荧光，好像马上便要溃散的光矢。<br>";
+		}
+		$chprocess($edata, $item);
+	}
+	
 	function story_branch_event($story,$branch)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
@@ -121,35 +146,28 @@ namespace instance98
 			$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 			if(strpos($itm,'游戏解除钥匙')!==false)
 			{
-				/*$log.="你看了看手中的钥匙，说出了那句你已烂熟于心的台词：<br><span class='yellow b'>“我是 {$name}。精神锁定解除。”</span><br>
-				狂风卷起，你神情庄重，静候接下来的变化。<br>……<br>然而什么也没有发生。<br>你在这有些尴尬的沉默中等待了一会儿。<br><br>
-				<span class='linen b'>“可恨啊！你作为一个触手，就这样就满足了吗！”</span><br>你听到有声音打破了沉默的氛围，而且那声音听起来耳熟极了。<br>
-				<span class='linen b'>“有点挑战精神好不好？？我在<span class='yellow b'>英灵殿</span>等你。”</span><br>
-				你还想再问两句，但手中的游戏解除钥匙忽然<span class='red'>爆炸</span>了！<br>
-				……！？<br>";*/
+				$log.="你尝试与手中的解除钥匙建立起联系……<br>像是说明书一样的画面随之出现在了你的战术界面之上。<br>值得一提的是，你看到一项名为【精神锁定解除】的指令似乎被人粗暴的涂抹过，从而让战术界面无法识别其特征码。……不过这和你要找的东西没关系就是了。<br>你收敛起心思，继续浏览其他部分的信息，很快便找到了自己需要的指令。<br>";
+				$log.="<span class='yellow b'>“我是挑战者 {$name}，申请开放J-10区域！”</span><br>";
+				$log.="响应着你的呼唤，世界没有异变，大地也没有颤抖，那钥匙仅是闪烁了一下，旋即便化作光点四散而去了。<br>你估摸着你的指令大概是生效了，但因为没有大场面发生，让你有点心里没底。<br>";
 				\itemmain\itms_reduce($theitem);
-				$log.="<span class='yellow b'>你的怒气增加了100点！</span><br>";
-				$log.="看来只能去英灵殿看看了……？<br>";
+				$log.="看来只能亲自去英灵殿看看了……？<br>";
 				if(!$gamevars['valhalla'])
 				{
 					$gamevars['valhalla'] = 1;
 					\sys\save_gameinfo();
 					addnews($now, 'valopen98',$name);
-				}
-				$rage=100;			
+				}		
 				return;
 			}
 			elseif($itm == '破灭之诗')
 			{
 				$rp = 0;
-				$log .= '在你唱出那单一的旋律的霎那，<br>尚未成形的虚拟世界发生了剧烈的颤抖……<br>';
+				$log .= '在你唱出那单一的旋律的霎那，<br>周围的空间发生了剧烈的颤抖……<br>但不知为何，你总觉得少了点什么。<br>';
 				eval(import_module('weather'));
 				$log .= '世界响应着这旋律，产生了异变……<br>';
-				\weather\wthchange( $itm,$itmsk);
-				addnews ($now , 'thiphase', $name);
+				\weather\wthchange($itm,$itmsk);
 				$hack = 1;
 				$log .= '因为破灭之歌的作用，全部锁定被打破了！<br>';
-				//\map\movehtm();
 				addnews($now,'hackb',$name);
 				\sys\systemputchat($now,'hack');
 				save_gameinfo();
@@ -157,7 +175,7 @@ namespace instance98
 				$itme = $itms = 0;
 				return;
 			}
-			elseif(strpos($itm,'《黑熊语录》')!==false)
+			elseif(strpos($itm,'褪色的笔记本')!==false)
 			{
 				if(\skillbase\skill_getvalue(1003,'used_bearbook'))
 				{
@@ -168,32 +186,38 @@ namespace instance98
 				$add_skillpoint = $itme>1 ? rand(1,$itme) : 1;	
 				$itme -= $add_skillpoint;
 				$skillpoint+=$add_skillpoint;
-				$log.="你粗略的翻看了一遍黑熊语录，饶是满腹经纶的你也感觉受益匪浅！<br>你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
-				if($itme)
-				{
-					$log.="看起来里面还有不少值得学习的内容，你决定把它保存下来。<br>也许可以将它分享给你的伙伴们看看。<br>";
-				}
-				else
-				{
-					$log.="看起来你已经花10分钟完全搞懂里面的内容了。<br>你随手就把它丢掉了。<br>";
-					\itemmain\itms_reduce($theitem);				
-				}
+				$log.="你打开了笔记本，粗略的翻阅着。<br>这似乎是一本语录，上面记载了不少流行于远古时代的短句。<br>";
+				$log.="你越看越是觉得这些短句朗朗上口，富有哲理。饶是满腹经纶的你也感觉受益匪浅！<br>你获得了<span class='yellow b'>{$add_skillpoint}</span>点技能点！<br>";
 				if($add_skillpoint==$nowitme)
 				{
 					$itme0=1;$itms0=1;
-					$log.="<span class='yellow b'>你发现有张卡牌黏在了你的衣服上！大概是从书里掉出来的……？</span><br>";
+					$log.="<span class='yellow b'>就在你认真翻阅时，你在笔记本的缝隙间发现了一张像是卡片的东西！</span><br>";
 					if($add_skillpoint>50)
 					{
-						$itm0='画有熊本熊的迷之卡牌';$itmk0='VO';$itmsk0='13';
+						$itm0='画有熊样生物的的迷之卡牌';$itmk0='VO';$itmsk0='13';
 					}
 					else
 					{
-						$log.="<span class='yellow b'>但这张卡似乎已经被人用过很多次了的样子……</span><br>";
-						$itm0='本来画有熊本熊的迷之卡牌';$itmk0='VO3';$itmsk0='';
+						$log.="<span class='yellow b'>但这张卡似乎已经破烂到看不出卡面上画的什么了……</span><br>";
+						$itm0='本来画有熊样生物的迷之卡牌';$itmk0='VO3';$itmsk0='';
 					}
 					\itemmain\itemget();
 				}
+				$log.="语录的内容包含了巨大的信息量，你只看了一会儿就感觉晕头转向，你赶忙将它合上了。<br>";
+				if($itme)
+				{
+					$log.="不过，看起来里面还有不少值得学习的内容，你决定把它保存下来。<br>也许可以将它分享给你的伙伴们看看。<br>";
+				}
+				else
+				{
+					$log.="不过，你觉得自己已经花10分钟完全搞懂里面的内容了。<br>你随手就把它丢掉了。<br>";
+					\itemmain\itms_reduce($theitem);				
+				}
 				\skillbase\skill_setvalue(1003,'used_bearbook',1);
+				return;
+			}
+			elseif(strpos($itm,'按钮的基座')!==false)
+				$log.="看起来这基座上本该有个按钮的，不过不知道被谁撬走了。现在它只是一个空壳子。<br>";
 				return;
 			}
 			elseif(strpos($itm,'黑熊键刃')!==false)
@@ -267,12 +291,12 @@ namespace instance98
 		eval(import_module('sys','instance98','map','player','logger'));
 		if(98 == $gametype)
 		{
-			//$ban ="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<br>“<span class=\"linen b\">要进入<span class=\"yellow b\">{$plsinfo[$moveto]}</span>，你必须先通过<span class=\"yellow b\">{$plsinfo[$moveto+1]}</span>的试炼！你懂不懂RPG的啊！</span>”<br>";
+			$ban ="你在迷雾中找寻着通往<span class=\"yellow b\">{$plsinfo[$moveto]}</span>的道路……却总是被突然杀出的敌人拦下。<br>看起来你需要彻底击败<span class=\"yellow b\">{$plsinfo[$moveto+1]}</span>内的敌人才能继续探索。<br>";
 			if($moveto==34)
 			{
-				if($gamevars['valhalla'])
+				if($gamevars['valhalla'] && $weather>17)
 				{
-					$log.="根据记忆中的位置，你推开了属于英灵殿的那扇厚重的木门。<br>在那一刹那，一股白色的光芒将你包裹了进去。<br>那强光刺得你闭上了眼。<br>当你反应过来的时候，呈现在你眼前的是一条";
+					$log.="在战术界面的指示下，你推开了属于英灵殿的那扇厚重的木门。<br>在那一刹那，一道白色的光芒将你包裹其中。<br>突然出现的强光使你条件反射闭上了眼，而当你再睁开眼时，呈现在眼前的是一条";
 					$pls = 98;//伪造移动
 					\explore\move_to_area(98);
 					return;
@@ -282,7 +306,7 @@ namespace instance98
 					$randpls = rand($areanum+1,sizeof($arealist));
 					while($randpls==34) $randpls = rand($areanum+1,sizeof($arealist));
 					$pls = $arealist[$randpls];
-					//$log.="殿堂的深处传来一个极力想模仿出严肃的感觉，但反而显得有点搞笑的的声音：<span class=\"linen b\">“你还没有进入这里的资格，快滚！”</span><br>一股未知的力量包围了你，当你反应过来的时候，发现自己正身处<span class=\"yellow b\">{$plsinfo[$pls]}</span>。<br>";
+					$log.="你沿着地图指定的坐标方向，朝着英灵殿的位置前行……本该是这样的。<br>可回过神来，你却发现自己已身处{$pls}。<br>这是怎么一回事呢……？也许该问问黑熊精灵。<br>";
 					return;
 				}
 			}
@@ -302,7 +326,7 @@ namespace instance98
 		if(\skillbase\skill_getvalue(1003,'used_bearbook'))
 		{
 			\skillbase\skill_setvalue(1003,'used_bearbook',0);
-			$log.="你感觉自己又可以继续学习黑熊语录了。<br>";
+			$log.="你感觉自己又可以继续学习那本语录了。<br>";
 		}
 	}
 	

@@ -3148,13 +3148,52 @@ $campfire_cards = Array
 		'rare' => 'S',
 		'pack' => 'Horizon of Campfire',
 		'desc' => '不幸也是幸运的影子',
-		'effect' => '获得技能「唯心」：你的防御、抹消属性的失效率与被贯穿率加倍，但攻击时贯穿对方防御、抹消的概率也加倍',
+		'effect' => '获得技能「唯心」：你的防御、抹消属性的失效率与被贯穿率加倍，但攻击时贯穿对方防御、抹消的概率也大幅提升',
 		'energy' => 60,
 		'valid' => array(
 			'skills' => array(
 				'1900' => '0', 
 			),
 		),
+	),
+	2001 => array(
+		'name' => '失名之人',
+		'rare' => 'C',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '他们徜徉在灰白色的梦境里，<br>一遍又一遍重演着过去。<br>他们已无法醒来，<br>直到下一位失意人到来。',
+		'effect' => '获得技能「贻梦」：首次使用该技能时，记录并消耗一件道具，再次使用该技能可获得记录的道具',
+		'energy' => 90,
+		'valid' => array(
+			'skills' => array(
+				'1910' => '0', 
+			),
+		),
+	),
+	2002 => array(
+		'name' => '奇点旅行者',
+		'rare' => 'A',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '漂泊于以载计数的岁月里，<br>直至群星黯然，万籁俱寂。<br>你最终还是到达了这里，<br>也还记得自己是谁，<br>唯独忘掉了为什么要出发。',
+		'effect' => '？？？',
+		'energy' => 90,
+	),
+	2003 => array(
+		'name' => '守护进程 “黑熊”',
+		'title' => '守护进程',
+		'rare' => 'C',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '黑熊只是一件外套<br>外套里面可以是任何人',
+		'effect' => '真正的黑熊是不存在的',
+		'energy' => 60,
+	),
+	2004 => array(
+		'name' => '机械降神 “黑熊”',
+		'title' => '机械降神',
+		'rare' => 'S',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '<span class="grey"><i>“这儿没有英雄和他的传奇故事，<br>有的仅是发生在舞台之外的小小插曲。而她也不该出现在这儿。<br>她理应在万众瞩目下，以怒涛之势登场。剪除邪恶，力挽狂澜。”</i></span>',
+		'effect' => '？？？',
+		'energy' => 60,
 	),
 );
 $cards = $cards + $campfire_cards;

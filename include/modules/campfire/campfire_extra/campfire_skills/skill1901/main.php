@@ -2,6 +2,8 @@
 
 namespace skill1901
 {
+	$paneldesc=array('融合','拟合','耦合');
+	$procrate=array(0,8,12,20,50,90);
 	$coolingtime1901 = 3;
 	function init() 
 	{

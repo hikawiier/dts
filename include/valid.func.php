@@ -138,11 +138,12 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 
 	//幕间狂想模式开局发全身装备
 	elseif(98==$gametype){
-		$arb = '黑熊战甲-B';$arbk = 'DBPC'; $arbe = 66; $arbs = 66; $arbsk = 'zA';
-		$arh = '黑熊战甲-H';$arhk = 'DHPC'; $arhe = 66; $arhs = 66; $arhsk = 'za';
-		$ara = '黑熊战甲-A';$arak = 'DAPC'; $arae = 66; $aras = 66; $arask = 'zH';
-		$arf = '黑熊战甲-F';$arfk = 'DFPC'; $arfe = 66; $arfs = 66; $arfsk = 'zM';
-		$itms[1] = 60; $itms[2] = 60;
+		$arb = '破损的斗篷';$arbk = 'DB'; $arbe = 120; $arbs = 45; $arbsk = 'zA';
+		$arh = '破损的兜帽';$arhk = 'DH'; $arhe = 120; $arhs = 45; $arhsk = 'za';
+		$ara = '破损的马靴';$arak = 'DA'; $arae = 120; $aras = 45; $arask = 'zH';
+		$arf = '破损的护手';$arfk = 'DF'; $arfe = 120; $arfs = 45; $arfsk = 'zM';
+		$itm[1] = '糊状物';$itmk[1] = 'HB';$itms[1] = 60; 
+		$itm[2] = '指令书'; $itmk[2] = 'Y'; $itme[2] = 1; $itms[2] = 1;
 		$itm[4] = '生命探测器'; $itmk[4] = 'ER'; $itme[4] = 3; $itms[4] = 1;$itmsk[4] = '';
 		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 15;$itmsk[5] = '';
 	}
