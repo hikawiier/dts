@@ -217,6 +217,7 @@ namespace instance98
 				return;
 			}
 			elseif(strpos($itm,'按钮的基座')!==false)
+			{
 				$log.="看起来这基座上本该有个按钮的，不过不知道被谁撬走了。现在它只是一个空壳子。<br>";
 				return;
 			}
