@@ -73,6 +73,7 @@ namespace instance98
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys'));
+		//不能摧毁黑精灵的尸体
 		if($gametype==98 && $edata['type']==1006) return false;
 		return $chprocess($edata);
 	}
@@ -198,7 +199,7 @@ namespace instance98
 					}
 					else
 					{
-						$log.="<span class='yellow b'>但这张卡似乎已经破烂到看不出卡面上画的什么了……</span><br>";
+						$log.="<span class='yellow b'>但这张卡片似乎已经破烂到看不出上面画了什么……</span><br>";
 						$itm0='本来画有熊样生物的迷之卡牌';$itmk0='VO3';$itmsk0='';
 					}
 					\itemmain\itemget();
@@ -260,11 +261,12 @@ namespace instance98
 				
 			elseif($command == 'confirm') 
 			{
-				$log.="你踏上银色的阶梯，拾级而上，直到临近天穹。你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，呈现在你眼前的是一副奇妙的景象——<br>";
-				$pls = 94;//伪造移动
-				//\explore\move_to_area(94);
-				$log.="{$areainfo[$pls]}";
-				bear_keysword_event();
+				$log.="你踏上银色的阶梯，拾级而上，直到临近天穹。<br>你回头望去，来时的阶梯已消失不见。<br>……<br>当你拨开迷雾，来到天空的另一端时，呈现在你眼前的是一副奇妙的景象——<br>";
+				$pls = 94;
+				$log.="{$areainfo[$pls]}";//伪造移动
+				//成就判断
+				if(\skillbase\skill_getvalue(1801,'cnt') < 3)  \skillbase\skill_setvalue(1801, 'cnt', 3);
+				//bear_keysword_event();
 			}
 			else
 			{
@@ -300,9 +302,15 @@ namespace instance98
 					$log.="在战术界面的指示下，你推开了属于英灵殿的那扇厚重的木门。<br>在那一刹那，一道白色的光芒将你包裹其中。<br>突然出现的强光使你条件反射闭上了眼，而当你再睁开眼时，呈现在眼前的是一条";
 					$pls = 98;//伪造移动
 					\explore\move_to_area(98);
+					//成就判断
+					if(!\skillbase\skill_getvalue(1801,'cnt'))
+					{
+						\skillbase\skill_acquire(1801);
+						\skillbase\skill_setvalue(1801, 'cnt', 1);
+					}	
 					return;
 				}
-				else					
+				else
 				{
 					$randpls = rand($areanum+1,sizeof($arealist));
 					while($randpls==34) $randpls = rand($areanum+1,sizeof($arealist));
@@ -315,6 +323,11 @@ namespace instance98
 			{
 				$log.=$ban;
 				return;
+			}
+			elseif($moveto==95)
+			{
+				//成就判断
+				if(\skillbase\skill_getvalue(1801,'cnt') < 2)  \skillbase\skill_setvalue(1801, 'cnt', 2);
 			}
 		}
 		$chprocess($moveto);

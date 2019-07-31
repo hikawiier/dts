@@ -5,24 +5,20 @@ namespace campfire_powerarmor
 	function init()
 	{
 		eval(import_module('armor','itemmain'));
-		//装甲分为T,S,A,B,C,O六个等级，在类别后面加上对应字母来区分，例如“DBPT”就是T等级的身体装甲
-		//没有等级的装甲默认为O等级
-		//不同级别的装甲差别主要体现在各个功能的数值上
-		/*
-		头部装甲：增加你的先攻率（仅在主动攻击时生效）、遇敌率（作战、偷袭、强袭姿态下）以及道具发现率（探索姿态下）
-		身体装甲：获得技能【护盾】（为你提供额外的减伤效果与护盾值，主动发动，发动时无法卸下装备），
-				  在同时装备身体装甲与头部装甲、且装甲未被破坏时，你不会受到致死伤害。
-		手部装甲：增加你的命中率，并额外附加取决于防具效果的电气伤害；
-		腿部装甲：降低你移动和探索时消耗的体力，降低敌人的命中率，增加你的回避率。
-		*/
-		
-		//防具上的属性仅仅用作识别，不具有实际效果
-		$itemspkinfo['^01099'] = '<span class="gold b">装甲</span>';		
-		$itemspkinfo['^01098'] = '<span class="purple b">装甲</span>';	
-		$itemspkinfo['^01097'] = '<span class="lightblue b">装甲</span>';
-		$itemspkinfo['^01096'] = '<span class="evergreen b">装甲</span>';	
-		$itemspkinfo['^01095'] = '<span class="b">装甲</span>';	
-		$itemspkinfo['^01094'] = '<span class="grey b">装甲</span>';	
+		//现在属性并无实际效果，而是通过一种非常愚蠢的方式判断装备中的装甲
+		//应在以后调整为用复合属性实现
+		$itemspkinfo['^01099'] = '<span class=\'gold b\'>装甲</span>';		
+		$itemspkdesc['^01099']='提供25%伤害减免，装备于头部防具时额外增加1.3倍先制率，装备于手部防具时额外增加2倍命中率，装备于腿部防具时额外降低14点体力消耗';
+		$itemspkinfo['^01098'] = '<span class=\'purple b\'>装甲</span>';
+		$itemspkdesc['^01098']='提供20%伤害减免，装备于头部防具时额外增加1.2倍先制率，装备于手部防具时额外增加1.8倍命中率，装备于腿部防具时额外降低13点体力消耗';
+		$itemspkinfo['^01097'] = '<span class=\'lightblue b\'>装甲</span>';
+		$itemspkdesc['^01097']='提供17%伤害减免，装备于头部防具时额外增加1.15倍先制率，装备于手部防具时额外增加1.7倍命中率，装备于腿部防具时额外降低11点体力消耗';
+		$itemspkinfo['^01096'] = '<span class=\'evergreen b\'>装甲</span>';	
+		$itemspkdesc['^01096']='提供13%伤害减免，装备于头部防具时额外增加1.1倍先制率，装备于手部防具时额外增加1.5倍命中率，装备于腿部防具时额外降低8点体力消耗';
+		$itemspkinfo['^01095'] = '<span class=\'b\'>装甲</span>';	
+		$itemspkdesc['^01095']='提供8%伤害减免，装备于头部防具时额外增加1.05倍先制率，装备于手部防具时额外增加1.3倍命中率，装备于腿部防具时额外降低7点体力消耗';
+		$itemspkinfo['^01094'] = '<span class=\'grey b\'>装甲</span>';	
+		$itemspkdesc['^01094']='提供5%伤害减免，装备于手部防具时额外增加1.1倍命中率，装备于腿部防具时额外降低6点体力消耗';
 	}
 	//获取装备中的动力装甲信息（任意对象）
 	function get_pa_kind_array($pad)
@@ -110,6 +106,7 @@ namespace campfire_powerarmor
 			//装甲系统最高能够提供的减伤数值
 			$AllparReduceDmgMax = $pa['dmg_dealt']*($max_pa_reduce_dmg_per/100);
 			$AllparReduceDmg = min($AllparReduceDmg,$AllparReduceDmgMax);
+			$AllparReduceDmg = round($AllparReduceDmg);
 			$pa['dmg_dealt'] -= $AllparReduceDmg;
 			//发log
 			if($AllparReduceDmg)

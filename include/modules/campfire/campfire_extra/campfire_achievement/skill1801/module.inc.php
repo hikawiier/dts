@@ -1,6 +1,6 @@
 <?php
 
-namespace skill1800
+namespace skill1801
 {
 	////////// MODULE HEADER START ///////////////
 	$___MODULE_dependency = 'skillbase clubbase sys player achievement_base';

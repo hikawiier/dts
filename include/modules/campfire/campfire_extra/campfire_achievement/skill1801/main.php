@@ -11,9 +11,9 @@ namespace skill1801
 	
 	//各级显示的要求，如果不存在则取低的
 	$ach1801_desc= array(
-		1=>'进入一次英灵殿内',
+		1=>'推开大门，进入英灵殿',
 		2=>'点亮英灵殿内所有的区域',
-		3=>'登上云之阶并选择穿过云层',
+		3=>'登上云之阶，并穿过云层',
 	);
 	
 	$ach1801_proc_words = '巡礼阶段';
@@ -61,14 +61,14 @@ namespace skill1801
 		$ret = $chprocess($pa, $data, $achid);
 		if($achid == 1801){
 			$cnt=\skillbase\skill_getvalue(1801, 'cnt', $pa);
-			if($ret<1 && $cnt>1) $ret++;
-			if(1<=$ret<2 && $cnt>2) $ret++;
-			if(2<=$ret<3 && $cnt>3) $ret++;			
+			if($ret<1 && $cnt>=1) $ret++;
+			if($ret>=1 && $ret<2 && $cnt>=2) $ret++;
+			if($ret>=2 && $ret<3 && $cnt>=3) $ret++;			
 		}
 		return $ret;
 	}
 	
 	//还差一个移动后加cnt的判断，明天再写
+	//写在模式98的文件里了，偷个懒对不起，以后有机会再移出来
 }
-
 ?>

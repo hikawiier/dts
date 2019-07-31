@@ -529,6 +529,7 @@ skill367,extra/achievement/skills/skill367/,1
 skill368,extra/achievement/skills/skill368/,1
 skill369,extra/achievement/skills/skill369/,1
 skill1800,campfire/campfire_extra/campfire_achievement/skill1800/,1
+skill1801,campfire/campfire_extra/campfire_achievement/skill1801/,1
 skill504,extra/card/skills/skill504/,1
 skill1004,extra/instance/gtype5/skill1004/,1
 searchmemory,extra/searchmemory/,1
