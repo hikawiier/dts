@@ -2,14 +2,11 @@
 
 namespace skill1901
 {
-	$paneldesc=array('融合','拟合','耦合');
-	$procrate=array(0,8,12,20,50,90);
-	$coolingtime1901 = 3;
 	function init() 
 	{
 		define('MOD_SKILL1901_INFO','card;unique;feature;');
 		eval(import_module('clubbase'));
-		$clubskillname[1901] = '权能';
+		$clubskillname[1901] = '回响';
 	}
 	
 	function acquire1901(&$pa)

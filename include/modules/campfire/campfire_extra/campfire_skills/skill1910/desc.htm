@@ -1,0 +1,28 @@
+<!--{eval $___TEMP_SKILL_ID=1910;}-->
+<!--{eval eval(import_module('skill1910'));$skill1910_flag = \skillbase\skill_getvalue(1910,'flag',$pa);}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+贻梦
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<!--{if $skill1910_flag}-->
+<td class="skilldesc_left b3"><span class="skilldesc">
+获得一件记录过的装备/道具<br>
+</span></td>
+<td class="skilldesc_right b3">
+<input type="button" style="width:46px" onclick="$('mode').value='special';$('command').value='skill1910_special';$('subcmd').value='load_tditm';postCmd('gamecmd','command.php');this.disabled=true;" value="发动">
+</td>
+<!--{else}-->
+<td class="skilldesc_left b3"><span class="skilldesc">
+记录一件装备/道具在该技能中<br>
+</span></td>
+<td class="skilldesc_right b3">
+<input type="button" style="width:46px" onclick="$('mode').value='special';$('command').value='skill1910_special';$('subcmd').value='traveldream_page';postCmd('gamecmd','command.php');this.disabled=true;" value="发动">
+</td>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

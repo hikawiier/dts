@@ -78,6 +78,8 @@ skill3,base/skills/skill3/,1
 item_uv,base/items/item_uv/,1
 npcchat_bubble,extra/misc/npcchat_bubble/,1
 gtype5,extra/instance/gtype5/main/,1
+skill1910,campfire/campfire_extra/campfire_skills/skill1910/,1
+skill1912,campfire/campfire_extra/campfire_skills/skill1912/,1
 skill11,extra/club/skills/skill11/,1
 skill10,extra/club/skills/skill10/,1
 skill305,extra/achievement/skills/skill305/,1

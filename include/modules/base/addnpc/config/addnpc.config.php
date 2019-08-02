@@ -618,7 +618,7 @@ namespace addnpc
 		'itmk2' => 'MH',
 		'itme2' => 20,
 		'itms2' => 1,
-		'description' => '虚拟体-C型，身穿动力装甲的虚拟结构体，<span class="yellow b">基本可以看作是给玩家送钱以及磨刀的高级兵。</span><br>“看上去有几千耐久，实际上一发就打没了。”——不愿透露姓名的小五。',
+		'description' => '虚拟体-C型，身穿动力装甲的虚拟结构体，<span class="yellow b">基本可以看作是给玩家送钱以及磨刀的高级兵。</span><br>“看上去有几千耐久，实际上一发就打没了。”——不愿透露的玩家小五。',
 		'sub' => array
 		(
 			0 => array
@@ -742,7 +742,7 @@ namespace addnpc
 			'itme3' => 1,
 			'itms3' => 1,
 			'itmsk3' => 'x',
-			'description' => '虚拟体-V型 VIA-61-AETHER，<span class="yellow b">手持重型枪械的虚拟体，其攻击能穿透对手的物理防御。</span><br>是V-61型虚拟体的「复写」版本。',
+			'description' => '虚拟体-V型 VIA-61-AETHER，<span class="yellow b">手持重型枪械的虚拟体，其攻击能穿透对手的物理防御。</span><br>是V-61型虚拟体的「素体」。',
 			),
 			1 => array
 			(
@@ -760,7 +760,7 @@ namespace addnpc
 			'itme3' => 1,
 			'itms3' => 1,
 			'itmsk3' => 'x',
-			'description' => '虚拟体-V型 VIA-61，<span class="yellow b">手持重型枪械的虚拟体，其攻击能穿透对手的属性防御。</span><br>V-61型虚拟体是以小说《偶像信仰》中的主要角色之一安可为原型制成的。从某种意义上来说，这是一位操盘手。',
+			'description' => '虚拟体-V型 VIA-61，<span class="yellow b">手持重型枪械的虚拟体，其攻击能穿透对手的属性防御。</span><br>V-61型虚拟体是以小说《偶像信仰》中的主要角色之一安可为原型制成的。《偶像信仰》是在距今约三十年前亚文化圈中极具人气的群像剧作品，讲述了一位通过偶像活动收集影响力，把控舆情，斡旋于世俗势力与超自然势力之间，乃至于最终成为了活体神明的少女的故事。',
 			),
 			2 => array
 			(
@@ -778,7 +778,7 @@ namespace addnpc
 			'itme3' => 1,
 			'itms3' => 1,
 			'itmsk3' => 'x',
-			'description' => '虚拟体-V型 VIA-54-AETHER，<span class="yellow b">手持黑色灵书的虚拟体，其攻击能穿透对手的物理防御。</span><br>是V-54型虚拟体的「复写」版本。',
+			'description' => '虚拟体-V型 VIA-54-AETHER，<span class="yellow b">手持黑色灵书的虚拟体，其攻击能穿透对手的物理防御。</span><br>是V-54型虚拟体的「素体」。',
 			),
 			3 => array
 			(
@@ -796,7 +796,7 @@ namespace addnpc
 			'itme3' => 1,
 			'itms3' => 1,
 			'itmsk3' => 'x',
-			'description' => '虚拟体-V型 VIA-54，<span class="yellow b">手持黑色灵书的虚拟体，其攻击能穿透对手的属性防御。</span><br>V-54型虚拟体是以小说《偶像信仰》中反派角色艾茜·弗洛格为原型制成的。该角色有着与其外表反差极大的话痨及电波属性，并因此拥获了不俗的人气。',
+			'description' => '虚拟体-V型 VIA-54，<span class="yellow b">手持黑色灵书的虚拟体，其攻击能穿透对手的属性防御。</span><br>V-54型虚拟体是以小说《偶像信仰》中反派角色艾茜·弗洛格为原型制成的。这部充斥着黑色幽默，情节怪诞的小说IP曾一度成为流量市场的香饽饽，但这一切都在作者辛西娅因某个诡异的罪名而锒铛入狱后戛然而止，与这部小说相关的话题也因此逐渐淡出了公众的视野，成为了隐藏在互联网中无数都市传说的一员。',
 			),
 		),
 	);
