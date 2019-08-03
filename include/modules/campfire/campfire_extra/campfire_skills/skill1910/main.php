@@ -73,6 +73,11 @@ namespace skill1910
 		$td = readitm1910();
 		foreach($td as $tn => $tdnm){
 			if($name == $tdnm['name']) {
+				$log.="你闭上双眼，在支离破碎的精神世界中徐徐前行……<br>
+				在无法分清天空与地平的灰色世界里，一抹兀自出现的黯淡光点在此刻却比任何绚烂的色彩都要明亮。<br>
+				不知为何而出现的悸动催促着你走上前去，紧握住那快要消散的光点，<br>
+				而在下一个瞬间，属于已逝之人的记忆再次浮现——<br>
+				当你再次睁开眼时，你发现手中多了些东西。<br>";
 				$tt = $tdnm;
 				$itm0= $tt['itm'];
 				$itmk0= $tt['itmk'];
@@ -91,6 +96,13 @@ namespace skill1910
 	function saveitm1910($tditm){
 	//存入道具
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','logger','itemmain'));
+		$log.="你闭上双眼，在支离破碎的精神世界中徐徐前行……<br>
+		在无法分清天空与地平的灰色世界里，一抹兀自出现的黯淡光点在此刻却比任何绚烂的色彩都要明亮。<br>
+		心中的悸动催动你走上前去，握住了这份超越了时间的遗赠。<br>
+		而在下一个瞬间，属于已逝之人的记忆再次浮现——<br>
+		当你再次睁开眼时，你手中的{$tditm['itm']}已经消失不见。<br>";
+		\skillbase\skill_setvalue(1910,'flag','1');
 		$td = readitm1910();
 		$td[] = $tditm;
 		writeitm1910($td);
@@ -151,8 +163,6 @@ namespace skill1910
 					'itms' => ${'itms'.$td_itm_id},
 					'itmsk' => ${'itmsk'.$td_itm_id},
 				);
-				$log.="你向灰白之梦中存入了{${'itm'.$td_itm_id}}。<br>";
-				\skillbase\skill_setvalue(1910,'flag','1');
 				${'itm'.$td_itm_id}='';
 				${'itmk'.$td_itm_id}='';
 				${'itme'.$td_itm_id}=0;

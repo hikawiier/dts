@@ -139,9 +139,9 @@ namespace skill1901
 		if(!empty($pd['skill1901_flag'])){
 			if ($pd['o_state']==27)	//陷阱
 			{
-				$log.= "<span class=\"lime b\">但是，被一种奇妙的力量所指引着，你又从死亡的边缘爬了回来！</span><br>";
+				$log.= "<span class=\"lime b\">但是，在一种奇妙力量的引导下，你越过了时间，并从死亡的边缘爬了回来！</span><br>";
 				if(!$pd['sourceless']){
-					$w_log = "<span class=\"lime b\">但是，{$pd['name']}被一种奇妙的力量所指引，又从死亡的边缘爬了回来！</span><br>";
+					$w_log = "<span class=\"lime b\">但你嗅到空气中充斥着不详的异样氛围，与之相伴的还有强烈的错位感，在下一个瞬间，你看到{$pd['name']}再度站了起来！</span><br>";
 					\logger\logsave ( $pa['pid'], $now, $w_log ,'b');
 				}
 			}
@@ -160,13 +160,13 @@ namespace skill1901
 		{
 			if ($active)
 			{
-				$log.='<span class="lime b">但是，敌人被一种奇妙的力量所指引，又从死亡的边缘爬了回来！</span><br>';
-				$pd['battlelog'].='<span class="lime b">但是，被一种奇妙的力量所指引着，你又从死亡的边缘爬了回来！</span>';
+				$log.='<span class="lime b">但你嗅到空气中充斥着不详的异样氛围，与之相伴的还有强烈的错位感，在下一个瞬间，你看到敌人再度站了起来！</span><br>';
+				$pd['battlelog'].='<span class="lime b">但是，在一种奇妙力量的引导下，你越过了时间，并从死亡的边缘爬了回来！</span>';
 			}
 			else
 			{
-				$log.='<span class="lime b">但是，被一种奇妙的力量所指引着，你又从死亡的边缘爬了回来！</span><br>';
-				$pd['battlelog'].='<span class="lime b">但是，敌人被一种奇妙的力量所指引，又从死亡的边缘爬了回来！</span>';
+				$log.='<span class="lime b">但是，在一种奇妙力量的引导下，你越过了时间，并从死亡的边缘爬了回来！</span><br>';
+				$pd['battlelog'].='<span class="lime b">但你嗅到空气中充斥着不详的异样氛围，与之相伴的还有强烈的错位感，在下一个瞬间，你看到敌人又再度站了起来！</span>';
 			}
 		}
 	}

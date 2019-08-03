@@ -7,14 +7,18 @@
 {template MOD_CLUBBASE_SKILLDESC_MID1}
 <!--{if $skill1910_flag}-->
 <td class="skilldesc_left b3"><span class="skilldesc">
-获得一件记录过的装备/道具<br>
+<span class='grey'>你并非独自一人……</span><br>
+没有名字，没有记忆，失去了自我的人，空旷的心中仅剩下一声长长的叹息<br>
+发动技能，可以从灰色的梦境中取出寄存的道具<br>
 </span></td>
 <td class="skilldesc_right b3">
 <input type="button" style="width:46px" onclick="$('mode').value='special';$('command').value='skill1910_special';$('subcmd').value='load_tditm';postCmd('gamecmd','command.php');this.disabled=true;" value="发动">
 </td>
 <!--{else}-->
 <td class="skilldesc_left b3"><span class="skilldesc">
-记录一件装备/道具在该技能中<br>
+<span class='grey'>我是否还有别的选择……？</span><br>
+没有名字，没有记忆，失去了自我的人，空旷的心中仅剩下一声长长的叹息<br>
+发动技能，可以向灰色的梦境中存入一件道具<br>
 </span></td>
 <td class="skilldesc_right b3">
 <input type="button" style="width:46px" onclick="$('mode').value='special';$('command').value='skill1910_special';$('subcmd').value='traveldream_page';postCmd('gamecmd','command.php');this.disabled=true;" value="发动">

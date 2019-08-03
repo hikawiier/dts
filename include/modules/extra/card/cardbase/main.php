@@ -555,6 +555,7 @@ namespace cardbase
 		$cgmethod[204][] = '在「荣耀模式」模式击杀「全息实体 麻烦妖精 Sophia」后，使用缴获的★蠢萌的卡牌包★获得（15%概率）';
 		$cgmethod[211][] = '击杀场上所有NPC之后，击杀入场的「断罪女神 一一五」，之后使用缴获的★印着「Mind Over Matters」的卡牌包★获得（必定获得）';
 		$cgmethod[2004][] = '在「幕间狂想」模式击杀「机械降神 ■」后，使用缴获的破烂的卡牌册获得（15%概率）';
+		$cgmethod[2005][] = '为参与版本早期测试的热心玩家献上的谢礼';
 		if(empty($cgmethod)) return;
 		$contents = str_replace('?>','',$checkstr);//"<?php\r\nif(!defined('IN_GAME')) exit('Access Denied');\r\n";
 
