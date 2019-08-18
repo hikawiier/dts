@@ -268,7 +268,7 @@ namespace instance98
 		),
 		
 		1006 => array(
-			'■' => array
+			'黑熊(?)' => array
 			(
 				'name' => '■',
 				'gd' => 'f',

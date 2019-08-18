@@ -4,7 +4,7 @@ namespace skill1912
 {	
 	function init() 
 	{
-		define('MOD_SKILL1912_INFO','card;unique;feature;');
+		define('MOD_SKILL1912_INFO','card;unique;feature;locked;');
 		eval(import_module('clubbase'));
 		$clubskillname[1912] = '朋友';
 	}

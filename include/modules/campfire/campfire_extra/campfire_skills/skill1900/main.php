@@ -4,7 +4,7 @@ namespace skill1900
 {	
 	function init() 
 	{
-		define('MOD_SKILL1900_INFO','card;unique;');
+		define('MOD_SKILL1900_INFO','card;unique;locked');
 		eval(import_module('clubbase'));
 		$clubskillname[1900] = '唯心';
 	}

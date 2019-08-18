@@ -5,7 +5,18 @@ namespace instance98
 	function init() {
 		eval(import_module('map','gameflow_combo','skillbase','trap'));
 		$valid_skills[98] = array(1901,1002);
-		$deathlimit_by_gtype[98] = 666;
+		$deathlimit_by_gtype[98] = 2000;
+	}
+	
+	function parse_itmuse_desc($n, $k, $e, $s, $sk){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$ret = $chprocess($n, $k, $e, $s, $sk);
+		if ($n == '一颗眼球'){
+			$ret .= '这是一颗表面呈现金属色泽，但外表栩栩如生的眼球';
+		}elseif ($n == '褪色的笔记本'){
+			$ret .= '属于不知名的某人的笔记';
+		}
+		return $ret;
 	}
 	
 	//在陷阱之海，你会很痛苦
@@ -87,9 +98,9 @@ namespace instance98
 		{
 			$edata['wep'] = '无名的光矢';
 			$edata['wepk'] = 'GA';
-			$edata['wepe'] = 1;
+			$edata['wepe'] = 1000;
 			$edata['weps'] = 1;
-			$edata['wepsk'] = 'O';
+			$edata['wepsk'] = 'x';
 			$log.="当你触碰到那把长弓的瞬间，一声微不可察的叹息在你的耳边响起。<br>而当你回过神来，却发现自己碰到的只是一根散发着些微荧光，好像马上便要溃散的光矢。<br>";
 		}
 		$chprocess($edata, $item);
@@ -147,7 +158,7 @@ namespace instance98
 			$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
 			if(strpos($itm,'游戏解除钥匙')!==false)
 			{
-				$log.="你尝试与手中的解除钥匙建立起联系……<br>像是说明书一样的画面随之出现在了你的战术界面之上。<br>值得一提的是，你看到一项名为【精神锁定解除】的指令似乎被人粗暴的涂抹过，从而让战术界面无法识别其特征码。……不过这和你要找的东西没关系就是了。<br>你收敛起心思，继续浏览其他部分的信息，很快便找到了自己需要的指令。<br>";
+				$log.="你尝试与手中的解除钥匙建立起联系……<br>像是说明书一样的画面随之出现在了你的战术界面之上。<br>名为【精神锁定解除】的指令似乎被人粗暴的涂抹过，无法看到其特征码。……不过这和你要找的东西没关系就是了。<br>你收敛起心思，继续浏览其他部分的信息，很快便找到了自己需要的指令。<br>";
 				$log.="<span class='yellow b'>“我是挑战者 {$name}，申请开放J-10区域！”</span><br>";
 				$log.="响应着你的呼唤，世界没有异变，大地也没有颤抖，那钥匙仅是闪烁了一下，旋即便化作光点四散而去了。<br>你估摸着你的指令大概是生效了，但因为没有大场面发生，让你有点心里没底。<br>";
 				\itemmain\itms_reduce($theitem);
@@ -299,7 +310,7 @@ namespace instance98
 			{
 				if($gamevars['valhalla'] && $weather>17)
 				{
-					$log.="在战术界面的指示下，你推开了属于英灵殿的那扇厚重的木门。<br>在那一刹那，一道白色的光芒将你包裹其中。<br>突然出现的强光使你条件反射闭上了眼，而当你再睁开眼时，呈现在眼前的是一条";
+					$log.="在极光下，你推开了属于英灵殿的那扇厚重的木门。<br>在那巨扉敞开的瞬间，狂风骤起，烟尘飞扬——你条件反射般遮住了眼。<br>而当你再次睁开眼时，呈现在眼前的是一条";
 					$pls = 98;//伪造移动
 					\explore\move_to_area(98);
 					//成就判断
@@ -307,7 +318,7 @@ namespace instance98
 					{
 						\skillbase\skill_acquire(1801);
 						\skillbase\skill_setvalue(1801, 'cnt', 1);
-					}	
+					}
 					return;
 				}
 				else

@@ -1,0 +1,20 @@
+<!--{eval eval(import_module('skill1911'));}-->
+<!--{eval $___TEMP_SKILL_ID=1911;}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+$clubskillname[$___TEMP_SKILL_ID]
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+<span class='grey'>这一切也许仅是我虚无缥缈的臆想……但我不会忘记它</span><br>
+你的初始血量与体力值为正常情况下的一半<br>
+但通过战斗获取经验与熟练度的速度提升至原本的3倍<br>
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

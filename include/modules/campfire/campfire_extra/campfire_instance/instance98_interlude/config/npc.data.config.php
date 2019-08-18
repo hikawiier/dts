@@ -2382,7 +2382,7 @@ namespace instance98
 		(
 			0 => array
 			(
-			'name' => '■',
+			'name' => '黑熊(?)',
 			'gd' => 'f',
 			'icon' => 'campfire_98/kumari.png',
 			'club' => 18,
@@ -2417,7 +2417,7 @@ namespace instance98
 			'arte' => 42,
 			'arts' => 139,
 			'artsk' => 'h',
-			'description' => '机械降神 ■，挡住你去路的一位老朋友，又或者是新面孔，这就要看你的理解了。<br><span class="brickred b">它没有你想象中那么强大，但你能打败它吗？</span>',
+			'description' => '机械降神 黑熊(?)，挡住你去路的一位老朋友，又或者是新面孔，这就要看你的理解了。<br><span class="brickred b">它没有你想象中那么强大，但你能打败它吗？</span>',
 			),
 		),
 	);
@@ -2465,7 +2465,7 @@ namespace instance98
 		(
 			0 => array
 			(
-			'name' => '斗争',
+			'name' => '身',
 			'gd' => 'r',
 			'icon' => 'campfire_98/red.jpg',
 			'pls' => 92,
@@ -2487,11 +2487,11 @@ namespace instance98
 			'itme1' => 1,
 			'itms1' => 1,
 			'itmsk1' => 'f',
-			'description' => '第八识 斗争，她的攻击凶猛刚烈，一切防御手段在她的打击面前都如同薄纸一张，想要不付出任何代价就击倒她是完全不可能的！',
+			'description' => '第八识 身，她的攻击凶猛刚烈，一切防御手段在她的打击面前都如同薄纸一张，想要不付出任何代价就击倒她是完全不可能的！',
 			),
 			1 => array
 			(
-			'name' => '权能',
+			'name' => '意',
 			'gd' => 'r',
 			'icon' => 'campfire_98/blue.jpg',
 			'pls' => 94,
@@ -2514,11 +2514,11 @@ namespace instance98
 			'itme1' => 1,
 			'itms1' => 1,
 			'itmsk1' => 'k',
-			'description' => '第八识 权能，她的攻击灵动迅捷，如同急风骤雨，却未必会致你于死地；她的防御同样滴水不漏。面对她时，要做好与她鏖战的心理准备。',
+			'description' => '第八识 意，她的攻击灵动迅捷，如同急风骤雨，却未必会致你于死地；她的防御同样滴水不漏。面对她时，要做好与她鏖战的心理准备。',
 			),
 			2 => array
 			(
-			'name' => '虚妄',
+			'name' => '语',
 			'gd' => 'r',
 			'icon' => 'campfire_98/green.jpg',
 			'pls' => 93,
@@ -2544,7 +2544,7 @@ namespace instance98
 			'itme1' => 1,
 			'itms1' => 1,
 			'itmsk1' => 'd',
-			'description' => '第八识 虚妄，她的攻击阴险狡诈，如蚀骨之蛇攀附于你的脊背，你必须寻找合适的手段尽快将她击倒，不然她将给你带来永无止境的麻烦——在战斗中、或是战场之外……',
+			'description' => '第八识 语，她的攻击阴险狡诈，如蚀骨之蛇攀附于你的脊背，你必须寻找合适的手段尽快将她击倒，不然她将给你带来永无止境的麻烦——在战斗中、或是战场之外……',
 			),
 		),
 	);

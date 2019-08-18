@@ -138,13 +138,13 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 
 	//幕间狂想模式开局发全身装备
 	elseif(98==$gametype){
-		$arb = '破损的斗篷';$arbk = 'DB'; $arbe = 120; $arbs = 45; $arbsk = 'zA';
-		$arh = '破损的兜帽';$arhk = 'DH'; $arhe = 120; $arhs = 45; $arhsk = 'za';
-		$ara = '破损的马靴';$arak = 'DA'; $arae = 120; $aras = 45; $arask = 'zH';
-		$arf = '破损的护手';$arfk = 'DF'; $arfe = 120; $arfs = 45; $arfsk = 'zM';
-		$itm[1] = '糊状物';$itmk[1] = 'HB';$itms[1] = 60; 
-		$itm[2] = '指令书'; $itmk[2] = 'Y'; $itme[2] = 1; $itms[2] = 1;
-		$itm[4] = '生命探测器'; $itmk[4] = 'ER'; $itme[4] = 3; $itms[4] = 1;$itmsk[4] = '';
+		$arb = '破损的斗篷';$arbk = 'DB'; $arbe = 120; $arbs = 45; $arbsk = 'A';
+		$arh = '破损的风帽';$arhk = 'DH'; $arhe = 120; $arhs = 45; $arhsk = 'a';
+		$ara = '褪色的护手';$arak = 'DA'; $arae = 120; $aras = 45; $arask = 'H';
+		$arf = '褪色的马靴';$arfk = 'DF'; $arfe = 120; $arfs = 45; $arfsk = 'M';
+		$art = '磨损的多面体';$artk = 'A'; $arte = 20; $arts = 20; $artsk = 'x';
+		$itm[1] = '面糊饼';$itmk[1] = 'HB';$itms[1] = 60; 
+		$itm[2] = '生命探测器'; $itmk[2] = 'ER'; $itme[2] = 3; $itms[2] = 1;$itmsk[2] = '';
 		$itm[5] = '全恢复药剂'; $itmk[5] = 'Ca'; $itme[5] = 1; $itms[5] = 15;$itmsk[5] = '';
 	}
 	
