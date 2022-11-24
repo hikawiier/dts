@@ -1,0 +1,26 @@
+<select id="csubwep" name="csubwep" style="text-align:center" onchange="$('mode').value='speical';$('command').value=$('csubwep').value;postCmd('gamecmd','command.php');this.disabled=true;">
+			<option value="csubwep1">
+				<span>
+					<!--{if $weps}-->
+					$tpldata['wep_words']
+					<!--{else}-->
+					$nowep
+					<!--{/if}-->
+				</span>
+			<option value="csubwep2">
+				<span>
+					<!--{if $weps2}-->
+					$tpldata['wep2_words']
+					<!--{else}-->
+					--可放置--
+					<!--{/if}-->
+				</span>	
+			<option value="csubwep3">
+				<span>
+					<!--{if $weps3}-->
+					$tpldata['wep3_words']
+					<!--{else}-->
+					--可放置--
+					<!--{/if}-->
+				</span>			
+</select>

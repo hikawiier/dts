@@ -8,6 +8,9 @@ namespace weapon
 		global $wep_equip_list;
 		$equip_list=array_merge($equip_list,$wep_equip_list);
 		$battle_equip_list=array_merge($battle_equip_list,$wep_equip_list);
+		//要干一件比较蛋疼的事情了
+		$sub_wep_equip_list = Array('wep2','wep3');
+		$equip_list=array_merge($equip_list,$sub_wep_equip_list);
 	}
 	
 	function parse_itmk_desc($k_value, $sk_value) {
@@ -679,8 +682,15 @@ namespace weapon
 	function check_can_counter(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if ($pa['battle_distance']==0 && $pd['battle_distance']==0)
+		{ //短兵相接 反击无视武器射程
+			echo "双方距离为0，进入鏖战状态，因此无视武器射程反击<br>";
+			if (!$chprocess($pa,$pd,$active)) return 0;
+			return check_counter_dice($pa, $pd, $active);
+		}
+		
 		if (check_counterable_by_weapon_range($pa, $pd, $active))
-		{
+		{			
 			if (!$chprocess($pa,$pd,$active)) return 0;
 			return check_counter_dice($pa, $pd, $active);
 		}
@@ -725,6 +735,85 @@ namespace weapon
 			return;
 		}
 		$chprocess($theitem);
+	}
+
+	function change_subweapon($s)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		eval(import_module('sys','player','itemmain','logger'));
+		$eqp = 'wep';
+		$noeqp = 'WN';
+		$seqp = 'wep'.$s;
+		//哇靠 竟然wepk2和wep2k不分 这下便样衰了！
+		$seqpk = 'wepk'.$s;
+		$seqpe = 'wepe'.$s;
+		$seqps = 'weps'.$s;
+		$seqpsk = 'wepsk'.$s;
+		$swep=${$seqp}; $swepk=${$seqpk};
+		$swepe=${$seqpe}; $sweps=${$seqps}; $swepsk=${$seqpsk};
+		if(${$seqps}>0)
+		{
+			if (($noeqp && strpos ( ${$eqp.'k'}, $noeqp ) === 0) || ! ${$eqp.'s'}) {
+				//没有主武器的情况下 副武器直接覆盖主武器
+				${$eqp} = $swep;
+				${$eqp.'k'} = $swepk;
+				${$eqp.'e'} = $swepe;
+				${$eqp.'s'} = $sweps;
+				${$eqp.'sk'} = $swepsk;
+				${$seqp} = '';
+				${$seqpk} = '';
+				${$seqpsk} = '';
+				${$seqpe} = 0;
+				${$seqps} = 0;
+				$log .= "你将<span class=\"yellow b\">${$eqp}</span>拿在了手上。<br>";				
+			} else {
+				${$seqp} = ${$eqp};
+				${$seqpk} = ${$eqp.'k'};
+				${$seqpe} = ${$eqp.'e'};
+				${$seqps} = ${$eqp.'s'};
+				${$seqpsk} = ${$eqp.'sk'};
+				${$eqp} = $swep;
+				${$eqp.'k'} = $swepk;
+				${$eqp.'e'} = $swepe;
+				${$eqp.'s'} = $sweps;
+				${$eqp.'sk'} = $swepsk;
+				$log .= "你收起<span class=\"yellow b\">${$seqp}</span>，将<span class=\"yellow b\">${$eqp}</span>拿在了手上。<br>";
+			}
+		}
+		else
+		{
+			if (($noeqp && strpos ( ${$eqp.'k'}, $noeqp ) === 0) || ! ${$eqp.'s'})
+			{	//没有副武器，也没有主武器的情况下
+				$log .="已经没有武器可更换了。<br>";
+				//$log .= "没有可更换的副武器{$seqp}，或其耐久${$seqps}没有大于0。<br>";
+			}
+			else
+			{ //有主武器，没有副武器的情况下，把主武器收到副手
+				${$seqp} = ${$eqp};
+				${$seqpk} = ${$eqp.'k'};
+				${$seqpe} = ${$eqp.'e'};
+				${$seqps} = ${$eqp.'s'};
+				${$seqpsk} = ${$eqp.'sk'};
+				${$eqp} = '拳头';
+				${$eqp.'k'} = 'WN';
+				${$eqp.'e'} = 0;
+				${$eqp.'s'} = $nosta;
+				${$eqp.'sk'} = '';
+				$log .= "你收起了<span class=\"yellow b\">{${$seqp}}</span>。<br>";	
+			}
+		}
+	}
+
+	function act()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','input','logger'));
+		if ($mode == 'speical' && strpos($command,'csubwep') === 0)
+		{
+			$s = substr($command,7,1);
+			change_subweapon($s,1);
+		} 
+		$chprocess();
 	}
 }
 

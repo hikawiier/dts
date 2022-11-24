@@ -22,6 +22,7 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	$att = 95 + $rand;
 	$def = 105 - $rand;
 	$pls = 0;
+	$pzone = 0;
 	$killnum = $npckillnum = 0;
 	$lvl = 0;
 	$skillpoint = 0;
@@ -250,6 +251,7 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 		'att' => $att,
 		'def' => $def,
 		'pls' => $pls,
+		'pzone' => $pzone,
 		'lvl' => $lvl,
 		'exp' => $exp,
 		'money' => $money,

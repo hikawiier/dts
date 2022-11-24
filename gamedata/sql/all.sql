@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2017 �?12 �?17 �?12:17
--- 服务器版�?: 5.5.53
+-- 生成日期: 2017 �?12 �?17 �?12:17
+-- 服务器版�?: 5.5.53
 -- PHP 版本: 5.6.27
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- 数据�?: `acdts_2`
+-- 数据�?: `acdts_2`
 --
 
 -- --------------------------------------------------------
@@ -136,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_mapitem` (
   `itms` char(5) NOT NULL DEFAULT '0',
   `itmsk` char(5) NOT NULL DEFAULT '',
   `pls` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pzone` tinyint(2) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`iid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7757 ;
 
@@ -154,6 +155,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_maptrap` (
   `itms` char(5) NOT NULL DEFAULT '0',
   `itmsk` char(5) NOT NULL DEFAULT '',
   `pls` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pzone` tinyint(2) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`tid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=171 ;
 
@@ -200,6 +202,8 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `cdmsec` smallint(3) unsigned NOT NULL DEFAULT '0',
   `cdtime` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `action` char(12) NOT NULL DEFAULT '',
+  `battle_distance` tinyint(3) NOT NULL DEFAULT '10',
+  `battle_times` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `a_actionnum` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `v_actionnum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `hp` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -211,6 +215,7 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `att` smallint(5) unsigned NOT NULL DEFAULT '0',
   `def` smallint(5) unsigned NOT NULL DEFAULT '0',
   `pls` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pzone` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `lvl` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exp` smallint(5) unsigned NOT NULL DEFAULT '0',
   `money` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -240,6 +245,16 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   `wepe` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `weps` char(5) NOT NULL DEFAULT '0',
   `wepsk` varchar(40) NOT NULL DEFAULT '',
+  `wep2` varchar(30) NOT NULL DEFAULT '',
+  `wepk2` char(5) NOT NULL DEFAULT '',
+  `wepe2` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `weps2` char(5) NOT NULL DEFAULT '0',
+  `wepsk2` varchar(40) NOT NULL DEFAULT '',
+  `wep3` varchar(30) NOT NULL DEFAULT '',
+  `wepk3` char(5) NOT NULL DEFAULT '',
+  `wepe3` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `weps3` char(5) NOT NULL DEFAULT '0',
+  `wepsk3` varchar(40) NOT NULL DEFAULT '',
   `arb` varchar(30) NOT NULL DEFAULT '',
   `arbk` char(5) NOT NULL DEFAULT '',
   `arbe` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -306,7 +321,8 @@ CREATE TABLE IF NOT EXISTS `acbra2_players` (
   PRIMARY KEY (`pid`),
   KEY `TYPE` (`type`),
   KEY `NAME` (`name`),
-  KEY `PLS` (`pls`)
+  KEY `PLS` (`pls`),
+  KEY `PZONE` (`pzone`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=366 ;
 
 -- --------------------------------------------------------
@@ -410,6 +426,24 @@ CREATE TABLE IF NOT EXISTS `acbra2_itemdepot` (
   `itmpw` char(5) NOT NULL DEFAULT '',
   PRIMARY KEY (`iid`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `acbra2_plszone`
+-- 储存地图区域的信息
+--
+
+DROP TABLE IF EXISTS `acbra2_mapzone`;
+CREATE TABLE TABLE IF NOT EXISTS `acbra2_mapzone` (
+  `pls` tinyint unsigned not null default '0',
+  `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `exposed` tinyint(3) unsigned not null default '0',
+  `zonenum` tinyint(3) NOT NULL DEFAULT '2',
+  `zonelist` varchar(255) NOT NULL DEFAULT '',
+  `zonevars` text NOT NULL,
+   PRIMARY KEY (`pls`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

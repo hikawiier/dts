@@ -1,0 +1,41 @@
+{template command}
+
+<!--{eval \bubblebox\bubblebox_set_style('id:cMobilePhone;height:442;width:442;cancellable:1;');}-->
+<!--外圈范围 height:400px width:400px--> 
+
+{template MOD_BUBBLEBOX_START}
+
+<!--{eval eval(import_module('player','map','c_mobilephone','c_mapzone'));}-->
+<!--{eval $mpp=\c_mobilephone\print_mapzonedata();$next_map=\c_mapzone\get_next_mapinfo($pls);$prev_map=\c_mapzone\get_prev_mapinfo($pls);}-->
+
+<p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
+<!--{if (strpos($prev_map,'end')===false)}-->
+上一地图：{$plsinfo[$prev_map]}
+<!--{else}-->
+无
+<!--{/if}-->
+ 【当前地图：{$plsinfo[$pls]}】下一地图：
+<!--{if (strpos($next_map,'end')===false)}-->
+{$plsinfo[$next_map]}
+<!--{else}-->
+无
+<!--{/if}-->
+</p>
+
+{template MOD_C_MOBILEPHONE_MAPZONE}
+
+<br>
+<p>
+    当前地区暴露度：$mapzonedata[$pls]['exposed']<br>
+    当前地区压制度：$mapzonedata[$pls]['zonevars']<br>
+</p>
+
+<input class="cmdbutton" onclick="bubblebox_hide_all();" value="返回主界面" type="button">
+
+<p>
+&nbsp;&nbsp;&nbsp; 提示:点击界面外任意位置也可以返回主界面<br>
+</p>
+{template MOD_BUBBLEBOX_END}
+
+<img style="display:none;" type="hidden" src="img/blank.png" onload="bubblebox_show('cMobilePhone');">
+<!--{eval $mode='command';}-->

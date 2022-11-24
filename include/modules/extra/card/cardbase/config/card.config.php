@@ -3139,9 +3139,10 @@ $cards = array(
 //	),
 );
 
+/*
 $packlist[] = 'Horizon of Campfire';
 $packdesc['Horizon of Campfire'] ='篝火模组包提供的扩展卡集，大部分与篝火模组新增的内容有关，也包含一些篝火模组的剧情设定。';
-$campfire_cards = Array
+$ccards = Array
 (
 	2000 => array(
 		'name' => '命运的表里',
@@ -3186,8 +3187,8 @@ $campfire_cards = Array
 		),
 	),
 	2003 => array(
-		'name' => '守护进程 黑熊',
-		'title' => '守护进程',
+		'name' => '虚拟主播 黑熊(?)',
+		'title' => '黑熊(?)',
 		'rare' => 'B',
 		'pack' => 'Horizon of Campfire',
 		'desc' => '黑熊只是一张皮套',
@@ -3206,7 +3207,7 @@ $campfire_cards = Array
 		'pack' => 'Horizon of Campfire',
 		'desc' => '<span class="grey"><i>“这儿没有英雄和他的传奇故事，<br>有的仅是发生在舞台之外的小小插曲。而她也不该出现在这儿——<br>她理应在万众瞩目下，以怒涛之势登场。剪除邪恶，力挽狂澜。”</i></span>',
 		'effect' => '获得技能「降临」',
-		//发动后进入100%先手模式，效果将持续到你造成了超过你当前业力后的伤害
+		//发动后进入必定先手状态，该状态将持续到角色累计造成了超过角色rp值后的伤害
 		'energy' => 200,
 		'valid' => array(
 			'skills' => array(
@@ -3218,7 +3219,7 @@ $campfire_cards = Array
 		'name' => '传奇调查员',
 		'rare' => 'S',
 		'pack' => 'Horizon of Campfire',
-		'desc' => '潮湿的罪恶蔓延于不为人知的黑暗角落，你的灵光一现为你揭示了即将到来的灾祸。你也许能挽救这一切，但代价又是什么……？',
+		'desc' => '潮湿的罪恶蔓延于不为人知的黑暗角落，你的灵光一现为你揭示了即将到来的灾祸。你也许能挽救这一切，但代价又会是什么……？',
 		'effect' => '获得技能「朋友」',
 		//可以消耗队友来抵挡致命伤害（复活），每消耗一个队友降低0~6SAN值，初始随机拥有5~100点SAN值，一次降低超过目前SAN值的1/5会使该技能消失
 		'energy' => 90,
@@ -3229,6 +3230,6 @@ $campfire_cards = Array
 		),
 	),
 );
-$cards = $cards + $campfire_cards;
+$cards = $cards + $ccards;*/
 }
 ?>

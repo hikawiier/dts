@@ -27,7 +27,7 @@ namespace skill505
 		$itme = 100;
 		$itms = 2;
 		$itmsk = '';
-		$db->query("INSERT INTO {$tablepre}mapitem (itm, itmk, itme, itms, itmsk ,pls) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$rpls')");
+		$db->query("INSERT INTO {$tablepre}mapitem (itm, itmk, itme, itms, itmsk ,pls ,pzone) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$rpls', 99)");
 	}
 	
 	function lost505(&$pa)

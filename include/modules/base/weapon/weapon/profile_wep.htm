@@ -3,7 +3,15 @@
 <TD class=b3>
 <!--{if CURSCRIPT == 'game' && $mode == 'command' && 'WN' != $wepk}--><span><input type="button" value="卸下" onclick="$('mode').value='itemmain';$('command').value='offwep';postCmd('gamecmd','command.php');return false;"</span><!--{/if}-->
 <span>
-	<!--{if $weps}-->$tpldata['wep_words']<!--{else}-->$nowep<!--{/if}-->
+	<!--{if (($weps && 'WN' != $wepk) || $weps2 || $weps3)}-->
+	{template MOD_WEAPON_PROFILE_WEPCHANGE}
+	<!--{else}-->
+		<!--{if $weps}-->
+			$tpldata['wep_words']
+		<!--{else}-->
+			$nowep
+		<!--{/if}-->
+	<!--{/if}-->
 </span>
 </TD>
 <TD class=b3><span <!--{if $tpldata['wepsk_desc']}-->title="{$tpldata['wepsk_desc']}"<!--{/if}-->>$tpldata['wepsk_words']</span></TD>

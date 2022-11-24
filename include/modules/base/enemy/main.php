@@ -90,6 +90,11 @@ namespace enemy
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','metman','logger'));
+		//以发现状态进入战斗时 初始化交战回合与距离
+		//记得去改逃跑操作 逃跑的时候也要初始化双方的回合次数
+		//battle_distance的初始值10 为什么？我不知道啊！
+		$sdata['battle_times']=0;$edata['battle_times']=0;
+		$sdata['battle_distance']=10;$edata['battle_distance']=10;
 		if ($edata['hp']>0)
 		{
 			extract($edata,EXTR_PREFIX_ALL,'w');
@@ -104,6 +109,77 @@ namespace enemy
 			}
 		}
 		else $chprocess($edata);
+	}
+
+	function meetman_once_again(&$edata,$log_kind=0)
+	{
+		//判断“追击”的外围阶段
+		//适用于所有需要【已经进入过一次战斗后】再度【保持战斗场景】的场合 
+		//一般情况下，进入这里的$edata前缀已经是带“w_”的，如果没有，请在操作这个函数前对$edata进行处理
+		//log_kind：0=换了武器；1=挨打；2=打人
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','metman','logger'));
+		if ($edata['hp']>0)
+		{
+			//有没有高手能告诉我init_battle()传的参是干嘛的
+			//上了个厕所回来忽然想明白了 原来是给雾天遇敌用的
+			$sdata['action'] = 'enemy'.$edata['pid'];
+			$sdata['keep_enemy'] = 1;
+			\player\update_sdata();
+			$battle_title = '陷入鏖战';
+			\metman\init_battle(1);
+			//呃呃呃呃是打人还是挨打这个状态怎么传回来，也是个问题……
+			//哈哈 我想到啦！
+			if($log_kind)
+			{
+				$log .= "<br>乘胜追击，你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
+				$log .= "<br>但是敌人<span class=\"red b\">{$tdata['name']}</span>在你身后紧追不舍！<br>";
+			}
+			else
+			{
+				$log .= "<br>稍作休整，你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
+			}
+			include template(get_battlecmd_filename());
+			$cmd = ob_get_contents();
+			ob_clean();
+			$main = MOD_METMAN_MEETMAN;		
+			return;
+		}
+		return;
+	}
+
+	function meetman_then_escape(&$edata)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','metman','logger'));
+		$escape_obbs = rand(1,100);
+		if(!$edata['battle_times'] || !$sdata['battle_times'])
+		{	//没交过手的情况下，逃跑率100%
+			$escape_succ_obbs = 0;
+		}
+		else
+		{
+			$escape_succ_obbs = 50;
+		}
+		if($escape_obbs>$escape_succ_obbs)
+		{
+			//逃跑成功 重置双方战斗回合、距离
+			$sdata['battle_times']=0;$sdata['battle_distance']=0;
+			$edata['battle_times']=0;$edata['battle_distance']=0;
+			\player\player_save($edata);
+			$log .= "你逃跑了。双方的战斗次数变为了".$sdata['battle_times']."和".$edata['battle_times']."<br>";
+			$mode = 'command';
+			return;
+		}
+		else
+		{
+			//逃跑失败 距离值归零 准备挨打
+			$sdata['battle_distance']=0;
+			$edata['battle_distance']=0;
+			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑随机数只有{$escape_obbs}!<br>";
+			battle_wrapper($edata,$sdata,0);
+			return;
+		}
 	}
 	
 	function battle_wrapper(&$pa, &$pd, $active)
@@ -130,14 +206,7 @@ namespace enemy
 		if($command == 'enter')
 			$sdata['keep_enemy'] = 1;
 		if($mode == 'combat') 
-		{
-			if ($command == 'back') 
-			{
-				$log .= "你逃跑了。";
-				$mode = 'command';
-				return;
-			}
-			
+		{			
 			$enemyid = str_replace('enemy','',$action);
 			
 			if(!$enemyid || strpos($action,'enemy')===false){
@@ -157,7 +226,7 @@ namespace enemy
 			$edata=\player\fetch_playerdata_by_pid($enemyid);
 			extract($edata,EXTR_PREFIX_ALL,'w');
 			
-			if ($edata ['pls'] != $pls) {
+			if ($edata ['pls'] != $pls || $edata ['pzone'] != $pzone) {
 				$log .= "<span class=\"yellow b\">" . $edata ['name'] . "</span>已经离开了<span class=\"yellow b\">$plsinfo[$pls]</span>。<br>";
 				
 				$mode = 'command';
@@ -171,10 +240,41 @@ namespace enemy
 					\corpse\findcorpse ( $edata );
 				}
 				return;
-			}
-			
+			}			
 			\player\update_sdata();
 			$ldata=$sdata;
+			
+			//逃跑被挪到下面 用来接住处理过的$edata
+			//增加3个新按钮 
+			//'once_again'替代了战斗结果的确认按钮 用于跳转到“追击”界面
+			//'defend' 之后会做成技能
+			//'b_csubwep' 好怪的名字……用来在战斗中切换武器
+			if($command == 'once_again')
+			{
+				meetman_once_again($edata);
+				return;
+			}
+			if ($command == 'back') 
+			{
+				//快润！
+				meetman_then_escape($edata);
+				return;
+			}
+			if ($command == 'defend') 
+			{
+				//挨打时除了逃跑以外也可以防御
+				$log .= "你双手抱头蹲在墙角，祈祷对方不要打得太狠。<br>";
+				battle_wrapper($edata,$ldata,0);
+				return;
+			}
+			if (strpos($command,'b_csubwep') === 0)
+			{
+				$s = substr($command,9,1);
+				eval(import_module('weapon'));
+				\weapon\change_subweapon($s,2);
+				meetman_once_again($edata);		
+				return;
+			} 
 			battle_wrapper($ldata,$edata,1);
 			return;
 		}

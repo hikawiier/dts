@@ -1,21 +1,20 @@
+<!--{if ($pls_zone)}-->
+<optgroup label="格子列表：">
+		<!--{loop array_keys(array_pad(array(),$pls_zone[$pls]['space'],'')) $key $value}-->
+			<!--{if $pzone == $key}--><optgroup label="■ 现在格子 ■">
+			<!--{elseif $key == 0}--><option value="$key">■ 地图入口 ■</option>
+			<!--{elseif $key == $pls_zone[$pls]['space']-1}--><option value="$key">■ 移动到 {$arealist[(array_search($pls,$arealist))+1]} ■</option>
+			<!--{else}--><option value="$key">格子$value</option>
+			<!--{/if}-->
+		<!--{/loop}-->
+<!--{/if}-->
 <option value="main">■ 移动 ■</option>
 <optgroup label="移动地点列表：">
-<!--{if (in_array($pls,$hidden_arealist))}-->
-	<!--{loop array_keys($hidden_areagroup) $hag_name}-->
-		<!--{if in_array($pls,$hidden_areagroup[$hag_name])}-->
-			<!--{loop $hidden_areagroup[$hag_name] $hag_num}-->
-			<!--{if $pls == $hag_num}--><optgroup label="■ 现在位置 ■">
-			<!--{else}--><option value="$hag_num">$plsinfo[$hag_num]($xyinfo[$hag_num])</option>
-			<!--{/if}-->
-			<!--{/loop}-->
-		<!--{/if}-->
-	<!--{/loop}-->
-<!--{else}-->
-	<!--{loop $plsinfo $key $value}-->
-	<!--{if ((array_search($key,$arealist) > $areanum || $hack) && (!in_array($key,$hidden_arealist)))}-->
-		<!--{if $pls == $key}--><optgroup label="■ 现在位置 ■">
-		<!--{else}--><option value="$key">$value($xyinfo[$key])</option>
-		<!--{/if}-->
+<!--{loop $plsinfo $key $value}-->
+<!--{if (array_search($key,$arealist) > $areanum || $hack)}-->
+	<!--{if $pls == $key}--><optgroup label="■ 现在位置 ■">
+	<!--{else}--><option value="$key">$value($xyinfo[$key])</option>
 	<!--{/if}-->
-	<!--{/loop}-->
 <!--{/if}-->
+<!--{/loop}-->
+

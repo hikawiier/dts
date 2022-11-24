@@ -122,7 +122,7 @@ namespace skill247
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if (!\skillbase\skill_query(247)) return $chprocess();
 		eval(import_module('sys','player'));
-		return $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND itmsk <> '$pid' ORDER BY itmk DESC");
+		return $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone = '$pzone' AND itmsk <> '$pid' ORDER BY itmk DESC");
 	}
 	
 	//不能获得肌肉兄贵称号

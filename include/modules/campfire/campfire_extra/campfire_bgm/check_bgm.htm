@@ -1,8 +1,0 @@
-<!--{eval eval(import_module('campfire_bgm'));}-->
-<!--{eval $bgmlink=\campfire_bgm\get_area_bgm();}-->
-<!--{if $bgmlink}-->
-	<audio loop="loop" autoplay="autoplay">
-		<source src="$bgmlink" type="audio/ogg">
-	</audio>
-	<span class='grey b'>当前BGM ：$bgm_info[$bgmlink]</span>
-<!--{/if}-->

@@ -181,7 +181,7 @@ namespace searchmemory
 			if ($mode == 'command' && strpos($command,'memory')===0){
 				$smn = substr($command,6);
 				searchmemory_discover($smn);
-			}elseif(($mode == 'combat' && $command == 'back')
+			}elseif(($mode == 'combat' && $command == 'back' && !$battle_times)
 				 || ($gamestate < 40 && $mode == 'corpse' && ($command == 'menu' || (check_keep_corpse_in_searchmemory() && $command != 'destroy')))){//测试，荣耀模式只要不销毁尸体，视野都留着
 				$eid = str_replace('enemy','',str_replace('corpse','',$action));
 				$edata = \player\fetch_playerdata_by_pid($eid);

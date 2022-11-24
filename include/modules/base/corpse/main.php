@@ -236,7 +236,7 @@ namespace corpse
 			
 			$mode = 'command';
 			return;
-		} elseif($edata['pls'] != $pls) {
+		} elseif($edata['pls'] != $pls || $edata['pzone'] != $pzone) {
 			$log .= '对方跟你不在同一个地图！<br>';
 			
 			$mode = 'command';

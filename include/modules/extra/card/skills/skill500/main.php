@@ -66,7 +66,7 @@ namespace skill500
 		$rage -= $skill500_rage;
 		//所有同地点玩家获得2秒的眩晕
 		$pids = array();
-		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE type=0 AND pls='$pls' AND pid!='$pid'");
+		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE type=0 AND pls='$pls' AND pzone='$pzone' AND pid!='$pid'");
 		if($db->num_rows($result)){
 			while($r = $db->fetch_array($result)){
 				$pids[] = $r['pid'];

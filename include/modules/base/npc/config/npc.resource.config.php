@@ -201,11 +201,12 @@ namespace npc
 		),
 	);
 
+	/*
 	//campfireMOD中不需要躲避禁区的NPC
-	$campfire_killzone_resistant_typelist=Array(1003,1004,1006);
-	$killzone_resistant_typelist = $killzone_resistant_typelist+$campfire_killzone_resistant_typelist;
+	$ckillzone_resistant_typelist=Array(1003,1004,1006);
+	$killzone_resistant_typelist = $killzone_resistant_typelist+$ckillzone_resistant_typelist;
 	//campfireMOD新增NPC类别
-	$campfire_npc_typeinfo = Array
+	$cnpc_typeinfo = Array
 	(
 		1001 => '虚拟体-C型',
 		1002 => '虚拟体-V型',
@@ -216,9 +217,9 @@ namespace npc
 		1007 => '第八识',
 		1008 => '狂想者',
 	);
-	$npc_typeinfo = $npc_typeinfo+$campfire_npc_typeinfo;
+	$npc_typeinfo = $npc_typeinfo+$cnpc_typeinfo;
 	//campfireMOD新增NPC类别的击杀信息
-	$campfire_npc_killmsginfo = Array
+	$cnpc_killmsginfo = Array
 	(
 		1001 => '1BF52:MEME COLLECTED;',
 		1002 => '1BF52:MEME COLLECTED',
@@ -228,9 +229,9 @@ namespace npc
 		1004 => 'MISSION：BATTLE DATA UPLOADING...',
 		1005 => '好好感受我的怨念吧！',
 	);
-	$npc_killmsginfo = $npc_killmsginfo+$campfire_npc_killmsginfo;
+	$npc_killmsginfo = $npc_killmsginfo+$cnpc_killmsginfo;
 	//campfireMOD新增NPC类别的死亡信息
-	$campfire_npc_lwinfo = Array
+	$cnpc_lwinfo = Array
 	(
 		1001 => '1BF52:ERROR_COULD_NOT_FIND_...',
 		1002 => '1BF52:ERROR_COULD_NOT_FIND_...',
@@ -240,16 +241,17 @@ namespace npc
 		1004 => 'WARNING：BAT...',
 		1005 => '活着被系统欺负，死了还被你们鞭尸，这世界还有没有人性啦！',
 	);
-	$npc_lwinfo = $npc_lwinfo+$campfire_npc_lwinfo;
+	$npc_lwinfo = $npc_lwinfo+$cnpc_lwinfo;
 	//新增复活信息
-	$campfire_npc_revive_info= Array
+	$cnpc_revive_info= Array
 	(
-		/*1006 => Array(
+		1006 => Array(
 			'黑熊王' => '活了！',
 		),
-		1007 => '哈哈！玩家！你牛！但我更牛! ',*/
+		1007 => '哈哈！玩家！你牛！但我更牛! ',
 	);
-	$npc_revive_info = $npc_revive_info + $campfire_npc_revive_info;
+	$npc_revive_info = $npc_revive_info + $cnpc_revive_info;
+	*/
 }
 
 ?>

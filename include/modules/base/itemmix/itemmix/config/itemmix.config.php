@@ -421,33 +421,80 @@ $mixinfo = array
 
 	);	
 	//篝火-道具：
-	$campfire_mixinfo=Array
-	(
-		array('class' => 'wk_pr', 'stuff' => array('长矛','美工刀'),'result' => array('护手剑','WK',50,45,'NK'),),
-		array('class' => 'wk_pr', 'stuff' => array('护手剑','毒药'),'result' => array('淬毒刺剑','WK',50,45,'NKp'),),
-		array('class' => 'wk_pr', 'stuff' => array('淬毒刺剑','妖精的羽翼','『祝福宝石』'),'result' => array('☆公主细剑☆','WK',225,80,'Nnp'),),
-		array('class' => 'wk_pr', 'stuff' => array('☆公主细剑☆','★荆棘王冠★','真 - 幻想戏服'),'result' => array('★女王细剑★','WK',655,255,'HNnpc'),),
-		array('class' => 'wk_pr', 'stuff' => array('★女王细剑★','神之操控','安雅人体冰雕'),'result' => array('「女王蔷薇」','WK',1926,'∞','HNnrpc'),),
-		array('class' => 'wk_pr', 'stuff' => array('「女王蔷薇」','■DeathNote■','悲叹之种'),'result' => array('「皇家蔷薇」','WK',17740,'∞','BNnrpc'),),
-		array('class' => 'wk_pr', 'stuff' => array('「皇家蔷薇」','龙虎旗帜'),'result' => array('「猩红蔷薇」','WK',179310,'∞','BNnrfv'),),
-		array('class' => 'wk_pr', 'stuff' => array('「猩红蔷薇」','『AZURE RONDO』','最终战术『神谕』'),'result' => array('「青蔷薇」','WK',1799119,'∞','BNnrkV'),),
-		array('class' => 'wk_pr', 'stuff' => array('「青蔷薇」','黑？？？？'),'result' => array('「黑蔷薇」','WK',1938119,'∞','BNnrpvV'),),
-		array('class' => 'wk_pr', 'stuff' => array('「黑蔷薇」','无法推卸的命运','破灭未来的残光'),'result' => array('「蔷薇凋敝之日」','WKG',4000000,'∞','LNnrypvV'),),
-		array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
-		array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('窜 天 猴','EW',1,1,1),),
-		array('class' => 'item', 'stuff' => array('雏人形','空白符卡'),'result' => array('灵能人形','Y',1,1,'O'),),
-		array('class' => 'item', 'stuff' => array('灵能圆盘「寻物者」','悲叹之种'),'result' => array('魔性圆盘「寻物者」','kget',0,1,'v'),),
-		array('class' => 'item', 'stuff' => array('自适应型溶剂TA-Z9','自适应型溶剂TA-Y5','自适应型溶剂TA-X3'),'result' => array('自适应型溶剂TA-E3','Z',1,1,'z'),),
-		array('class' => 'item', 'stuff' => array('自适应型溶剂TA-E3','自适应型溶剂TA-E3'),'result' => array('自适应型溶剂TA-C3','Z',1,1,'z'),),
-		array('class' => 'item', 'stuff' => array('自适应型溶剂TA-C3','自适应型溶剂TA-C3','自适应型溶剂TA-C3'),'result' => array('自适应型溶剂TA-00','Z',1,1,'x'),),
-		array('class' => 'item', 'stuff' => array('沸腾之血','被冰封的碎片'),'result' => array('黑色碎片','Y',1,1,''),),
-		array('class' => 'item', 'stuff' => array('无名的光矢','染血的羽毛'),'result' => array('残响','Y',1,1,'x'),),
-		array('class' => 'item', 'stuff' => array('Blockade','Tear down this wall','War games'),'result' => array('Way of Life','Y',1,1,'x'),),
-		array('class' => 'hidden', 'stuff' => array('荣耀','光辉','虔诚','奉献'),'result' => array('Untainted Glory','A',99,6,'hL'),),
-		array('class' => 'hidden', 'stuff' => array('荣耀','光辉'),'result' => array('Untainted Glory','A',99,6,'h'),),
-		array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',99,6,'L'),),
-	);
-	$mixinfo = array_merge($mixinfo,$campfire_mixinfo);
+	$cmixinfo=Array
+		(
+			//蔷薇系列武器
+			array('class' => 'wk_pr', 'stuff' => array('长矛','美工刀'),'result' => array('护手剑','WK',50,45,'NK'),),
+			array('class' => 'wk_pr', 'stuff' => array('护手剑','毒药'),'result' => array('淬毒刺剑','WK',50,45,'NKp'),),
+			array('class' => 'wk_pr', 'stuff' => array('淬毒刺剑','妖精的羽翼','『祝福宝石』'),'result' => array('☆公主细剑☆','WK',225,80,'Nnp'),),
+			array('class' => 'wk_pr', 'stuff' => array('☆公主细剑☆','★荆棘王冠★','真 - 幻想戏服'),'result' => array('★女王细剑★','WK',655,255,'HNnpc'),),
+			array('class' => 'wk_pr', 'stuff' => array('★女王细剑★','神之操控','安雅人体冰雕'),'result' => array('「女王蔷薇」','WK',1926,'∞','HNnrpc'),),
+			array('class' => 'wk_pr', 'stuff' => array('「女王蔷薇」','■DeathNote■','悲叹之种'),'result' => array('「皇家蔷薇」','WK',17740,'∞','BNnrpc'),),
+			array('class' => 'wk_pr', 'stuff' => array('「皇家蔷薇」','龙虎旗帜'),'result' => array('「猩红蔷薇」','WK',179310,'∞','BNnrfv'),),
+			array('class' => 'wk_pr', 'stuff' => array('「猩红蔷薇」','『AZURE RONDO』','最终战术『神谕』'),'result' => array('「青蔷薇」','WK',1799119,'∞','BNnrkV'),),
+			array('class' => 'wk_pr', 'stuff' => array('「青蔷薇」','黑？？？？'),'result' => array('「黑蔷薇」','WK',1938119,'∞','BNnrpvV'),),
+			array('class' => 'wk_pr', 'stuff' => array('「黑蔷薇」','无法推卸的命运','破灭未来的残光'),'result' => array('「蔷薇凋敝之日」','WKG',4000000,'∞','LNnrypvV'),),
+			
+			//回复道具
+			array('class' => 'h', 'stuff' => array('油炖萌物「石斑」','油炖萌物「金鲤」'),'result' => array('鸳鸯锅「涮鱼」','HB',450,'∞','z'),),
+			
+			//殴系武器
+			array('class' => 'wp', 'stuff' => array('Vampire Killer','怨灵','『祝福宝石』',),'result' => array('被解放的圣鞭','WP',130,'∞','ZruN'),),
+			array('class' => 'wp', 'stuff' => array('御币','【风神的神德】','☆守矢神签☆',),'result' => array('☆守矢风祝的御币☆','WP',128,8,'rew'),),
+			array('class' => 'wp', 'stuff' => array('冰棍棒','白色方块','黑色方块','☆炸虾饭☆'),'result' => array('★悔悟之棒★','WP',777,'∞','Znrdk'),),
+			
+			//射系武器
+			array('class' => 'wg', 'stuff' => array('★沙漠之鹰★','金色方块','银色方块','黑色方块'),'result' => array('石油之鹰','WG',90,'∞','crd'),),
+			array('class' => 'wg', 'stuff' => array('【最终鬼畜兵器】','☆金色闪光☆','『巴雷特M82A1』'),'result' => array('『移动武库』','WJ',2048,16,'dfkNn'),),			
+
+			//方块道具
+			array('class' => 'cube', 'stuff' => array('黑色方块','水晶方块'),'result' => array('幽黑方块','X',1,1,),),
+			array('class' => 'cube', 'stuff' => array('白色方块','水晶方块'),'result' => array('素白方块','X',1,1,),),
+			array('class' => 'cube', 'stuff' => array('黑色方块','黑色方块'),'result' => array('黑夜方块','X',1,1,),),
+			array('class' => 'cube', 'stuff' => array('白色方块','白色方块'),'result' => array('白昼方块','X',1,1,),),
+			array('class' => 'cube', 'stuff' => array('幽黑方块','素白方块'),'result' => array('阴霾混沌徽记','A',240,180,'Ac'),),
+			array('class' => 'cube', 'stuff' => array('黑夜方块','白昼方块'),'result' => array('【附魔日晷】','Y',1,1,''),),
+			array('class' => 'cube', 'stuff' => array('水晶方块','白色方块','黑色方块'),'result' => array('★骨灰盒★','WC',99,'∞','ipr'),),
+			
+			//特殊道具
+			array('class' => 'item', 'stuff' => array('打火机','地雷'),'result' => array('混沌驱云弹','EW',1,1,1),),
+			array('class' => 'item', 'stuff' => array('雏人形','空白符卡'),'result' => array('灵能人柱','Y',1,1,'O'),),
+			array('class' => 'item', 'stuff' => array('【灵能寻物者】','悲叹之种'),'result' => array('【魔性寻物者】','kget',0,1,'v'),),
+			//array('class' => 'item', 'stuff' => array('自适应型溶剂TA-Z9','自适应型溶剂TA-Y5','自适应型溶剂TA-X3'),'result' => array('自适应型溶剂TA-E3','Z',1,1,'z'),),
+			//array('class' => 'item', 'stuff' => array('自适应型溶剂TA-E3','自适应型溶剂TA-E3'),'result' => array('自适应型溶剂TA-C3','Z',1,1,'z'),),
+			//array('class' => 'item', 'stuff' => array('自适应型溶剂TA-C3','自适应型溶剂TA-C3','自适应型溶剂TA-C3'),'result' => array('自适应型溶剂TA-00','Z',1,1,'x'),),
+			//array('class' => 'item', 'stuff' => array('沸腾之血','被冰封的碎片'),'result' => array('黑色碎片','Y',1,1,''),),
+			//array('class' => 'item', 'stuff' => array('无名的光矢','染血的羽毛'),'result' => array('残响','Y',1,1,'x'),),
+			//array('class' => 'item', 'stuff' => array('Blockade','Tear down this wall','War games'),'result' => array('Way of Life','Y',1,1,'x'),),
+			
+			//命途莫测
+			array('class' => 'magic', 'stuff' => array('肩章','绿色方块'),'result' => array('宁静徽章','A',1,1,'qF'),),
+			array('class' => 'magic', 'stuff' => array('肩章','黄色方块'),'result' => array('固化徽章','A',1,1,'ED'),),
+			array('class' => 'magic', 'stuff' => array('绳索','时符『Private Square』'),'result' => array('时之锁','WF',155,'∞','ie'),),
+			array('class' => 'magic', 'stuff' => array('水晶方块','悲叹之种','灵魂的结晶','月光碎片'),'result' => array('伽启的水晶之球','WC',120,360,'Znrk'),),
+			array('class' => 'magic', 'stuff' => array('银色方块','《魔女的魔导书》','凤凰之羽','生命之源'),'result' => array('蕾思的奇迹扉页','VV',365,1,'x'),),	
+			array('class' => 'magic', 'stuff' => array('伽启的水晶之球','增幅设备','《魔女的魔导书》'),'result' => array('封印着启示之眼的结界','Y',1,1,),),
+			array('class' => 'magic', 'stuff' => array('奥都的白银手杖','时之锁'),'result' => array('封印着秩序之框的结界','Y',1,1,),),
+			array('class' => 'magic', 'stuff' => array('蕾思的奇迹扉页','『祝福宝石』'),'result' => array('封印着奇迹扉页的结界','Y',1,1,),),
+			array('class' => 'magic', 'stuff' => array('「启示之眼」','「秩序之框」','「奇迹扉页」'),'result' => array('金色秘录的雏形','Y',1,1,),),	
+			array('class' => 'magic', 'stuff' => array('★骨灰盒★','便当'),'result' => array('便当盒','WF',180,'∞','Zcnrd'),),
+			array('class' => 'magic', 'stuff' => array('冰冻青蛙','便当盒'),'result' => array('不悔的忠诚','A',256,256,'Ha'),),
+			array('class' => 'magic', 'stuff' => array('铁锤','镰刀'),'result' => array('燃烧的信仰','A',256,256,'Aa'),),
+			array('class' => 'magic', 'stuff' => array('杏仁豆腐的ID卡','■DeathNote■'),'result' => array('鲜血的荣耀','A',256,256,'Ha'),),	
+			array('class' => 'magic', 'stuff' => array('不悔的忠诚','燃烧的信仰','鲜血的荣耀'),'result' => array('【盟约之誓】','X',1,1,'Zzx'),),	
+			array('class' => 'magic', 'stuff' => array('死体意识','盖亚意识','阿赖耶识'),'result' => array('忠诚『Servant of Sword』','WD',65535,'∞','Zndhj'),),
+			array('class' => 'magic', 'stuff' => array('广域生命探测器','《魔女的魔导书》','某种电子零件'),'result' => array('《统治局的遗产》','VV',233,1,),),
+			array('class' => 'magic', 'stuff' => array('电焊刀','《统治局的遗产》','增幅设备'),'result' => array('■高周波切割装置■','WK',755,455,'ZNrie'),),	
+			array('class' => 'magic', 'stuff' => array('电焊刀','《统治局的遗产》','【纳吉尼的毒牙】'),'result' => array('■灰粒子放射装置■','WK',755,455,'ZNdeA'),),
+			array('class' => 'magic', 'stuff' => array('■高周波切割装置■','■灰粒子放射装置■','《统治局的遗产》','最终战术『剑海』'),'result' => array('■永咎的邪灵■','WFK',45000,'∞','knrT'),),	
+	
+
+			//隐藏合成
+			array('class' => 'hidden', 'stuff' => array('荣耀','光辉','虔诚','奉献'),'result' => array('Untainted Glory','A',99,6,'hL'),),
+			array('class' => 'hidden', 'stuff' => array('荣耀','光辉'),'result' => array('Untainted Glory','A',99,6,'h'),),
+			array('class' => 'hidden', 'stuff' => array('虔诚','奉献'),'result' => array('Untainted Glory','A',99,6,'L'),),
+		);
+	$mixinfo = array_merge($mixinfo,$cmixinfo);
 }
 
 ?>

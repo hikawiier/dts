@@ -84,6 +84,8 @@ namespace metman
 		$tdata['wep']=$w_wep;
 		$tdata['lvl']=$w_lvl;
 		$tdata['wepk']=$w_wepk;
+		$tdata['battle_distance']=$w_battle_distance;
+		$tdata['battle_times']=$w_battle_times;
 		return;
 	}
 	
@@ -172,7 +174,7 @@ namespace metman
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
-		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE pls='$pls' AND pid!='$pid' AND (hp>'0' OR corpse_clear_flag!='1')");
+		$result = $db->query("SELECT pid FROM {$tablepre}players WHERE pls='$pls' AND pzone='$pzone' AND pid!='$pid' AND (hp>'0' OR corpse_clear_flag!='1')");
 		$pcount=$db->num_rows($result);
 		if(!$pcount){//没有人
 			if ($schmode == 'search') return 50;
@@ -194,11 +196,11 @@ namespace metman
 	}
 	
 	//部分玩家、尸体数据直接在这里滤掉，不需要反复调用discover()这种蠢写法。平衡性？实际概率跟期望概率完全不是一回事的算法，再平衡也是错的。
-	function discover_player_get_epids($spls, $spid){
+	function discover_player_get_epids($spls, $spzone, $spid){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$ret = array();
 		eval(import_module('sys'));
-		$result = $db->query("SELECT * FROM {$tablepre}players WHERE pls='$spls' AND pid!='$spid'");
+		$result = $db->query("SELECT * FROM {$tablepre}players WHERE pls='$spls' AND pzone='$spzone' AND pid!='$spid'");
 		while($r = $db->fetch_array($result)){
 			if(discover_player_filter($r))
 				$ret[] = $r;
@@ -247,7 +249,7 @@ namespace metman
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','player','logger','metman'));
-		$edata_arr = discover_player_get_epids($pls, $pid);
+		$edata_arr = discover_player_get_epids($pls, $pzone, $pid);
 
 		if(!sizeof($edata_arr)){
 			$log .= '<span class="yellow b">周围一个人都没有。</span><br>';
@@ -261,7 +263,7 @@ namespace metman
 		foreach($edata_arr as $ed){
 			$edata = \player\fetch_playerdata_by_pid($ed['pid']);
 			if (isset($edata['infochanged']) && $edata['infochanged']) \player\player_save($edata);
-			if ($edata['pls']==$pls)	
+			if ($edata['pls']==$pls && $edata['pzone']==$pzone)	
 			{
 				$z=check_player_discover($edata);
 				//这一奇葩设定被干掉了，真是大快人心啊

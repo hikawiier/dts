@@ -247,7 +247,7 @@ namespace itemmain
 		
 		eval(import_module('player','itemmain'));
 		$r=Array();
-		
+
 		foreach ($equip_list as $v) {
 			$z=strlen($v)-1;
 			while ('0'<=$v[$z] && $v[$z]<='9') $z--;//注意这同样也会把wep等包括进去！
@@ -288,15 +288,16 @@ namespace itemmain
 		
 		$chprocess($xmode);
 		
-		eval(import_module('sys','map','itemmain'));
+		eval(import_module('sys','map','itemmain','c_mapzone'));
 		if ($xmode & 16) {	//地图道具
 			$plsnum = sizeof($plsinfo);
 			//plsinfo修改标记
-			if($hidden_area)
-			{
-				$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
-			}			
+			//if($hidden_area)
+			//{
+			//	$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
+			//}			
 			$iqry = '';
+			$rzone = 0;
 			$itemlist = get_itemfilecont();
 			$in = sizeof($itemlist);
 			$an = $areanum ? ceil($areanum/$areaadd) : 0;
@@ -312,14 +313,15 @@ namespace itemmain
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;
-							list($iname, $ikind, $ieff, $ista, $iskind, $rmap) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap);
-							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap'),";
+							list($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone);
+							if(!$rzone)	$rzone = rand(0,$mapzonelist[$rmap]['space']);	
+							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap','$rzone'),";
 						}
 					}
 				}
 			}
 			if(!empty($iqry)){
-				$iqry = "INSERT INTO {$tablepre}mapitem (itm,itmk,itme,itms,itmsk,pls) VALUES ".substr($iqry, 0, -1);
+				$iqry = "INSERT INTO {$tablepre}mapitem (itm,itmk,itme,itms,itmsk,pls,pzone) VALUES ".substr($iqry, 0, -1);
 				$db->query($iqry);
 			}
 		}
@@ -347,9 +349,10 @@ namespace itemmain
 	}
 	
 	//每个刷新到地图上的道具的data处理
-	function mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $imap){
+	function mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $imap, $izone){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		return array($iname, $ikind, $ieff, $ista, $iskind, $imap);
+		eval(import_module('sys'));
+		return array($iname, $ikind, $ieff, $ista, $iskind, $imap, $izone);
 	}
 	
 	function get_itemfilecont(){
@@ -379,7 +382,7 @@ namespace itemmain
 		
 		eval(import_module('sys','player','logger','itemmain'));
 		
-		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$pls'");
+		$result = $db->query("SELECT * FROM {$tablepre}mapitem WHERE pls = '$pls' AND pzone='$pzone'");
 		$itemnum = $db->num_rows($result);
 		if($itemnum <= 0){
 			$log .= '<span class="yellow b">周围找不到任何物品。</span><br>';

@@ -45,6 +45,7 @@ CREATE TABLE bra_mapitem (
   itms varchar(10) not null default '0',
   itmsk varchar(40) not null default '',
   pls tinyint unsigned not null default '0',
+  pzone tinyint unsigned not null default '0',
   
   PRIMARY KEY  (iid)
 ) ENGINE=MyISAM;
@@ -63,6 +64,7 @@ CREATE TABLE bra_maptrap (
   itms varchar(10) not null default '0',
   itmsk varchar(40) not null default '',
   pls tinyint unsigned not null default '0',
+  pzone tinyint unsigned not null default '0',
   
   PRIMARY KEY  (tid)
 ) ENGINE=MyISAM;
@@ -103,4 +105,21 @@ CREATE TABLE bra_itemdepot (
   itmpw char(5) NOT NULL DEFAULT '',
   
   PRIMARY KEY  (iid)
+) ENGINE=MyISAM;
+
+--
+-- 表的结构 `bra_plszone`
+-- 储存地图区域的信息
+--
+
+DROP TABLE IF EXISTS bra_mapzone;
+CREATE TABLE bra_mapzone (
+  pls tinyint unsigned not null default '0',
+  weather tinyint(3) unsigned NOT NULL DEFAULT '0',
+  exposed tinyint(3) unsigned not null default '0',
+  zonenum tinyint(3) NOT NULL DEFAULT '2',
+  zonelist varchar(255) NOT NULL DEFAULT '',
+  zonevars text NOT NULL,
+
+  PRIMARY KEY  (pls)
 ) ENGINE=MyISAM;

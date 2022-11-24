@@ -97,7 +97,7 @@ namespace skill56
 		}
 		$spid = $spids[0];
 		//设置位置
-		$db->query("UPDATE {$tablepre}players SET pls='$pls' WHERE pid='$spid'");
+		$db->query("UPDATE {$tablepre}players SET pls='$pls' AND pzone='$pzone'  WHERE pid='$spid'");
 		\skillbase\skill_setvalue(56,'p'.$x,$spid);
 		\skillbase\skill_setvalue(56,'l'.$x,$now);
 		\skillbase\skill_setvalue(56,'s'.$x,$nkind);

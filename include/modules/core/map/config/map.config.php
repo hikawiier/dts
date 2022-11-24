@@ -7,14 +7,351 @@ namespace map
 	//不同游戏类型的禁区间隔时间，单位：分钟
 	$areainterval = Array( 0 => 30 );
 	//每次间隔增加的禁区数量
-	$areaadd = 4;
+	$areaadd = 1;
 	//聊天记录里的禁区提示时间，单位秒
 	$areawarntime = 60;
 	//玩家激活结束时的增加禁区的回数，相当于已经进行的小时数/间隔时间，〉0
-	$arealimit = 2;
+	$arealimit = 4;
 	//是否激活自动躲避禁区
 	$areaesc = 1;
+
+	$pls_zone_name = array
+	(//标记一些特殊房间的名称，没有的话编号0默认叫【入口】，编号末默认叫【出口】，其他默认叫【区域】
+		0 => Array
+		(
+			7 => '新地平',
+			8 => '隙间',
+		),
+		34 => Array
+		(
+			0 => '甬道',
+			1 => '玄关',
+		),
+	);
 	
+	$pls_zone = Array(
+		0 => Array
+		(
+			'space' => 9, //地图大小（自定义格数，最大25格）
+			'weather' => 0, //默认天气
+			'exposed' => 0, //暴露度上限修正 0=默认
+			'elements' => Array
+			( 
+				//包含哪些特殊格 
+				//loot（补给站-回复道具多）armor（武库 装备多） mini-boss(特殊敌人刷新点) shop（商店）function（杂项）
+				//后面数字代表会生成在第几格（最低不能为0，最高不能为地图格子数量，这两个格子是出入口）
+				'loot' => 4,
+				'mini-boss' => 5,
+				'shop' => 6,
+			),
+		),
+		1 => Array
+		(
+			'space' => 12, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		2 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		3 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		4 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		5 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		6 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		7 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		8 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		9 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		10 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		11 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		12 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		13 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		14 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		15 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		16 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		17 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		18 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		19 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		20 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		21 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		22 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		23 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		24 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		25 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		26 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		27 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		28 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		29 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		30 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		31 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		32 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		33 => Array
+		(
+			'space' => 9, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+		34 => Array
+		(
+			'space' => 2, 
+			'weather' => 0,
+			'exposed' => 0, 
+			'elements' => Array
+			( 
+			),
+		),
+	);
 	$plsinfo = Array(
 		0=>'无月之影',
 		1=>'端点',
@@ -135,11 +472,11 @@ namespace map
 		33=>"风祭森林的最深处。<BR>被盛开的雏菊花覆盖着的山丘。<BR>山丘上貌似有个身影坐着，<BR>还是离她远一点为妙。<BR>",
 		34=>"看不见尽头的走廊……<BR>",
 	);
-	//campfireMOD新增地区，及隐藏地图设定
+	/*//campfireMOD新增地区，及隐藏地图设定
 	//地区
-	$plsinfo[92]='数据之海';
-	$plsinfo[93]='数据之海';
-	$plsinfo[94]='数据之海';
+	$plsinfo[92]='里海';
+	$plsinfo[93]='里海';
+	$plsinfo[94]='里海';
 	$plsinfo[95]='云之阶';
 	$plsinfo[96]='英灵殿 - 正殿';
 	$plsinfo[97]='英灵殿 - 偏殿';
@@ -164,10 +501,10 @@ namespace map
 	//即使只有一张地图，也请把它写进一个array里
 	$hidden_areagroup = Array(
 		'英灵殿' => Array(95,96,97,98),
-		'数据之海' => Array(92,93,94),
+		'里海' => Array(92,93,94),
 	);
 	//全部隐藏地图列表（注意：在$plsinfo中，隐藏地图的序号一定要排在非隐藏地图后面，否则会出BUG，推荐使用从98开始的倒序，无效的地图不要写在列表里，否则也会出BUG） 
-	$hidden_arealist = Array(92,93,94,95,96,97,98);
+	$hidden_arealist = Array(92,93,94,95,96,97,98);*/
 }
 
 ?>

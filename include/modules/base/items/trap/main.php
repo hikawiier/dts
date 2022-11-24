@@ -16,14 +16,14 @@ namespace trap
 		
 		$chprocess($xmode);
 		
-		eval(import_module('sys','map','itemmain','trap'));
+		eval(import_module('sys','map','itemmain','trap','c_mapzone'));
 		if ($xmode & 16) {	//地图陷阱初始化
 			//plsinfo修改标记
 			$plsnum = sizeof($plsinfo);
-			if($hidden_area)
-			{
-				$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
-			}	
+			//if($hidden_area)
+			//{
+			//	$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
+			//}	
 			$iqry = '';
 			$itemlist = get_trapfilecont();
 			$in = sizeof($itemlist);
@@ -49,13 +49,14 @@ namespace trap
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;
-							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap'),";
+							$rzone=rand(0,$mapzonelist[$rmap]['space']);
+							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap','$rzone'),";
 						}
 					}
 				}
 			}
 			if(!empty($iqry)){
-				$iqry = "INSERT INTO {$tablepre}maptrap (itm,itmk,itme,itms,itmsk,pls) VALUES ".substr($iqry, 0, -1);
+				$iqry = "INSERT INTO {$tablepre}maptrap (itm,itmk,itme,itms,itmsk,pls,pzone) VALUES ".substr($iqry, 0, -1);
 				$db->query($iqry);
 			}
 		}
@@ -76,7 +77,7 @@ namespace trap
 		//最小值
 		$real_trap_obbs = $trap_min_obbs;
 		//地图上每有1个雷+0.25%
-		$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' ORDER BY itmk DESC");
+		$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone ='$pzone' ORDER BY itmk DESC");
 		$trpnum = $db->num_rows($trapresult);
 		$real_trap_obbs += $trpnum/4;
 		//把奇怪的加成值去掉了
@@ -360,7 +361,7 @@ namespace trap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
-		return $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' ORDER BY itmk DESC");
+		return $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone = '$pzone' ORDER BY itmk DESC");
 	}
 	
 	function trapcheck()
@@ -480,7 +481,7 @@ namespace trap
 		$log .= "小心，自己也很难发现。<br>";
 		
 		$trapk = str_replace('TN','TO',$itmk);
-		$db->query("INSERT INTO {$tablepre}maptrap (itm, itmk, itme, itms, itmsk, pls) VALUES ('$itm', '$trapk', '$trape', '1', '$pid', '$pls')");
+		$db->query("INSERT INTO {$tablepre}maptrap (itm, itmk, itme, itms, itmsk, pls, pzone) VALUES ('$itm', '$trapk', '$trape', '1', '$pid', '$pls', '$pzone')");
 		
 		\lvlctl\getexp(1);
 		$wd++;

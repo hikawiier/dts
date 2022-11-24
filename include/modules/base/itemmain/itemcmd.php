@@ -139,7 +139,7 @@ namespace itemmain
 	//	$mapfile = GAME_ROOT."./gamedata/mapitem/{$pls}mapitem.php";
 	//	$itemdata = "$itm,$itmk,$itme,$itms,$itmsk,\n";
 	//	writeover($mapfile,$itemdata,'ab');
-		$db->query("INSERT INTO {$tablepre}mapitem (itm, itmk, itme, itms, itmsk ,pls) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$pls')");
+		$db->query("INSERT INTO {$tablepre}mapitem (itm, itmk, itme, itms, itmsk ,pls ,pzone) VALUES ('$itm', '$itmk', '$itme', '$itms', '$itmsk', '$pls', '$pzone')");
 		$dropid = $db->insert_id();
 		$dropname = $itm;
 		$log .= "你丢弃了<span class=\"red b\">$dropname</span>。<br>";

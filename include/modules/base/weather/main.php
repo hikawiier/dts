@@ -120,16 +120,20 @@ namespace weather
 	function apply_tornado_weather_effect()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','map','player','logger'));
+		eval(import_module('sys','map','player','logger','c_mapzone'));
 		//plsinfo修改标记
-		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
+		//$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		if($hack)
 		{
 			$pls = rand(0,sizeof($plsinfo)-1);
+			$tmp_pzone_available = $mapzonelist[$pls]['space'];
+			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		else 
 		{
 			$pls = rand($areanum+1,sizeof($plsinfo)-1);$pls=$arealist[$pls];
+			$tmp_pzone_available = $mapzonelist[$pls]['space'];
+			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		$log .= "但是强烈的龙卷风把你吹到了<span class=\"yellow b\">$plsinfo[$pls]</span>！<br>";
 	}

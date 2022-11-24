@@ -53,7 +53,7 @@ namespace item_misc
 		
 		if ($itmk=='U') 
 		{
-			$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND itme>='$itme'");
+			$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone='$pzone' AND itme>='$itme'");
 			$trpnum = $db->num_rows($trapresult);
 			if ($trpnum>0){
 				$itemno = rand(0,$trpnum-1);
@@ -204,11 +204,12 @@ namespace item_misc
 					$wp=$wk=$wg=$wc=$wd=$wf=666;
 					$ss=$mss=600;
 					$att+=200;$def+=200;
+					$mhp+=1800;$hp+=1800;
 					$money+=19980;
 					$itm1='美味补给';$itmk1 = 'HB';$itmsk1 = '';$itme1 = 2777;$itms1 = 277;
 					$itm2='全恢复药剂';$itmk2 = 'Ca';$itmsk2 = '';$itme2 = 1;$itms2 = 44;
 					$itm3='食堂的剩饭';$itmk3 = 'HR';$itmsk3 = '';$itme3 = 100;$itms3 = 15;
-					$itm4='量子雷达';$itmk4 = 'ER';$itmsk4 = '2';$itme4 = 20;$itms4 = 1;
+					$itm4='地区压制';$itmk4 = 'Y';$itmsk4 = '';$itme4 = 1;$itms4 = 100;
 					$itm5='聪明药';$itmk5 = 'ME';$itmsk5 = '';$itme5 = 100;$itms5 = 4;
 					//$itm5='游戏解除钥匙';$itmk5 = 'Y';$itmsk5 = '';$itme5 = 1;$itms5 = 1;
 					$arb='代码聚合体的长袍';$arbk = 'DB';$arbsk = 'Bb';$arbe = 5000;$arbs = 1000;
@@ -386,6 +387,21 @@ namespace item_misc
 					\sys\addchat(6, "{$name}一边大口吃翔一边说道：“满场沙包，不足为惧。且看爷吃了这百斤翔，再来包你们爽！”");
 				}
 				return;
+			} elseif(strpos($itm,'地区压制')===0) {
+				eval(import_module('map','c_mapzone'));
+				$m_zonevars = $mapzonedata[$pls]['zonevars'];
+				if($m_zonevars == 100)
+				{
+					$log .= "<span class=\"yellow b\">此地区的压制度{$m_zonevars}已满！不能重复使用。</span><br>";
+					return;
+				}
+				else
+				{
+					$mapzonedata[$pls]['zonevars'] = '100';
+					\c_mapzone\update_mapzonedata($pls,$mapzonedata);
+					$log .= "<span class=\"yellow b\">你成功压制了此地图！现在的压制度是{$mapzonedata[$pls]['zonevars']}！</span><br>";;
+					return;
+				}
 			}
 		}
 		$chprocess($theitem);

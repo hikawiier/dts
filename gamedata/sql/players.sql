@@ -24,6 +24,8 @@ CREATE TABLE bra_players (
   `cdmsec` smallint(3) unsigned NOT NULL DEFAULT '0',
   `cdtime` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `action` char(12) NOT NULL DEFAULT '',
+  `battle_distance` tinyint(3) NOT NULL DEFAULT '10',
+  `battle_times` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `a_actionnum` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `v_actionnum` smallint(5) unsigned NOT NULL DEFAULT '0',
   `hp` int(10) unsigned NOT NULL DEFAULT '0',
@@ -35,6 +37,7 @@ CREATE TABLE bra_players (
   `att` smallint(5) unsigned NOT NULL DEFAULT '0',
   `def` smallint(5) unsigned NOT NULL DEFAULT '0',
   `pls` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `pzone` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `lvl` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exp` smallint(5) unsigned NOT NULL DEFAULT '0',
   `money` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -65,6 +68,16 @@ CREATE TABLE bra_players (
   `wepe` int(10) unsigned NOT NULL DEFAULT '0',
   `weps` varchar(10) NOT NULL DEFAULT '0',
   `wepsk` varchar(40) NOT NULL DEFAULT '',
+  `wep2` varchar(30) NOT NULL DEFAULT '',
+  `wepk2` char(5) NOT NULL DEFAULT '',
+  `wepe2` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `weps2` char(5) NOT NULL DEFAULT '0',
+  `wepsk2` varchar(40) NOT NULL DEFAULT '',
+  `wep3` varchar(30) NOT NULL DEFAULT '',
+  `wepk3` char(5) NOT NULL DEFAULT '',
+  `wepe3` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `weps3` char(5) NOT NULL DEFAULT '0',
+  `wepsk3` varchar(40) NOT NULL DEFAULT '',
   `arb` varchar(30) NOT NULL DEFAULT '',
   `arbk` varchar(15) NOT NULL DEFAULT '',
   `arbe` int(10) unsigned NOT NULL DEFAULT '0',
@@ -132,6 +145,7 @@ CREATE TABLE bra_players (
   PRIMARY KEY (`pid`),
   INDEX `TYPE` (`type`),
   INDEX `NAME` (`name`),
-  INDEX `PLS` (`pls`)
+  INDEX `PLS` (`pls`),
+  INDEX `PZONE` (`pzone`)
 	
 ) ENGINE=MyISAM;

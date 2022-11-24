@@ -19,60 +19,101 @@ namespace explore
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger'));
 		
-		$log .= $areainfo[$pls].'<br>';
-		
+		if($moveto != 'zone')
+		{
+			$log .= $areainfo[$pls].'<br>';
+		}
 		discover('move');
 	}
 	
 	function move($moveto = 99) {
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','logger'));
-		
-		$plsnum = sizeof($plsinfo);
-		if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&(!in_array($moveto,$hidden_arealist))){
-			$log .= '请选择正确的移动地点。<br>';
-			return;
-		} elseif($pls == $moveto){
-			$log .= '相同地点，不需要移动。<br>';
-			return;
-		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack && !in_array($moveto,$hidden_arealist)){
-			//plsinfo修改标记
-			$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
-			return;
-		} elseif(in_array($moveto,$hidden_arealist)){
-			$hag_name = array_search($pls,$hidden_areagroup);
-			if(array_search($moveto,$hidden_areagroup)==$hag_name)
+		eval(import_module('sys','player','map','logger','c_mapzone'));
+
+		if(($moveto === 'next') || ($moveto === 'prev'))
+		{
+			if($moveto === 'next')
 			{
-				$enter_hidden_area_flag = true;
+				if($pzone<$mapzonedata[$pls]['zonenum'] )
+				{
+					$log .= '只有位于地图出口才能移动到下一张地图。<br>';
+					return;
+				}
+				$zone_flag = $moveto;
+				$moveto = JianChaXiaZhangTu();
 			}
-			else
+			elseif($moveto === 'prev')
 			{
-				$enter_hidden_area_flag = false;
+				if($pzone>0)
+				{
+					$log .= '只有位于地图入口才能回到上一张地图。<br>';
+					return;
+				}
+				$zone_flag = $moveto;
+				$moveto = JianChaShangZhangTu();
 			}
-			if(!$enter_hidden_area_flag){
-				$log .= "地图上没有{$plsinfo[$moveto]}啊？是不是你看错了？{$hag_name}<br>";
+			$plsnum = sizeof($plsinfo);
+			if(($moveto === 'main')||($moveto < 0 )||($moveto >= $plsnum)){
+			//if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&(!in_array($moveto,$hidden_arealist))){
+				$log .= '请选择正确的移动地点。<br>';
+				return;
+			} elseif($pls == $moveto){
+				$log .= '相同地点，不需要移动。<br>';
+				return;
+			} elseif(array_search($moveto,$arealist) <= $areanum && !$hack){
+			//} elseif(array_search($moveto,$arealist) <= $areanum && !$hack && !in_array($moveto,$hidden_arealist)){
+				//plsinfo修改标记
+				$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
+				return;
+			}/* elseif(in_array($moveto,$hidden_arealist)){
+				$hag_name = array_search($pls,$hidden_areagroup);
+				if(array_search($moveto,$hidden_areagroup)==$hag_name)
+				{
+					$enter_hidden_area_flag = true;
+				}
+				else
+				{
+					$enter_hidden_area_flag = false;
+				}
+				if(!$enter_hidden_area_flag){
+					$log .= "地图上没有{$plsinfo[$moveto]}啊？是不是你看错了？{$hag_name}<br>";
+					return;
+				}
+			}*/
+
+			$movesp=max(calculate_move_sp_cost(),1);		
+			if($sp <= $movesp){
+				$log .= "体力不足，不能移动！<br>还是先睡会儿吧！<br>";
 				return;
 			}
+			$sp -= $movesp;
+			$log .= "你消耗<span class=\"yellow b\">{$movesp}</span>点体力，移动到了$plsinfo[$moveto]。<br>";
+			if($zone_flag=='next') $pzone=0;
+			elseif($zone_flag=='prev') $pzone=$mapzonedata[$moveto]['zonenum'] ;
+			$pls = $moveto;
+			move_to_area($moveto);
 		}
-		
-		
-		$movesp=max(calculate_move_sp_cost(),1);
-		
-		if($sp <= $movesp){
-			$log .= "体力不足，不能移动！<br>还是先睡会儿吧！<br>";
-			return;
+		else
+		{
+			$plsnum = $mapzonelist[$pls]['space'];
+			if(($moveto === 'main')||($moveto < 0 )||($moveto >= $plsnum)){
+				$log .= '请选择正确的移动地点2。<br>'.$moveto.$mapzonedata[$pls]['zonenum'];
+				return;
+			} elseif($pzone == $moveto){
+				$log .= '相同地点，不需要移动。<br>';
+				return;
+			}
+			$movesp=max(calculate_move_sp_cost(),1);		
+			if($sp <= $movesp){
+				$log .= "体力不足，不能移动！<br>还是先睡会儿吧！<br>";
+				return;
+			}
+			$sp -= $movesp;
+			$log .= "你消耗<span class=\"yellow b\">{$movesp}</span>点体力，移动到了$plsinfo[$pls]的区域[$moveto]。<br>";
+			$pzone = $moveto;
+			move_to_area('zone');
 		}
-
-		$sp -= $movesp;
-		
-		$log .= "你消耗<span class=\"yellow b\">{$movesp}</span>点体力，移动到了$plsinfo[$moveto]。<br>";
-		
-		$pls = $moveto;
-		
-		move_to_area($moveto);
-		
 		return;
-
 	}
 
 	function calculate_search_sp_cost()
@@ -94,8 +135,9 @@ namespace explore
 	function search(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger'));
-		
-		if(array_search($pls,$arealist) <= $areanum && !$hack && !in_array($pls,$hidden_arealist)){
+
+		if(array_search($pls,$arealist) <= $areanum && !$hack){
+		//if(array_search($pls,$arealist) <= $areanum && !$hack && !in_array($pls,$hidden_arealist)){
 			//plsinfo修改标记
 			$log .= $plsinfo[$pls].'是禁区，还是赶快逃跑吧！<br>';
 			return;
@@ -138,17 +180,44 @@ namespace explore
 
 		if($mode == 'command') 
 		{
-			if ($command == 'move') 
+			switch($command)
 			{
-				move($moveto);
-			} 
-			else  if ($command == 'search') 
-			{
-				search();
-			} 
+				case 'move':
+					move($moveto);
+					break;
+				case 'search':
+					search();
+					break;
+				case  'moveforward':
+					move($pzone+1);
+					break;
+				case 'moveback':
+					move($pzone-1);
+					break;
+				case 'movenext':
+					move('next');
+					break;
+				case 'moveprev':
+					move('prev');
+					break;	
+			}
 		}
 		
 		$chprocess();
+	}
+
+	function JianChaShangZhangTu()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','map'));
+		return($arealist[array_search($pls,$arealist)-1]);
+	}
+
+	function JianChaXiaZhangTu()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','map'));
+		return($arealist[array_search($pls,$arealist)+1]);
 	}
 }
 

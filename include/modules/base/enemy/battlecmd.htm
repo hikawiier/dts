@@ -9,15 +9,20 @@
 <!--{if (defined('MOD_WEAPON'))}-->
 {template MOD_WEAPON_ATT_METHOD}
 <!--{/if}-->
+<input type="button" class="cmdbutton" id="C" value="防御" onclick="$('command').value='defend';postCmd('gamecmd','command.php');this.disabled=true;"> 
 <br><input type="button" class="cmdbutton" id="x" value="[X]逃跑" onclick="postCmd('gamecmd','command.php');this.disabled=true;"> 
 <!--{else}-->
 <input type="hidden" id="bskill" name="bskill" value="0">
 <input type="hidden" id="bskillpara" name="bskillpara" value="">
 <table cellSpacing=0 cellPadding=0 width=300px style="table-layout:fixed;">
 <tr><td width=100px align="center" style="vertical-align:top">
-<!--{if (defined('MOD_WEAPON'))}-->
+<!--{if (defined('MOD_WEAPON')) && ($battle_distance>=0)}-->
 {template MOD_WEAPON_ATT_METHOD}
+<!--{else}-->
+<input type="button" class="cmdbutton" style="width:98" id="z" value="[Z]防御" onclick="$('command').value='defend';postCmd('gamecmd','command.php');this.disabled=true;"><br>
 <!--{/if}-->
+<!--{if $weps2}--><input type="button" class="cmdbutton"  value="切换至{$wep2} " onclick="$('command').value='b_csubwep2';postCmd('gamecmd','command.php');this.disabled=true;"> <!--{/if}-->
+<!--{if $weps3}--><input type="button" class="cmdbutton"  value="切换至{$wep3} " onclick="$('command').value='b_csubwep3';postCmd('gamecmd','command.php');this.disabled=true;"> <!--{/if}-->
 <!--{eval \clubbase\get_battle_skill_entry($edata,3);}-->
 <br><input type="button" class="cmdbutton" id="x" value="[X]逃跑" onclick="postCmd('gamecmd','command.php');this.disabled=true;"> 
 </td>

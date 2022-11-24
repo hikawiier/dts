@@ -25,7 +25,7 @@ namespace npc
 	//把rs_game里一些能复用的功能放进来
 	function init_npcdata($npc, $plslist=array()){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		eval(import_module('sys','map','player','npc','lvlctl'));
+		eval(import_module('sys','map','player','npc','lvlctl','c_mapzone'));
 		//获得当前NPC能随机到的地图
 		if(!$plslist) $plslist = \map\get_safe_plslist();
 		//基本的一些数值
@@ -50,8 +50,10 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
+				$npc['pzone'] = rand(0,$mapzonelist[$plslist[0]]['space']);
 			}else{
 				$npc['pls'] = 0;
+				$npc['pzone'] = 0;
 			}
 		}	
 		//npc初始状态默认为睡眠
@@ -217,7 +219,7 @@ namespace npc
 	function addarea_pc_process_single($sub, $atime){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($sub, $atime);
-		eval(import_module('sys','map','npc'));
+		eval(import_module('sys','map','npc','c_mapzone'));
 		$pid = $sub['pid'];
 		$o_sub = $sub;
 		$pls_available = \map\get_safe_plslist();//不能移动去的区域，如果不存在，NPC不移动
@@ -227,6 +229,8 @@ namespace npc
 			$tmp_pls_available = 14 == $sub['type'] ? $pls_available2 : $pls_available;
 			shuffle($tmp_pls_available);
 			$sub['pls'] = $tmp_pls_available[0];
+			$tmp_pzone_available = $mapzonelist[$sub['pls']]['space'];
+			$sub['pzone'] = $sub['pzone']>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $sub['pzone'];
 			$db->array_update("{$tablepre}players",$sub,"pid='$pid'",$o_sub);
 			\player\post_pc_avoid_killarea($sub, $atime);
 			//echo $sub['pid'].' ';

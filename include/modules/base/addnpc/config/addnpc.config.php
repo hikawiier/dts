@@ -561,6 +561,7 @@ namespace addnpc
 		),
 	);
 
+	/*
 	//campfireMOD新增addnpc
 	$anpcinfo[1001]=array
 	(
@@ -959,7 +960,7 @@ namespace addnpc
 			'wepsk' => 'Nnufd',
 			),
 		),
-	);
+	);*/
 }
 
 ?>

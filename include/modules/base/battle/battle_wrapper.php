@@ -27,16 +27,61 @@ namespace battle
 			\sys\addchat(6, "{$pa['name']}高喊着“{$message}”杀向了{$pd['name']}");
 		}
 	}
+
+	function get_battle_distance(&$pa, &$pd, $active)
+	{
+		//是玩家的情况下 pa = r1 pd = r2 active =1 
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','weapon'));
+		$r1 = \weapon\get_weapon_range($pa, $active);
+		$r2 = \weapon\get_weapon_range($pd, 1-$active);
+		$r = max(0,$r1-$r2);
+		if($r1 === 0)
+		{
+			//先制者武器为爆炸物，距离值恒定为1
+			$r = 1;			
+		}
+		if(!$active)
+		{
+			$r = 0-$r;
+		}
+		return $r;
+	}
 	
 	function battle_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		send_battle_msg($pa, $pd, $active);
+		send_battle_msg($pa, $pd, $active);		
+		if(!$pa['battle_times'] && !$pd['battle_times'])
+		{	//双方战斗次数为0时 初始化双方战斗距离
+			if($active)
+			{
+				$pa['battle_distance'] = get_battle_distance($pa, $pd, $active);
+				$pd['battle_distance'] = get_battle_distance($pa, $pd, 1-$active);
+			}
+			else
+			{
+				$pa['battle_distance'] = get_battle_distance($pa, $pd, 1-$active);
+				$pd['battle_distance'] = get_battle_distance($pa, $pd, $active);
+			}
+			echo "初次交战，距离初始化完成。<br>";
+		}
+		echo "{$pa['name']}和{$pd['name']}的状态是{$active}，距离分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
 	}
 	
 	function battle_finish(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+
+		if($pa['battle_distance'] && $pd['battle_distance'])
+		{	//双方存在距离 故拉近距离
+			$pa['battle_distance']-=1;
+			$pd['battle_distance']+=1;
+			echo "{$pa['name']}和{$pd['name']}之间的距离被拉近了一格！现在分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
+		}
+		$pa['battle_times']++;$pd['battle_times']++;
+		//增加一次战斗内的交手回合
+		echo "增加了一次战斗回合。现在{$pa['name']}和{$pd['name']}的战斗回合数分别是{$pa['battle_times']}与{$pd['battle_times']}<br>";
 	}
 	
 	function battle(&$pa, &$pd, $active)
@@ -56,7 +101,14 @@ namespace battle
 		
 		//写回数据库
 		eval(import_module('sys','logger','player','metman'));
-		
+
+		if ($pd['hp']<=0 || $pa['hp']<=0)
+		{
+			//死人了情况下重置距离鱼回合数
+			$pa['battle_distance'] = 10; $pd['battle_distance'] = 10; 
+			$pa['battle_times'] = 0; $pd['battle_times'] = 0; 
+		}
+
 		if ($active) 
 		{ 
 			if ($pd['hp']<=0 && $pa['hp']>0)
@@ -66,7 +118,7 @@ namespace battle
 			if ($pa['hp']<=0 && $pd['hp']>0 && $pd['action']=='' && $pd['type']==0)
 			{
 				$pd['action'] = 'pacorpse'.$pa['pid']; 
-			}
+			}			
 		}
 		else
 		{
@@ -79,7 +131,7 @@ namespace battle
 				$pd['action'] = 'corpse'.$pa['pid']; 
 			}
 		}
-		
+
 		if ($active)
 		{
 			$edata=$pd;
@@ -97,6 +149,7 @@ namespace battle
 			\player\load_playerdata($pd);
 		}
 		
+		
 		$battle_title = '战斗发生';
 		$main = MOD_METMAN_MEETMAN;
 		\metman\init_battle(1);
@@ -107,6 +160,10 @@ namespace battle
 		}
 		else
 		{
+			//卧槽 这咋写 我开始迷惑了……
+			//不想改act()里原本的判断逻辑 那只能这么写了！
+			$sdata['action'] = 'enemy'.$edata['pid'];
+			$sdata['keep_enemy'] = 1;
 			include template(get_battleresult_filename());
 			$cmd = ob_get_contents();
 			ob_clean();

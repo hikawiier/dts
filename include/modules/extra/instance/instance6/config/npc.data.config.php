@@ -2744,7 +2744,7 @@ namespace instance6
 			),
 		),
 	);
-	//campfireMOD新增npc
+	/*//campfireMOD新增npc
 	$npcinfo_instance6[1005]=array
 		(
 		'mode' => 2,
@@ -2896,7 +2896,7 @@ namespace instance6
 			'description' => "迷之怨灵 死于鱼弹袭击的亡灵，在某个时空帧中因忽然出现的乱七八糟的NPC而死的可怜人。<br><span class='yellow'>“这NPC！之前没见过啊！看起来好蠢啊，摸一下试试……”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 				),
 			),
-		);
+		);*/
 }
 
 ?>

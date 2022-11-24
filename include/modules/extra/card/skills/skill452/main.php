@@ -32,7 +32,7 @@ namespace skill452
 		{
 			eval(import_module('logger','map','sys'));
 			//plsinfo修改标记
-			if($hidden_area) $plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
+			//if($hidden_area) $plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo) - 1;
 			$pls452 = $arealist[rand($areanum+1,$plsnum)];	
 			if ($areanum+1 < $plsnum){
@@ -42,6 +42,7 @@ namespace skill452
 				$log.="<span class=\"cyan b\">{$pd['name']}通过相位裂隙紧急转移到了{$plsinfo[$pls452]}！</span><br>";
 			else  $log.="<span class=\"cyan b\">你通过相位裂隙紧急转移到了{$plsinfo[$pls452]}！</span><br>";
 			$pd['pls']=$pls452;
+			$pd['pzone']= 0;
 		}
 		$chprocess($pa,$pd,$active);
 	}

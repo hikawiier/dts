@@ -8,7 +8,7 @@ namespace metman
 	$wepeinfo = Array('不值一提','略有威胁','威力可观','无敌神器');
 	
 	//发现活人基础几率(百分比)
-	$metman_obbs = 70;
+	$metman_obbs = 100;
 }
 
 ?>

@@ -66,7 +66,7 @@ namespace team
 		if(!isset($edata)){
 			$log .= "对方不存在！<br>";
 			return false;
-		} elseif($edata['pls'] != $pls) {
+		} elseif($edata['pls'] != $pls || $edata['pzone'] != $pzone) {
 			$log .= '<span class="yellow b">'.$edata['name'].'</span>已经离开了<span class="yellow b">'.$plsinfo[$pls].'</span>。<br>';
 			return false;
 		} elseif($edata['hp'] <= 0) {

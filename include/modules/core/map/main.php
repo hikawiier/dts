@@ -19,7 +19,7 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
 		//$plsinfo修改标记
-		$hag_name = array_search($pls,$hidden_areagroup);
+		/*$hag_name = array_search($pls,$hidden_areagroup);
 		if(array_search($pno,$hidden_areagroup)==$hag_name)
 		{
 			$enter_hidden_area_flag = true;
@@ -28,7 +28,8 @@ namespace map
 		{
 			$enter_hidden_area_flag = false;
 		}
-		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;
+		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;*/
+		return (!check_in_forbidden_area($pno) || $hack);
 	}
 
 	function init_areatiming(){
@@ -86,8 +87,6 @@ namespace map
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
 		$plsnum = sizeof($plsinfo) - 1;
-		//plsinfo修改标记
-		if($hidden_area) $plsnum = sizeof($plsinfo)-sizeof($hidden_area)-1;
 		if($areanum >= $plsnum) 
 		{
 			\sys\gameover($atime,'end1');
@@ -110,8 +109,6 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
-			//涉及到$plsinfo的随机内容要排除隐藏地区
-			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo) - 1;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
@@ -168,12 +165,25 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			//plsinfo修改标记
-			$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 			$plsnum = sizeof($plsinfo);
-			$arealist = range(1,$plsnum-1);
+			$arealist = range(1,$plsnum-2);
 			shuffle($arealist);
 			array_unshift($arealist,0);
+			$arealist=array_reverse($arealist);
+			array_unshift($arealist,34);
+			//我逻辑理不顺不要打我
+			$repA=0;$repB=0;$shopALoc=0;$shopBLoc=0;
+			$tmpShopA=12; //第一个商店应该在的位置
+			$tmpShopB=24; //第二个商店应该在的位置
+			$repA = $arealist[$tmpShopA]; //现在列表里在第一个商店位置的地图
+			$repB = $arealist[$tmpShopB]; //现在列表里在第二个商店位置的地图
+			$shopALoc = array_search(14,$arealist); //现在列表里第一个商店的位置
+			$shopBLoc = array_search(27,$arealist); //现在列表里第二个商店的位置
+			$arealist[$tmpShopA]=14; //交换位置
+			$arealist[$tmpShopB]=27;
+			$arealist[$shopALoc]=$repA; 
+			$arealist[$shopBLoc]=$repB;
+
 			$areanum = 0;
 			$hack = 0;
 			$areawarn = 0;
@@ -216,7 +226,7 @@ namespace map
 			$atime = $areatime;
 		}
 		//plsinfo修改标记
-		$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
+		//$plsinfo = array_flip(array_diff(array_flip($plsinfo),$hidden_arealist));
 		$timediff = $atime - $now;
 		if($timediff > 43200){//如果禁区时间在12个小时以后则显示其他信息
 			$areadata .= '距离下一次禁区还有12个小时以上';

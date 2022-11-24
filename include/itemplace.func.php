@@ -28,8 +28,8 @@ function init_item_place()
 		'evonpc' => GAME_ROOT.'./include/modules/extra/club/skills/skill21/config/evonpc.config.php',
 		'wepchange' => GAME_ROOT.'./include/modules/extra/attr/wepchange/config/wepchange.config.php',
 	);
-	$iplacefilelist['npc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
-	$iplacefilelist['evonpc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/evonpc.config.php';
+	//$iplacefilelist['npc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/npc.data.config.php';
+	//$iplacefilelist['evonpc_i98'] = GAME_ROOT.'./include/modules/campfire/campfire_extra/campfire_instance/instance98_interlude/config/evonpc.config.php';
 	$iplacefiledata = array();
 	foreach($iplacefilelist as $ipfkey => $ipfval){
 		if($ipfkey == 'mixitem') {
@@ -253,6 +253,10 @@ function get_item_place_single($which){
 	if(!empty($enhance)){
 		$result.="<br>并使用『祝福宝石』/『灵魂宝石』强化到{$enhance}<br>";
 	}
+	/*if (strops($which,'？？')!==false) {
+		if(!empty($result)) $result .= '<br>';
+		$result.="在进行上级合成时获得道具线索<br>";
+	}*/
 	return $result;
 }
 
@@ -352,6 +356,7 @@ function get_item_place($which)
 		}
 	}
 	if ($which=="悲叹之种") $result.="通过使用『灵魂宝石』强化物品失败获得<br>";
+	if (strops($which,'？？')!==false) $result.="在进行上级合成时获得道具线索<br>";
 	return $result;
 }
 

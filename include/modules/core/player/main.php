@@ -273,7 +273,7 @@ namespace player
 	function parse_interface_profile(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','player','map'));
+		eval(import_module('sys','player','map','c_mapzone'));
 		
 		//$ardef = $arbe + $arhe + $arae + $arfe;
 		
@@ -312,6 +312,8 @@ namespace player
 		
 		//旧界面用的一些参数
 		$uip['innerHTML']['pls'] = $plsinfo[$pls];
+		$uip['innerHTML']['pzone'] = ' - ';
+		$uip['innerHTML']['pzone'] .= \c_mapzone\get_mapzoneinfo($pls,$pzone);
 		$uip['value']['teamID'] = $teamID;
 		if($teamID){
 			$uip['innerHTML']['chattype'] = "<select name=\"chattype\" value=\"2\"><option value=\"0\" selected>$chatinfo[0]<option value=\"1\" >$chatinfo[1]</select>";
@@ -339,7 +341,7 @@ namespace player
 		eval(import_module('sys','map'));
 		if($areanum >= sizeof($plsinfo) - 1) return;//如果禁区数已达上限，跳过所有处理（gameover()函数会判定游戏结束）
 		//plsinfo修改标记
-		if($hidden_area && ($areanum >= sizeof($plsinfo)-sizeof($hidden_area)-1)) return;
+		//if($hidden_area && ($areanum >= sizeof($plsinfo)-sizeof($hidden_area)-1)) return;
 		$now_areaarr = array_slice($arealist,0,$areanum+1);
 		$where = "('".implode("','",$now_areaarr)."')";//构建查询列表——当前所有禁区
 		$result = $db->query("SELECT * FROM {$tablepre}players WHERE pls IN $where AND hp>0");
