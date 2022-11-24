@@ -155,13 +155,14 @@ namespace enemy
 		$escape_obbs = rand(1,100);
 		if(!$edata['battle_times'] || !$sdata['battle_times'])
 		{	//没交过手的情况下，逃跑率100%
-			$escape_succ_obbs = 0;
+			$escape_succ_obbs = 100;
 		}
 		else
-		{
-			$escape_succ_obbs = 50;
+		{	//有战斗回合记录 逃跑率=40%+|距离|x10
+			$dis_obbs = abs($sdata['battle_distance']*10);
+			$escape_succ_obbs = 40 + $dis_obbs;
 		}
-		if($escape_obbs>$escape_succ_obbs)
+		if($escape_obbs<=$escape_succ_obbs)
 		{
 			//逃跑成功 重置双方战斗回合、距离
 			$sdata['battle_times']=0;$sdata['battle_distance']=0;
@@ -173,10 +174,12 @@ namespace enemy
 		}
 		else
 		{
-			//逃跑失败 距离值归零 准备挨打
-			$sdata['battle_distance']=0;
-			$edata['battle_distance']=0;
-			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑随机数只有{$escape_obbs}!<br>";
+			//逃跑失败 准备挨打
+			//不对 仔细想了想逃跑失败距离值不应该变啊！不然硬扛亏死了
+			//不对不对 逃跑失败减距离意味着逃跑更难了 所以还是要减滴
+			$sdata['battle_distance']++;
+			$edata['battle_distance']--;
+			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑随机数只有{$escape_obbs}!想成功的话不能超过{$escape_succ_obbs}！<br>";
 			battle_wrapper($edata,$sdata,0);
 			return;
 		}
