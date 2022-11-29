@@ -50,7 +50,7 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
-				$npc['pzone'] = rand(0,$mapzonelist[$plslist[0]]['space']);
+				$npc['pzone'] = rand(0,$mapzone_end[$plslist[0]]);
 			}else{
 				$npc['pls'] = 0;
 				$npc['pzone'] = 0;
@@ -229,7 +229,7 @@ namespace npc
 			$tmp_pls_available = 14 == $sub['type'] ? $pls_available2 : $pls_available;
 			shuffle($tmp_pls_available);
 			$sub['pls'] = $tmp_pls_available[0];
-			$tmp_pzone_available = $mapzonelist[$sub['pls']]['space'];
+			$tmp_pzone_available = $mapzone_end[$sub['pls']];
 			$sub['pzone'] = $sub['pzone']>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $sub['pzone'];
 			$db->array_update("{$tablepre}players",$sub,"pid='$pid'",$o_sub);
 			\player\post_pc_avoid_killarea($sub, $atime);

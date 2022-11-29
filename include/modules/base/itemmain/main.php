@@ -314,7 +314,7 @@ namespace itemmain
 							}
 							else  $rmap = $imap;
 							list($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone);
-							if(!$rzone)	$rzone = rand(0,$mapzonelist[$rmap]['space']);	
+							if(!$rzone)	$rzone = rand(0,$mapzone_end[$rmap]);	
 							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap','$rzone'),";
 						}
 					}

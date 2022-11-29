@@ -14,11 +14,10 @@ bufficons,extra/misc/bufficons/,1
 explore,base/explore/,1
 noise,base/noise/,1
 lvlctl,base/lvlctl/,1
-c_mobilephone,campfire/c_mobilephone/,1
-c_mapzone,campfire/c_MapZone/,1
 skill4,base/skills/skill4/,1
 npc,base/npc/,1
 itemmain,base/itemmain/,1
+c_mapzone,campfire/c_MapZone/,1
 metman,base/metman/,1
 itemmix,base/itemmix/itemmix/,1
 itemshop,base/itemshop/,1
@@ -30,6 +29,7 @@ item_ub,base/items/item_ub/,1
 item_uee,base/items/item_uee/,1
 apm,base/apm/,1
 item_addarea,extra/item_extra/item_addarea/,1
+c_mobilephone,campfire/c_mobilephone/,1
 corpse,base/corpse/,1
 trap,base/items/trap/,1
 item_slip,extra/item_extra/item_slip/,1

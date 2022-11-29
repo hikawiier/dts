@@ -1,16 +1,11 @@
 <!--{eval eval(import_module('player','map','c_mobilephone','c_mapzone'));}-->
-<!--{eval $mpp=\c_mobilephone\print_mapzonedata();}-->
+<!--{eval $mpp=$mapzone_coorarr[$pls];}-->
 
 <p>
 	<TABLE border="0" cellspacing="0" cellpadding="0" align=center" style="position:relative;background-repeat:no-repeat;background-position:right bottom;">
-		<TR>
-			<!--{loop range(0,$mpp['max_x']) $x}-->
-				<TD></TD>
-			<!--{/loop}-->
-		</TR>
-		<!--{loop range(0,$mpp['max_x']) $x}-->
-			<tr><TD></TD>
-			 <!--{loop range(0,$mpp['max_y']) $y}-->
+		<!--{loop range(0,$mpp['max_y']) $y}-->
+			<TR>
+			 <!--{loop range(0,$mpp['max_x']) $x}-->
 					<!--{if isset($mpp[$x][$y])}-->
 						<td width="32" height="32" class="map2" align=middle background="map/zone.gif">
 							<!--{if $pzone == $mpp[$x][$y]}-->

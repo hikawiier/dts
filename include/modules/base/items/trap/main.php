@@ -49,7 +49,7 @@ namespace trap
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;
-							$rzone=rand(0,$mapzonelist[$rmap]['space']);
+							$rzone=rand(0,$mapzone_end[$rmap]);
 							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap','$rzone'),";
 						}
 					}

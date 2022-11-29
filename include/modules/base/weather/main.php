@@ -126,13 +126,13 @@ namespace weather
 		if($hack)
 		{
 			$pls = rand(0,sizeof($plsinfo)-1);
-			$tmp_pzone_available = $mapzonelist[$pls]['space'];
+			$tmp_pzone_available = $mapzone_end[$pls];
 			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		else 
 		{
 			$pls = rand($areanum+1,sizeof($plsinfo)-1);$pls=$arealist[$pls];
-			$tmp_pzone_available = $mapzonelist[$pls]['space'];
+			$tmp_pzone_available = $mapzone_end[$pls];
 			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		$log .= "但是强烈的龙卷风把你吹到了<span class=\"yellow b\">$plsinfo[$pls]</span>！<br>";

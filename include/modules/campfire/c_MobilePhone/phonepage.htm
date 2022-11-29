@@ -6,7 +6,7 @@
 {template MOD_BUBBLEBOX_START}
 
 <!--{eval eval(import_module('player','map','c_mobilephone','c_mapzone'));}-->
-<!--{eval $mpp=\c_mobilephone\print_mapzonedata();$next_map=\c_mapzone\get_next_mapinfo($pls);$prev_map=\c_mapzone\get_prev_mapinfo($pls);}-->
+<!--{eval $next_map=\c_mapzone\get_next_mapinfo($pls);$prev_map=\c_mapzone\get_prev_mapinfo($pls);}-->
 
 <p style="margin-left:0px; margin-top:0px; margin-right:0px; margin-bottom:0px;">
 <!--{if (strpos($prev_map,'end')===false)}-->
@@ -26,8 +26,8 @@
 
 <br>
 <p>
-    当前地区暴露度：$mapzonedata[$pls]['exposed']<br>
-    当前地区压制度：$mapzonedata[$pls]['zonevars']<br>
+    当前地区暴露度：$mapzone_exposed[$pls]<br>
+    当前地区压制度：$mapzone_vars[$pls]<br>
 </p>
 
 <input class="cmdbutton" onclick="bubblebox_hide_all();" value="返回主界面" type="button">

@@ -21,16 +21,27 @@ namespace battle
 	function send_battle_msg(&$pa, &$pd, $active){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','logger','input'));
+		//哈哈 该来的躲不掉
+		//加入“追击”后 喊话要用$active区分$pa和$pd的对应身份了
+		//讲道理 不能因为NPC不能喊话就不给NPC喊话的机会 NPC LIVES MATTER
 		if(!empty($message)){
-			$log .= "<span class=\"lime b\">你向{$pd['name']}喊道：“{$message}”</span><br>";
-			$pd['battle_msg'] = "<span class=\"lime b\">{$pa['name']}向你喊道：“{$message}”</span><br><br>";
-			\sys\addchat(6, "{$pa['name']}高喊着“{$message}”杀向了{$pd['name']}");
+			if($active)
+			{
+				$log .= "<span class=\"lime b\">你向{$pd['name']}喊道：“{$message}”</span><br>";
+				$pd['battle_msg'] = "<span class=\"lime b\">{$pa['name']}向你喊道：“{$message}”</span><br><br>";
+				\sys\addchat(6, "{$pa['name']}高喊着“{$message}”杀向了{$pd['name']}");
+			}
+			else
+			{
+				$log .= "<span class=\"lime b\">你向{$pa['name']}喊道：“{$message}”</span><br>";
+				$pa['battle_msg'] = "<span class=\"lime b\">{$pd['name']}向你喊道：“{$message}”</span><br><br>";
+				\sys\addchat(6, "{$pd['name']}高喊着“{$message}”杀向了{$pa['name']}");
+			}
 		}
 	}
 
 	function get_battle_distance(&$pa, &$pd, $active)
 	{
-		//是玩家的情况下 pa = r1 pd = r2 active =1 
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weapon'));
 		$r1 = \weapon\get_weapon_range($pa, $active);
@@ -75,8 +86,8 @@ namespace battle
 
 		if($pa['battle_distance'] && $pd['battle_distance'])
 		{	//双方存在距离 故拉近距离
-			$pa['battle_distance']-=1;
-			$pd['battle_distance']+=1;
+			$pa['battle_distance'] = max(0,$pa['battle_distance']-1);
+			$pd['battle_distance'] = min(0,$pd['battle_distance']+1);
 			echo "{$pa['name']}和{$pd['name']}之间的距离被拉近了一格！现在分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
 		}
 		$pa['battle_times']++;$pd['battle_times']++;

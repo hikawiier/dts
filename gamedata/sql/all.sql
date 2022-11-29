@@ -437,12 +437,14 @@ CREATE TABLE IF NOT EXISTS `acbra2_itemdepot` (
 DROP TABLE IF EXISTS `acbra2_mapzone`;
 CREATE TABLE TABLE IF NOT EXISTS `acbra2_mapzone` (
   `pls` tinyint unsigned not null default '0',
+  `pfloor` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `weather` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `exposed` tinyint(3) unsigned not null default '0',
-  `zonenum` tinyint(3) NOT NULL DEFAULT '2',
+  `zoneend` tinyint(3) NOT NULL DEFAULT '2',
   `zonelist` varchar(255) NOT NULL DEFAULT '',
   `zonevars` text NOT NULL,
-   PRIMARY KEY (`pls`)
+   PRIMARY KEY (`pfloor`),
+   KEY `PLS` (`pls`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------

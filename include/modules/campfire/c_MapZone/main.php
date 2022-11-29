@@ -5,29 +5,59 @@ namespace c_mapzone
 	function init() 
 	{
 		eval(import_module('sys','map'));
-		global $mapzonedata;
+		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_pfloor,$mapzone_end,$mapzone_weather,$mapzone_exposed,$mapzone_vars;
 		$mapzonedata = NULL;
-		for($p=0;$p<sizeof($plsinfo);$p++)
+		if($gamevars['genzone'])
 		{
-			$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pls='$p'");
-			if ($db->num_rows($result))
+			for($p=0;$p<sizeof($plsinfo);$p++)
 			{
-				$mapzonedata[$p] = $db->fetch_array($result);
+				$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pls='$p'");
+				if ($db->num_rows($result))
+				{
+					$mapzonedata = $db->fetch_array($result);
+					$mapzone_pfloor[$p] = $mapzonedata['pfloor'];
+					$mapzone_end[$p] = $mapzonedata['zoneend'];
+					$mapzone_weather[$p] = $mapzonedata['weather'];
+					$mapzone_exposed[$p] = $mapzonedata['exposed'];
+					$mapzone_vars[$p] = $mapzonedata['zonevars'];
+					//杀了我把
+					//留两个数组：一个是房间号=>坐标 一个是坐标=>房间号 为什么会这样？我不到啊！
+					$coorlist = $mapzonedata['zonelist'];
+					$coorlist = explode(',',$coorlist);
+					for($i=0;$i<sizeof($coorlist);$i++){
+						list($x, $y) = explode('-',$coorlist[$i]);
+						//生成地图的时候怎么不这么写……？神经病啊
+						$mapzone_coorlist[$p][$i]['x'] = $x;
+						$mapzone_coorlist[$p][$i]['y'] = $y;
+						$max_x = max($max_x,$x);
+						$max_y = max($max_y,$y);
+						$mapzone_coorarr[$p][$x][$y]=$i;
+					}
+					$mapzone_coorarr[$p]['max_x'] = $max_x;
+					$mapzone_coorarr[$p]['max_y'] = $max_y;
+				}
 			}
 		}
 		//这样搞真的能行吗？？？？		
 	}
 
-	function update_mapzonedata($p,$mapzonedata)
+	function update_mapzonedata($p,$znew,$kind=0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','c_mapzone'));
-		$m_weather = $mapzonedata[$p]['weather'];
-		$m_exposed = $mapzonedata[$p]['exposed'];
-		$m_zonevars = $mapzonedata[$p]['zonevars'];
-		echo $m_weather.$m_exposed;
-		print_r($m_zonevars);
-		$db->query("UPDATE {$tablepre}mapzone SET weather='$m_weather',exposed='$m_exposed',zonevars='$m_zonevars' WHERE pls='$p'");
+		switch($kind){
+			case 'exposed':
+				$db->query("UPDATE {$tablepre}mapzone SET exposed='$znew' WHERE pls='$p'");
+				break;
+			case 'weather':
+				$db->query("UPDATE {$tablepre}mapzone SET weather='$znew' WHERE pls='$p'");
+				break;
+			case 'zonevars':
+				$db->query("UPDATE {$tablepre}mapzone SET zonevars='$znew' WHERE pls='$p'");
+				break;
+			default:
+				return;
+		}
 	}
 
 	function rs_game($xmode = 0) 	//开局区域表初始化
@@ -36,11 +66,14 @@ namespace c_mapzone
 		
 		$chprocess($xmode);
 		
-		eval(import_module('c_mapzone'));
+		eval(import_module('sys','c_mapzone'));
 		if ($xmode & 4) 
 		{
 			//把区域初始化做一下
 			rs_mapzone();
+			//传一个标记告诉game表我好了
+			$gamevars['genzone'] = 1;
+			save_gameinfo();
 		}
 	}
 	
@@ -53,9 +86,9 @@ namespace c_mapzone
 			$mapzone_id = $p; //地图编号
 			$mapzone_weather = $mapzonelist[$mapzone_id]['weather'];	
 			$rooms_max = $mapzonelist[$mapzone_id]['space'];
-			$room_end = $rooms_max-1; //数据库有一个字段叫zonenum 虽然听起来像是房间数量 但是因为它更常用的地方在找出口 所以它实际上的值应该是格子数-1
+			$room_end = $rooms_max-1; 
 			$mapzone_list = get_roomlist_arr($coordinates, $start_x, $start_y, 1, $rooms_max, $x_max, $y_max, $dr, $px, $py);
-			$db->query("INSERT INTO {$tablepre}mapzone (pls, weather, zonenum, zonelist) VALUES ('$mapzone_id', '$mapzone_weather', '$room_end', '$mapzone_list')");
+			$db->query("INSERT INTO {$tablepre}mapzone (pls, weather, zoneend, zonelist) VALUES ('$mapzone_id', '$mapzone_weather', '$room_end', '$mapzone_list')");
 		}
 	}
 	
@@ -237,7 +270,7 @@ namespace c_mapzone
 			{
 				$info = '<span class="yellow b">入口</span>';
 			}
-			elseif($z == $mapzonedata[$p]['zonenum'])
+			elseif($z == $mapzone_end[$p])
 			{
 				$info = '<span class="yellow b">出口</span>';
 			}

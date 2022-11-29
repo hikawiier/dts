@@ -389,7 +389,7 @@ namespace item_misc
 				return;
 			} elseif(strpos($itm,'地区压制')===0) {
 				eval(import_module('map','c_mapzone'));
-				$m_zonevars = $mapzonedata[$pls]['zonevars'];
+				$m_zonevars = $mapzone_vars[$pls];
 				if($m_zonevars == 100)
 				{
 					$log .= "<span class=\"yellow b\">此地区的压制度{$m_zonevars}已满！不能重复使用。</span><br>";
@@ -397,9 +397,10 @@ namespace item_misc
 				}
 				else
 				{
-					$mapzonedata[$pls]['zonevars'] = '100';
-					\c_mapzone\update_mapzonedata($pls,$mapzonedata);
-					$log .= "<span class=\"yellow b\">你成功压制了此地图！现在的压制度是{$mapzonedata[$pls]['zonevars']}！</span><br>";;
+					$mapzone_vars[$pls] = '100';
+					\c_mapzone\update_mapzonedata($pls,$mapzone_vars[$pls],'zonevars');
+					print_r($mapzone_coorlist[$pls]);
+					$log .= "<span class=\"yellow b\">你成功压制了此地图！现在的压制度是{$mapzone_vars[$pls]}！</span><br>";;
 					return;
 				}
 			}

@@ -111,7 +111,7 @@ namespace enemy
 		else $chprocess($edata);
 	}
 
-	function meetman_once_again(&$edata,$log_kind=0)
+	function meetman_once_again(&$edata)
 	{
 		//判断“追击”的外围阶段
 		//适用于所有需要【已经进入过一次战斗后】再度【保持战斗场景】的场合 
@@ -130,14 +130,17 @@ namespace enemy
 			\metman\init_battle(1);
 			//呃呃呃呃是打人还是挨打这个状态怎么传回来，也是个问题……
 			//哈哈 我想到啦！
-			if($log_kind)
+			if($edata['battle_distance']>0)
 			{
-				$log .= "<br>乘胜追击，你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
 				$log .= "<br>但是敌人<span class=\"red b\">{$tdata['name']}</span>在你身后紧追不舍！<br>";
+			}
+			elseif($edata['battle_distance']<0)
+			{
+				$log .= "<br>乘胜追击，你紧紧尾随在敌人<span class=\"red b\">{$tdata['name']}</span>身后！<br>";
 			}
 			else
 			{
-				$log .= "<br>稍作休整，你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
+				$log .= "<br>你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
 			}
 			include template(get_battlecmd_filename());
 			$cmd = ob_get_contents();
@@ -153,15 +156,16 @@ namespace enemy
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','metman','logger'));
 		$escape_obbs = rand(1,100);
-		if(!$edata['battle_times'] || !$sdata['battle_times'])
-		{	//没交过手的情况下，逃跑率100%
+		//if(!$edata['battle_times'] || !$sdata['battle_times'])
+		//{	//没交过手的情况下，逃跑率100%
+			//默认100% 以后给精英类敌人加技能影响逃跑概率
 			$escape_succ_obbs = 100;
-		}
-		else
-		{	//有战斗回合记录 逃跑率=40%+|距离|x10
-			$dis_obbs = abs($sdata['battle_distance']*10);
-			$escape_succ_obbs = 40 + $dis_obbs;
-		}
+		//}
+		//else
+		//{	//有战斗回合记录 逃跑率=40%+|距离|x10
+		//	$dis_obbs = abs($sdata['battle_distance']*10);
+		//	$escape_succ_obbs = 40 + $dis_obbs;
+		//}
 		if($escape_obbs<=$escape_succ_obbs)
 		{
 			//逃跑成功 重置双方战斗回合、距离
@@ -174,15 +178,37 @@ namespace enemy
 		}
 		else
 		{
-			//逃跑失败 准备挨打
+			//逃跑失败 准备挨打 
+			//逃跑这个操作只有玩家能做 所以不用判断active了 爽死
 			//不对 仔细想了想逃跑失败距离值不应该变啊！不然硬扛亏死了
 			//不对不对 逃跑失败减距离意味着逃跑更难了 所以还是要减滴
-			$sdata['battle_distance']++;
-			$edata['battle_distance']--;
+			$sdata['battle_distance'] = min(0,$sdata['battle_distance']+1);
+			$edata['battle_distance'] = max(0,$edata['battle_distance']-1);
 			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑随机数只有{$escape_obbs}!想成功的话不能超过{$escape_succ_obbs}！<br>";
 			battle_wrapper($edata,$sdata,0);
 			return;
 		}
+	}
+
+	function prepare_initial_response_content()
+	{	//重载页面后维持战斗界面
+		//还是会有一些怪问题 比如载入页面后重新加载界面需要一段时间 这时候提交别的操作会把加载界面的指令覆盖掉
+		//想到一些很麻烦的解决办法 因为太麻烦了所以不管了！
+		if (eval(__MAGIC__)) return $___RET_VALUE;		
+		eval(import_module('sys','player','metman'));
+		$cmd = $main = '';
+		if(strpos($action,'enemy')===0 && $gamestate<40){
+			$eid = str_replace('enemy','',$action);
+			if($eid){
+				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
+				if($db->num_rows($result)>0){
+					$edata = \player\fetch_playerdata_by_pid($eid);
+					extract($edata,EXTR_PREFIX_ALL,'w');
+					meetman_once_again($edata);
+				}
+			}
+		}
+		$chprocess();
 	}
 	
 	function battle_wrapper(&$pa, &$pd, $active)
@@ -206,8 +232,23 @@ namespace enemy
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','map','player','logger','metman','input'));
+		if ($command == 'enter' && strpos($action,'enemy')===0)
+		{
+			$eid = str_replace('enemy','',$action);
+			if($eid){
+				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
+				if($db->num_rows($result)>0){
+					$edata = \player\fetch_playerdata_by_pid($eid);
+					extract($edata,EXTR_PREFIX_ALL,'w');
+					meetman_once_again($edata);
+					return;
+				}
+			}	
+		}
+
 		if($command == 'enter')
 			$sdata['keep_enemy'] = 1;
+			
 		if($mode == 'combat') 
 		{			
 			$enemyid = str_replace('enemy','',$action);
@@ -265,7 +306,10 @@ namespace enemy
 			}
 			if ($command == 'defend') 
 			{
-				//挨打时除了逃跑以外也可以防御
+				//暂时写在这里 之后要把坚守做成技能
+				//坚守是玩家受到先制攻击且敌人射程比自己远的情况下，除了逃跑唯一能做的主操作
+				//因此meetman_once_again()里没有判断攻击是否先手 非先手的情况直接交由坚守处理
+				//因此因此 做成技能的时候记得给坚守加发动条件判断 只有battle_distance<=0的情况下才能发动
 				$log .= "你双手抱头蹲在墙角，祈祷对方不要打得太狠。<br>";
 				battle_wrapper($edata,$ldata,0);
 				return;
