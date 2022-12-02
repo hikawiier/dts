@@ -4,22 +4,24 @@ namespace c_mapzone
 {	
 	function init() 
 	{
-		eval(import_module('sys','map'));
 		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_pfloor,$mapzone_end,$mapzone_weather,$mapzone_exposed,$mapzone_vars;
 		$mapzonedata = NULL;
+		eval(import_module('sys','map'));
+		//鱼唇的可视化……
 		if($gamevars['genzone'])
 		{
-			for($p=0;$p<sizeof($plsinfo);$p++)
+			for($p=1;$p<=$areamax;$p++)
 			{
-				$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pls='$p'");
+				$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pfloor='$p'");
 				if ($db->num_rows($result))
 				{
 					$mapzonedata = $db->fetch_array($result);
-					$mapzone_pfloor[$p] = $mapzonedata['pfloor'];
-					$mapzone_end[$p] = $mapzonedata['zoneend'];
-					$mapzone_weather[$p] = $mapzonedata['weather'];
-					$mapzone_exposed[$p] = $mapzonedata['exposed'];
-					$mapzone_vars[$p] = $mapzonedata['zonevars'];
+					$mapzone_pls = $mapzonedata['pls'];
+					$mapzone_pfloor[$mapzone_pls] = $p;
+					$mapzone_end[$mapzone_pls] = $mapzonedata['zoneend'];
+					$mapzone_weather[$mapzone_pls] = $mapzonedata['weather'];
+					$mapzone_exposed[$mapzone_pls] = $mapzonedata['exposed'];
+					$mapzone_vars[$mapzone_pls] = $mapzonedata['zonevars'];
 					//杀了我把
 					//留两个数组：一个是房间号=>坐标 一个是坐标=>房间号 为什么会这样？我不到啊！
 					$coorlist = $mapzonedata['zonelist'];
@@ -27,16 +29,17 @@ namespace c_mapzone
 					for($i=0;$i<sizeof($coorlist);$i++){
 						list($x, $y) = explode('-',$coorlist[$i]);
 						//生成地图的时候怎么不这么写……？神经病啊
-						$mapzone_coorlist[$p][$i]['x'] = $x;
-						$mapzone_coorlist[$p][$i]['y'] = $y;
+						$mapzone_coorlist[$mapzone_pls][$i]['x'] = $x;
+						$mapzone_coorlist[$mapzone_pls][$i]['y'] = $y;
 						$max_x = max($max_x,$x);
 						$max_y = max($max_y,$y);
-						$mapzone_coorarr[$p][$x][$y]=$i;
+						$mapzone_coorarr[$mapzone_pls][$x][$y]=$i;
 					}
-					$mapzone_coorarr[$p]['max_x'] = $max_x;
-					$mapzone_coorarr[$p]['max_y'] = $max_y;
+					$mapzone_coorarr[$mapzone_pls]['max_x'] = $max_x;
+					$mapzone_coorarr[$mapzone_pls]['max_y'] = $max_y;
 				}
 			}
+			$gamevars['genzone'] = NULL;
 		}
 		//这样搞真的能行吗？？？？		
 	}

@@ -40,34 +40,17 @@ namespace explore
 				$log.="只有位于地图的出入口才能切换地图。<br>";
 				return;
 		}
-		$plsnum = sizeof($plsinfo);
-		if(($moveto === 'main')||($moveto < 0 )||($moveto >= $plsnum)){
-		//if((($moveto == 'main')||($moveto < 0 )||(($moveto >= $plsnum)))&&(!in_array($moveto,$hidden_arealist))){
+		//$plsnum = sizeof($plsinfo);
+		if(($moveto === 'main')||($moveto < 0 )||(!array_search($moveto,$arealist))){
 			$log .= '请选择正确的移动地点。<br>';
 			return;
 		} elseif($pls == $moveto){
 			$log .= '相同地点，不需要移动。<br>';
 			return;
 		} elseif(array_search($moveto,$arealist) <= $areanum && !$hack){
-		//} elseif(array_search($moveto,$arealist) <= $areanum && !$hack && !in_array($moveto,$hidden_arealist)){
-			//plsinfo修改标记
 			$log .= $plsinfo[$moveto].'是禁区，还是离远点吧！<br>';
 			return;
-		}/* elseif(in_array($moveto,$hidden_arealist)){
-			$hag_name = array_search($pls,$hidden_areagroup);
-			if(array_search($moveto,$hidden_areagroup)==$hag_name)
-			{
-				$enter_hidden_area_flag = true;
-			}
-			else
-			{
-				$enter_hidden_area_flag = false;
-			}
-			if(!$enter_hidden_area_flag){
-				$log .= "地图上没有{$plsinfo[$moveto]}啊？是不是你看错了？{$hag_name}<br>";
-				return;
-			}
-		}*/
+		}
 		$movesp=max(calculate_move_sp_cost(),1);		
 		if($sp <= $movesp){
 			$log .= "体力不足，不能移动！<br>还是先睡会儿吧！<br>";

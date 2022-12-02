@@ -2,9 +2,12 @@
 
 namespace map
 {
+	$areamax = max(2,4); //单局游戏会生成的地图数量 不能小于2
+	$areaend = $areamax-1;
+
 	function init() 
 	{
-		
+		global $areamax,$areaend;
 	}
 	
 	//检查一个地区编号是否是禁区
@@ -66,7 +69,8 @@ namespace map
 		if($areanum+1 > sizeof($arealist)) return array();
 		else {
 			$r = array_slice($arealist,$areanum+1);
-			if($no_dangerous_zone) $r = array_diff($r, array(32,34));
+			//if($no_dangerous_zone) $r = array_diff($r, array(32,34));
+			if($no_dangerous_zone) $r = array_diff($r, array(0,34));
 			return $r;
 		}
 	}
@@ -86,7 +90,8 @@ namespace map
 	function check_addarea_gameover($atime){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map'));
-		$plsnum = sizeof($plsinfo) - 1;
+		//$plsnum = sizeof($plsinfo) - 1;
+		$plsnum = $areaend;
 		if($areanum >= $plsnum) 
 		{
 			\sys\gameover($atime,'end1');
@@ -109,7 +114,8 @@ namespace map
 		
 		eval(import_module('sys','map'));
 		if ( $gamestate > 10 && $now > $atime ) {
-			$plsnum = sizeof($plsinfo) - 1;
+			//$plsnum = sizeof($plsinfo) - 1;
+			$plsnum = $areaend;
 			$areanum += $areaadd;
 			if($areanum >= $plsnum) 
 			{
@@ -165,25 +171,18 @@ namespace map
 			list($sec,$min,$hour,$day,$month,$year,$wday,$yday,$isdst) = localtime($starttime);
 			$areatime = rs_areatime();
 			//init_areatiming();
-			$plsnum = sizeof($plsinfo);
-			$arealist = range(1,$plsnum-2);
+			$plsnum = sizeof($plsinfo)-2;
+			$arealist = range(1,$plsnum); //掐头去尾
 			shuffle($arealist);
-			array_unshift($arealist,0);
-			$arealist=array_reverse($arealist);
-			array_unshift($arealist,34);
-			//我逻辑理不顺不要打我
-			$repA=0;$repB=0;$shopALoc=0;$shopBLoc=0;
-			$tmpShopA=12; //第一个商店应该在的位置
-			$tmpShopB=24; //第二个商店应该在的位置
-			$repA = $arealist[$tmpShopA]; //现在列表里在第一个商店位置的地图
-			$repB = $arealist[$tmpShopB]; //现在列表里在第二个商店位置的地图
-			$shopALoc = array_search(14,$arealist); //现在列表里第一个商店的位置
-			$shopBLoc = array_search(27,$arealist); //现在列表里第二个商店的位置
-			$arealist[$tmpShopA]=14; //交换位置
-			$arealist[$tmpShopB]=27;
-			$arealist[$shopALoc]=$repA; 
-			$arealist[$shopBLoc]=$repB;
-
+			//初始化地图上限
+			$tmp_arealist = Array();
+			$tmp_arealist[0] = 34; //接好你的头
+			for($a=1;$a<$areaend;$a++)
+			{
+				$tmp_arealist[$a] = $arealist[$a-1];
+			}
+			$arealist = $tmp_arealist;
+			$arealist[$areaend] = 0; //塞好你的尾
 			$areanum = 0;
 			$hack = 0;
 			$areawarn = 0;

@@ -69,8 +69,8 @@ namespace npc
 	function get_safe_plslist($no_dangerous_zone = true, $type = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		$ret = $chprocess($no_dangerous_zone, $type);
-		if($no_dangerous_zone && 1 == $type)
-			$ret = array_diff($ret, array(21,26,33));
+		//if($no_dangerous_zone && 1 == $type)
+			//$ret = array_diff($ret, array(21,26,33));
 		return $ret;
 	}
 	

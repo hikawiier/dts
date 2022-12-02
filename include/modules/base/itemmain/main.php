@@ -290,12 +290,7 @@ namespace itemmain
 		
 		eval(import_module('sys','map','itemmain','c_mapzone'));
 		if ($xmode & 16) {	//地图道具
-			$plsnum = sizeof($plsinfo);
-			//plsinfo修改标记
-			//if($hidden_area)
-			//{
-			//	$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
-			//}			
+			//$plsnum = sizeof($plsinfo);		
 			$iqry = '';
 			$rzone = 0;
 			$itemlist = get_itemfilecont();
@@ -309,7 +304,10 @@ namespace itemmain
 							if ($imap == 99)
 							{
 								do {
-									$rmap = rand(0,$plsnum-1);
+									//$rmap = rand(0,$plsnum-1);
+									$rmap = \map\get_safe_plslist();
+									shuffle($rmap);
+									$rmap = $rmap[0];
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;

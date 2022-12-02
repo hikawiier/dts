@@ -18,12 +18,7 @@ namespace trap
 		
 		eval(import_module('sys','map','itemmain','trap','c_mapzone'));
 		if ($xmode & 16) {	//地图陷阱初始化
-			//plsinfo修改标记
-			$plsnum = sizeof($plsinfo);
-			//if($hidden_area)
-			//{
-			//	$plsnum = sizeof($plsinfo)-sizeof($hidden_area);
-			//}	
+			//$plsnum = sizeof($plsinfo);
 			$iqry = '';
 			$itemlist = get_trapfilecont();
 			$in = sizeof($itemlist);
@@ -45,7 +40,10 @@ namespace trap
 							if ($imap == 99)
 							{
 								do {
-									$rmap = rand(0,$plsnum-1);
+									//$rmap = rand(0,$plsnum-1);
+									$rmap = \map\get_safe_plslist();
+									shuffle($rmap);
+									$rmap = $rmap[0];
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
 							else  $rmap = $imap;
