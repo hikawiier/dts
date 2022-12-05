@@ -63,8 +63,8 @@ namespace battle
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		send_battle_msg($pa, $pd, $active);		
-		if(!$pa['battle_times'] && !$pd['battle_times'])
-		{	//双方战斗次数为0时 初始化双方战斗距离
+		if(strpos($pa['action'],'chase')===false && strpos($pd['action'],'chase')===false)
+		{	//没有检测到追击状态时 初始化战斗距离与回合数
 			if($active)
 			{
 				$pa['battle_distance'] = get_battle_distance($pa, $pd, $active);
@@ -171,9 +171,9 @@ namespace battle
 		}
 		else
 		{
-			//卧槽 这咋写 我开始迷惑了……
-			//不想改act()里原本的判断逻辑 那只能这么写了！
-			$sdata['action'] = 'enemy'.$edata['pid'];
+			//笨办法
+			//这里不给对手赋对应的action是有问题的 纯粹假设是单人模式只存在玩家才能控制战斗界面的情况下
+			$sdata['action'] = 'chase'.$edata['pid'];
 			$sdata['keep_enemy'] = 1;
 			include template(get_battleresult_filename());
 			$cmd = ob_get_contents();
@@ -186,6 +186,7 @@ namespace battle
 	function get_battleresult_filename(){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','logger','player','metman'));
+		//这里之后再加一个新的result页面用来跳转到追击页面吧 不要改原来的了
 		return MOD_BATTLE_BATTLERESULT;
 	}
 }

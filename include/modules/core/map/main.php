@@ -2,7 +2,8 @@
 
 namespace map
 {
-	$areamax = max(2,4); //单局游戏会生成的地图数量 不能小于2
+	$areamax = 12;
+	$areamax = max(2,$areamax); //单局游戏会生成的地图数量 不能小于2 //地图？地点？地区？区域？
 	$areaend = $areamax-1;
 
 	function init() 
@@ -21,17 +22,6 @@ namespace map
 	function check_can_enter($pno){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
-		//$plsinfo修改标记
-		/*$hag_name = array_search($pls,$hidden_areagroup);
-		if(array_search($pno,$hidden_areagroup)==$hag_name)
-		{
-			$enter_hidden_area_flag = true;
-		}
-		else
-		{
-			$enter_hidden_area_flag = false;
-		}
-		return (!check_in_forbidden_area($pno) || $hack) && $enter_hidden_area_flag;*/
 		return (!check_in_forbidden_area($pno) || $hack);
 	}
 

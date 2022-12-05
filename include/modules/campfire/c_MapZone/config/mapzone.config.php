@@ -2,30 +2,16 @@
 
 namespace c_mapzone
 {
-	// 全局地图边界 10x10
-    $x_axis = 10;
-    $y_axis = 10;
-	$x_max = $x_axis-1;
-    $y_max = $y_axis-1;
-	// 地图生成房间上限 初始地图数量
-	//$rooms_max = 9;
-	// 暂时先由地图自己决定
 	// 第一个房间的固定位置
-	$start_x = 1;
-    $start_y = 1;
+	$start_x = 2;
+    $start_y = 2;
 	// 初始化第一次拓展房间的方向 0=x+;1=x-;2=y+;3=y-;
 	$dr = 0;
 	// 初始化岔路坐标
 	$px = 0;
 	$py = 0;
-	// 初始化坐标数组
-	$x_array = array_fill(0, $x_axis, 0);
-	$y_array = array_fill(0, $y_axis, 0);
-	$coordinates = [];
-	foreach($x_array as $x => $v)
-    {
-        $coordinates[$x] = $y_array;
-    }
+	//不会生成特殊房间的地图
+	$not_spawn_special_roomlist = Array(34);
 	
 	$mapzonelist = Array(
 		0 => Array
@@ -353,16 +339,14 @@ namespace c_mapzone
 
 	$mapzoneinfo = array
 	(//标记一些特殊房间的名称，没有的话编号0默认叫【入口】，编号末默认叫【出口】，其他默认叫【区域】
-		0 => Array
-		(
-			6 => '主控室',
-			7 => '商店',
-		),
-		34 => Array
-		(
-			0 => '甬道',
-			1 => '玄关',
-		),
+		'shop' => '商店',
+		'armory' => '武库',
+		'supply' => '补给点',
+		'workbench' => '工作间',
+		'hospital' => '诊所',
+		'miniboss' => '警卫室',
+		'start' => Array(34=>'遗址',),
+		'end' => Array(0=>'总控室',34=>'出口',),
 	);
 
 }

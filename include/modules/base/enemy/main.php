@@ -90,9 +90,8 @@ namespace enemy
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','metman','logger'));
-		//以发现状态进入战斗时 初始化交战回合与距离
-		//记得去改逃跑操作 逃跑的时候也要初始化双方的回合次数
-		//battle_distance的初始值10 为什么？我不知道啊！
+		//以发现状态进入战斗时 再次初始化交战回合与距离
+		//其实没必要了
 		$sdata['battle_times']=0;$edata['battle_times']=0;
 		$sdata['battle_distance']=10;$edata['battle_distance']=10;
 		if ($edata['hp']>0)
@@ -123,7 +122,7 @@ namespace enemy
 		{
 			//有没有高手能告诉我init_battle()传的参是干嘛的
 			//上了个厕所回来忽然想明白了 原来是给雾天遇敌用的
-			$sdata['action'] = 'enemy'.$edata['pid'];
+			$sdata['action'] = 'chase'.$edata['pid'];
 			$sdata['keep_enemy'] = 1;
 			\player\update_sdata();
 			$battle_title = '陷入鏖战';
@@ -143,6 +142,7 @@ namespace enemy
 				$log .= "<br>你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
 			}
 			include template(get_battlecmd_filename());
+			//记得之后在check_battle_skill_available()里加一段和战斗距离相关的判定 在负距离情况下过滤掉带有“攻击性”的技能
 			$cmd = ob_get_contents();
 			ob_clean();
 			$main = MOD_METMAN_MEETMAN;		
@@ -197,8 +197,8 @@ namespace enemy
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		eval(import_module('sys','player','metman'));
 		$cmd = $main = '';
-		if(strpos($action,'enemy')===0 && $gamestate<40){
-			$eid = str_replace('enemy','',$action);
+		if(strpos($action,'chase')===0 && $gamestate<40){
+			$eid = str_replace('chase','',$action);
 			if($eid){
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
 				if($db->num_rows($result)>0){
@@ -221,7 +221,7 @@ namespace enemy
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess();
 		eval(import_module('player'));
-		if(empty($sdata['keep_enemy']) && strpos($action, 'enemy')===0){
+		if(empty($sdata['keep_enemy']) && (strpos($action, 'enemy')===0 || strpos($action, 'chase')===0)){
 			$action = '';
 			unset($sdata['keep_enemy']);
 		}
@@ -230,11 +230,12 @@ namespace enemy
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		
 		eval(import_module('sys','map','player','logger','metman','input'));
-		if ($command == 'enter' && strpos($action,'enemy')===0)
-		{
-			$eid = str_replace('enemy','',$action);
+
+		if ($command == 'enter' && strpos($action,'chase')===0)
+		{ //只有追击状态下刷新页面才会重载战斗界面 初次发现但不攻击不会
+			//但是会会比较好？
+			$eid = str_replace('chase','',$action);
 			if($eid){
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
 				if($db->num_rows($result)>0){
@@ -251,9 +252,9 @@ namespace enemy
 			
 		if($mode == 'combat') 
 		{			
-			$enemyid = str_replace('enemy','',$action);
+			$enemyid = strpos($action,'enemy')===0 ? str_replace('enemy','',$action) : str_replace('chase','',$action);
 			
-			if(!$enemyid || strpos($action,'enemy')===false){
+			if(!$enemyid || (strpos($action,'enemy')===false && strpos($action,'chase')===false)){
 				$log .= "<span class=\"yellow b\">你没有遇到敌人，或已经离开战场！</span><br>";
 				$mode = 'command';
 				return;

@@ -4,42 +4,27 @@ namespace c_mapzone
 {	
 	function init() 
 	{
-		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_pfloor,$mapzone_end,$mapzone_weather,$mapzone_exposed,$mapzone_vars;
+		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_pfloor,$mapzone_end,$mapzone_vars;
 		$mapzonedata = NULL;
 		eval(import_module('sys','map'));
-		//鱼唇的可视化……
-		if($gamevars['genzone'])
+		for($p=1;$p<=$areamax;$p++)
 		{
-			for($p=1;$p<=$areamax;$p++)
+			$result = $db->query("SELECT pls,zoneend,zonelist,zonevars FROM {$tablepre}mapzone WHERE pfloor='$p'");
+			if ($db->num_rows($result))
 			{
-				$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pfloor='$p'");
-				if ($db->num_rows($result))
-				{
-					$mapzonedata = $db->fetch_array($result);
-					$mapzone_pls = $mapzonedata['pls'];
-					$mapzone_pfloor[$mapzone_pls] = $p;
-					$mapzone_end[$mapzone_pls] = $mapzonedata['zoneend'];
-					$mapzone_weather[$mapzone_pls] = $mapzonedata['weather'];
-					$mapzone_exposed[$mapzone_pls] = $mapzonedata['exposed'];
-					$mapzone_vars[$mapzone_pls] = $mapzonedata['zonevars'];
-					//杀了我把
-					//留两个数组：一个是房间号=>坐标 一个是坐标=>房间号 为什么会这样？我不到啊！
-					$coorlist = $mapzonedata['zonelist'];
-					$coorlist = explode(',',$coorlist);
-					for($i=0;$i<sizeof($coorlist);$i++){
-						list($x, $y) = explode('-',$coorlist[$i]);
-						//生成地图的时候怎么不这么写……？神经病啊
-						$mapzone_coorlist[$mapzone_pls][$i]['x'] = $x;
-						$mapzone_coorlist[$mapzone_pls][$i]['y'] = $y;
-						$max_x = max($max_x,$x);
-						$max_y = max($max_y,$y);
-						$mapzone_coorarr[$mapzone_pls][$x][$y]=$i;
-					}
-					$mapzone_coorarr[$mapzone_pls]['max_x'] = $max_x;
-					$mapzone_coorarr[$mapzone_pls]['max_y'] = $max_y;
-				}
+				$mapzonedata = $db->fetch_array($result);
+				$mapzone_pls = $mapzonedata['pls'];
+				$mapzone_pfloor[$mapzone_pls] = $p;
+				$mapzone_end[$mapzone_pls] = $mapzonedata['zoneend'];
+				$mapzone_vars[$mapzone_pls] = $mapzonedata['zonevars'];
+				$coorlist = $mapzonedata['zonelist'];
+				$coorlist = gdecode($coorlist,true);
+				$mapzone_coorlist[$mapzone_pls] = $coorlist;
+				//临时鼠族 $mapzone_coorarr 用一种看不懂的格式来记录房间↔坐标的对应关系 仅用于打印可视化地图
+				//之后会把这一块换成存储在本地的缓存文件
+				//哎呀！好像不行 因为十字方向移动判断四周是否存在邻接格的时候还要用到这个鼠族 要不就这样吧
+				$mapzone_coorarr[$mapzone_pls] = change_coorlist_to_coorarr($coorlist);
 			}
-			$gamevars['genzone'] = NULL;
 		}
 		//这样搞真的能行吗？？？？		
 	}
@@ -49,9 +34,6 @@ namespace c_mapzone
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','c_mapzone'));
 		switch($kind){
-			case 'exposed':
-				$db->query("UPDATE {$tablepre}mapzone SET exposed='$znew' WHERE pls='$p'");
-				break;
 			case 'weather':
 				$db->query("UPDATE {$tablepre}mapzone SET weather='$znew' WHERE pls='$p'");
 				break;
@@ -74,9 +56,6 @@ namespace c_mapzone
 		{
 			//把区域初始化做一下
 			rs_mapzone();
-			//传一个标记告诉game表我好了
-			$gamevars['genzone'] = 1;
-			save_gameinfo();
 		}
 	}
 	
@@ -86,12 +65,59 @@ namespace c_mapzone
 		//开始初始化区域表
 		foreach($arealist as $p)
 		{
-			$mapzone_id = $p; //地图编号
-			$mapzone_weather = $mapzonelist[$mapzone_id]['weather'];	
-			$rooms_max = $mapzonelist[$mapzone_id]['space'];
-			$room_end = $rooms_max-1; 
+			$mapzone_pls = $p; //地图编号
+			$f = array_search($mapzone_pls,$arealist); //地图层数
+			$mapzone_weather = $mapzonelist[$mapzone_pls]['weather'];	
+			$room_size = array();
+			$log_intensity = 'intensity';
+			if($f == 0 || $f == $areaend)
+			{ //首尾层地图搞些特殊化
+				$room_size = get_mapzone_room_size($mapzone_pls);
+				$log_intensity .= $mapzone_pls;
+			}
+			else
+			{
+				//决定地图所处的强度区间 刨除首尾2张地图 每经过占总数1/5的地图升级一次强度
+				$i = 100*($f/($areamax-2));
+				if($i >= 80 && $f > 8)
+				{	//有8张以上地图 且位置位于4/5路程往上 生成强度4
+					$room_size = get_mapzone_room_size(4);
+					$log_intensity .= 4;
+				}
+				elseif($i >= 60 && $f > 6)
+				{	//有6张以上地图 且位置位于3/5往上 生成强度3
+					$room_size = get_mapzone_room_size(3);
+					$log_intensity .= 3;
+				}
+				elseif($i >= 40 && $f > 4)
+				{	//有4张以上地图 且位置位于2/5往上 生成强度2
+					$room_size = get_mapzone_room_size(2);
+					$log_intensity .= 2;
+				}
+				elseif($i >= 20 && $f > 2)
+				{	//有2张以上地图 且位置位于1/5往上 生成强度1
+					$room_size = get_mapzone_room_size(1);
+					$log_intensity .= 1;
+				}
+				else
+				{	//生成默认的最低强度地图
+					$room_size = get_mapzone_room_size(99);
+					$log_intensity .= 99;
+				}
+			}
+			$log_intensity .= ',';
+			$x_max = $room_size['x_axis'];
+			$y_max = $room_size['y_axis'];
+			$rooms_max = $room_size['rooms_max'];
+			$room_end = $rooms_max-1; //这个room_end指向的是出口所在的房间 很关键
+			$coordinates = get_mapzone_coordinates($room_size);
+			//生成带坐标区域列表
 			$mapzone_list = get_roomlist_arr($coordinates, $start_x, $start_y, 1, $rooms_max, $x_max, $y_max, $dr, $px, $py);
-			$db->query("INSERT INTO {$tablepre}mapzone (pls, weather, zoneend, zonelist) VALUES ('$mapzone_id', '$mapzone_weather', '$room_end', '$mapzone_list')");
+			//初始化特殊区域 插入到区域列表里
+			$mapzone_list = get_special_roomlist_arr($f,$mapzone_list,$room_end,$x_max,$y_max);
+			//再生产
+			$mapzone_list = gencode($mapzone_list);
+			$db->query("INSERT INTO {$tablepre}mapzone (pls, weather, zoneend, zonelist, zonevars) VALUES ('$mapzone_pls', '$mapzone_weather', '$room_end', '$mapzone_list', '$log_intensity')");
 		}
 	}
 	
@@ -101,74 +127,80 @@ namespace c_mapzone
 		//开始生成随机区域格
 		$room_arr = generate_room($c, $x, $y, $r, $rm, $xm, $ym, $px, $p);
 		//整理生成后的随机区域格鼠族
-		return encode_roomlist($room_arr,$xm, $ym);
+		return change_coorarr_to_coorlist($room_arr,$xm,$ym);
 	}
 	
-	function encode_roomlist($c,$x_max,$y_max)
+	function change_coorarr_to_coorlist($c,$x_max,$y_max)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		//整理生成的随机区域格
 		$room_list = Array();
-		for($y=0;$y<=$y_max;$y++)
+		for($x=0;$x<=$x_max;$x++)
 		{
 			//echo '<br>';
-			for($x=0;$x<=$x_max;$x++)
+			for($y=0;$y<=$y_max;$y++)
 			{
-				if($c[$y][$x]>0){
+				if($c[$x][$y]>0){
 					//echo $a[$y][$x].' ';
-					$room_id = $c[$y][$x];
-					$room_coor = $x.'-'.$y;
-					$room_list[$room_id]=$room_coor;
+					$room_id = $c[$x][$y]-1;
+					$room_list[$room_id]['x']=$x;
+					$room_list[$room_id]['y']=$y;
 				}
 			}
 		}
 		ksort($room_list);
 		//list里只保留坐标
-		$room_list = array_keys(array_flip($room_list));
-		return implode(',',$room_list);
+		//$room_list = array_keys(array_flip($room_list));
+		return $room_list;
 	}
 
-	function get_roomlist_data($p)
+	function change_coorlist_to_coorarr($coorlist)
 	{
-		//拉取区域格表相关的数据
-		//有什么办法能把拉取出来的区域格放在全局变量里？因为它一局下来多半也不会有变化了
-		//哈哈有拌饭了
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		/*eval(import_module('sys'));
-		$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pls = '$pls'");
-		$rarr = $db->fetch_array($result);
-		$z = explode(',',$rarr['zonelist']);
-		return $z;*/
+		for($i=0;$i<sizeof($coorlist);$i++){
+			$x = $coorlist[$i]['x'];
+			$y = $coorlist[$i]['y'];
+			$max_x = max($max_x,$x);
+			$max_y = max($max_y,$y);
+			$coorarr[$x][$y]=$i;
+		}
+		$coorarr['max_x'] = $max_x;
+		$coorarr['max_y'] = $max_y;
+		return $coorarr;
 	}
 
 	//下面是区域格生成的相关函数
 	
-	function generate_room($c, $x, $y, $r, $rm, $xm, $ym, $px, $py)
+	function generate_room($c, $x, $y, $r, $rm, $xm, $ym, $px, $py, $dr=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
 		// 增加房间号
-		$c[$y][$x] = $r;
+		$c[$x][$y] = $r;
 		//echo "此次生成了房间({$x},{$y})。这是我们的第{$r}间房，";		
 		if($r>2 && (rand(0,100)<65))
 		{
 			//echo "一条岔路生成了，我们的出发点从({$x},{$y})变更为({$px},{$py})，";
 			$x = $px;
 			$y = $py;
+			$odr = $dr;
+			do {
+				$dr = rand(0,3);
+			  } while ($dr == $odr);
 		}		
 		if($r < $rm)
 		{
 			$r = $r + 1;
-			$dr = rand(0,3);//随机挑选一个方向前进 0 x+ 1 x- 2 y+ 3 y-		
+			if(!isset($dr)) $dr = rand(0,3);//随机挑选一个方向前进 0 x+ 1 x- 2 y+ 3 y-		
 			//echo "接下来要向【{$dr}】方向移动。<br>";			
-			$next_coord = generate_coord($c, $x, $y, $xm, $ym, $dr); 			
-			$c = generate_room($c, $next_coord[0], $next_coord[1], $r, $rm, $xm, $ym, $next_coord[2], $next_coord[3]);     
+			$next_coord = generate_coord($c, $x, $y, $xm, $ym, $dr); 	
+			$c = generate_room($c, $next_coord[0], $next_coord[1], $r, $rm, $xm, $ym, $next_coord[2], $next_coord[3], $next_coord[4]);     
 		}
 		return $c;
 	}
 
-	function generate_coord($c, $x, $y, $xm, $ym, $dr)
+	function generate_coord($c, $x, $y, $xm, $ym, $dr=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map'));
@@ -225,7 +257,7 @@ namespace c_mapzone
 				}
 			}
 		}
-		$room = $c[$y][$x];
+		$room = $c[$x][$y];
 		// 我们有家了
 		if($room > 0)
 		{
@@ -233,9 +265,71 @@ namespace c_mapzone
 			//↑↑不，还是用原来的方法 不改变方向 让它沿着一条路自己走到能创建新房间的地方
 			return generate_coord($c, $x, $y, $xm, $ym, $dr);
 		}
-		return [$x, $y, $px, $py];
+		return [$x, $y, $px, $py, $dr];
+	}	
+
+	function get_mapzone_room_size($intensity=99)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//默认的全局地图边界 10x10
+		$x_axis = 10;
+		$y_axis = 10;
+		//默认的地图内有效格子数
+		$rooms_max = 7;
+		switch($intensity)
+		{
+			case 0: //无月之影可能比较大
+				$room_size['x_axis'] = 40;
+				$room_size['y_axis'] = 40;
+				$room_size['rooms_max'] = 16;
+				break;
+			case 1:
+				$room_size['x_axis'] = ceil($x_axis*1.5);
+				$room_size['y_axis'] = ceil($x_axis*1.5);
+				$room_size['rooms_max'] = ceil($rooms_max*1.2);
+				break;
+			case 2:
+				$room_size['x_axis'] = ceil($x_axis*2);
+				$room_size['y_axis'] = ceil($x_axis*2);
+				$room_size['rooms_max'] = ceil($rooms_max*1.45);
+				break;
+			case 3:
+				$room_size['x_axis'] = ceil($x_axis*2.5);
+				$room_size['y_axis'] = ceil($x_axis*2.5);
+				$room_size['rooms_max'] = ceil($rooms_max*1.65);
+				break;
+			case 4:
+				$room_size['x_axis'] = ceil($x_axis*3);
+				$room_size['y_axis'] = ceil($x_axis*3);
+				$room_size['rooms_max'] = ceil($rooms_max*1.9);
+				break;
+			case 34: //英灵殿只有2个房间
+				$room_size['x_axis'] = 5;
+				$room_size['y_axis'] = 5;
+				$room_size['rooms_max'] = 2;
+				break;
+			default:
+				$room_size['x_axis'] = $x_axis;
+				$room_size['y_axis'] = $y_axis;
+				$room_size['rooms_max'] = $rooms_max;
+				break;
+		}
+		return $room_size;
 	}
 
+	function get_mapzone_coordinates($room_size)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$x_array = array_fill(0, $room_size['x_axis'], 0);
+		$y_array = array_fill(0, $room_size['y_axis'], 0);
+		$coordinates = [];
+		foreach($x_array as $x => $v)
+		{
+			$coordinates[$x] = $y_array;
+		}
+		return $coordinates;
+	}
+	
 	function get_next_mapinfo($p)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -263,19 +357,22 @@ namespace c_mapzone
 	function get_mapzoneinfo($p,$z){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map','c_mapzone'));
-		if(isset($mapzoneinfo[$p][$z]))
+
+		$mpt=$mapzone_coorlist[$p][$z]['t'];
+		if($mpt)
 		{
-			$info = '<span class="yellow b">'.$mapzoneinfo[$p][$z].'</span>';
+			$mpt = explode('-',$mpt);
+			$info = '<span class="yellow b">'.$mapzoneinfo[$mpt[0]].'</span>';
 		}
 		else
 		{
 			if($z == 0)
 			{
-				$info = '<span class="yellow b">入口</span>';
+				$info = isset($mapzoneinfo['start'][$pls]) ? "<span class='yellow b'>{$mapzoneinfo['start'][$pls]}</span>" : '<span class="yellow b">入口</span>';
 			}
 			elseif($z == $mapzone_end[$p])
 			{
-				$info = '<span class="yellow b">出口</span>';
+				$info = isset($mapzoneinfo['end'][$pls]) ? "<span class='yellow b'>{$mapzoneinfo['end'][$pls]}</span>" : '<span class="yellow b">出口</span>';
 			}
 			else
 			{
@@ -284,19 +381,7 @@ namespace c_mapzone
 			
 		}
 		return $info;
-	}	
-
-	/*function itemuse(&$theitem)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','itemmain','logger','c_mapzone'));
-		
-		$itm=&$theitem['itm']; $itmk=&$theitem['itmk'];
-		$itme=&$theitem['itme']; $itms=&$theitem['itms']; $itmsk=&$theitem['itmsk'];
-		
-		
-		$chprocess($theitem);
-	}*/
+	}
 }
 
 ?>

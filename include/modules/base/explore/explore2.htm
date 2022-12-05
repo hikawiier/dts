@@ -1,0 +1,10 @@
+<!--方向按钮太卡了先注释掉了 反正用手机地图也能移动 不如说真的有必要搞4个按钮吗吗吗吗？？？？-->
+<!--{eval eval(import_module('c_mapzone'));}-->
+<input type="button" class="cmdbutton" id="zz" value="[Z]探索" onclick="$('command').value='search';postCmd('gamecmd','command.php');this.disabled=true;" <!--{if array_search($pls,$arealist) <= $areanum && !$hack}-->disabled<!--{/if}-->>
+<input type="button" class="slimbutton" id="moveto" value="切换地图" onclick="$('command').value='movepls';postCmd('gamecmd','command.php');this.disabled=true;"<!--{if \c_mapzone\check_moveto_pls_available()===NULL}-->disabled<!--{/if}-->>
+<!--{if !$mapzone_coorlist}-->
+<span id="moveto_box"><select id="moveto" name="moveto" onchange="$('command').value='move';replay_record_DOM_path(this.options[this.selectedIndex]);postCmd('gamecmd','command.php');this.disabled=true;">
+{template move}
+</select></span>
+<!--{/if}-->
+<br /> 

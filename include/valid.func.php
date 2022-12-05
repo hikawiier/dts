@@ -21,7 +21,7 @@ function enter_battlefield($xuser,$xpass,$xgender,$xicon,$card=0,$ip=NULL)
 	$rand = rand(0,15);
 	$att = 95 + $rand;
 	$def = 105 - $rand;
-	$pls = $arealist[0];
+	$pls = 34;
 	$pzone = 0;
 	$killnum = $npckillnum = 0;
 	$lvl = 0;

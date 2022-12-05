@@ -26,7 +26,7 @@ namespace c_mobilephone
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','input','logger','explore'));
+		eval(import_module('sys','player','input','c_mapzone'));
 		if ($mode == 'special' && $command == 'viewphone') 
 		{
 			$mode = MOD_C_MOBILEPHONE_PHONEPAGE;
@@ -34,7 +34,7 @@ namespace c_mobilephone
 		}
 		if ($mode == 'special' && $command == 'mapzone_special') 
 		{
-			\explore\move($subcmd);
+			\c_mapzone\move_to_zone($subcmd);
 			return;
 		}
 

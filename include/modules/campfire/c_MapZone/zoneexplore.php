@@ -3,54 +3,34 @@
 namespace c_mapzone
 {	//区域移动相关
 
-	function check_moveto_zone_available($dir)
+	function check_moveto_zone_dir($carr,$x,$y)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','c_mapzone'));
-
-		$mpp = $mapzone_coorarr[$pls];
-		$x = $mapzone_coorlist[$pls][$pzone]['x'];
-		$y = $mapzone_coorlist[$pls][$pzone]['y'];
-		$nx = $x; $ny = $y;
-		switch($dir)
-		{ // 0=n 1=w 2=e 3=s
-			case 0:
-				$ny = $y-1;
-				//echo '向北：'.$x.'-'.$ny;
-				if(isset($mpp[$x][$ny]))
-				{
-					return $mpp[$x][$ny];
-				} 
-				break;
-			case 1:
-				$nx = $x-1;
-				//echo '向西：'.$nx.'-'.$y;
-				if(isset($mpp[$nx][$y]))
-				{
-					return $mpp[$nx][$y];
-				}
-				break;
-			case 2:
-				$nx = $x+1;
-				//echo '向东：'.$nx.'-'.$y;
-				if(isset($mpp[$nx][$y]))
-				{
-					return $mpp[$nx][$y];
-				}
-				break;
-			case 3:
-				$ny = $y+1;
-				//echo '向南：'.$x.'-'.$ny;
-				if(isset($mpp[$x][$ny]))
-				{
-					return $mpp[$x][$ny];
-				}
-				break;
-			default:
-				return NULL;
-				break;
+		$dir = Array();
+		$ny = $y-1; $sy = $y+1;
+		$wx = $x-1; $ex = $x+1;
+		//我真是日了狗了 方向对应关系 0=x+；1=x-；2=y+；3=y-；
+		//向北	
+		if(isset($carr[$x][$ny]))
+		{
+			$dir[3] = $carr[$x][$ny];
+		} 
+		//向西
+		if(isset($carr[$wx][$y]))
+		{
+			$dir[1] = $carr[$wx][$y];
 		}
-		return NULL;
+		//向东
+		if(isset($carr[$ex][$y]))
+		{
+			$dir[0] = $carr[$ex][$y];
+		}
+		//向南
+		if(isset($carr[$x][$sy]))
+		{
+			$dir[2] = $carr[$x][$sy];
+		}
+		return $dir;
 	}
 
 	function check_moveto_pls_available()
@@ -125,9 +105,9 @@ namespace c_mapzone
 
 		if($mode == 'command' && strpos($command,'move_')===0) 
 		{
-			$moveto = NULL;
-			$dir = substr($command,5);
-			$moveto = \c_mapzone\check_moveto_zone_available($dir);
+			$moveto  = substr($command,5);
+			//$log.='你输入的指令是'.$moveto;
+			//$moveto = \c_mapzone\check_moveto_zone_dir($carr,$x,$y);
 			if(isset($moveto))	\c_mapzone\move_to_zone($moveto);				
 		} 
 		elseif ($mode == 'command' && strpos($command,'movepls')===0) 
