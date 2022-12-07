@@ -3,6 +3,57 @@
 namespace c_mapzone
 {	//区域移动相关
 
+	function get_next_mapinfo($p)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','map'));
+		$next = array_search($p,$arealist)+1;
+		if(isset($arealist[$next]))
+		{
+			return $arealist[$next];
+		}
+		return 'end';
+	}
+
+	function get_prev_mapinfo($p)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','map'));
+		$prev = array_search($p,$arealist)-1;
+		if(isset($arealist[$prev]))
+		{
+			return $arealist[$prev];
+		}
+		return 'end';
+	}
+
+	function get_mapzoneinfo($p,$z){
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','map','c_mapzone'));
+		$mpt=$mapzone_coorlist[$p][$z]['t'];
+		if($mpt)
+		{
+			if($mpt == 'start')
+			{
+				$info = isset($mapzoneinfo['start'][$pls]) ? "<span class='yellow b'>{$mapzoneinfo['start'][$pls]}</span>" : '<span class="yellow b">入口</span>';
+			}
+			elseif($mpt == 'end')
+			{
+				$info = isset($mapzoneinfo['end'][$pls]) ? "<span class='yellow b'>{$mapzoneinfo['end'][$pls]}</span>" : '<span class="yellow b">出口</span>';
+			}
+			else
+			{
+				$mpt = explode('-',$mpt);
+				$info = '<span class="b">'.$mapzoneinfo[$mpt[0]].'</span>';
+			}
+		}
+		else
+		{
+			$info = '区域'.$z;
+		}
+		return $info;
+	}
+
 	function check_moveto_zone_dir($carr,$x,$y)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -37,23 +88,20 @@ namespace c_mapzone
 	{	//我印象里见过一个和这个差不多名字的函数……不过不管了……
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','c_mapzone'));
-
-		$moveto = NULL;
 		switch($pzone)
 		{
 			case 0:
-				$moveto = $arealist[array_search($pls,$arealist)-1];
+				$moveto = get_prev_mapinfo($pls);
 				break;
 			case $mapzone_end[$pls]:
-				$moveto = $arealist[array_search($pls,$arealist)+1];
+				$moveto = get_next_mapinfo($pls);
 				break;
 			default:
-				return NULL;
-				break;
+				$moveto = NULL;
 		}
 		if(array_search($moveto,$arealist) <= $areanum && !$hack)
 		{
-			return NULL;
+			return;
 		}
 		else
 		{

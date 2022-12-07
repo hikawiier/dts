@@ -23,7 +23,7 @@ namespace npc
 	}
 	
 	//把rs_game里一些能复用的功能放进来
-	function init_npcdata($npc, $plslist=array()){
+	function init_npcdata($npc,$plslist=array(),$mzdata=array()){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys','map','player','npc','lvlctl','c_mapzone'));
 		//获得当前NPC能随机到的地图
@@ -50,12 +50,55 @@ namespace npc
 			if(!empty($plslist)){
 				shuffle($plslist);
 				$npc['pls'] = $plslist[0];
-				$npc['pzone'] = rand(0,$mapzone_end[$plslist[0]]);
 			}else{
 				$npc['pls'] = 0;
-				$npc['pzone'] = 0;
 			}
 		}	
+		//调整有强度要求的NPC的位置 
+		//暂时不写防呆判定了，定义NPC强度的时候注意点——如果是“非固定强度”的地图，NPC会根据强度要求跑到别的地方去！
+		$tmp_np = $npc['pls']; $tmp_nz = $npc['pzone'];
+		if(is_array($npc['intensity']))
+		{
+			$tmp_intensity = $mzdata[$tmp_np]['intensity'];
+			while(!in_array($tmp_intensity,$npc['intensity']))
+			{
+				shuffle($plslist);
+				$npc['pls'] = $plslist[0];
+				$tmp_np = $npc['pls'];
+				$tmp_intensity = $mzdata[$tmp_np]['intensity'];
+			}
+		}
+		//初始化NPC所在区域格 
+		//先看这个NPC是不是要生成在特殊格
+		if(array_key_exists($tmp_nz,$mapzoneinfo))
+		{ 
+			$tmp_speclist = $mzdata[$tmp_np]['speclist'];
+			//是特殊格，但是所在地没有，那就在符合强度区间的地图里找一个有的
+			if(!array_key_exists($tmp_nz,$tmp_speclist))
+			{
+				do{
+					shuffle($plslist);
+					$npc['pls'] = $plslist[0];
+					$tmp_np = $npc['pls'];
+					$tmp_speclist = $mzdata[$tmp_np]['speclist'];
+					$tmp_intensity = $mzdata[$tmp_np]['intensity'];
+				} while(!array_key_exists($tmp_nz,$tmp_speclist) || (is_array($npc['intensity']) && !in_array($tmp_intensity,$npc['intensity'])));
+			}
+			$npc['pzone'] = $tmp_speclist[$tmp_nz];
+			echo "生成了特殊种类NPC".$npc['name']."，位于地图".$npc['pls']."的区域".$npc['pzone']."，该地图强度为：".$tmp_intensity."<br>";
+		}
+		//未定义过区域格的 或者类型非法的 通通按随机处理
+		if($npc['pzone'] == 99 || !isset($npc['pzone']))
+		{
+			$tmp_zoneend = $mzdata[$tmp_np]['zoneend'];
+			$pzonelist = range(0,$tmp_zoneend);
+			if(!empty($pzonelist)){
+				shuffle($pzonelist);
+				$npc['pzone'] = $pzonelist[0];
+			}else{
+				$npc['pzone'] = 0;
+			}
+		}
 		//npc初始状态默认为睡眠
 		if(!isset($npc['state'])){$npc['state'] = 1;}
 		//技能的获取
@@ -105,10 +148,15 @@ namespace npc
 		
 		$chprocess($xmode);
 		
-		eval(import_module('sys','map','player','npc','lvlctl','skillbase'));
+		eval(import_module('sys','map','player','npc','lvlctl','skillbase','c_mapzone'));
 		if ($xmode & 8) {
 			//echo " - NPC初始化 - ";
 			$db->query("DELETE FROM {$tablepre}players WHERE type>0 ");
+			//从数据库拉取区域表，只拉取一次传进init_npcdata()，而不是在里面套娃
+			$tmp_mapzonedata = \c_mapzone\load_mapzonedata();
+			//初始化miniboss计数器
+			$miniboss_list = Array();
+			$miniboss_intensity_list = Array();
 			//$plsnum = sizeof($plsinfo);
 			$npcqry = '';
 			$ninfo = get_npclist();
@@ -121,6 +169,35 @@ namespace npc
 				if(!empty($npcs)) {
 					//检查当前模式允许不允许这个type的NPC加入
 					if (!check_initnpcadd($i)) continue;
+
+					//如果type属于miniboss 暂时跳过生成 但用数组记录它们出现的时机
+					if($npcs['pzone']=='miniboss')
+					{
+						//echo "检测到一个候选的miniboss：".$i; //插入miniboss列表
+						$miniboss_list[$i]=$npcs;
+						//初始化可能位于的强度区间
+						if(is_array($npcs['intensity']))
+						{
+							shuffle($npcs['intensity']);
+							$spbi = $npcs['intensity'][0];
+						}
+						else
+						{
+							shuffle($randomboss_intensity_list);
+							$spbi = $randomboss_intensity_list[0];
+						}
+						//echo "，它所在的强度为：".$spbi."<br>";
+						$miniboss_list[$i]['intensity'] = $spbi;
+						//向对应强度区间内插入该类type 然后随机化列表
+						$miniboss_intensity_list[$spbi][] = $i;
+						if(rand(0,99)>50)
+						{ 
+							//随机但不完全随机
+							shuffle($miniboss_intensity_list[$spbi]);
+						}
+						//暂时跳过生成
+						continue;
+					}
 					//得到此type的NPC的加入列表
 					$subnum = sizeof($npcs['sub']);
 					$jarr = $jarr0 = array_keys($npcs['sub']);
@@ -149,7 +226,7 @@ namespace npc
 						//选择所用地图列表
 						$tmp_pls_available = 14 == $i ? $pls_available2 : $pls_available;
 						//初始化函数
-						$npc = init_npcdata($npc, $tmp_pls_available);
+						$npc = init_npcdata($npc, $tmp_pls_available, $tmp_mapzonedata);
 						//writeover('a.txt',json_encode($npc['nskillpara']));
 //						$npc['endtime'] = $now;
 //						$npc['hp'] = $npc['mhp'];
@@ -202,6 +279,44 @@ namespace npc
 //							\player\player_save($pp);
 //						}
 						//藏好自己，做好清理
+						unset($npc);
+					}
+				}
+			}
+			//进行第二轮生成 处理miniboss
+			foreach ($miniboss_list as $i => $npcs){
+				if(!empty($npcs)) {
+					//重新取得miniboss要生成的强度区
+					$spbi = $npcs['intensity'];
+					//候选列表里有多个miniboss时 只生成第一个
+					if($i !== $miniboss_intensity_list[$spbi][0])
+					{
+						//echo "当前miniboss种类".$i."与首位候选miniboss种类".$miniboss_intensity_list[$spbi][0]."不匹配<br>";
+						continue;
+					}
+					//再包好……
+					$npcs['intensity'] = Array($spbi);
+					$subnum = sizeof($npcs['sub']);
+					$jarr = $jarr0 = array_keys($npcs['sub']);
+					if (!$subnum || !$npcs['num']) $jarr=array();
+					elseif ($subnum > $npcs['num']) {
+						shuffle($jarr);
+						$jarr=array_slice($jarr,0,$npcs['num']);
+					}elseif ($subnum < $npcs['num']) {
+						while(sizeof($jarr) < $npcs['num']) {
+							$jarr = array_merge($jarr,$jarr0);
+						}
+					}
+					sort($jarr);
+					foreach($jarr as $j){
+						$npc = array_merge($npcinit,$npcs);
+						if(isset($npc['sub']) && is_array($npc['sub'])) $npc = array_merge($npc,$npc['sub'][$j]);
+						$npc['type'] = $i;
+						$npc['sNo'] = $j;
+						$tmp_pls_available = 14 == $i ? $pls_available2 : $pls_available;
+						$npc = init_npcdata($npc, $tmp_pls_available, $tmp_mapzonedata);
+						$npc=\player\player_format_with_db_structure($npc);
+						$db->array_insert("{$tablepre}players", $npc);
 						unset($npc);
 					}
 				}

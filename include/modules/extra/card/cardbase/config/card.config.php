@@ -70,7 +70,8 @@ $cards = array(
 		'effect' => '无',
 		'energy' => 0,
 		'valid' => array(
-			'pls' => '0',
+			//'pls' => '0',
+			//找了半个月不知道为什么改不了出生点 原来是你小子！你害的我好苦啊！
 		)
 	),
 	1 => array(

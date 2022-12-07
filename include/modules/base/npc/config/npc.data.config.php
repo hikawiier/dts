@@ -6,6 +6,7 @@ namespace npc
 		(
 			'name' => '',	'pass' => 'bra', 'gd' => 'm',	'icon' => 0,	'club' => 0,	
 			'mhp' => 0,	'msp' => 0,	 'mss' => 0, 'att' => 0,	'def' => 0,	'pls' => 0,	'lvl' => 0,
+			'pzone' => 0,	'intensity' => '', 
 			'money' => 0,	'inf' => '',	'rage' => 0,	'pose' => 0,	'tactic' => 0, 'skill' => 0,
 			'killnum' => 0,	'npckillnum' => 0, 'state' => 1,	'teamID' => '',	'teamPass' => '','bid' => 0,
 			'wep' => '',	'wepk' => '',	'wepe' => 0,	'weps' => 0,	'wepsk' => '',
@@ -41,6 +42,7 @@ namespace npc
 			'teamPass' => '',
 			'gd' => 'f',
 			'pls' => 0,
+			'pzone' => 'end',
 			'mhp' => 7500,
 			'msp' => 4000,
 			'att' => 750,
@@ -102,7 +104,7 @@ namespace npc
 		2 => array
 		(
 		'mode' => 2,
-		'num' => 16,
+		'num' => 3,
 		'pass' => 'bra',
 		'club' => 0,
 		'bid' => 0,
@@ -114,6 +116,8 @@ namespace npc
 		'teamID' => '',
 		'teampass' => '',
 		'pls' => 99,
+		'pzone' => 'miniboss',
+		'intensity' => Array(1,2), //强度匹配 只有强度1或2的地图才会刷这个怪 还是要想一想这里应该匹配允许生成的的还是匹配禁止生成的
 		'mhp' => 2800,
 		'msp' => 200,
 		'att' => 250,
@@ -411,6 +415,8 @@ namespace npc
 			'teamID' => '',
 			'teamPass' => '',
 			'pls' => 99,
+			'pzone' => 'miniboss',
+			'intensity' => Array(3), 
 			'mhp' => 3333,
 			'msp' => 333,
 			'att' => 333,
@@ -515,6 +521,8 @@ namespace npc
 			'teamPass' => '',
 			'gd' => 'r',
 			'pls' => 99,
+			'pzone' => 'miniboss',
+			'intensity' => Array(4), 
 			'mhp' => 8888,
 			'msp' => 400,
 			'att' => 400,
@@ -757,7 +765,7 @@ namespace npc
 		11 => array
 			(
 			'mode' => 1,
-			'num' => 7,
+			'num' => 1,
 			'pass' => 'bra',
 			'club' => 0,
 			'bid' => 0,
@@ -770,6 +778,8 @@ namespace npc
 			'teamPass' => '',
 			'gd' => 'r',
 			'pls' => 99,
+			'pzone' => 'miniboss',
+			'intensity' => Array(3), 
 			'mhp' => 2888,
 			'msp' => 888,
 			'att' => 88,
@@ -1154,6 +1164,8 @@ namespace npc
 		'teamPass' => '',
 		'gd' => 'f',
 		'pls' => 99,
+		'pzone' => 'miniboss',
+		'intensity' => Array(5), 
 		'mhp' => 2800,
 		'msp' => 400,
 		'att' => 75,
@@ -2408,7 +2420,7 @@ namespace npc
 	45=> array
 		(
 		'mode' => 2,
-		'num' => 8,
+		'num' => 2,
 		'pass' => 'bra',
 		'club' => 14,
 		'bid' => 0,
@@ -2421,6 +2433,8 @@ namespace npc
 		'teamID' => 'MhHmpsz',
 		'teamPass' => 'Eb2Lfz3Usvui',
 		'pls' => 99,
+		'pzone' => 'miniboss',
+		'intensity' => Array(2,3),
 		'mhp' => 5400,
 		'msp' => 200,
 		'att' => 200,
@@ -2777,11 +2791,11 @@ namespace npc
 		),
 	);
 
-	/*//campfireMOD新增npc
+	//campfireMOD新增npc
 	$npcinfo[1005]=array
 	(
 		'mode' => 2,
-		'num' => 16,
+		'num' => 3,
 		'pass' => 'bra',
 		'skills' => array('400'=>'1',),
 		'club' => 0,
@@ -2795,6 +2809,8 @@ namespace npc
 		'teamID' => '',
 		'teamPass' => '',
 		'pls' => 99,
+		'pzone' => 'miniboss',
+		'intensity' => Array(1,2),
 		'mhp' => 2700,
 		'msp' => 200,
 		'att' => 233,
@@ -2929,7 +2945,7 @@ namespace npc
 			'description' => "迷之怨灵 死于鱼弹袭击的亡灵，在某个时空帧中因忽然出现的乱七八糟的NPC而死的可怜人。<br><span class='yellow'>“这NPC！之前没见过啊！看起来好蠢啊，摸一下试试……”</span><br>隔着屏幕都能感觉到从它身上渗透出的怨念……",
 			),
 		),
-	);*/
+	);
 }
 
 ?>

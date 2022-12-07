@@ -116,9 +116,11 @@ DROP TABLE IF EXISTS bra_mapzone;
 CREATE TABLE bra_mapzone (
   pls tinyint unsigned not null default '0',
   pfloor tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  intensity tinyint(3) unsigned NOT NULL DEFAULT '0',
   weather tinyint(3) unsigned NOT NULL DEFAULT '0',
   zoneend tinyint(3) NOT NULL DEFAULT '2',
   zonelist varchar(255) NOT NULL DEFAULT '',
+  speclist varchar(255) NOT NULL DEFAULT '',
   zonevars text NOT NULL,
 
   PRIMARY KEY (pfloor),

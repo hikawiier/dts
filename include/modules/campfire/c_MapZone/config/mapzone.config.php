@@ -12,7 +12,10 @@ namespace c_mapzone
 	$py = 0;
 	//不会生成特殊房间的地图
 	$not_spawn_special_roomlist = Array(34);
-	
+	//允许随机生成miniboss的强度区间
+	$randomboss_intensity_list = Array(1,2,3,4,5);
+	//每个miniboss房间最多允许生成几个miniboss?
+
 	$mapzonelist = Array(
 		0 => Array
 		(
@@ -338,15 +341,15 @@ namespace c_mapzone
 	);
 
 	$mapzoneinfo = array
-	(//标记一些特殊房间的名称，没有的话编号0默认叫【入口】，编号末默认叫【出口】，其他默认叫【区域】
+	(//标记一些特殊房间的名称，没有的话编号首默认叫【入口】，编号尾默认叫【出口】，其他默认叫【区域】
 		'shop' => '商店',
 		'armory' => '武库',
 		'supply' => '补给点',
 		'workbench' => '工作间',
-		'hospital' => '诊所',
+		'hospital' => '医务室',
 		'miniboss' => '警卫室',
-		'start' => Array(34=>'遗址',),
-		'end' => Array(0=>'总控室',34=>'出口',),
+		'start' => Array(34=>'大殿的遗迹',),
+		'end' => Array(0=>'总控室',34=>'玄关',),
 	);
 
 }

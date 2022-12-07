@@ -22,9 +22,11 @@ namespace addnpc
 	function addnpc($xtype,$xsub,$num,$newspls = 0,$time = 0) 
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','logger','addnpc','lvlctl','skillbase'));
+		eval(import_module('sys','player','map','logger','addnpc','lvlctl','skillbase','c_mapzone'));
 		$time = $time == 0 ? $now : $time;
 //		$plsnum = sizeof($plsinfo);
+		//从数据库拉取区域表
+		$tmp_mapzonedata = \c_mapzone\load_mapzonedata();
 		$anpcs = get_addnpclist();
 		$npc=array_merge($npcinit,$anpcs[$xtype]);
 		//$npcwordlist = Array();
@@ -38,7 +40,7 @@ namespace addnpc
 				$npc = array_merge($npc,$npc['sub'][$xsub]);
 				$npc['type'] = $xtype;
 				$npc['sNo'] = $i;
-				$npc = \npc\init_npcdata($npc,$pls_available);
+				$npc = \npc\init_npcdata($npc,$pls_available,$tmp_mapzonedata);
 //				$spid = uniqid('',true);
 //				$npc['pass']=$spid;
 //				$npc['endtime'] = $time;

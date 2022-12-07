@@ -3,7 +3,7 @@
 namespace sys
 {
 	//是否禁止曜日活动
-	$disable_event = 0;
+	$disable_event = 1;
 	//是否禁止沙盒模式
 	//$disable_sandbox_mode = 0;
 	//是否禁止新游戏（主游戏下一局时间会变为未定，无法新建房间）用于更新
@@ -12,7 +12,7 @@ namespace sys
 	$disable_newroom = 0;
 	
 	//游戏开始方式 0=后台手动开始，1=每天固定时间开始，2=上局结束后，间隔固定小时后的整点开始，3=上局结束后，间隔固定分钟开始
-	$startmode = 3;
+	$startmode = 0;
 	//游戏开始的小时，如果，如果$startmode=1,表示开始时间0~23，如果$startmode=2，表示间隔小时，>0，如果$startmode=3则无视
 	$starthour = 0;
 	//游戏开始的分钟数，范围1~59，$startmode=3时表示间隔分钟

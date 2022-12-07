@@ -22,9 +22,9 @@ namespace aprilfool2018
 	}
 	
 	//开场新增NPC时报告位置
-	function init_npcdata($npc, $plslist=array()){
+	function init_npcdata($npc, $plslist=array(),$mzdata=array()){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
-		$npc = $chprocess($npc, $plslist);
+		$npc = $chprocess($npc, $plslist, $mzdata);
 		eval(import_module('sys'));
 		if(in_array($gametype, array(0,4)) && 1 == \achievement_base\check_achtype_available(34) && 41 == $npc['type']) {
 			eval(import_module('player'));

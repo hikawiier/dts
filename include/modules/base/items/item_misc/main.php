@@ -399,7 +399,6 @@ namespace item_misc
 				{
 					$mapzone_vars[$pls] .= '100';
 					\c_mapzone\update_mapzonedata($pls,$mapzone_vars[$pls],'zonevars');
-					print_r($mapzone_coorlist[$pls]);
 					$log .= "<span class=\"yellow b\">你成功压制了此地图！现在的压制度是{$mapzone_vars[$pls]}！</span><br>";;
 					return;
 				}
