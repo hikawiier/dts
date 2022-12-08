@@ -15,7 +15,7 @@ namespace c_mapzone
 	*/
 
 	//下面是区域格生成部分
-	//决定地图强度
+	//决定地图危险度
 	function get_mapzone_intensity($f,$mapzone_pls)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -26,7 +26,7 @@ namespace c_mapzone
 		}
 		else
 		{
-			//决定地图所处的强度区间 刨除首尾2张地图 每经过占总数1/5的地图升级一次强度
+			//决定地图所处的危险度区间 刨除首尾2张地图 每经过占总数1/5的地图升级一次强度
 			$i = 100*($f/($areamax-2));
 			if($i >= 80 && $f > 8)
 			{	//有8张以上地图 且位置位于4/5路程往上 生成强度5
@@ -292,7 +292,7 @@ namespace c_mapzone
 		eval(import_module('map'));
 		//根据层数还有其他乱七八糟的东西获取能生成的特殊房间列表
 		//搞特殊化的地图不生成特殊房间
-		if(in_array($f,$not_spawn_special_roomlist))
+		if(in_array($f,$map_nospeczone_arealist))
 		{ 
 			return $sp_room_list;
 		}

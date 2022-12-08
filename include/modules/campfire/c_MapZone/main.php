@@ -59,7 +59,7 @@ namespace c_mapzone
 			$mapzone_pls = $p; 
 			//地图层数
 			$f = array_search($mapzone_pls,$arealist); 
-			//初始化地图强度
+			//初始化地图危险度
 			$map_intensity = get_mapzone_intensity($f,$mapzone_pls);
 			//初始化地图大小
 			$room_size = array();

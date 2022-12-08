@@ -290,7 +290,9 @@ namespace itemmain
 		
 		eval(import_module('sys','map','itemmain','c_mapzone'));
 		if ($xmode & 16) {	//地图道具
-			//$plsnum = sizeof($plsinfo);		
+			//$plsnum = sizeof($plsinfo);	
+			//从数据库拉取区域表
+			$tmp_mapzonedata = \c_mapzone\load_mapzonedata();	
 			$iqry = '';
 			$rzone = 0;
 			$itemlist = get_itemfilecont();
@@ -298,22 +300,69 @@ namespace itemmain
 			$an = $areanum ? ceil($areanum/$areaadd) : 0;
 			for($i = 1; $i < $in; $i++) {
 				if(!empty($itemlist[$i]) && strpos($itemlist[$i],',')!==false){
-					list($iarea,$imap,$inum,$iname,$ikind,$ieff,$ista,$iskind) = mapitem_data_process(explode(',',$itemlist[$i]));
-					if( $iarea == $an || $iarea == 99 || ($iarea == 98 && $an > 0)) {
+					list($iarea,$imap,$inum,$iname,$ikind,$ieff,$ista,$iskind,$izone) = mapitem_data_process(explode(',',$itemlist[$i]));
+					//指定的地图不存在 或是指定了区域但指定地图内没有该类区域的 直接跳过生成
+					if($imap < 99)
+					{
+						if(!in_array($imap,$arealist))
+						{
+							//echo "本局游戏没有生成地图".$imap."，跳过了不能生成的道具".$iname."<br>";
+							continue;
+						}
+						if(array_key_exists($izone,$mapzoneinfo) && !in_array($izone,$tmp_mapzonedata[$imap]['speclist']))
+						{
+							//echo "本局游戏的地图".$imap."中没有指定区域".$izone."，跳过了不能生成的道具".$iname."<br>";
+							continue;
+						}
+					}
+					//指定地图生成的道具 在所指定地图危险度大于生成所需禁数的情况下 初始化时会直接生成 之后禁区增加时不会再次生成
+					//全图随机的道具依然遵循旧的生成规则
+					$tmp_areaintensity = $tmp_mapzonedata[$imap]['intensity'];
+					if($imap == 0)	$tmp_areaintensity = 5; //无月之影太恐怖啦！
+					if(($iarea==$an && $tmp_areaintensity<$iarea)||($iarea==99)||($iarea==98 && $an>0)||($tmp_areaintensity>=$iarea && $an<1)) {
 						for($j = $inum; $j>0; $j--) {
+							$rzone = NULL;	
 							if ($imap == 99)
 							{
 								do {
 									//$rmap = rand(0,$plsnum-1);
-									$rmap = \map\get_safe_plslist();
+									$rmap = $arealist;
 									shuffle($rmap);
 									$rmap = $rmap[0];
+									//随机地图&&指定区域生成的道具 优先生成于“存在该区域”的地图
+									if(array_key_exists($izone,$mapzoneinfo))
+									{
+										while(!in_array($izone,$tmp_mapzonedata[$rmap]['speclist']))
+										{
+											shuffle($rmap);
+											$rmap = $rmap[0];
+										}
+										$rzone = $tmp_mapzonedata[$rmap]['speclist'][$izone];
+										//echo "随机地图指定区域格生成标记：";
+									}
 								} while (in_array($rmap,$map_noitemdrop_arealist));
 							}
-							else  $rmap = $imap;
-							list($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap, $rzone);
-							if(!$rzone)	$rzone = rand(0,$mapzone_end[$rmap]);	
+							else
+							{
+								$rmap = $imap;
+								//指定地图 指定区域生成的陷阱 对号入座
+								if(array_key_exists($izone,$mapzoneinfo))
+								{
+									$rzone = $tmp_mapzonedata[$rmap]['speclist'][$izone];
+									//echo "指定地图指定区域格生成标记：";
+								}
+							}
+							if(!isset($rzone))
+							{	
+								$tmp_speclist = array_flip($tmp_mapzonedata[$rmap]['speclist']);
+								do {
+									$rzone = rand(0,$tmp_mapzonedata[$rmap]['zoneend']);
+									$rspec = $tmp_speclist[$rzone];
+								} while (in_array($rspec,$map_noitemdrop_zonetype));
+							}
+							list($iname, $ikind, $ieff, $ista, $iskind, $rmap) = mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $rmap);
 							$iqry .= "('$iname', '$ikind','$ieff','$ista','$iskind','$rmap','$rzone'),";
+							//echo '在地图'.$rmap.'的区域'.$rzone.$izone.'内生成了道具'.$iname.'<br>';
 						}
 					}
 				}
@@ -347,10 +396,10 @@ namespace itemmain
 	}
 	
 	//每个刷新到地图上的道具的data处理
-	function mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $imap, $izone){
+	function mapitem_single_data_process($iname, $ikind, $ieff, $ista, $iskind, $imap){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
 		eval(import_module('sys'));
-		return array($iname, $ikind, $ieff, $ista, $iskind, $imap, $izone);
+		return array($iname, $ikind, $ieff, $ista, $iskind, $imap);
 	}
 	
 	function get_itemfilecont(){

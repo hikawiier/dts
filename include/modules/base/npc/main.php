@@ -54,8 +54,8 @@ namespace npc
 				$npc['pls'] = 0;
 			}
 		}	
-		//调整有强度要求的NPC的位置 
-		//暂时不写防呆判定了，定义NPC强度的时候注意点——如果是“非固定强度”的地图，NPC会根据强度要求跑到别的地方去！
+		//调整有危险度要求的NPC的位置 
+		//暂时不写防呆判定了，定义NPC危险度的时候注意点——如果是“非固定危险度”的地图，NPC会根据危险度要求跑到别的地方去！
 		$tmp_np = $npc['pls']; $tmp_nz = $npc['pzone'];
 		if(is_array($npc['intensity']))
 		{
@@ -73,7 +73,7 @@ namespace npc
 		if(array_key_exists($tmp_nz,$mapzoneinfo))
 		{ 
 			$tmp_speclist = $mzdata[$tmp_np]['speclist'];
-			//是特殊格，但是所在地没有，那就在符合强度区间的地图里找一个有的
+			//是特殊格，但是所在地没有，那就在符合危险度区间的地图里找一个有的
 			if(!array_key_exists($tmp_nz,$tmp_speclist))
 			{
 				do{
@@ -85,7 +85,7 @@ namespace npc
 				} while(!array_key_exists($tmp_nz,$tmp_speclist) || (is_array($npc['intensity']) && !in_array($tmp_intensity,$npc['intensity'])));
 			}
 			$npc['pzone'] = $tmp_speclist[$tmp_nz];
-			echo "生成了特殊种类NPC".$npc['name']."，位于地图".$npc['pls']."的区域".$npc['pzone']."，该地图强度为：".$tmp_intensity."<br>";
+			//echo "生成了特殊种类NPC".$npc['name']."，位于地图".$npc['pls']."的区域".$npc['pzone']."，该地图危险度为：".$tmp_intensity."<br>";
 		}
 		//未定义过区域格的 或者类型非法的 通通按随机处理
 		if($npc['pzone'] == 99 || !isset($npc['pzone']))
@@ -175,7 +175,7 @@ namespace npc
 					{
 						//echo "检测到一个候选的miniboss：".$i; //插入miniboss列表
 						$miniboss_list[$i]=$npcs;
-						//初始化可能位于的强度区间
+						//初始化可能位于的危险度区间
 						if(is_array($npcs['intensity']))
 						{
 							shuffle($npcs['intensity']);
@@ -183,12 +183,12 @@ namespace npc
 						}
 						else
 						{
-							shuffle($randomboss_intensity_list);
-							$spbi = $randomboss_intensity_list[0];
+							shuffle($map_spawn_miniboss_intensity);
+							$spbi = $map_spawn_miniboss_intensity[0];
 						}
-						//echo "，它所在的强度为：".$spbi."<br>";
+						//echo "，它所在的危险度为：".$spbi."<br>";
 						$miniboss_list[$i]['intensity'] = $spbi;
-						//向对应强度区间内插入该类type 然后随机化列表
+						//向对应危险度区间内插入该类type 然后随机化列表
 						$miniboss_intensity_list[$spbi][] = $i;
 						if(rand(0,99)>50)
 						{ 
@@ -286,7 +286,7 @@ namespace npc
 			//进行第二轮生成 处理miniboss
 			foreach ($miniboss_list as $i => $npcs){
 				if(!empty($npcs)) {
-					//重新取得miniboss要生成的强度区
+					//重新取得miniboss要生成的危险度区
 					$spbi = $npcs['intensity'];
 					//候选列表里有多个miniboss时 只生成第一个
 					if($i !== $miniboss_intensity_list[$spbi][0])
