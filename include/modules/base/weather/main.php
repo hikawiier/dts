@@ -11,7 +11,8 @@ namespace weather
 	function calculate_weather_itemfind_obbs()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','player','c_mapzone'));
+		$weather = $mapzone_weather[$pls];
 		return $weather_itemfind_obbs[$weather];
 	}
 	
@@ -24,7 +25,8 @@ namespace weather
 	function calculate_weather_meetman_obbs(&$edata)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','c_mapzone'));
+		$weather = $mapzone_weather[$edata['pls']];
 		return $weather_meetman_obbs[$weather];
 	}
 	
@@ -37,7 +39,8 @@ namespace weather
 	function calculate_weather_active_obbs(&$ldata,&$edata)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','c_mapzone'));
+		$weather = $mapzone_weather[$edata['pls']];
 		return $weather_active_obbs[$weather];
 	}
 	
@@ -55,7 +58,8 @@ namespace weather
 	function calculate_weather_attack_modifier(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','c_mapzone'));
+		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ; //其实不用这样 按理说pa pd的位置都是一样的
 		return 1+$weather_attack_modifier[$weather]/100;
 	}
 	
@@ -71,7 +75,8 @@ namespace weather
 	function calculate_weather_defend_modifier(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','c_mapzone'));
+		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
 		return 1+$weather_defend_modifier[$weather]/100;
 	}
 	
@@ -87,7 +92,8 @@ namespace weather
 	function get_hitrate_base(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weather'));
+		eval(import_module('sys','weather','c_mapzone'));
+		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
 		$ret = $chprocess($pa,$pd,$active);
 		$a = 0;
 		if($weather == 12)
@@ -265,7 +271,8 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
-		eval(import_module('sys','map','player','logger','weather'));
+		eval(import_module('sys','map','player','logger','weather','c_mapzone'));
+		$weather = $mapzone_weather[$pls];
 		if($weather >= 14 && $itmsk != 95){
 			addnews ( $now, 'wthfail', $name, $weather, $itm );
 			$log .= "你使用了{$itm}。<br /><span class=\"red b\">但是天气并未发生任何变化！</span><br />";
@@ -282,8 +289,12 @@ namespace weather
 				}else{$weather = 0;}
 			}
 			else{$weather = 0;}
-			save_gameinfo ();
-			addnews ( $now, 'wthchange', $name, $weather, $itm );
+
+			$mapzone_weather[$pls] = $weather;
+			\c_mapzone\update_mapzonedata($pls,$mapzone_weather[$pls],'weather');
+
+			//save_gameinfo ();
+			//addnews ( $now, 'wthchange', $name, $weather, $itm );
 			$log .= "你使用了{$itm}。<br />天气突然转变成了<span class=\"red b\">$wthinfo[$weather]</span>！<br />";
 		}
 		return;
@@ -322,7 +333,8 @@ namespace weather
 	function init_playerdata()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','weather'));
+		eval(import_module('sys','player','weather','c_mapzone'));
+		$weather = $mapzone_weather[$pls];
 		if($weather_fog[$weather]) 
 		{
 			$fog = true;
@@ -383,7 +395,8 @@ namespace weather
 	function use_radar($mms = 0)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','logger'));
+		eval(import_module('sys','logger','player','c_mapzone'));
+		$weather = $mapzone_weather[$pls];
 		if($weather == 14)
 		{
 			$log .= '由于<span class="linen b">离子风暴</span>造成了电磁干扰，探测仪器完全显示不出信息……<br>';
@@ -427,7 +440,8 @@ namespace weather
 	function attack_finish(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
+		eval(import_module('sys','c_mapzone'));
+		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
 		if(17 == $weather){
 			weather_aurora_check($pa, $pd, $active);
 		}
@@ -451,7 +465,8 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd);
-		eval(import_module('sys'));
+		eval(import_module('sys','c_mapzone'));
+		$weather = $mapzone_weather[$pd['pls']] ;
 		if(17 == $weather){
 			$pd['revive_sequence'][50] = 'aurora';
 		}
@@ -511,7 +526,8 @@ namespace weather
 	
 	function weather_aurora_check(&$pa,&$pd,$active){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','logger'));
+		eval(import_module('sys','logger','c_mapzone'));
+		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
 		if(17 != $weather) return;
 		foreach(array('pa','pd') as $pn){
 			if(!${$pn}['type']) $aurora_rate = 10;//玩家回血概率10%，NPC回血概率1%
@@ -524,7 +540,8 @@ namespace weather
 	
 	function weather_aurora_revive_num(&$pd){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys'));
+		eval(import_module('sys','c_mapzone'));
+		$weather = $mapzone_weather[$pd['pls']] ;
 		if(17 != $weather || !$pd['aurora_revive']) return 0;
 		if($pd['hp'] < 0) $pd['hp'] = 0;
 		$aurora_revive = $pd['aurora_revive'];
@@ -536,7 +553,8 @@ namespace weather
 	//这个函数只在没死时处理
 	function weather_aurora_revive_process(&$pa,&$pd){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','logger'));
+		eval(import_module('sys','player','logger','c_mapzone'));
+		$weather = $mapzone_weather[$pa['pls']] ;
 		if(17 != $weather) return;
 		foreach(array('pa','pd') as $pn){
 			if(!empty(${$pn}['aurora_revive']) && ${$pn}['hp'] < ${$pn}['mhp']){

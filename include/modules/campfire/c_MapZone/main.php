@@ -4,7 +4,7 @@ namespace c_mapzone
 {	
 	function init() 
 	{
-		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_speclist,$mapzone_pfloor,$mapzone_end,$mapzone_vars;
+		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_speclist,$mapzone_pfloor,$mapzone_end,$mapzone_weather;$mapzone_vars;
 		/*$mapzone_update_flag = check_need_update_mapzonedata();
 		if($mapzone_update_flag)
 		{
@@ -22,6 +22,7 @@ namespace c_mapzone
 				$mapzone_pfloor[$mapzone_pls] = $mapzonedata['pfloor'];
 				$mapzone_end[$mapzone_pls] = $mapzonedata['zoneend'];
 				$mapzone_vars[$mapzone_pls] = $mapzonedata['zonevars'];
+				$mapzone_weather[$mapzone_pls] = $mapzonedata['weather'];
 				$speclist = $mapzonedata['speclist'];
 				$speclist = json_decode($speclist,true);
 				$coorlist = $mapzonedata['zonelist'];
