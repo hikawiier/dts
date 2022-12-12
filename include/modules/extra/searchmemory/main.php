@@ -64,7 +64,7 @@ namespace searchmemory
 		$chprocess($data);
 	}
 	
-	function add_memory($marr, $showlog = 1){
+	function add_memory($marr, $showlog = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger','searchmemory'));
 		if(searchmemory_available() && $marr){
@@ -113,7 +113,7 @@ namespace searchmemory
 		return -1;
 	}
 	
-	function remove_memory($mn = 0, $shwlog = 1){
+	function remove_memory($mn = 0, $shwlog = 0){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger'));
 		if(searchmemory_available()){

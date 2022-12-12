@@ -33,7 +33,7 @@ namespace explore
 			case 0:
 				$flag = 'back';
 				break;
-			case $mapzone_end[$pls]:
+			case $uip['mapzone_end'][$pls]:
 				$flag = 'forward';
 				break;
 			default:
@@ -58,7 +58,7 @@ namespace explore
 		}
 		$sp -= $movesp;
 		$log .= "你消耗<span class=\"yellow b\">{$movesp}</span>点体力，移动到了$plsinfo[$moveto]。<br>";
-		if(strpos($flag,'back')===0) $pzone=$mapzone_end[$moveto];
+		if(strpos($flag,'back')===0) $pzone=$uip['mapzone_end'][$moveto];
 		elseif(strpos($flag,'forward')===0) $pzone=0;
 		$pls = $moveto;
 		move_to_area($moveto);

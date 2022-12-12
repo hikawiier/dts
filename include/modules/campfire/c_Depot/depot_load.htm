@@ -1,0 +1,16 @@
+<input type="hidden" name="mode" value="depot_load">
+你提交了取出道具的请求，计算机的画面开始闪烁，<br>
+片刻之后，出现在你面前的是一个列表，上面记载的是你曾经在设施中存入的道具信息。<br>
+同时，你注意到了旁边的机器上，下方的金属隔离栏被打开了，<br>
+看起要被取出的道具会从那里出现……希望别是像自动售货机那样的暴力运送啊。<br>
+<span class='yellow'>那么接下来……应该就是选择要取出的道具了吧。</span><br>
+<input type="radio" name="command" id="menu" value="menu" checked><a onclick=sl('menu'); href="javascript:void(0);" onmouseover="status=' ';return true;">【放弃取出】</a>
+<br><br>
+<input type="radio" name="command" id="depot_load" value="depot_load"><a onclick=sl('depot_load'); href="javascript:void(0);" onmouseover="status=' ';return true;">【取出道具】</a>
+<a onclick=sl('depot_load');><select name="load_itm_num">
+<!--{loop $saveitem_list $sid $siar}-->
+<option value="$sid"><span class='yellow'>$siar['itm']</span>/$iteminfo[$siar['itmk']]/$siar['itme']/$siar['itms']<br>
+<!--{/loop}-->
+</select></a>
+<br><br>
+<input type="button" class="cmdbutton" name="submit" id="决定" value="决定" onclick="postCmd('gamecmd','command.php');this.disabled=true;">

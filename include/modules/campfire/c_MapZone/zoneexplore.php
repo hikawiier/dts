@@ -30,7 +30,7 @@ namespace c_mapzone
 	function get_mapzoneinfo($p,$z){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map','c_mapzone'));
-		$mpt=$mapzone_coorlist[$p][$z]['t'];
+		$mpt=$uip['mapzone_coorlist'][$p][$z]['t'];
 		if($mpt)
 		{
 			if($mpt == 'start')
@@ -93,7 +93,7 @@ namespace c_mapzone
 			case 0:
 				$moveto = get_prev_mapinfo($pls);
 				break;
-			case $mapzone_end[$pls]:
+			case $uip['mapzone_end'][$pls]:
 				$moveto = get_next_mapinfo($pls);
 				break;
 			default:
@@ -126,9 +126,9 @@ namespace c_mapzone
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','logger','explore','c_mapzone'));
 
-		$pzonenum = $mapzone_end[$pls];
+		$pzonenum = $uip['mapzone_end'][$pls];
 		if(($moveto === 'main')||($moveto < 0 )||($moveto > $pzonenum)){
-			$log .= '请选择正确的移动地点2。<br>'.$moveto.$mapzone_end[$pls];
+			$log .= '请选择正确的移动地点2。<br>'.$moveto.$uip['mapzone_end'][$pls];
 			return;
 		} elseif($pzone == $moveto){
 			$log .= '相同地点，不需要移动。<br>';

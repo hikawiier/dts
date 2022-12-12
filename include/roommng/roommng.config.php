@@ -3,10 +3,10 @@
 //房间设置
 
 //全局最大房间数目
-$max_room_num = 5;
+$max_room_num = 10;
 
 //单人最大房间数目
-$max_private_room_num = 3;
+$max_private_room_num = 1;
 
 //长轮询端口号范围
 $room_poll_port_low = 25000;
@@ -21,7 +21,7 @@ $soleroom_private_resettime = 1800;
 //房间类型
 $roomtypelist = Array(
 	
-	0 => Array(
+	/*0 => Array(
 		'name' => 'SOLO模式',
 		'gtype' => 10, //对应的游戏模式编号
 		'available' => true,
@@ -88,7 +88,7 @@ $roomtypelist = Array(
 			)
 		)
 	),
-	/*
+	
 	1 => Array(
 		'name' => '二队模式',
 		'gtype' => 11, //对应的游戏模式编号
@@ -228,7 +228,7 @@ $roomtypelist = Array(
 			15 => '黄队',
  		),
 		'show-team-leader' => 1,
-	),*/
+	),
 	4 => Array(
 		'name' => '组队模式',
 		'gtype' => 14, //对应的游戏模式编号
@@ -505,11 +505,11 @@ $roomtypelist = Array(
 			0 => '试炼者',
 		),
 		'show-team-leader' => 0,	//是否显示“队长”标签（如队伍大于1人设为1）
-	),
+	),*/
 );
 
 	$roomtypelist[]=Array(
-		'name' => '<font class="brickred b">幕间狂想</font>',
+		'name' => '<font class="lightdark b">幻境暗室</font>',
 		'gtype' => 98, //对应的游戏模式编号
 		'available' => true,
 		'available-start' => 0, //如果设置并大于零，表明时间戳迟于此时才显示和开放
@@ -519,7 +519,7 @@ $roomtypelist = Array(
 		'without-valid' => false,//是否跳过加入游戏画面就直接进入房间。
 		'req-mod' => 'instance98',//前置mod
 		'pnum' => 1,	//最大参与人数，只有开启准备才有效
-		'globalnum' => 2,	//全场最大开启数目，不设或者0认为无限制
+		'globalnum' => 0,	//全场最大开启数目，不设或者0认为无限制
 		'privatenum' => 1,	//单人最大开启数目，不设或者0认为无限制；不需要准备的房间无视这个值
 		'leader-position' => Array(	//各个编号位置的所属队伍队长位置
 			0 => 0,

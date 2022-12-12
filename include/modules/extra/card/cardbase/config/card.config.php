@@ -3140,56 +3140,88 @@ $cards = array(
 //	),
 );
 
-/*
+
 $packlist[] = 'Horizon of Campfire';
-$packdesc['Horizon of Campfire'] ='篝火模组包提供的扩展卡集，大部分与篝火模组新增的内容有关，也包含一些篝火模组的剧情设定。';
-$ccards = Array
+$packdesc['Horizon of Campfire'] ='篝火模组包提供的扩展卡集。也许能够解释什么是篝火。';
+/*$ccards = Array
 (
 	2000 => array(
-		'name' => '命运的表里',
-		'rare' => 'S',
-		'pack' => 'Horizon of Campfire',
-		'desc' => '不幸也是幸运的影子',
-		'effect' => '获得技能「唯心」',
-		//防御、抹消属性的失效率与被贯穿率加倍，但攻击时贯穿对方防御、抹消的概率提升至原本的4倍
-		'energy' => 60,
+		'name' => '代行客',
+		'rare' => 'C',
+		'pack' => 'hidden',
+		'desc' => '一位隐藏身份的佣兵，<br>为了找寻杀害至友的阴谋者，<br>在两位奇怪同伴的帮助下骇入了幻境系统。<br>她不会放过任何阴谋者留下的蛛丝马迹。',
+		'effect' => '以代行客的身份开始游戏。',
+		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
-				'1900' => '0', 
 			),
 		),
 	),
 	2001 => array(
-		'name' => '失名之人',
+		'name' => '失名客',
 		'rare' => 'C',
-		'pack' => 'Horizon of Campfire',
-		'desc' => '他们徜徉在灰白色的梦境里，一遍又一遍重演着过去。<br>他们亦无法醒来，直到下一位失意人到来。',
-		'effect' => '获得技能「贻梦」',
-		//第一次使用该技能时，记录并消耗一件道具，再次使用该技能可获得记录的道具
+		'pack' => 'hidden',
+		'desc' => '“动漫祭惨案”唯一的幸存者。<br>始终难逃过去的梦魇。<br>机缘巧合下，<br>他/她再次回到了幻境展会的现场。<br>是化身为复仇的厉鬼？<br>还是要找寻悲剧的源头？<br>一切皆在他/她的一念之间。',
+		'effect' => '以失名客的身份开始游戏。',
 		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
-				'1910' => '0', 
 			),
 		),
 	),
 	2002 => array(
-		'name' => '奇点旅行者',
-		'rare' => 'A',
-		'pack' => 'Horizon of Campfire',
+		'name' => '里海行者',
+		'rare' => 'C',
+		'pack' => 'hidden',
 		'desc' => '漂泊在以载计数的岁月里，直至群星黯然、万籁俱寂。<br>你最终到达了旅途的终点，却忘掉了为什么而出发。',
-		'effect' => '获得技能「遗梦」',
-		//经验值、熟练度获取速度变为原本的3倍 初始生命值 体力值减半 使用该称号可以触发金色秘录剧情线的TE剧情
-		'energy' => 130,
+		'effect' => '以里海行者的身份开始游戏',
+		'energy' => 0,
 		'valid' => array(
 			'skills' => array(
-				'1911' => '0', 
 			),
 		),
 	),
 	2003 => array(
-		'name' => '虚拟主播 黑熊(?)',
-		'title' => '黑熊(?)',
+		'name' => '机械降神',
+		'rare' => 'S',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '<span class="grey"><i>“这儿没有英雄和他的传奇故事，<br>有的仅是发生在舞台之外的小小插曲。而她也不该出现在这儿——<br>她理应在万众瞩目下，以怒涛之势登场。剪除邪恶，力挽狂澜。”</i></span>',
+		'effect' => '获得技能「降临」',
+		'energy' => 200,
+		'valid' => array(
+			'skills' => array(
+			),
+		),
+	),
+	2004 => array(
+		'name' => '传奇调查员',
+		'rare' => 'A',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '潮湿的罪恶蔓延于不为人知的黑暗角落，你的灵光一现为你揭示了即将到来的灾祸。你也许能挽救这一切，但代价又是什么……？',
+		'effect' => '获得技能「朋友」',
+		//可以消耗队友来抵挡致命伤害（复活） 每消耗一个队友降低 1d6 SAN值 初始随机拥有 5d20 SAN值 一次降低超过目前SAN值的1/5会失去该技能 转而获得技能「疯狂」
+		'energy' => 90,
+		'valid' => array(
+			'skills' => array(
+			),
+		),
+	),
+	2005 => array(
+		'name' => '命运的表子',
+		'rare' => 'B',
+		'pack' => 'Horizon of Campfire',
+		'desc' => '不幸是幸运的影子',
+		'effect' => '获得技能「唯心」',
+		//防御、抹消属性的失效率与被贯穿率提升至原本的2倍，但攻击时贯穿对方防御、抹消的概率提升至原本的4倍
+		'energy' => 60,
+		'valid' => array(
+			'skills' => array(
+			),
+		),
+	),
+	2006 => array(
+		'name' => '超人气虚拟主播 黑熊~☆',
+		'title' => '黑熊~☆',
 		'rare' => 'B',
 		'pack' => 'Horizon of Campfire',
 		'desc' => '黑熊只是一张皮套',
@@ -3199,34 +3231,6 @@ $ccards = Array
 		'valid' => array(
 			'skills' => array(
 				'1913' => '0', 
-			),
-		),
-	),
-	2004 => array(
-		'name' => '机械降神',
-		'rare' => 'S',
-		'pack' => 'Horizon of Campfire',
-		'desc' => '<span class="grey"><i>“这儿没有英雄和他的传奇故事，<br>有的仅是发生在舞台之外的小小插曲。而她也不该出现在这儿——<br>她理应在万众瞩目下，以怒涛之势登场。剪除邪恶，力挽狂澜。”</i></span>',
-		'effect' => '获得技能「降临」',
-		//发动后进入必定先手状态，该状态将持续到角色累计造成了超过角色rp值后的伤害
-		'energy' => 200,
-		'valid' => array(
-			'skills' => array(
-				'1914' => '0', 
-			),
-		),
-	),
-	2005 => array(
-		'name' => '传奇调查员',
-		'rare' => 'S',
-		'pack' => 'Horizon of Campfire',
-		'desc' => '潮湿的罪恶蔓延于不为人知的黑暗角落，你的灵光一现为你揭示了即将到来的灾祸。你也许能挽救这一切，但代价又会是什么……？',
-		'effect' => '获得技能「朋友」',
-		//可以消耗队友来抵挡致命伤害（复活），每消耗一个队友降低0~6SAN值，初始随机拥有5~100点SAN值，一次降低超过目前SAN值的1/5会使该技能消失
-		'energy' => 90,
-		'valid' => array(
-			'skills' => array(
-				'1912' => '0', 
 			),
 		),
 	),

@@ -12,7 +12,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','player','c_mapzone'));
-		$weather = $mapzone_weather[$pls];
+		$weather = $uip['mapzone_weather'][$pls];
 		return $weather_itemfind_obbs[$weather];
 	}
 	
@@ -26,7 +26,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','c_mapzone'));
-		$weather = $mapzone_weather[$edata['pls']];
+		$weather = $uip['mapzone_weather'][$edata['pls']];
 		return $weather_meetman_obbs[$weather];
 	}
 	
@@ -40,7 +40,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','c_mapzone'));
-		$weather = $mapzone_weather[$edata['pls']];
+		$weather = $uip['mapzone_weather'][$edata['pls']];
 		return $weather_active_obbs[$weather];
 	}
 	
@@ -59,7 +59,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','c_mapzone'));
-		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ; //其实不用这样 按理说pa pd的位置都是一样的
+		$weather = $active ? $uip['mapzone_weather'][$pa['pls']] : $uip['mapzone_weather'][$pd['pls']] ; //其实不用这样 按理说pa pd的位置都是一样的
 		return 1+$weather_attack_modifier[$weather]/100;
 	}
 	
@@ -76,7 +76,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','c_mapzone'));
-		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
+		$weather = $active ? $uip['mapzone_weather'][$pa['pls']] : $uip['mapzone_weather'][$pd['pls']] ;
 		return 1+$weather_defend_modifier[$weather]/100;
 	}
 	
@@ -93,7 +93,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','weather','c_mapzone'));
-		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
+		$weather = $active ? $uip['mapzone_weather'][$pa['pls']] : $uip['mapzone_weather'][$pd['pls']] ;
 		$ret = $chprocess($pa,$pd,$active);
 		$a = 0;
 		if($weather == 12)
@@ -130,13 +130,13 @@ namespace weather
 		if($hack)
 		{
 			$pls = array_rand($arealist);
-			$tmp_pzone_available = $mapzone_end[$pls];
+			$tmp_pzone_available = $uip['mapzone_end'][$pls];
 			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		else 
 		{
 			$pls = rand($areanum+1,$areaend);$pls=$arealist[$pls];
-			$tmp_pzone_available = $mapzone_end[$pls];
+			$tmp_pzone_available = $uip['mapzone_end'][$pls];
 			$pzone = $pzone>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $pzone;
 		}
 		$log .= "但是强烈的龙卷风把你吹到了<span class=\"yellow b\">$plsinfo[$pls]</span>！<br>";
@@ -272,7 +272,7 @@ namespace weather
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		
 		eval(import_module('sys','map','player','logger','weather','c_mapzone'));
-		$weather = $mapzone_weather[$pls];
+		$weather = $uip['mapzone_weather'][$pls];
 		if($weather >= 14 && $itmsk != 95){
 			addnews ( $now, 'wthfail', $name, $weather, $itm );
 			$log .= "你使用了{$itm}。<br /><span class=\"red b\">但是天气并未发生任何变化！</span><br />";
@@ -290,8 +290,8 @@ namespace weather
 			}
 			else{$weather = 0;}
 
-			$mapzone_weather[$pls] = $weather;
-			\c_mapzone\update_mapzonedata($pls,$mapzone_weather[$pls],'weather');
+			$uip['mapzone_weather'][$pls] = $weather;
+			\c_mapzone\update_mapzonedata($pls,$uip['mapzone_weather'][$pls],'weather');
 
 			//save_gameinfo ();
 			//addnews ( $now, 'wthchange', $name, $weather, $itm );
@@ -334,7 +334,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','weather','c_mapzone'));
-		$weather = $mapzone_weather[$pls];
+		$weather = $uip['mapzone_weather'][$pls];
 		if($weather_fog[$weather]) 
 		{
 			$fog = true;
@@ -396,7 +396,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','logger','player','c_mapzone'));
-		$weather = $mapzone_weather[$pls];
+		$weather = $uip['mapzone_weather'][$pls];
 		if($weather == 14)
 		{
 			$log .= '由于<span class="linen b">离子风暴</span>造成了电磁干扰，探测仪器完全显示不出信息……<br>';
@@ -441,7 +441,7 @@ namespace weather
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','c_mapzone'));
-		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
+		$weather = $active ? $uip['mapzone_weather'][$pa['pls']] : $uip['mapzone_weather'][$pd['pls']] ;
 		if(17 == $weather){
 			weather_aurora_check($pa, $pd, $active);
 		}
@@ -466,7 +466,7 @@ namespace weather
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd);
 		eval(import_module('sys','c_mapzone'));
-		$weather = $mapzone_weather[$pd['pls']] ;
+		$weather = $uip['mapzone_weather'][$pd['pls']] ;
 		if(17 == $weather){
 			$pd['revive_sequence'][50] = 'aurora';
 		}
@@ -527,7 +527,7 @@ namespace weather
 	function weather_aurora_check(&$pa,&$pd,$active){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','logger','c_mapzone'));
-		$weather = $active ? $mapzone_weather[$pa['pls']] : $mapzone_weather[$pd['pls']] ;
+		$weather = $active ? $uip['mapzone_weather'][$pa['pls']] : $uip['mapzone_weather'][$pd['pls']] ;
 		if(17 != $weather) return;
 		foreach(array('pa','pd') as $pn){
 			if(!${$pn}['type']) $aurora_rate = 10;//玩家回血概率10%，NPC回血概率1%
@@ -541,7 +541,7 @@ namespace weather
 	function weather_aurora_revive_num(&$pd){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','c_mapzone'));
-		$weather = $mapzone_weather[$pd['pls']] ;
+		$weather = $uip['mapzone_weather'][$pd['pls']] ;
 		if(17 != $weather || !$pd['aurora_revive']) return 0;
 		if($pd['hp'] < 0) $pd['hp'] = 0;
 		$aurora_revive = $pd['aurora_revive'];
@@ -554,7 +554,7 @@ namespace weather
 	function weather_aurora_revive_process(&$pa,&$pd){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','logger','c_mapzone'));
-		$weather = $mapzone_weather[$pa['pls']] ;
+		$weather = $uip['mapzone_weather'][$pa['pls']] ;
 		if(17 != $weather) return;
 		foreach(array('pa','pd') as $pn){
 			if(!empty(${$pn}['aurora_revive']) && ${$pn}['hp'] < ${$pn}['mhp']){

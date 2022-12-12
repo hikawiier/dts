@@ -4,37 +4,6 @@ namespace c_mapzone
 {	
 	function init() 
 	{
-		global $mapzone_coorlist,$mapzone_coorarr,$mapzone_speclist,$mapzone_pfloor,$mapzone_end,$mapzone_weather;$mapzone_vars;
-		/*$mapzone_update_flag = check_need_update_mapzonedata();
-		if($mapzone_update_flag)
-		{
-			echo "更新了一次地图";
-			$mapzonedata = load_mapzonedata();	
-		}*/
-		eval(import_module('sys','map'));
-		for($f=1;$f<=$areamax;$f++)
-		{
-			$result = $db->query("SELECT * FROM {$tablepre}mapzone WHERE pfloor='$f'");
-			if ($db->num_rows($result))
-			{
-				$mapzonedata = $db->fetch_array($result);
-				$mapzone_pls = $mapzonedata['pls'];
-				$mapzone_pfloor[$mapzone_pls] = $mapzonedata['pfloor'];
-				$mapzone_end[$mapzone_pls] = $mapzonedata['zoneend'];
-				$mapzone_vars[$mapzone_pls] = $mapzonedata['zonevars'];
-				$mapzone_weather[$mapzone_pls] = $mapzonedata['weather'];
-				$speclist = $mapzonedata['speclist'];
-				$speclist = json_decode($speclist,true);
-				$coorlist = $mapzonedata['zonelist'];
-				$coorlist = gdecode($coorlist,true);
-				$mapzone_coorlist[$mapzone_pls] = $coorlist;
-				$mapzone_speclist[$mapzone_pls] = $speclist;
-				$mapzone_coorarr[$mapzone_pls] = change_coorlist_to_coorarr($coorlist);
-				//为什么一个coorlist不够，还需要一个cooarr? <--现在又加上一个 speclist
-				//因为存在两种需求 以坐标为索引寻找区域编号 和 以区域编号为索引寻找坐标 <--现在又多了一个需求 以区域类型为索引找区域编号
-				//是很蛋疼
-			}
-		}
 	}
 
 	function rs_game($xmode = 0) 	//开局区域表初始化
@@ -94,6 +63,28 @@ namespace c_mapzone
 		chmod($file,0777);*/
 	}
 
+	function updategame()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','c_mapzone'));
+		$chprocess();
+		//if(\c_mapzone\check_need_update_mapzonedata())
+		//{
+			$tmp_mapzonedata = \c_mapzone\load_mapzonedata();
+			foreach($tmp_mapzonedata as $tmp_pls => $tmp_data)
+			{
+				$uip['mapzone_pfloor'][$tmp_pls] = $tmp_data['pfloor'];
+				$uip['mapzone_end'][$tmp_pls] = $tmp_data['zoneend'];
+				$uip['mapzone_vars'][$tmp_pls] = $tmp_data['zonevars'];
+				$uip['mapzone_weather'][$tmp_pls] = $tmp_data['weather'];
+				$uip['mapzone_coorlist'][$tmp_pls] =$tmp_data['zonelist'];
+				$uip['mapzone_speclist'][$tmp_pls] = $tmp_data['speclist'];
+				$uip['mapzone_coorarr'][$tmp_pls] = change_coorlist_to_coorarr($tmp_data['zonelist']);
+			}
+		//}
+		//print_r($uip);
+	}
+
 	function load_mapzonedata()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -134,10 +125,10 @@ namespace c_mapzone
 			default:
 				return;
 		}
-		do {
+		/*do {
 			$file = GAME_ROOT.'./gamedata/cache/'.$groomid.'.mapzonedata.lock';
 		} while(file_exists($file));
-		/*$data = 'needupdate';
+		$data = 'needupdate';
 		writeover($file, $data);
 		chmod($file,0777);*/
 	}

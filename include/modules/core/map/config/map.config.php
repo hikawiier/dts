@@ -15,343 +15,6 @@ namespace map
 	//是否激活自动躲避禁区
 	$areaesc = 1;
 
-	$pls_zone_name = array
-	(//标记一些特殊房间的名称，没有的话编号0默认叫【入口】，编号末默认叫【出口】，其他默认叫【区域】
-		0 => Array
-		(
-			7 => '新地平',
-			8 => '隙间',
-		),
-		34 => Array
-		(
-			0 => '甬道',
-			1 => '玄关',
-		),
-	);
-	
-	$pls_zone = Array(
-		0 => Array
-		(
-			'space' => 9, //地图大小（自定义格数，最大25格）
-			'weather' => 0, //默认天气
-			'exposed' => 0, //暴露度上限修正 0=默认
-			'elements' => Array
-			( 
-				//包含哪些特殊格 
-				//loot（补给站-回复道具多）armor（武库 装备多） mini-boss(特殊敌人刷新点) shop（商店）function（杂项）
-				//后面数字代表会生成在第几格（最低不能为0，最高不能为地图格子数量，这两个格子是出入口）
-				'loot' => 4,
-				'mini-boss' => 5,
-				'shop' => 6,
-			),
-		),
-		1 => Array
-		(
-			'space' => 12, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		2 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		3 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		4 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		5 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		6 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		7 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		8 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		9 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		10 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		11 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		12 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		13 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		14 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		15 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		16 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		17 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		18 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		19 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		20 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		21 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		22 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		23 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		24 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		25 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		26 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		27 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		28 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		29 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		30 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		31 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		32 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		33 => Array
-		(
-			'space' => 9, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-		34 => Array
-		(
-			'space' => 2, 
-			'weather' => 0,
-			'exposed' => 0, 
-			'elements' => Array
-			( 
-			),
-		),
-	);
 	$plsinfo = Array(
 		0=>'无月之影',
 		1=>'端点',
@@ -379,7 +42,7 @@ namespace map
 		23=>'幻想世界',
 		24=>'永恒的世界',
 		25=>'妖精驿站',
-		26=>'冰封墓场',
+		26=>'键刃墓场',
 		27=>'花菱商厦',
 		28=>'FARGO前基地',
 		29=>'风祭森林',
@@ -387,7 +50,7 @@ namespace map
 		31=>'和田町研究所',
 		32=>'ＳＣＰ研究设施',
 		33=>'雏菊之丘',
-		34=>'英灵殿'
+		34=>'英灵殿的废墟'
 	);
 	$plsinfo_for_short = Array(
 		11=>'对天使',
@@ -462,7 +125,7 @@ namespace map
 		23=>"被白雪笼罩，一片荒芜的空间……<BR>时空错乱了吗？为什么我会在这里？<br>",
 		24=>"诡异的地方……脚下已经看不见什么地面了……<BR>这个地方究竟是什么？<br>",
 		25=>"一间孤独的小屋子。<br>貌似没有人住在这里了。<br>门上贴着告示：<br>TRAIN WITH MY HOLOGRAM IF YOU WANT TO --- GA-04<br>",
-		26=>"代表火与血的牺牲的曾经的战场。<BR>现在被未明的力量全部冰封，不过看起来地上的武器还勉强能用……<br><span class=\"yellow b\">你感觉到一股苍凉的杀气！还是快逃跑吧！</span><br>",
+		26=>"代表火与血的牺牲的曾经的战场。<BR>冰封的力量已经不在。<br><span class=\"yellow\">你仍然感觉到一股苍凉的杀气！是你的错觉么！</span><br>",
 		27=>"荒废的都市里，顶层有着天象馆的废弃商场。<BR>虽然大部分区域都停电了，<span class=\"yellow b\">角落里的自动售货机似乎还能运行。</span><br>",
 		28=>"现在已经是一团废墟的遗迹。<BR>可能能找到有用的物品也说不定。<br>",
 		29=>"传说有神秘力量的森林。<BR>谁知道这个地方会出现什么。<br>",
@@ -470,7 +133,7 @@ namespace map
 		31=>"最近突然在地平线远端出现的大型建筑，<BR>你注意到建筑的后院时空裂缝之外貌似还有一个小镇……<br>",
 		32=>"最近突然在地平线远端出现的第二座大型建筑，<BR>感觉有种不祥的气息……<br>",
 		33=>"风祭森林的最深处。<BR>被盛开的雏菊花覆盖着的山丘。<BR>山丘上貌似有个身影坐着，<BR>还是离她远一点为妙。<BR>",
-		34=>"看不见尽头的走廊……<BR>",
+		34=>"曾经神秘莫测的宏伟殿堂，如今只剩下一片断壁残垣。<BR>偶尔有风从缝隙间掠过，让此地更显破败凄凉。<BR>……不知道从哪传出了钟声，总觉得有点脊背发凉……<BR>",
 	);
 	/*//campfireMOD新增地区，及隐藏地图设定
 	//地区
@@ -493,10 +156,10 @@ namespace map
 	$areainfo[92]="圆月当空，有巨兽从海中跃起，掀起层层巨浪。<br>月光下，你看见一抹血红的身影屹立于巨兽背上。<br>";
 	$areainfo[93]="圆月当空，有巨兽从海中跃起，掀起层层巨浪。<br>月光下，你看见一抹墨绿的身影屹立于巨兽背上。<br>";
 	$areainfo[94]="圆月当空，有巨兽从海中跃起，掀起层层巨浪。<br>月光下，你看见一抹亮蓝的身影屹立于巨兽背上。<br>";
-	$areainfo[95]="从月光中凝结出的银色阶梯，其蜿蜒向上，隐没于云层的另一端。<br>看起来留给你的选择只剩一个了。<br>";
-	$areainfo[96]="敞开的穹顶从夜空接引下一束清冷的月光。<br>在月光的映照下，你看到自己的前方已是一片坦途。<br>";
-	$areainfo[97]="推开走廊尽头的木门，你踏入了一座空旷的拱形大厅中。<BR>不知是不是错觉……你感到有什么正隐藏于立柱背后的阴影里。<br>";
-	$areainfo[98]="看不见尽头的走廊……<br>墙壁两侧的烛火伴随你的脚步依次亮起，又在你的背后悄然熄灭……不知不觉间，你已置身于黑暗中了。<BR>";
+	$areainfo[95]="从月光中凝结出的银色阶梯，蜿蜒向上，隐没于云层的另一端。<br>看起来留给你的选择只剩一个了。<br>";
+	$areainfo[96]="敞开的穹顶从夜空中接引下一束清冷的月光。<br>月光映照下，你的前方已是一片坦途。<br>";
+	$areainfo[97]="推开走廊尽头的木门，你踏入了一座空旷的拱形大厅中。<BR>不知是不是错觉……你感到有什么隐藏在立柱背后的阴影里。<br>";
+	$areainfo[98]="看不见尽头的走廊……<br>墙壁两侧的烛火伴随你的脚步依次亮起，又在你的背后悄然熄灭……回过神来，你已置身于无垠的黑暗中了。<BR>";
 	//隐藏地图分组（这个功能的作用是，如果有些隐藏地图之间不能互相移动，那可以通过这个分组功能来规定可以互相移动的隐藏地图都有哪些）
 	//即使只有一张地图，也请把它写进一个array里
 	$hidden_areagroup = Array(

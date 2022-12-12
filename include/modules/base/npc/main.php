@@ -344,7 +344,7 @@ namespace npc
 			$tmp_pls_available = 14 == $sub['type'] ? $pls_available2 : $pls_available;
 			shuffle($tmp_pls_available);
 			$sub['pls'] = $tmp_pls_available[0];
-			$tmp_pzone_available = $mapzone_end[$sub['pls']];
+			$tmp_pzone_available = $uip['mapzone_end'][$sub['pls']];
 			$sub['pzone'] = $sub['pzone']>$tmp_pzone_available ? rand(0,$tmp_pzone_available) : $sub['pzone'];
 			$db->array_update("{$tablepre}players",$sub,"pid='$pid'",$o_sub);
 			\player\post_pc_avoid_killarea($sub, $atime);
