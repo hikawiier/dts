@@ -1,0 +1,22 @@
+<!--{eval eval(import_module('skill2102','sys'));}-->
+<!--{eval $___TEMP_SKILL_ID=2102;}-->
+<!--{eval $tmp_debuff_per = \skillbase\skill_getvalue(2102,'debuff');$tmp_debuff_times = \skillbase\skill_getvalue(2102,'end')-$now;}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+碎甲
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+你的<span class="red b">物理护甲</span>被降低了：<br>
+全系物理护甲<span class="red b">-{$tmp_debuff_per}%</span>
+<!--{if $tmp_debuff_times>0 }--><br>效果剩余时间：<span class="red b">$tmp_debuff_times</span>秒<br>
+<!--{/if}-->
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

@@ -1,0 +1,29 @@
+<!--{eval eval(import_module('skill2101','sys','itemmain'));}-->
+<!--{eval $___TEMP_SKILL_ID=2101;}-->
+<!--{eval $phy_def = \skill2101\get_phy_def_kind();}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+物甲
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+当前拥有的<span class="yellow b">物理护甲</span>一览：
+<!--{loop $phy_def $d}-->
+     <!--{eval $dn = \skillbase\skill_getvalue(2101,$d);}-->
+    <!--{if $dn}-->
+                     <!--{if $d == 'A'}-->
+<span class="yellow b">全物理护甲</span>{$dn}%
+                       <!--{else}-->
+<span class="yellow b">{$itemspkinfo[$d]}</span>{$dn}%；
+                      <!--{/if}-->
+    <!--{/if}-->
+<!--{/loop}-->
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

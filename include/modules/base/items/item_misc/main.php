@@ -212,8 +212,8 @@ namespace item_misc
 					$itm4='地区压制';$itmk4 = 'Y';$itmsk4 = '';$itme4 = 1;$itms4 = 100;
 					$itm5='聪明药';$itmk5 = 'ME';$itmsk5 = '';$itme5 = 100;$itms5 = 4;
 					//$itm5='游戏解除钥匙';$itmk5 = 'Y';$itmsk5 = '';$itme5 = 1;$itms5 = 1;
-					$arb='代码聚合体的长袍';$arbk = 'DB';$arbsk = 'Bb';$arbe = 5000;$arbs = 1000;
-					$arh='代码聚合体的面罩';$arhk = 'DH';$arhsk = 'Aa';$arhe = 5000;$arhs = 1000;
+					$arb='代码聚合体的长袍';$arbk = 'DB';$arbsk = 'G';$arbe = 5000;$arbs = 1000;
+					$arh='代码聚合体的面罩';$arhk = 'DH';$arhsk = '';$arhe = 5000;$arhs = 1000;
 					$ara='代码聚合体的手套';$arak = 'DA';$arask = 'Hh';$arae = 5000;$aras = 1000;
 					$arf='代码聚合体的鞋子';$arfk = 'DF';$arfsk = 'Mm';$arfe = 5000;$arfs = 1000;
 					$art='Untainted Glory';$artk = 'A';$artsk = '';$arte = 1;$arts = 1;

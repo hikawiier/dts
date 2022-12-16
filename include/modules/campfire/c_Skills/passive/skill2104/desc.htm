@@ -1,0 +1,32 @@
+<!--{eval eval(import_module('skill2103','skill2104','sys'));}-->
+<!--{eval $___TEMP_SKILL_ID=2104;}-->
+<!--{eval $ex_def = \skill2103\get_ex_def_kind();}-->
+<!--{eval $tmp_debuff_times = \skillbase\skill_getvalue(2104,'end')-$now;}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+浊心
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+你的<span class="red b">属性抗性</span>被降低了：<br>
+<!--{loop $ex_def $d}-->
+    <!--{eval $dn = \skillbase\skill_getvalue(2104,$d);}-->
+    <!--{if (\skillbase\skill_getvalue(2104,$d))}-->
+                     <!--{if $d == 'a'}-->
+全属性抗性<span class="red b">-{$dn}%</span>
+                     <!--{else}-->
+{$itemspkinfo[$d]}<span class="red b">-{$dn}%</span>；
+                    <!--{/if}-->
+  <!--{/if}-->
+<!--{/loop}-->
+<!--{if $tmp_debuff_times>0 }--><br>效果剩余时间：<span class="red b">$tmp_debuff_times</span>秒<br>
+<!--{/if}-->
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

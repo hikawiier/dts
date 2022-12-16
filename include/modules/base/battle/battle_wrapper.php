@@ -75,9 +75,9 @@ namespace battle
 				$pa['battle_distance'] = get_battle_distance($pa, $pd, 1-$active);
 				$pd['battle_distance'] = get_battle_distance($pa, $pd, $active);
 			}
-			echo "初次交战，距离初始化完成。<br>";
+			//echo "初次交战，距离初始化完成。<br>";
 		}
-		echo "{$pa['name']}和{$pd['name']}的状态是{$active}，距离分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
+		//echo "{$pa['name']}和{$pd['name']}的状态是{$active}，距离分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
 	}
 	
 	function battle_finish(&$pa, &$pd, $active)
@@ -88,11 +88,11 @@ namespace battle
 		{	//双方存在距离 故拉近距离
 			$pa['battle_distance'] = max(0,$pa['battle_distance']-1);
 			$pd['battle_distance'] = min(0,$pd['battle_distance']+1);
-			echo "{$pa['name']}和{$pd['name']}之间的距离被拉近了一格！现在分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
+			//echo "{$pa['name']}和{$pd['name']}之间的距离被拉近了一格！现在分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
 		}
 		$pa['battle_times']++;$pd['battle_times']++;
 		//增加一次战斗内的交手回合
-		echo "增加了一次战斗回合。现在{$pa['name']}和{$pd['name']}的战斗回合数分别是{$pa['battle_times']}与{$pd['battle_times']}<br>";
+		//echo "增加了一次战斗回合。现在{$pa['name']}和{$pd['name']}的战斗回合数分别是{$pa['battle_times']}与{$pd['battle_times']}<br>";
 	}
 	
 	function battle(&$pa, &$pd, $active)

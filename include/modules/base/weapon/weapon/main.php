@@ -669,7 +669,7 @@ namespace weapon
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if ($pa['battle_distance']==0 && $pd['battle_distance']==0)
 		{ //短兵相接 反击无视武器射程
-			echo "双方距离为0，进入鏖战状态，因此计算反击时不统计武器射程。<br>";
+			//echo "双方距离为0，进入鏖战状态，因此计算反击时不统计武器射程。<br>";
 			return 1;
 		}
 		//$pa反击方有可能因为某些原因改变了攻击方式，从而要重算$wep_kind
@@ -690,7 +690,15 @@ namespace weapon
 		if (check_counterable_by_weapon_range($pa, $pd, $active))
 		{			
 			if (!$chprocess($pa,$pd,$active)) return 0;
-			return check_counter_dice($pa, $pd, $active);
+			
+			if ($pa['battle_distance']==0 && $pd['battle_distance']==0)
+			{ //短兵相接 反击不用掷骰
+				return 1;
+			}
+			else
+			{
+				return check_counter_dice($pa, $pd, $active);
+			}
 		}
 		else
 		{

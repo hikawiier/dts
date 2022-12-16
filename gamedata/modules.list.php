@@ -268,6 +268,7 @@ skill523,extra/card/skills/skill523/,1
 skill524,extra/card/skills/skill524/,1
 skill525,extra/card/skills/skill525/,1
 skill526,extra/card/skills/skill526/,1
+skill2101,campfire/c_Skills/passive/skill2101/,1
 ex_phy_nullify,extra/attr/ex_phy_nullify/,1
 skill232,extra/club/skills/skill232/,1
 weather,base/weather/,1
@@ -286,6 +287,7 @@ skill208,extra/club/skills/skill208/,1
 skill215,extra/club/skills/skill215/,1
 skill271,extra/club/skills/skill271/,1
 skill51,extra/club/skills/skill51/,1
+skill2102,campfire/c_Skills/passive/skill2102/,1
 skill604,extra/club/skills/skill604/,1
 ex_gender_attr,extra/attr/ex_gender_attr/,1
 ex_attr_pierce,extra/attr/ex_attr_pierce/,1
@@ -309,6 +311,7 @@ skill244,extra/club/skills/skill244/,1
 skill233,extra/club/skills/skill233/,1
 skill26,extra/club/skills/skill26/,1
 skill265,extra/club/skills/skill265/,1
+skill2103,campfire/c_Skills/passive/skill2103/,1
 skill43,extra/club/skills/skill43/,1
 itemnumlist,extra/item_extra/itemnumlist/,1
 skill56,extra/club/skills/skill56/,1
@@ -323,6 +326,7 @@ searchmemory,extra/searchmemory/,1
 skill27,extra/club/skills/skill27/,1
 skill266,extra/club/skills/skill266/,1
 skill81,extra/club/skills/skill81/,1
+skill2104,campfire/c_Skills/passive/skill2104/,1
 randmix,extra/misc/randmix/,1
 skill57,extra/club/skills/skill57/,1
 skill36,extra/club/skills/skill36/,1

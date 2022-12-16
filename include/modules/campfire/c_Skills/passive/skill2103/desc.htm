@@ -1,0 +1,29 @@
+<!--{eval eval(import_module('skill2103','sys','itemmain'));}-->
+<!--{eval $___TEMP_SKILL_ID=2103;}-->
+<!--{eval $ex_def = \skill2103\get_ex_def_kind();}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+属抗
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+当前拥有的<span class="clan b">属性抗性</span>一览：
+<!--{loop $ex_def $d}-->
+    <!--{if (\skillbase\skill_getvalue(2103,$d))}-->
+            <!--{eval $dn = \skillbase\skill_getvalue(2103,$d);}-->
+                     <!--{if $d == 'a'}-->
+<span class="clan b">全属性抗性</span>{$dn}%
+                       <!--{else}-->
+<span class="clan b">{$itemspkinfo[$d]}</span>{$dn}%；
+                      <!--{/if}-->
+    <!--{/if}-->
+<!--{/loop}-->
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

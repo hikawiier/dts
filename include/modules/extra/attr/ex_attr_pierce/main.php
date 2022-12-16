@@ -44,7 +44,7 @@ namespace ex_attr_pierce
 			$dice = rand(0,99);
 			if ($dice<$proc_rate)
 			{
-				$log .= \battle\battlelog_parser($pa, $pd, $active, "<span class=\"yellow b\"><:pa_name:>的攻击贯穿了<:pd_name:>的物理防御属性！</span><br>");
+				$log .= \battle\battlelog_parser($pa, $pd, $active, "<span class=\"yellow b\"><:pa_name:>的攻击贯穿了<:pd_name:>的物理护甲！</span><br>");
 				$pa['physical_pierce_success'] = 1;
 			}
 		}
@@ -62,7 +62,7 @@ namespace ex_attr_pierce
 			$dice = rand(0,99);
 			if ($dice<$proc_rate)
 			{
-				$log .= \battle\battlelog_parser($pa, $pd, $active, "<span class=\"yellow b\"><:pa_name:>的攻击穿透了<:pd_name:>的属性防御属性！</span><br>");
+				$log .= \battle\battlelog_parser($pa, $pd, $active, "<span class=\"yellow b\"><:pa_name:>的攻击穿透了<:pd_name:>的属性抗性！</span><br>");
 				$pa['attr_pierce_success'] = 1;
 			}
 		}
@@ -82,7 +82,7 @@ namespace ex_attr_pierce
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		//贯穿触发后跳过减半属性判定
-		if ($pa['physical_pierce_success']) return Array();
+		//if ($pa['physical_pierce_success']) return Array();
 		return $chprocess($pa, $pd, $active);
 	}
 	
@@ -90,7 +90,7 @@ namespace ex_attr_pierce
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		//贯穿触发后跳过伤抹属性判定
-		if ($pa['physical_pierce_success']) return array();
+		//if ($pa['physical_pierce_success']) return array();
 		return $chprocess($pa, $pd, $active);
 	}
 	
@@ -98,7 +98,7 @@ namespace ex_attr_pierce
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		//属穿触发后跳过减半属性判定
-		if ($pa['attr_pierce_success']) return 1;
+		//if ($pa['attr_pierce_success']) return 1;
 		return $chprocess($pa, $pd, $active,$key);
 	}
 	
@@ -106,7 +106,7 @@ namespace ex_attr_pierce
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		//属穿触发后跳过属抹属性判定
-		if ($pa['attr_pierce_success']) return 0;
+		//if ($pa['attr_pierce_success']) return 0;
 		return $chprocess($pa, $pd, $active);
 	}
 	

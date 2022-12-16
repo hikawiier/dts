@@ -170,7 +170,7 @@ namespace ex_dmg_att
 		eval(import_module('logger','ex_dmg_att'));
 		if ($pd['ex_dmg_'.$key.'_defend_success'] == 1)	//恶心一下吧…… 奇怪的log美观修正……
 			//这里具体是red还是yellow有待后头决定
-			$log .= '造成了<span class="<:ex_single_dmg:>">'.$pa['ex_dmg_'.$key.'_dealt'].'</span>点属性伤害！';
+			$log .= '造成了<span class="<:ex_single_dmg:>">'.$pa['ex_dmg_'.$key.'_dealt'].'</span>点伤害！';//打不出异常就不要带“属性”描述
 		else  $log .= $exdmgname[$key].'造成了<span class="<:ex_single_dmg:>">'.$pa['ex_dmg_'.$key.'_dealt'].'</span>点属性伤害！';
 		$pa['mult_words_exdmgbs'] .= empty($pa['mult_words_exdmgbs']) ? $pa['ex_dmg_'.$key.'_dealt'] : '+'.$pa['ex_dmg_'.$key.'_dealt'];
 	}
