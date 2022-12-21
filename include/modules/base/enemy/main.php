@@ -90,10 +90,6 @@ namespace enemy
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','metman','logger'));
-		//以发现状态进入战斗时 再次初始化交战回合与距离
-		//其实没必要了
-		$sdata['battle_times']=0;$edata['battle_times']=0;
-		$sdata['battle_distance']=10;$edata['battle_distance']=10;
 		if ($edata['hp']>0)
 		{
 			extract($edata,EXTR_PREFIX_ALL,'w');
@@ -103,112 +99,12 @@ namespace enemy
 				findenemy($edata);
 				return;
 			} else {
+				$action = 'penemy'.$edata['pid'];
 				battle_wrapper($edata,$sdata,0);
 				return;
 			}
 		}
 		else $chprocess($edata);
-	}
-
-	function meetman_once_again(&$edata)
-	{
-		//判断“追击”的外围阶段
-		//适用于所有需要【已经进入过一次战斗后】再度【保持战斗场景】的场合 
-		//一般情况下，进入这里的$edata前缀已经是带“w_”的，如果没有，请在操作这个函数前对$edata进行处理
-		//log_kind：0=换了武器；1=挨打；2=打人
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','metman','logger'));
-		if ($edata['hp']>0)
-		{
-			//有没有高手能告诉我init_battle()传的参是干嘛的
-			//上了个厕所回来忽然想明白了 原来是给雾天遇敌用的
-			$sdata['action'] = 'chase'.$edata['pid'];
-			$sdata['keep_enemy'] = 1;
-			\player\update_sdata();
-			$battle_title = '陷入鏖战';
-			\metman\init_battle(1);
-			//呃呃呃呃是打人还是挨打这个状态怎么传回来，也是个问题……
-			//哈哈 我想到啦！
-			if($edata['battle_distance']>0)
-			{
-				$log .= "<br>但是敌人<span class=\"red b\">{$tdata['name']}</span>在你身后紧追不舍！<br>";
-			}
-			elseif($edata['battle_distance']<0)
-			{
-				$log .= "<br>乘胜追击，你紧紧尾随在敌人<span class=\"red b\">{$tdata['name']}</span>身后！<br>";
-			}
-			else
-			{
-				$log .= "<br>你再度锁定了敌人<span class=\"red b\">{$tdata['name']}</span>！<br>";
-			}
-			include template(get_battlecmd_filename());
-			//记得之后在check_battle_skill_available()里加一段和战斗距离相关的判定 在负距离情况下过滤掉带有“攻击性”的技能
-			$cmd = ob_get_contents();
-			ob_clean();
-			$main = MOD_METMAN_MEETMAN;		
-			return;
-		}
-		return;
-	}
-
-	function meetman_then_escape(&$edata)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','metman','logger'));
-		$escape_obbs = rand(1,100);
-		//if(!$edata['battle_times'] || !$sdata['battle_times'])
-		//{	//没交过手的情况下，逃跑率100%
-			//默认100% 以后给精英类敌人加技能影响逃跑概率
-			$escape_succ_obbs = 100;
-		//}
-		//else
-		//{	//有战斗回合记录 逃跑率=40%+|距离|x10
-		//	$dis_obbs = abs($sdata['battle_distance']*10);
-		//	$escape_succ_obbs = 40 + $dis_obbs;
-		//}
-		if($escape_obbs<=$escape_succ_obbs)
-		{
-			//逃跑成功 重置双方战斗回合、距离
-			$sdata['battle_times']=0;$sdata['battle_distance']=0;
-			$edata['battle_times']=0;$edata['battle_distance']=0;
-			\player\player_save($edata);
-			$log .= "你逃跑了。双方的战斗次数变为了".$sdata['battle_times']."和".$edata['battle_times']."<br>";
-			$mode = 'command';
-			return;
-		}
-		else
-		{
-			//逃跑失败 准备挨打 
-			//逃跑这个操作只有玩家能做 所以不用判断active了 爽死
-			//不对 仔细想了想逃跑失败距离值不应该变啊！不然硬扛亏死了
-			//不对不对 逃跑失败减距离意味着逃跑更难了 所以还是要减滴
-			$sdata['battle_distance'] = min(0,$sdata['battle_distance']+1);
-			$edata['battle_distance'] = max(0,$edata['battle_distance']-1);
-			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑随机数只有{$escape_obbs}!想成功的话不能超过{$escape_succ_obbs}！<br>";
-			battle_wrapper($edata,$sdata,0);
-			return;
-		}
-	}
-
-	function prepare_initial_response_content()
-	{	//重载页面后维持战斗界面
-		//还是会有一些怪问题 比如载入页面后重新加载界面需要一段时间 这时候提交别的操作会把加载界面的指令覆盖掉
-		//想到一些很麻烦的解决办法 因为太麻烦了所以不管了！
-		if (eval(__MAGIC__)) return $___RET_VALUE;		
-		eval(import_module('sys','player','metman'));
-		$cmd = $main = '';
-		if(strpos($action,'chase')===0 && $gamestate<40){
-			$eid = str_replace('chase','',$action);
-			if($eid){
-				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
-				if($db->num_rows($result)>0){
-					$edata = \player\fetch_playerdata_by_pid($eid);
-					extract($edata,EXTR_PREFIX_ALL,'w');
-					meetman_once_again($edata);
-				}
-			}
-		}
-		$chprocess();
 	}
 	
 	function battle_wrapper(&$pa, &$pd, $active)
@@ -221,7 +117,7 @@ namespace enemy
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess();
 		eval(import_module('player'));
-		if(empty($sdata['keep_enemy']) && (strpos($action, 'enemy')===0 || strpos($action, 'chase')===0)){
+		if(empty($sdata['keep_enemy']) && (strpos($action, 'enemy')===0 || strpos($action, 'penemy')===0)){
 			$action = '';
 			unset($sdata['keep_enemy']);
 		}
@@ -230,32 +126,31 @@ namespace enemy
 	function act()
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','map','player','logger','metman','input'));
-
-		if ($command == 'enter' && strpos($action,'chase')===0)
-		{ //只有追击状态下刷新页面才会重载战斗界面 初次发现但不攻击不会
-			//但是会会比较好？
-			$eid = str_replace('chase','',$action);
-			if($eid){
-				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
-				if($db->num_rows($result)>0){
-					$edata = \player\fetch_playerdata_by_pid($eid);
-					extract($edata,EXTR_PREFIX_ALL,'w');
-					meetman_once_again($edata);
-					return;
-				}
-			}	
-		}
+		eval(import_module('sys','map','player','logger','metman','input','c_battle'));
 
 		if($command == 'enter')
 			$sdata['keep_enemy'] = 1;
 			
 		if($mode == 'combat') 
 		{			
-			$enemyid = strpos($action,'enemy')===0 ? str_replace('enemy','',$action) : str_replace('chase','',$action);
-			
-			if(!$enemyid || (strpos($action,'enemy')===false && strpos($action,'chase')===false)){
-				$log .= "<span class=\"yellow b\">你没有遇到敌人，或已经离开战场！</span><br>";
+			if(strpos($action,'enemy')===0)
+			{
+				$enemyid = str_replace('enemy','',$action);
+			}
+			elseif(strpos($action,'chase')===0)
+			{
+				$enemyid = str_replace('chase','',$action);
+			}
+			elseif(strpos($action,'attbycp')===0)
+			{
+				$enemyid = str_replace('attbycp','',$action);
+			}
+			elseif(strpos($action,'attcp')===0)
+			{
+				$enemyid = str_replace('attcp','',$action);
+			}
+			if(!$enemyid || (strpos($action,'enemy')===false && strpos($action,'chase')===false && strpos($action,'attbycp')===false && strpos($action,'attcp')===false)){
+				$log .= "<span class=\"yellow b\">你没有遇到敌人，或已经离开战场！</span>{$enemyid}<br>";
 				$mode = 'command';
 				return;
 			}
@@ -294,15 +189,27 @@ namespace enemy
 			//'once_again'替代了战斗结果的确认按钮 用于跳转到“追击”界面
 			//'defend' 之后会做成技能
 			//'b_csubwep' 好怪的名字……用来在战斗中切换武器
+			if($command == 'init_coop')
+			{
+				if(strpos($action,'attbycp')===0)
+				{
+					\c_battle\init_coop_battle($edata,0);
+				}
+				else
+				{
+					\c_battle\init_coop_battle($edata,1);
+				}
+				return;
+			}
 			if($command == 'once_again')
 			{
-				meetman_once_again($edata);
+				\c_battle\meetman_once_again($edata);
 				return;
 			}
 			if ($command == 'back') 
 			{
 				//快润！
-				meetman_then_escape($edata);
+				\c_battle\meetman_then_escape($edata);
 				return;
 			}
 			if ($command == 'defend') 
@@ -320,7 +227,7 @@ namespace enemy
 				$s = substr($command,9,1);
 				eval(import_module('weapon'));
 				\weapon\change_subweapon($s,2);
-				meetman_once_again($edata);		
+				\c_battle\meetman_once_again($edata);		
 				return;
 			} 
 			battle_wrapper($ldata,$edata,1);

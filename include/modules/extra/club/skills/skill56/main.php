@@ -96,6 +96,10 @@ namespace skill56
 			return;
 		}
 		$spid = $spids[0];
+		//与保镖结成盟友关系
+		\skillbase\skill_acquire(2600);
+		\skillbase\skill_setvalue(2600,'mn',$skill56_npc['sub'][$nkind]['name']);
+		\skillbase\skill_setvalue(2600,'mt',25);
 		//设置位置
 		$db->query("UPDATE {$tablepre}players SET pls='$pls' AND pzone='$pzone'  WHERE pid='$spid'");
 		\skillbase\skill_setvalue(56,'p'.$x,$spid);
@@ -253,17 +257,13 @@ namespace skill56
 				$cost = $skill56_npc['sub'][$ty]['mercsalary']*2;
 				if ($money>=$cost)
 				{
-					if ($skillpara3==$employee['pls'])
-					{
-						$log.='佣兵已经在该地点，不需移动。<br>';
-						return;
-					}
 					if (in_array($skillpara3,$arealist) && (array_search($skillpara3,$arealist) > $areanum || $hack))
 					{
 						$money-=$cost;
 						$employee['money']+=$cost;
 						$employee['pls']=$skillpara3;
-						$log.="消耗了<span class=\"yellow b\">$cost</span>元，佣兵<span class=\"yellow b\">{$employee['name']}</span>移动到了<span class=\"yellow b\">{$plsinfo[$employee['pls']]}</span>。<br>";
+						$employee['pzone']=$pzone;
+						$log.="消耗了<span class=\"yellow b\">$cost</span>元，佣兵<span class=\"yellow b\">{$employee['name']}</span>移动到了<span class=\"yellow b\">{$plsinfo[$employee['pls']]}的{$employee['pzone']}</span>。<br>";
 					}
 					else
 					{

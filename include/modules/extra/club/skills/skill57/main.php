@@ -33,7 +33,8 @@ namespace skill57
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 	}
 	
-	function skill_onload_event(&$pa)
+	//呃……佣兵收钱暂时和协战不兼容 先把协战做完再来仔细看看
+/*	function skill_onload_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if (\skillbase\skill_query(57,$pa) && $pa['hp']>0)
@@ -93,7 +94,7 @@ namespace skill57
 		}
 		
 		$chprocess($pa);
-	}
+	}*/
 }
 
 ?>

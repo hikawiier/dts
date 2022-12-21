@@ -97,11 +97,12 @@ namespace skill2104
 	function strike_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('ex_dmg_att','logger','skill2104'));
+		eval(import_module('ex_dmg_att','skill2104'));
 		foreach ( $ex_attack_list as $key ) $pd['dec_ex_'.$key.'_def_per'] = 0;
 		if(\skillbase\skill_query(2104,$pd) && !check_skill2104_state($pd))
 		{
-			$log .= $pd['name']."从浊心状态中恢复了！<br>";
+			//eval(import_module('logger'));
+			//$log .= $pd['name']."从浊心状态中恢复了！<br>";
 			\skillbase\skill_lost(2104,$pd);
 			return $chprocess($pa, $pd, $active, $key);
 		}
@@ -115,11 +116,10 @@ namespace skill2104
 		eval(import_module('ex_dmg_att','ex_dmg_def','skill2103','logger'));
 		//属穿的部分有点麻烦 要先确认会造成属性伤害才会继续下一步 所以是否成功浊心就在这里处理
 		if ($pa['attr_pierce_success'])
-		{ //属穿成功，浊心状态加深 属穿默认提供的来源为全属性抗性穿透
+		{ //属穿成功 浊心状态加深 
 			if(!\skillbase\skill_query(2104,$pd))	\skillbase\skill_acquire(2104,$pd);
-			//浊心状态加深 只会降低成功打出来的属性的对应抗性
+			//只会降低成功打出来的属性的对应抗性
 			\skill2104\skill2104_debuff_levelup($pd,$exdef_kind[$key]); 
-			//eval(import_module('logger'));
 			//$log .= $pd['name']."对".$exdef_kind[$key]."的抗性下降了！<br>";
 		}
 		if (\skillbase\skill_query(2104,$pd)) 

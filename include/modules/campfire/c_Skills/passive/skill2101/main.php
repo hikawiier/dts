@@ -121,7 +121,7 @@ namespace skill2101
 		$chprocess($pa);
 	}
 
-	//技能类“物理防御”生效时 跳过属性类“物理防御”的判断
+	//技能“物理护甲”生效时 跳过属性类“物理防御”的判断
 	function check_physical_def_attr(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;

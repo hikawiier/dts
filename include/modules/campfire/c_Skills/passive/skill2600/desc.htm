@@ -1,0 +1,20 @@
+<!--{eval eval(import_module('skill2600'));}-->
+<!--{eval $___TEMP_SKILL_ID=2600;}-->
+{template MOD_CLUBBASE_SKILLDESC_START}
+<span>
+盟誓
+</span>
+{template MOD_CLUBBASE_SKILLDESC_MID1}
+<td class="skilldesc_left b3"><span class="skilldesc">
+    <!--{eval eval(import_module('sys','player'));}-->
+    <!--{eval $tmp_mn = \skillbase\skill_getvalue(2600,'mn');}-->
+    目前你存活着的盟友是：$tmp_mn
+</span></td>
+<td class="skilldesc_right b3">
+</td>
+{template MOD_CLUBBASE_SKILLDESC_MID2}
+<!--{if empty($___TEMP_THIS_SKILL_ACQUIRED)}-->
+<span class="yellow b">
+</span>
+<!--{/if}-->
+{template MOD_CLUBBASE_SKILLDESC_END}

@@ -21,8 +21,7 @@ namespace battle
 	function send_battle_msg(&$pa, &$pd, $active){
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','logger','input'));
-		//哈哈 该来的躲不掉
-		//加入“追击”后 喊话要用$active区分$pa和$pd的对应身份了
+		//加入“连续战斗”后 喊话要用$active区分$pa和$pd的对应身份了
 		//讲道理 不能因为NPC不能喊话就不给NPC喊话的机会 NPC LIVES MATTER
 		if(!empty($message)){
 			if($active)
@@ -40,59 +39,15 @@ namespace battle
 		}
 	}
 
-	function get_battle_distance(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weapon'));
-		$r1 = \weapon\get_weapon_range($pa, $active);
-		$r2 = \weapon\get_weapon_range($pd, 1-$active);
-		$r = max(0,$r1-$r2);
-		if($r1 === 0)
-		{
-			//先制者武器为爆炸物，距离值恒定为1
-			$r = 1;			
-		}
-		if(!$active)
-		{
-			$r = 0-$r;
-		}
-		return $r;
-	}
-	
 	function battle_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		send_battle_msg($pa, $pd, $active);		
-		if(strpos($pa['action'],'chase')===false && strpos($pd['action'],'chase')===false)
-		{	//没有检测到追击状态时 初始化战斗距离与回合数
-			if($active)
-			{
-				$pa['battle_distance'] = get_battle_distance($pa, $pd, $active);
-				$pd['battle_distance'] = get_battle_distance($pa, $pd, 1-$active);
-			}
-			else
-			{
-				$pa['battle_distance'] = get_battle_distance($pa, $pd, 1-$active);
-				$pd['battle_distance'] = get_battle_distance($pa, $pd, $active);
-			}
-			//echo "初次交战，距离初始化完成。<br>";
-		}
-		//echo "{$pa['name']}和{$pd['name']}的状态是{$active}，距离分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
 	}
 	
 	function battle_finish(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-
-		if($pa['battle_distance'] && $pd['battle_distance'])
-		{	//双方存在距离 故拉近距离
-			$pa['battle_distance'] = max(0,$pa['battle_distance']-1);
-			$pd['battle_distance'] = min(0,$pd['battle_distance']+1);
-			//echo "{$pa['name']}和{$pd['name']}之间的距离被拉近了一格！现在分别是{$pa['battle_distance']}与{$pd['battle_distance']}<br>";
-		}
-		$pa['battle_times']++;$pd['battle_times']++;
-		//增加一次战斗内的交手回合
-		//echo "增加了一次战斗回合。现在{$pa['name']}和{$pd['name']}的战斗回合数分别是{$pa['battle_times']}与{$pd['battle_times']}<br>";
 	}
 	
 	function battle(&$pa, &$pd, $active)
@@ -113,6 +68,20 @@ namespace battle
 		//写回数据库
 		eval(import_module('sys','logger','player','metman'));
 
+		$finish_cpatk_flag = false;
+		if(\skillbase\skill_query(2601,$pa))
+		{
+			//在这个地方丢掉协战技能
+			//写在battle_finish()里必须厘清继承关系 不然有被无限连打的风险 但是厘不清啦！
+			$finish_cpatk_flag = true;
+			\skillbase\skill_delvalue(2601,'oid',$pa); //消除协战技能中的主战者记录
+			\skillbase\skill_lost(2601,$pa);
+			if($active)
+			{ //偷个懒 为玩家召唤的协战对象的log替换人称
+				$log = str_replace('你',$pa['name'],$log);
+			}
+		}	
+
 		if ($pd['hp']<=0 || $pa['hp']<=0)
 		{
 			//死人了情况下重置距离鱼回合数
@@ -129,7 +98,14 @@ namespace battle
 			if ($pa['hp']<=0 && $pd['hp']>0 && $pd['action']=='' && $pd['type']==0)
 			{
 				$pd['action'] = 'pacorpse'.$pa['pid']; 
-			}			
+			}		
+			if($pa['action']=='' && $pa['type']==0)
+			{ //玩家身上没有其他标记 发一个追击标记
+				$pa['action'] = 'chase'.$pd['pid']; 
+				//卧槽 这里一直不会被触发 现在不知道chase标记到底是从哪被传进来的 
+				//但是功能却能正常实现……要不别管了吧
+				echo "玩家主动触发了追击标记：".$pa['action']."<br>";
+			}	
 		}
 		else
 		{
@@ -140,6 +116,11 @@ namespace battle
 			if ($pa['hp']<=0 && $pd['hp']>0)
 			{
 				$pd['action'] = 'corpse'.$pa['pid']; 
+			}
+			if($pd['action']=='' && $pd['type']==0)
+			{	//玩家身上没有其他种类的标记
+				$pd['action'] = 'chase'.$pa['pid']; 
+				echo "玩家被动触发了追击标记：".$pd['action']."<br>";;
 			}
 		}
 
@@ -160,7 +141,6 @@ namespace battle
 			\player\load_playerdata($pd);
 		}
 		
-		
 		$battle_title = '战斗发生';
 		$main = MOD_METMAN_MEETMAN;
 		\metman\init_battle(1);
@@ -169,17 +149,20 @@ namespace battle
 		{
 			\corpse\findcorpse($edata);
 		}
+		elseif(strpos($action,'attcp')===0 || strpos($action,'attbycp')===0)
+		{
+			$sdata['keep_enemy'] = 1;
+			include template(MOD_BATTLE_COOPBATTLERESULT);
+			$cmd = ob_get_contents();
+			ob_clean();
+		}
 		else
 		{
-			//笨办法
-			//这里不给对手赋对应的action是有问题的 纯粹假设是单人模式只存在玩家才能控制战斗界面的情况下
-			$sdata['action'] = 'chase'.$edata['pid'];
 			$sdata['keep_enemy'] = 1;
 			include template(get_battleresult_filename());
 			$cmd = ob_get_contents();
 			ob_clean();
 		}
-		
 		if (defined('MOD_CLUBBASE')) include template(MOD_CLUBBASE_NPCSKILLPAGE);
 	}
 	

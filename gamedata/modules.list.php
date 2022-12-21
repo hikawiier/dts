@@ -49,6 +49,7 @@ npcchat,base/npcchat/,1
 skill21,extra/club/skills/skill21/,1
 set_gametype,extra/misc/set_gametype/,1
 kujibase,extra/card/kujibase/,1
+c_battle,campfire/c_Battle/,1
 clubbase,extra/club/clubbase/,1
 wep_n,base/weapon/wep_n/,1
 wep_p,base/weapon/wep_p/,1
@@ -169,6 +170,7 @@ skill269,extra/club/skills/skill269/,1
 skill78,extra/club/skills/skill78/,1
 club15,extra/club/clubs/club15/,1
 skill84,extra/club/skills/skill84/,1
+skill2600,campfire/c_Skills/passive/skill2600/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
 skill273,extra/club/skills/skill273/,1
@@ -225,6 +227,7 @@ ex_direct,extra/attr/ex_direct/,1
 ex_seckill,extra/attr/ex_seckill/,1
 ex_cursed,extra/attr/ex_cursed/,1
 ex_def_down,extra/attr/ex_def_down/,1
+skill2601,campfire/c_Skills/passive/skill2601/,1
 skill33,extra/club/skills/skill33/,1
 tactic,base/tactic/,1
 wepchange,extra/attr/wepchange/,1

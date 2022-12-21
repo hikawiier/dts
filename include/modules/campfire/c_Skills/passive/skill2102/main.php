@@ -110,8 +110,8 @@ namespace skill2102
 			if(!\skillbase\skill_query(2102,$pd))	\skillbase\skill_acquire(2102,$pd);
 			//碎甲状态加深
 			\skill2102\skill2102_debuff_levelup($pd);
-			eval(import_module('logger'));
-			$log .= $pd['name']."被碎甲了！<br>";
+			//eval(import_module('logger'));
+			//$log .= $pd['name']."被碎甲了！<br>";
 		}
 		return $chprocess($pa, $pd, $active);
 	}

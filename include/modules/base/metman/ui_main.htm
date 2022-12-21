@@ -45,10 +45,18 @@ Table Design:
 		</TD>
 		<td class="b8" width=140px rowspan="2" valign="bottom">
 			<div style="position:relative;width:140px;height:350px;">
-				<!--{if $iconImgB}-->
-				<IMG src="img/{$iconImgB}" style="border:0;height:340px;position:absolute;left:<!--{eval echo round((140-$iconImgBwidth)/2);}-->px;bottom:0px;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+				<!--{if $uip['fake_img']}-->
+					<!--{if strpos($uip['fake_img'],'a')!==false}-->
+						<IMG src="img/{$uip['fake_img']}" style="border:0;height:340px;position:absolute;left:<!--{eval echo round((140-$iconImgBwidth)/2);}-->px;bottom:0px;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+					<!--{else}-->
+						<IMG src="img/{$uip['fake_img']}" style="border:0;height:80px;position:absolute;left:0;bottom:0;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+					<!--{/if}-->
 				<!--{else}-->
-				<IMG src="img/{$iconImg}" style="border:0;height:80px;position:absolute;left:0;bottom:0;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+					<!--{if $iconImgB}-->
+						<IMG src="img/{$iconImgB}" style="border:0;height:340px;position:absolute;left:<!--{eval echo round((140-$iconImgBwidth)/2);}-->px;bottom:0px;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+					<!--{else}-->
+						<IMG src="img/{$iconImg}" style="border:0;height:80px;position:absolute;left:0;bottom:0;<!--{if $hp==0}-->filter: grayscale(100%)<!--{/if}-->" />
+					<!--{/if}-->
 				<!--{/if}-->
 			</div>
 		</td>

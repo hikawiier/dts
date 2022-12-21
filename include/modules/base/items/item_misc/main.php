@@ -204,13 +204,14 @@ namespace item_misc
 					$wp=$wk=$wg=$wc=$wd=$wf=666;
 					$ss=$mss=600;
 					$att+=200;$def+=200;
-					$mhp+=1800;$hp+=1800;
+					$mhp+=5800;$hp+=5800;
 					$money+=19980;
-					$itm1='美味补给';$itmk1 = 'HB';$itmsk1 = '';$itme1 = 2777;$itms1 = 277;
+					\clubbase\club_acquire(11);
+					$itm1='美味补给';$itmk1 = 'HB';$itmsk1 = '';$itme1 = 27777;$itms1 = 2777;
 					$itm2='全恢复药剂';$itmk2 = 'Ca';$itmsk2 = '';$itme2 = 1;$itms2 = 44;
 					$itm3='食堂的剩饭';$itmk3 = 'HR';$itmsk3 = '';$itme3 = 100;$itms3 = 15;
 					$itm4='地区压制';$itmk4 = 'Y';$itmsk4 = '';$itme4 = 1;$itms4 = 100;
-					$itm5='聪明药';$itmk5 = 'ME';$itmsk5 = '';$itme5 = 100;$itms5 = 4;
+					$itm5='聪明药';$itmk5 = 'ME';$itmsk5 = '';$itme5 = 400;$itms5 = 1;
 					//$itm5='游戏解除钥匙';$itmk5 = 'Y';$itmsk5 = '';$itme5 = 1;$itms5 = 1;
 					$arb='代码聚合体的长袍';$arbk = 'DB';$arbsk = 'G';$arbe = 5000;$arbs = 1000;
 					$arh='代码聚合体的面罩';$arhk = 'DH';$arhsk = '';$arhe = 5000;$arhs = 1000;
