@@ -170,7 +170,6 @@ skill269,extra/club/skills/skill269/,1
 skill78,extra/club/skills/skill78/,1
 club15,extra/club/clubs/club15/,1
 skill84,extra/club/skills/skill84/,1
-skill2600,campfire/c_Skills/passive/skill2600/,1
 wep_g,base/weapon/wep_g/,1
 wep_j,base/weapon/wep_j/,1
 skill273,extra/club/skills/skill273/,1
@@ -214,6 +213,7 @@ skill20,extra/club/skills/skill20/,1
 empowers,base/items/empowers/,1
 skill70,extra/club/skills/skill70/,1
 skill246,extra/club/skills/skill246/,1
+skill2600,campfire/c_Skills/passive/skill2600/,1
 ex_phy_def,extra/attr/ex_phy_def/,1
 rage,extra/attr/rage/,1
 skill30,extra/club/skills/skill30/,1

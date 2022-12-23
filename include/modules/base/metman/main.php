@@ -84,8 +84,8 @@ namespace metman
 		$tdata['wep']=$w_wep;
 		$tdata['lvl']=$w_lvl;
 		$tdata['wepk']=$w_wepk;
-		$tdata['battle_distance']=$w_battle_distance;
-		$tdata['battle_times']=$w_battle_times;
+		$tdata['battle_range']=$w_battle_range;
+		$tdata['battle_turns']=$w_battle_turns;
 		return;
 	}
 	

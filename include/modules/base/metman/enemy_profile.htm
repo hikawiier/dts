@@ -37,12 +37,12 @@
 	<tr>
 		<td height="20px" class="b2"><span>交战距离</span></td>
 		<td class="b3"><span>
-		<!--{if $tdata['battle_distance'] == 10}-->尚未接触
-		<!--{elseif (($tdata['battle_distance']>0 && $tdata['battle_distance']<=2)||($tdata['battle_distance']<0 && $tdata['battle_distance']>=-2))}--><span class='yellow b'>非常接近</span>
-		<!--{elseif $tdata['battle_distance'] == 0}--><span class='red b'>短兵相接</span>
+		<!--{if $tdata['battle_range'] == 10}-->尚未接触
+		<!--{elseif (($tdata['battle_range']>0 && $tdata['battle_range']<=2)||($tdata['battle_range']<0 && $tdata['battle_range']>=-2))}--><span class='yellow b'>非常接近</span>
+		<!--{elseif $tdata['battle_range'] == 0}--><span class='red b'>短兵相接</span>
 		<!--{else}--><span class='clan b'>尚有距离</span><!--{/if}--></span></td>
 		<td height="20px" class="b2"><span>经过回合</span></td>
-		<td class="b3"><span><!--{if $tdata['battle_times']}--><span class='yellow b'>$tdata['battle_times']</span><!--{else}-->0<!--{/if}--></span></td>
+		<td class="b3"><span><!--{if $tdata['battle_turns']}--><span class='yellow b'>$tdata['battle_turns']</span><!--{else}-->0<!--{/if}--></span></td>
 		<!--{if defined('MOD_CLUBBASE')}-->
 		{template MOD_CLUBBASE_NPCSKILL_BUTTON}
 		<!--{else}-->

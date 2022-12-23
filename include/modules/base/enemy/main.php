@@ -21,7 +21,6 @@ namespace enemy
 		ob_clean();
 
 		$main = MOD_METMAN_MEETMAN;
-		
 		return;
 	}
 	
@@ -217,7 +216,7 @@ namespace enemy
 				//暂时写在这里 之后要把坚守做成技能
 				//坚守是玩家受到先制攻击且敌人射程比自己远的情况下，除了逃跑唯一能做的主操作
 				//因此meetman_once_again()里没有判断攻击是否先手 非先手的情况直接交由坚守处理
-				//因此因此 做成技能的时候记得给坚守加发动条件判断 只有battle_distance<=0的情况下才能发动
+				//因此因此 做成技能的时候记得给坚守加发动条件判断 只有battle_range<=0的情况下才能发动
 				$log .= "你双手抱头蹲在墙角，祈祷对方不要打得太狠。<br>";
 				battle_wrapper($edata,$ldata,0);
 				return;

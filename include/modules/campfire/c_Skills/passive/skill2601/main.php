@@ -25,6 +25,45 @@ namespace skill2601
 		return 1;
 	}
 
+	function skilll2601_get_final_dmg_multiplier_fix()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//协战最终伤害系数修正
+		//协战（群殴）本质上是一个更具演出性质的技能
+		//所以被群殴时应该加深伤害还是减轻伤害，不应该是一个平衡性问题，而是一个叙事问题
+		//如果你想凸显被群殴的人的宗师气度、大家风范，那被群殴时的伤害就会有所降低
+		//如果你想让被群殴的人看起来英雄迟暮、或是让发起群殴的人同仇敌忾，那被群殴的伤害就应该有所提高
+		//默认为0.3
+		return 0.3;
+	}
+
+	//协战伤害修正
+	function get_final_dmg_multiplier(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$r=Array();
+		if (\skillbase\skill_query(2601,$pa))
+		{
+			$tmp_r = skilll2601_get_final_dmg_multiplier_fix();
+			$log_r = $tmp_r*100;
+			eval(import_module('logger'));
+			if($log_r<100)
+			{
+				if ($active)
+				$log.= "<span class=\"yellow b\">对方见招拆招，游刃有余，".$pa['name']."打出的攻击仅发挥出{$log_r}%的威力！</span><br>";
+				else  $log.="<span class=\"yellow b\">你见招拆招，游刃有余，敌人的攻击仅发挥出{$log_r}%的威力！</span><br>";
+			}
+			else
+			{
+				if ($active)
+				$log.= "<span class=\"yellow b\">对方腹背受敌，连遭掣肘，从".$pa['name']."那受到的伤害增加了{$log_r}%！</span><br>";
+				else  $log.="<span class=\"yellow b\">你腹背受敌，连遭掣肘，从敌人那受到的伤害增加了{$log_r}%！</span><br>";
+			}
+			$r=Array($tmp_r);	
+		}
+		return array_merge($r,$chprocess($pa,$pd,$active));
+	}
+
 	//协战特殊攻击通告
 	function player_attack_enemy(&$pa,&$pd,$active)
 	{
@@ -35,14 +74,14 @@ namespace skill2601
 			eval(import_module('logger'));
 			if($active) {
 				//玩家盟友发起协战
-				$log .= "抓住机会，".$pa['name']."同时对<span class=\"red b\">{$pd['name']}</span>发起攻击！<br>";
-				$pd['battlelog'] .= "手持<span class=\"red b\">{$pa['wep']}</span>的<span class=\"yellow b\">{$pa['name']}</span>趁机向你发起了攻击！年轻人真是不讲武德！";
+				$log .= "<span class=\"yellow b\">抓住机会，".$pa['name']."与你一同对{$pd['name']}发起夹击！</span><br>";
+				$pd['battlelog'] .= "手持<span class=\"red b\">{$pa['wep']}</span>的<span class=\"yellow b\">{$pa['name']}</span>抓住机会同时向你发起攻击！";
 				$cp_atk_flag = 1;
 			}
 			else
 			{
 				//NPC盟友发起协战
-				$log .= "在你们战作一团的时候，<span class=\"red b\">{$pa['name']}</span>趁机对你作出攻击！年轻人真是不讲武德！<br>";
+				$log .= "<span class=\"yellow b\">在你们战作一团的时候，{$pa['name']}抓住机会，与同伴一起向你发起攻击！</span><br>";
 				$cp_atk_flag = 1;
 			}
 		}
@@ -86,6 +125,7 @@ namespace skill2601
 		$chprocess($pa,$pd,$active);
 		
 		//协战结束后处理一些返回的数据
+		eval(import_module('c_battle'));
 		if (\skillbase\skill_query(2601,$pa))
 		{
 			$oid = \skillbase\skill_getvalue(2601,'oid',$pa); 
@@ -108,8 +148,8 @@ namespace skill2601
 					//被NPC的盟友打过后 把玩家的追击标记对象改回原NPC
 					$pd['action'] = 'chase'.$oid; 
 				}
-				/*eval(import_module('logger'));
-				$log.="返回了原主战的pid：".$oid;*/
+				//eval(import_module('logger'));
+				//$log.="返回了原主战的pid：".$oid;
 			}
 		}
 	}

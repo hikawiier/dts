@@ -16,7 +16,7 @@
 <input type="hidden" id="bskillpara" name="bskillpara" value="">
 <table cellSpacing=0 cellPadding=0 width=300px style="table-layout:fixed;">
 <tr><td width=100px align="center" style="vertical-align:top">
-<!--{if (defined('MOD_WEAPON')) && ($battle_distance>=0)}-->
+<!--{if (defined('MOD_WEAPON')) && ($battle_range>=0)}-->
 {template MOD_WEAPON_ATT_METHOD}
 <!--{else}-->
 <input type="button" class="cmdbutton" style="width:98" id="z" value="[Z]防御" onclick="$('command').value='defend';postCmd('gamecmd','command.php');this.disabled=true;"><br>

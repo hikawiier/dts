@@ -667,7 +667,7 @@ namespace weapon
 	function check_counterable_by_weapon_range(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if ($pa['battle_distance']==0 && $pd['battle_distance']==0)
+		if ($pa['battle_range']==0 && $pd['battle_range']==0)
 		{ //短兵相接 反击无视武器射程
 			//echo "双方距离为0，进入鏖战状态，因此计算反击时不统计武器射程。<br>";
 			return 1;
@@ -691,7 +691,7 @@ namespace weapon
 		{			
 			if (!$chprocess($pa,$pd,$active)) return 0;
 			
-			if ($pa['battle_distance']==0 && $pd['battle_distance']==0)
+			if ($pa['battle_range']==0 && $pd['battle_range']==0)
 			{ //短兵相接 反击不用掷骰
 				return 1;
 			}

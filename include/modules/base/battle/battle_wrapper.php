@@ -68,13 +68,11 @@ namespace battle
 		//写回数据库
 		eval(import_module('sys','logger','player','metman'));
 
-		$finish_cpatk_flag = false;
 		if(\skillbase\skill_query(2601,$pa))
 		{
 			//在这个地方丢掉协战技能
 			//写在battle_finish()里必须厘清继承关系 不然有被无限连打的风险 但是厘不清啦！
-			$finish_cpatk_flag = true;
-			\skillbase\skill_delvalue(2601,'oid',$pa); //消除协战技能中的主战者记录
+			\skillbase\skill_delvalue(2601,'oid',$pa); 
 			\skillbase\skill_lost(2601,$pa);
 			if($active)
 			{ //偷个懒 为玩家召唤的协战对象的log替换人称
@@ -85,8 +83,8 @@ namespace battle
 		if ($pd['hp']<=0 || $pa['hp']<=0)
 		{
 			//死人了情况下重置距离鱼回合数
-			$pa['battle_distance'] = 10; $pd['battle_distance'] = 10; 
-			$pa['battle_times'] = 0; $pd['battle_times'] = 0; 
+			$pa['battle_range'] = $pd['battle_range'] = 10; 
+			$pa['battle_turns'] = $pd['battle_turns'] = 0; 
 		}
 
 		if ($active) 
@@ -99,12 +97,10 @@ namespace battle
 			{
 				$pd['action'] = 'pacorpse'.$pa['pid']; 
 			}		
-			if($pa['action']=='' && $pa['type']==0)
-			{ //玩家身上没有其他标记 发一个追击标记
+			if(($pa['action']=='' || strpos($pa['action'],'enemy')!==false) && $pa['type']==0)
+			{ //玩家身上只有发现敌人或被发现的标记 发一个追击标记
 				$pa['action'] = 'chase'.$pd['pid']; 
-				//卧槽 这里一直不会被触发 现在不知道chase标记到底是从哪被传进来的 
-				//但是功能却能正常实现……要不别管了吧
-				echo "玩家主动触发了追击标记：".$pa['action']."<br>";
+				//echo "玩家主动触发了追击标记：".$pa['action']."<br>";
 			}	
 		}
 		else
@@ -117,10 +113,10 @@ namespace battle
 			{
 				$pd['action'] = 'corpse'.$pa['pid']; 
 			}
-			if($pd['action']=='' && $pd['type']==0)
-			{	//玩家身上没有其他种类的标记
+			if(($pd['action']=='' || strpos($pd['action'],'enemy')!==false) && $pd['type']==0)
+			{
 				$pd['action'] = 'chase'.$pa['pid']; 
-				echo "玩家被动触发了追击标记：".$pd['action']."<br>";;
+				//echo "玩家被动触发了追击标记：".$pd['action']."<br>";;
 			}
 		}
 
