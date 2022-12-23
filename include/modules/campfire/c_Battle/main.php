@@ -185,9 +185,7 @@ namespace c_battle
 	function prepare_initial_response_content()
 	{	
 		//重载页面后维持战斗界面
-		//会有一些怪问题 比如载入页面后如果因为卡了等原因提交了别的操作 会把加载界面的指令覆盖掉
-		//等遇到这种问题了再去解决吧……好懒啊……
-		//卧槽！这个部分明明没有用，但是去掉了又不行！我不理解啊！震惊！
+		//我是sb
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		eval(import_module('sys','map','player','logger','metman','input','c_battle'));
 		$cmd = $main = '';
@@ -199,6 +197,7 @@ namespace c_battle
 					$edata = \player\fetch_playerdata_by_pid($eid);
 					extract($edata,EXTR_PREFIX_ALL,'w');
 					\c_battle\meetman_once_again($edata);
+					return;
 				}
 			}
 		}
@@ -210,6 +209,7 @@ namespace c_battle
 					$edata = \player\fetch_playerdata_by_pid($eid);
 					extract($edata,EXTR_PREFIX_ALL,'w');
 					\c_battle\init_coop_battle($edata);
+					return;
 				}
 			}
 		}
@@ -221,6 +221,7 @@ namespace c_battle
 					$edata = \player\fetch_playerdata_by_pid($eid);
 					extract($edata,EXTR_PREFIX_ALL,'w');
 					\c_battle\init_coop_battle($edata,1);
+					return;
 				}
 			}
 		}
@@ -251,7 +252,7 @@ namespace c_battle
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','map','player','logger','metman','input','c_battle'));
 		//各种标记下刷新页面会重载战斗界面
-		if ($command == 'enter' && strpos($action,'chase')===0 && $gamestate<40 && $hp>0)
+		/*if ($command == 'enter' && strpos($action,'chase')===0 && $gamestate<40 && $hp>0)
 		{
 			$eid = str_replace('chase','',$action);
 			if($eid){
@@ -289,7 +290,7 @@ namespace c_battle
 					return;
 				}
 			}
-		}
+		}*/
 		$chprocess();
 	}
 }
