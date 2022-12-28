@@ -257,6 +257,20 @@ namespace ex_dmg_att
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 	}
+
+	function get_tmp_ex_attack_arr(&$pa, &$pd, $active, $ex_arr)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('ex_dmg_att'));
+		//提纯
+		$new_ex_arr = array();
+		foreach ($ex_attack_list as $key)
+			if (in_array($key, $ex_arr))
+			{
+				$new_ex_arr[]=$key;
+			}
+		return $new_ex_arr;
+	}
 	
 	//总属性伤害基础值
 	function calculate_ex_attack_dmg_base(&$pa, &$pd, $active)
@@ -266,6 +280,8 @@ namespace ex_dmg_att
 		$tot = 0;
 		$pa['ex_attack_num'] = 0;
 		$ex_attack_array = \attrbase\get_ex_attack_array($pa, $pd, $active);
+		$ex_attack_array = get_tmp_ex_attack_arr($pa, $pd, $active, $ex_attack_array);
+		//print_r($ex_attack_array);
 		foreach ( $ex_attack_list as $key )
 			if (in_array($key, $ex_attack_array))
 			{

@@ -2,6 +2,15 @@
 
 namespace ex_dmg_att
 {
+	//每个属性可以组合的对应属性列表
+	$ex_mix_list = array
+	(
+		'u' => Array('i','e','w','p'),
+		'i' => Array('u','e','w','p'),
+		'e' => Array('u','i','w','p'),
+		'w' => Array('u','e','i','p'),
+		'p' => Array('u','e','i','w'),
+	);
 	//属性攻击登录
 	$ex_attack_list = Array('p', 'u', 'i', 'd', 'e','w','f','k','t');
 	

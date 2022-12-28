@@ -97,8 +97,7 @@ namespace c_battle
 		if($escape_dice<=$escape_succ_obbs)
 		{*/
 			//逃跑成功 重置双方战斗回合、距离
-			$sdata['battle_turns']=0;$sdata['battle_range']=10;//每次看见这个10都有点绷不住
-			$edata['battle_turns']=0;$edata['battle_range']=10;
+			\c_battle\rs_battle_range_and_turns($sdata,$edata,1);
 			//逃跑作为脱离战斗循环的唯一途径 在这里消除掉追击标记
 			$sdata['action'] = '';unset($sdata['keep_enemy']); 
 			\player\player_save($edata);\player\player_save($sdata);
@@ -109,8 +108,8 @@ namespace c_battle
 		/*}
 		else
 		{
-			$edata['battle_range'] = max(0,$edata['battle_range']-1);
-			$sdata['battle_range'] = 0-$edata['battle_range'];
+			\c_battle\change_battle_range($edata, $sdata, 0);
+			\c_battle\change_battle_turns($edata, $sdata, 0);
 			$log .= "你试图逃跑。<br>但只听得背后传来一声怒喝：<span class='yellow b'>“小子，哪里跑！”</span><br>原来是你的逃跑骰只有{$escape_dice}!这下要免不了要挨一顿毒打了！<br>";
 			battle_wrapper($edata,$sdata,0);
 			return;
@@ -133,53 +132,54 @@ namespace c_battle
 		return $r;
 	}
 
-	function battle_prepare(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		if((strpos($pd['action'],'penemy')!==false && !$active) || (strpos($pa['action'],'enemy')!==false && $active))
-		{	//从meetman_alternative()进入战斗时 初始化距离、回合数
-			$pa['battle_range'] = get_battle_range($pa, $pd, $active);
-			$pd['battle_range'] = 0-$pa['battle_range'];
-			$pd['battle_turns'] = $pa['battle_turns'] = 0;
-			eval(import_module('logger'));
-			$log .="初次交战，距离与轮次初始化完成。<br>";
-		}
-		$chprocess($pa, $pd, $active);
-	}
-
-	function assault_prepare(&$pa, &$pd, $active)
+	function rs_battle_range_and_turns(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//战斗准备阶段 存在战斗距离的情况下拉近一格距离
-		if(!\skillbase\skill_query(2601,$pa) && $pa['battle_range'] && $pd['battle_range'])
+		//从追击来源发起的战斗 不进行距离、轮次初始化
+		if(strpos($pa['action'],'chase')!==false || strpos($pd['action'],'chase')!==false)	return;
+		$pa['battle_range'] = get_battle_range($pa, $pd, $active);
+		$pd['battle_range'] = 0-$pa['battle_range'];
+		$pd['battle_turns'] = $pa['battle_turns'] = 0;
+		eval(import_module('logger'));
+		$log .="距离与轮次初始化完成。<br>";
+	}
+
+	function change_battle_range(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		if($pa['battle_range'] && $pd['battle_range'])
 		{
 			$pa['battle_range'] = max(0,$pa['battle_range']-1);
 			$pd['battle_range'] = 0-$pa['battle_range'];
 			eval(import_module('logger'));
 			$log .= "{$pa['name']}向{$pd['name']}逼近了一步！现在二人的距离分别为{$pa['battle_range']}与{$pd['battle_range']}<br>";
 		}
+	}
+
+	function change_battle_turns(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
+		$pa['battle_turns']++;
+		$pd['battle_turns']=$pa['battle_turns'];
+		eval(import_module('logger'));
+		$log .="双方完成了一轮交手。现在{$pa['name']}和{$pd['name']}的战斗轮次分别是{$pa['battle_turns']}与{$pd['battle_turns']}<br>";
+	}
+
+	function battle_prepare(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//战斗准备阶段 初始化双方距离、回合数	
+		\c_battle\rs_battle_range_and_turns($pa, $pd, $active);
 		$chprocess($pa, $pd, $active);
 	}
 
 	function assault_finish(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//战斗结算阶段 计算战斗轮变化
-		if(!\skillbase\skill_query(2601,$pa))
-		{
-			$pa['battle_turns']++;
-			$pd['battle_turns']=$pa['battle_turns'];
-			eval(import_module('logger'));
-			$log .="双方完成了一轮交手。现在{$pa['name']}和{$pd['name']}的战斗轮次分别是{$pa['battle_turns']}与{$pd['battle_turns']}<br>";
-		}
+		//战斗结算阶段 应用战斗距离与战斗轮变化
+		\c_battle\change_battle_range($pa, $pd, $active);
+		\c_battle\change_battle_turns($pa, $pd, $active);
 		$chprocess($pa, $pd, $active);
-	}
-
-	function battle_finish(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//战斗轮与距离计算移至他处
-		$chprocess($pa,$pd,$active);
 	}
 	
 	function prepare_initial_response_content()
@@ -225,72 +225,6 @@ namespace c_battle
 				}
 			}
 		}
-		$chprocess();
-	}
-
-	function post_act()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$chprocess();
-		//chase、attbycp、attcp这3个标记只能通过battle_wrapper内的逻辑消除
-		//这样可以避免刷新页面后因为卡了等原因按到其他按钮导致提前脱离战斗
-		//可以避免……吧……
-		/*eval(import_module('player'));
-		if(empty($sdata['keep_enemy']) && ( strpos($action, 'chase')===0)){
-			$action = '';
-			unset($sdata['keep_enemy']);
-		}
-		if(empty($sdata['keep_enemy']) && ( strpos($action, 'attbycp')===0)){
-			$action = '';
-			unset($sdata['keep_enemy']);
-		}*/
-	}
-
-	//act()其他部分都写在enemy里了，不挪出来的原因是已经和原本的指令判断紧紧抱在一起了……为什么会这样呢……？
-	function act()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','map','player','logger','metman','input','c_battle'));
-		//各种标记下刷新页面会重载战斗界面
-		/*if ($command == 'enter' && strpos($action,'chase')===0 && $gamestate<40 && $hp>0)
-		{
-			$eid = str_replace('chase','',$action);
-			if($eid){
-				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
-				if($db->num_rows($result)>0){
-					$edata = \player\fetch_playerdata_by_pid($eid);
-					extract($edata,EXTR_PREFIX_ALL,'w');
-					\c_battle\meetman_once_again($edata);
-					return;
-				}
-			}	
-		}
-		elseif($command == 'enter' && strpos($action,'attbycp')===0 && $gamestate<40 && $hp>0)
-		{
-			$eid = str_replace('attbycp','',$action);
-			if($eid){
-				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
-				if($db->num_rows($result)>0){
-					$edata = \player\fetch_playerdata_by_pid($eid);
-					extract($edata,EXTR_PREFIX_ALL,'w');
-					\c_battle\init_coop_battle($edata);
-					return;
-				}
-			}
-		}
-		elseif($command == 'enter' && strpos($action,'attcp')===0 && $gamestate<40 && $hp>0)
-		{
-			$eid = str_replace('attcp','',$action);
-			if($eid){
-				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
-				if($db->num_rows($result)>0){
-					$edata = \player\fetch_playerdata_by_pid($eid);
-					extract($edata,EXTR_PREFIX_ALL,'w');
-					\c_battle\init_coop_battle($edata,1);
-					return;
-				}
-			}
-		}*/
 		$chprocess();
 	}
 }

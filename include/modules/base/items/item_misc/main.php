@@ -207,6 +207,7 @@ namespace item_misc
 					$mhp+=5800;$hp+=5800;
 					$money+=19980;
 					\clubbase\club_acquire(11);
+					$wep='虹光射线';$wepk='WG';$wepe=333;$weps=3333;$wepsk='iuewp';
 					$itm1='美味补给';$itmk1 = 'HB';$itmsk1 = '';$itme1 = 27777;$itms1 = 2777;
 					$itm2='全恢复药剂';$itmk2 = 'Ca';$itmsk2 = '';$itme2 = 1;$itms2 = 44;
 					$itm3='食堂的剩饭';$itmk3 = 'HR';$itmsk3 = '';$itme3 = 100;$itms3 = 15;

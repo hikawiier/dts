@@ -76,6 +76,34 @@ namespace skill5
 		}
 		if ($hp>0) $chprocess($moveto);
 	}
+
+	//攻击准备阶段 结算$pa受到的异常伤害
+	function attack_prepare(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		unset($pa['deathmark']);//有点搞笑
+		if (\skillbase\skill_query(5,$pa) && !$pa['is_colatk'])
+		{
+			$tmp_inf_dmg = 1;
+			$pa['hp'] -= $tmp_inf_dmg;
+			eval(import_module('logger'));
+			$log .= $pa['name']."因<span class=\"purple b\">毒发</span>减少了<span class=\"red b\">$tmp_inf_dmg</span>点生命！<br>";
+			if($pa['hp']<=0)
+			{
+				$pa['deathmark'] = 120;
+				return;
+			}
+		}
+	}
+
+	function attack(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//pa因为某些情况意外暴毙了 不会触发打击流程
+		if($pa['deathmark']) return;
+		$chprocess($pa, $pd, $active);
+	}
 	
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())	//毒发死亡新闻
 	{
@@ -89,6 +117,15 @@ namespace skill5
 				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
 			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>因<span class=\"red b\">毒发</span>死亡{$e0}</li>";
+		} 
+
+		if($news == 'death120') 
+		{
+			$dname = $typeinfo[$b].' '.$a;
+			if(!$e)
+				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
+			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>在与<span class=\"yellow b\">$c</span>的战斗中因<span class=\"red b\">毒发</span>死亡{$e0}</li>";
 		} 
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);

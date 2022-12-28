@@ -72,7 +72,6 @@ namespace battle
 		{
 			//在这个地方丢掉协战技能
 			//写在battle_finish()里必须厘清继承关系 不然有被无限连打的风险 但是厘不清啦！
-			\skillbase\skill_delvalue(2601,'oid',$pa); 
 			\skillbase\skill_lost(2601,$pa);
 			if($active)
 			{ //偷个懒 为玩家召唤的协战对象的log替换人称

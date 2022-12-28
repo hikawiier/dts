@@ -35,7 +35,7 @@ namespace npc
 			'inf' => '',
 			'rage' => 0,
 			'pose'=> 2,
-			'skills'=>array('2600'=>Array('mt'=>9,'mn'=>'蓝凝'),),
+			'skills'=>array('2600'=>Array('mt'=>9,'mn'=>'蓝凝','mobbs'=>'50','mdmg'=>'150'),),//有50%概率召唤蓝凝协战 蓝凝协战时享受150%伤害修正
 			'tactic' => 3,
 			'killnum' => 0,
 			'teamID' => '',
@@ -737,7 +737,7 @@ namespace npc
 				(
 				'name' => '蓝凝',
 				'mss' => 40,
-				'skills' => array('2600'=>Array('mt'=>1,'mn'=>'红暮'),),
+				'skills' => array('2600'=>Array('mt'=>1,'mn'=>'红暮','mobbs'=>'80','mdmg'=>'50'),),//有80%概率召唤红暮协战，红暮协战时最终伤害修正为50%
 				'icon' => 52,
 				'wep' => '『AZURE RONDO』',
 				'wepk' => 'WKF',
