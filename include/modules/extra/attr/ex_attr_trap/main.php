@@ -24,12 +24,12 @@ namespace ex_attr_trap
 		return 35;
 	}
 	
-	function get_trap_escape_rate()
+	function get_trap_escape_rate($pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\attrbase\check_itmsk('M'))
-			return calculate_trapdetect_rate()+$chprocess();
-		else  return $chprocess();
+		if (\attrbase\check_itmsk('M',$pa))
+			return calculate_trapdetect_rate($pa)+$chprocess($pa);
+		else  return $chprocess($pa);
 	}
 	
 	//陷阱迎击触发率

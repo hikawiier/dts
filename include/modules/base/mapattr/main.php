@@ -58,13 +58,13 @@ namespace mapattr
 		return $ret;
 	}
 	
-	function calculate_real_trap_obbs()
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('player'));
-		if($pls == 0)	//在后台非常容易踩陷阱
-			return $chprocess()+15;
-		else  return $chprocess();
+		if($pa['pls'] == 0)	//在后台非常容易踩陷阱
+			return $chprocess($var+15,$pa);
+		return $chprocess($var,$pa);
 	}
 }
 

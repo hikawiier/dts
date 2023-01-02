@@ -199,13 +199,29 @@ namespace attack
 		eval(import_module('sys','logger','player'));
 		if ($active)
 		{
-			$log .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">被你杀死了！</span><br>";
-			$pd['battlelog'] .= "<span class=\"red b\">你被{$pa['name']}杀死了！</span><br>";
+			if($pd['death_flag'])
+			{
+				$log .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">在与你的战斗中意外身亡！</span><br>";
+				$pd['battlelog'] .= "<span class=\"red b\">你在与{$pa['name']}的战斗中意外身亡！</span><br>";
+			}
+			else
+			{
+				$log .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">被你杀死了！</span><br>";
+				$pd['battlelog'] .= "<span class=\"red b\">你被{$pa['name']}杀死了！</span><br>";
+			}
 		}
 		else
 		{
-			$log .= "<span class=\"red b\">你被{$pa['name']}杀死了！</span><br>";
-			$pa['battlelog'] .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">被你杀死了！</span><br>";
+			if($pd['death_flag'])
+			{
+				$log .= "<span class=\"red b\">你在与{$pa['name']}的战斗中意外身亡！</span><br>";
+				$pd['battlelog'] .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">在与你的战斗中意外身亡！</span><br>";
+			}
+			else
+			{
+				$log .= "<span class=\"red b\">你被{$pa['name']}杀死了！</span><br>";
+				$pa['battlelog'] .= "<span class=\"yellow b\">{$pd['name']}</span><span class=\"red b\">被你杀死了！</span><br>";
+			}
 		}
 		
 		$pd['state']=$pd['deathmark'];

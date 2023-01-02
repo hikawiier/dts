@@ -138,13 +138,12 @@ namespace skill500
 	}
 	
 	//不会踩到陷阱
-	function calculate_real_trap_obbs_change($var)
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$ret = $chprocess($var);
 		eval(import_module('player'));
-		if(1 == check_skill500_state($sdata)) $ret = 0;
-		return $ret;
+		if(1 == check_skill500_state($pa)) return $chprocess(0,$pa);
+		return $chprocess($var,$pa);
 	}
 	
 	//不会受到敌人反击

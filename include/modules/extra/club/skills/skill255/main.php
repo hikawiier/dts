@@ -50,19 +50,18 @@ namespace skill255
 		return $r;
 	}
 	
-	function calculate_real_trap_obbs()
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$r = $chprocess();
-		if (\skillbase\skill_query(255)) $r*=0.85;
-		return $r;
+		if (\skillbase\skill_query(255,$pa)) return $chprocess($var*0.85,$pa);
+		return $chprocess($var,$pa);
 	}
 	
-	function get_trap_escape_rate()
+	function get_trap_escape_rate($pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$r = $chprocess();
-		if (\skillbase\skill_query(255)) $r*=1.1;
+		$r = $chprocess($pa);
+		if (\skillbase\skill_query(255,$pa)) $r*=1.1;
 		return $r;
 	}
 }

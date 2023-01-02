@@ -78,20 +78,19 @@ namespace tactic
 		return $ret;
 	}
 	
-	function get_trap_damage()
+	function get_trap_damage_multiplier(&$pa, &$pd, $trap, $damage)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player'));
-		$damage = $chprocess();
-		if ($tactic == 2) if (rand(0,99)<75) $damage = round($damage * 0.75);	//防御姿态大概率降低陷阱伤害
-		return $damage;
+		$r=Array();
+		if ($pd['tactic'] == 2) $r=Array(0.75);	//防御姿态大概率降低陷阱伤害
+		return array_merge($r,$chprocess($pa,$pd,$trap,$damage));
 	}
 	
-	function get_trap_escape_rate()
+	function get_trap_escape_rate($pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
-		if ($tactic == 4) return $chprocess()+20; else return $chprocess();	//躲避姿态提高陷阱回避率
+		if ($pa['tactic'] == 4) return $chprocess($pa)+20; else return $chprocess($pa);	//躲避姿态提高陷阱回避率
 	}
 	
 	function tactic_change($ntactic)

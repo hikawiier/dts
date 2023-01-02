@@ -4,16 +4,16 @@ namespace pose
 {
 	function init() {}
 	
-	function calculate_real_trap_obbs()
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		$r = 0;
-		if($pose==1)
+		if($pa['pose']==1)
 			$r = 1;
-		else if($pose==3)	//攻击和探索姿势略容易踩陷阱
+		else if($pa['pose']==3)	//攻击和探索姿势略容易踩陷阱
 			$r = 3;
-		return $r+$chprocess();
+		return $chprocess($var+$r,$pa);
 	}
 	
 	function pose_change($npose)

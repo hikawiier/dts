@@ -26,7 +26,7 @@ namespace skill6
 	function skill_onload_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (strpos($pa['inf'],'u')!==false) \skillbase\skill_acquire(6,$pa);
+		if (strpos($pa['inf'],'u')!==false && !\skillbase\skill_query(6,$pa)) \skillbase\skill_acquire(6,$pa);
 		$chprocess($pa);
 	}
 	
@@ -75,6 +75,26 @@ namespace skill6
 		}
 		if ($hp>0) $chprocess($moveto);
 	}
+
+	function check_dot_effect(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if (\skillbase\skill_query(6,$pa))
+		{
+			$tmp_inf_dmg = round($pa['mhp']*0.0625) + rand(0,10);
+			$pa['hp'] -= $tmp_inf_dmg;
+			eval(import_module('logger'));
+			$tmp_name = $active ? '你' : $pa['name'];
+			$log .= $tmp_name."因<span class=\"red b\">烧伤发作</span>减少了<span class=\"red b\">$tmp_inf_dmg</span>点生命！<br>";
+			if($pa['hp']<=0)
+			{
+				$pa['death_flag'] = 1;
+				$pa['deathmark'] = 121;
+				return;
+			}
+		}
+	}
 	
 	function get_att_multiplier(&$pa,&$pd,$active)	//烧伤攻击力下降
 	{
@@ -99,6 +119,15 @@ namespace skill6
 				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
 			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
 			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>因<span class=\"red b\">烧伤发作</span>死亡{$e0}</li>";
+		} 
+
+		if($news == 'death121') 
+		{
+			$dname = $typeinfo[$b].' '.$a;
+			if(!$e)
+				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
+			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>在与<span class=\"yellow b\">$c</span>的战斗中因<span class=\"red b\">烧伤发作</span>死亡{$e0}</li>";
 		} 
 		
 		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);

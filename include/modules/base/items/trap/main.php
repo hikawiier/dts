@@ -108,6 +108,52 @@ namespace trap
 			}
 		}
 	}
+		
+	function trapcheck()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','map','itemmain','trap'));
+		\player\update_sdata();
+		$real_trap_obbs = calculate_real_trap_obbs($sdata);
+		$real_trap_obbs = calculate_real_trap_obbs_change($real_trap_obbs,$sdata);
+		
+		//好神奇的算法……在下面那个函数先40%判定是不是进入踩雷判断，再在这里用0-39的随机数判断是不是踩陷阱
+		//概率跟踩雷上限40%概率是一样的
+		$trap_dice=rand(0,$trap_max_obbs-1);
+		if($trap_dice < $real_trap_obbs){//踩陷阱判断
+			$trapresult = get_traplist();
+			$trpnum = $db->num_rows($trapresult);
+			if ($trpnum == 0) return 0;
+			$itemno = rand(0,$trpnum-1);
+			$db->data_seek($trapresult,$itemno);
+			$mi=$db->fetch_array($trapresult);
+			trapget($mi);
+			return 1;
+		}
+		return 0;
+	}
+
+	function calculate_real_trap_obbs($pa)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','trap'));
+		//最小值
+		$real_trap_obbs = $trap_min_obbs;
+		//地图上每有1个雷+0.25%
+		$tpls=$pa['pls'];$tpzone=$pa['pzone'];
+		$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$tpls' AND pzone ='$tpzone' ORDER BY itmk DESC");
+		$trpnum = $db->num_rows($trapresult);
+		$real_trap_obbs += $trpnum/4;
+		//把奇怪的加成值去掉了
+
+		return $real_trap_obbs;
+	}
+		
+	function calculate_real_trap_obbs_change($var,$pa)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		return $var;
+	}
 	
 	function get_trapfilecont(){
 		if (eval(__MAGIC__)) return $___RET_VALUE; 
@@ -116,38 +162,160 @@ namespace trap
 		$l = openfile($file);
 		return $l;
 	}
-	
-	function calculate_real_trap_obbs()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','trap'));
-		//最小值
-		$real_trap_obbs = $trap_min_obbs;
-		//地图上每有1个雷+0.25%
-		$trapresult = $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone ='$pzone' ORDER BY itmk DESC");
-		$trpnum = $db->num_rows($trapresult);
-		$real_trap_obbs += $trpnum/4;
-		//把奇怪的加成值去掉了
 
-		return $real_trap_obbs;
-	}
-		
-	function calculate_real_trap_obbs_change($var)
+	function trapget($mi)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		return $var;
+		
+		eval(import_module('sys','player','trap'));
+		$itm0=$mi['itm'];
+		$itmk0=$mi['itmk'];
+		$itme0=$mi['itme'];
+		$itms0=$mi['itms'];
+		$itmsk0=$mi['itmsk']; 
+		$tid=$mi['tid'];
+		$db->query("DELETE FROM {$tablepre}maptrap WHERE tid='$tid'");
+		
+		$playerflag = is_numeric($itmsk0) ? true : false;
+		$selflag = ($playerflag && ($itmsk0 == $pid)) ? true : false;
+		
+		if($playerflag && !$selflag){
+			$wdata = \player\fetch_playerdata_by_pid($itmsk0);
+			$trname = $wdata['name'];$trtype = $wdata['type'];$trprefix = '<span class="yellow b">'.$trname.'</span>设置的';
+		}elseif($selflag){
+			$trname = $name;$trtype = 0;$trprefix = '你自己设置的';
+		}else{
+			$trname = $trtype = $trprefix = '';
+		}
+		
+		trap();
+	}
+
+	function trap()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		
+		eval(import_module('sys','player','trap'));
+		\player\update_sdata();
+		$escrate = get_trap_escape_rate($sdata);
+		$escrate = $escrate >= 90 ? 90 : $escrate;//最大回避率
+
+		$dice=rand(0,99);
+		if($dice >= $escrate){
+			trap_hit();
+		} else {
+			trap_miss();
+		}
 	}
 			
-	function get_trap_escape_rate()
+	function get_trap_escape_rate($pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','map','itemmain','trap'));
-		$escrate = 8 + $lvl/3 ;
+		$escrate = 8 + $pa['lvl']/3 ;
 		/*
 		if ($club==6) $escrate +=15;
 		*/
-		if ($selflag) $escrate += 50; //自己设置的陷阱容易躲避
+		if ($selflag || $pa['self_trap_flag']) $escrate += 50; //自己设置的陷阱容易躲避
+		if ($pa['self_trap_flag']) unset($pa['self_trap_flag']);
 		return $escrate;
+	}
+
+	function trap_hit()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','map','itemmain','trap','logger'));
+		
+		trap_deal_damage();
+		
+		if($hp <= 0) {
+			$log .= "<span class=\"red b\">你被{$trprefix}陷阱杀死了！</span>";
+			$state = 27;
+			\player\update_sdata();
+			if (!$selflag && $playerflag) 	//有来源且不是自己
+			{
+				$edata = \player\fetch_playerdata_by_pid($itmsk0);
+			}
+			else 
+			{
+				$edata = &$sdata;		//无来源或来源是自己
+				if (!$playerflag) $sdata['sourceless']=1;	//无来源
+			}
+			
+			$edata['attackwith'] = $itm0;
+			$killmsg = \player\kill($edata, $sdata);
+			
+			if (!$selflag && $playerflag)
+			{
+				\player\player_save($edata);
+			}
+			\player\player_save($sdata);
+			\player\load_playerdata($sdata);
+			
+			if (isset($sdata['sourceless'])) unset($sdata['sourceless']);
+			if($killmsg != ''){
+				$log .= "<span class=\"yellow b\">{$trname}对你说：“{$killmsg}”</span><br>";
+			}				
+		}
+		
+		$itm0 = $itmk0 = $itmsk0 = '';
+		$itme0 = $itms0 = 0;
+	}
+
+	function trap_deal_damage()
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','trap','logger'));
+		
+		$bid = $itmsk0;
+		if($bid) {
+			$pa=\player\fetch_playerdata_by_pid($bid);
+		}else {
+			$pa=\player\create_dummy_playerdata();
+		}
+		$log .= "糟糕，你触发了{$trprefix}陷阱<span class=\"yellow b\">$itm0</span>！";
+		$damage = get_trap_damage();
+		
+		
+	
+		$tritm=Array();
+		$tritm['itm']=$itm0; $tritm['itmk']=$itmk0; 
+		$tritm['itme']=$itme0; $tritm['itms']=$itms0; $tritm['itmsk']=$itmsk0;
+		$multiplier = get_trap_damage_multiplier($pa, $sdata, $tritm, $damage);
+		
+		if (count($multiplier)>0)
+		{
+			$fin_dmg=$damage; $mult_words='';
+			foreach ($multiplier as $key)
+			{
+				$fin_dmg=$fin_dmg*$key;
+				$mult_words.="×{$key}";
+			}
+			$fin_dmg=round($fin_dmg);
+			if ($fin_dmg < 1) $fin_dmg = 1;
+			$log .= "你受到了{$damage}{$mult_words}＝<span class=\"dmg\">{$fin_dmg}</span>点伤害。<br>";
+			$damage = $fin_dmg;
+		}
+		else
+		{
+			$log.="你受到了<span class=\"dmg\">$damage</span>点伤害！<br>";
+		}
+		
+		$damage = get_trap_final_damage_modifier_up($pa, $sdata, $tritm, $damage);
+		
+		$damage = get_trap_final_damage_modifier_down($pa, $sdata, $tritm, $damage);
+		
+		$damage = get_trap_final_damage_change($pa, $sdata, $tritm, $damage);
+
+		$hp -= $damage;
+		
+		if ($damage>0) post_traphit_events($pa, $sdata, $tritm, $damage);
+		
+		if($playerflag){
+			addnews($now,'trap',$name,$trname,$itm0,$damage);
+		}
+		
+		send_trap_enemylog(1);
 	}
 	
 	function get_trap_damage()
@@ -213,103 +381,6 @@ namespace trap
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 	}
-	
-	function trap_deal_damage()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','trap','logger'));
-		
-		$bid = $itmsk0;
-		if($bid) {
-			$pa=\player\fetch_playerdata_by_pid($bid);
-		}else {
-			$pa=\player\create_dummy_playerdata();
-		}
-		$log .= "糟糕，你触发了{$trprefix}陷阱<span class=\"yellow b\">$itm0</span>！";
-		$damage = get_trap_damage();
-		
-		
-	
-		$tritm=Array();
-		$tritm['itm']=$itm0; $tritm['itmk']=$itmk0; 
-		$tritm['itme']=$itme0; $tritm['itms']=$itms0; $tritm['itmsk']=$itmsk0;
-		$multiplier = get_trap_damage_multiplier($pa, $sdata, $tritm, $damage);
-		
-		if (count($multiplier)>0)
-		{
-			$fin_dmg=$damage; $mult_words='';
-			foreach ($multiplier as $key)
-			{
-				$fin_dmg=$fin_dmg*$key;
-				$mult_words.="×{$key}";
-			}
-			$fin_dmg=round($fin_dmg);
-			if ($fin_dmg < 1) $fin_dmg = 1;
-			$log .= "你受到了{$damage}{$mult_words}＝<span class=\"dmg\">{$fin_dmg}</span>点伤害。<br>";
-			$damage = $fin_dmg;
-		}
-		else
-		{
-			$log.="你受到了<span class=\"dmg\">$damage</span>点伤害！<br>";
-		}
-		
-		$damage = get_trap_final_damage_modifier_up($pa, $sdata, $tritm, $damage);
-		
-		$damage = get_trap_final_damage_modifier_down($pa, $sdata, $tritm, $damage);
-		
-		$damage = get_trap_final_damage_change($pa, $sdata, $tritm, $damage);
-
-		$hp -= $damage;
-		
-		if ($damage>0) post_traphit_events($pa, $sdata, $tritm, $damage);
-		
-		if($playerflag){
-			addnews($now,'trap',$name,$trname,$itm0,$damage);
-		}
-		
-		send_trap_enemylog(1);
-	}
-	
-	function trap_hit()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','itemmain','trap','logger'));
-		
-		trap_deal_damage();
-		
-		if($hp <= 0) {
-			$log .= "<span class=\"red b\">你被{$trprefix}陷阱杀死了！</span>";
-			$state = 27;
-			\player\update_sdata();
-			if (!$selflag && $playerflag) 	//有来源且不是自己
-			{
-				$edata = \player\fetch_playerdata_by_pid($itmsk0);
-			}
-			else 
-			{
-				$edata = &$sdata;		//无来源或来源是自己
-				if (!$playerflag) $sdata['sourceless']=1;	//无来源
-			}
-			
-			$edata['attackwith'] = $itm0;
-			$killmsg = \player\kill($edata, $sdata);
-			
-			if (!$selflag && $playerflag)
-			{
-				\player\player_save($edata);
-			}
-			\player\player_save($sdata);
-			\player\load_playerdata($sdata);
-			
-			if (isset($sdata['sourceless'])) unset($sdata['sourceless']);
-			if($killmsg != ''){
-				$log .= "<span class=\"yellow b\">{$trname}对你说：“{$killmsg}”</span><br>";
-			}				
-		}
-		
-		$itm0 = $itmk0 = $itmsk0 = '';
-		$itme0 = $itms0 = 0;
-	}
 		
 	function calculate_trap_reuse_rate()	//重复利用陷阱的概率
 	{
@@ -359,79 +430,11 @@ namespace trap
 		}
 	}
 	
-	function trap()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		
-		eval(import_module('sys','player','trap'));
-		
-		$escrate = get_trap_escape_rate();
-		$escrate = $escrate >= 90 ? 90 : $escrate;//最大回避率
-
-		$dice=rand(0,99);
-		if($dice >= $escrate){
-			trap_hit();
-		} else {
-			trap_miss();
-		}
-	}
-
-	function trapget($mi)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		
-		eval(import_module('sys','player','trap'));
-		$itm0=$mi['itm'];
-		$itmk0=$mi['itmk'];
-		$itme0=$mi['itme'];
-		$itms0=$mi['itms'];
-		$itmsk0=$mi['itmsk']; 
-		$tid=$mi['tid'];
-		$db->query("DELETE FROM {$tablepre}maptrap WHERE tid='$tid'");
-		
-		$playerflag = is_numeric($itmsk0) ? true : false;
-		$selflag = ($playerflag && ($itmsk0 == $pid)) ? true : false;
-		
-		if($playerflag && !$selflag){
-			$wdata = \player\fetch_playerdata_by_pid($itmsk0);
-			$trname = $wdata['name'];$trtype = $wdata['type'];$trprefix = '<span class="yellow b">'.$trname.'</span>设置的';
-		}elseif($selflag){
-			$trname = $name;$trtype = 0;$trprefix = '你自己设置的';
-		}else{
-			$trname = $trtype = $trprefix = '';
-		}
-		
-		trap();
-	}
-	
 	function get_traplist() 
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		return $db->query("SELECT * FROM {$tablepre}maptrap WHERE pls = '$pls' AND pzone = '$pzone' ORDER BY itmk DESC");
-	}
-	
-	function trapcheck()
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','player','map','itemmain','trap'));
-		$real_trap_obbs = calculate_real_trap_obbs();
-		$real_trap_obbs = calculate_real_trap_obbs_change($real_trap_obbs);
-		
-		//好神奇的算法……在下面那个函数先40%判定是不是进入踩雷判断，再在这里用0-39的随机数判断是不是踩陷阱
-		//概率跟踩雷上限40%概率是一样的
-		$trap_dice=rand(0,$trap_max_obbs-1);
-		if($trap_dice < $real_trap_obbs){//踩陷阱判断
-			$trapresult = get_traplist();
-			$trpnum = $db->num_rows($trapresult);
-			if ($trpnum == 0) return 0;
-			$itemno = rand(0,$trpnum-1);
-			$db->data_seek($trapresult,$itemno);
-			$mi=$db->fetch_array($trapresult);
-			trapget($mi);
-			return 1;
-		}
-		return 0;
 	}
 	
 	function discover($schmode) 

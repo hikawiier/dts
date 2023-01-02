@@ -2,6 +2,8 @@
 
 namespace c_battle
 {
+	//主文件：
+	//新增界面 + 对原模块的修改
 	function init() 
 	{
 	}
@@ -96,10 +98,11 @@ namespace c_battle
 		}
 		if($escape_dice<=$escape_succ_obbs)
 		{*/
-			//逃跑成功 重置双方战斗回合、距离
-			\c_battle\rs_battle_range_and_turns($sdata,$edata,1);
+			//逃跑成功
 			//逃跑作为脱离战斗循环的唯一途径 在这里消除掉追击标记
 			$sdata['action'] = '';unset($sdata['keep_enemy']); 
+			//重置双方战斗回合、距离
+			\c_battle\rs_battle_range_and_turns($sdata,$edata,1);
 			\player\player_save($edata);\player\player_save($sdata);
 			$log .= "你逃跑了。<br>";
 			//$log .= "双方的战斗次数变为了".$sdata['battle_turns']."和".$edata['battle_turns']."<br>";
@@ -116,80 +119,72 @@ namespace c_battle
 		}*/
 	}
 
-	function get_battle_range(&$pa, &$pd, $active)
-	{
-		//根据武器射程对比初始化战斗距离
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','weapon'));
-		$r1 = \weapon\get_weapon_range($pa, $active);
-		$r2 = \weapon\get_weapon_range($pd, 1-$active);
-		$r = max(0,$r1-$r2);
-		if($r1 === 0)
-		{
-			//先制者武器为爆炸物，距离值恒定为1
-			$r = 1;			
-		}
-		return $r;
-	}
-
-	function rs_battle_range_and_turns(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//从追击来源发起的战斗 不进行距离、轮次初始化
-		if(strpos($pa['action'],'chase')!==false || strpos($pd['action'],'chase')!==false)	return;
-		$pa['battle_range'] = get_battle_range($pa, $pd, $active);
-		$pd['battle_range'] = 0-$pa['battle_range'];
-		$pd['battle_turns'] = $pa['battle_turns'] = 0;
-		eval(import_module('logger'));
-		$log .="距离与轮次初始化完成。<br>";
-	}
-
-	function change_battle_range(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		if($pa['battle_range'] && $pd['battle_range'])
-		{
-			$pa['battle_range'] = max(0,$pa['battle_range']-1);
-			$pd['battle_range'] = 0-$pa['battle_range'];
-			eval(import_module('logger'));
-			$log .= "{$pa['name']}向{$pd['name']}逼近了一步！现在二人的距离分别为{$pa['battle_range']}与{$pd['battle_range']}<br>";
-		}
-	}
-
-	function change_battle_turns(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;	
-		$pa['battle_turns']++;
-		$pd['battle_turns']=$pa['battle_turns'];
-		eval(import_module('logger'));
-		$log .="双方完成了一轮交手。现在{$pa['name']}和{$pd['name']}的战斗轮次分别是{$pa['battle_turns']}与{$pd['battle_turns']}<br>";
-	}
-
+	//战斗外围准备阶段 初始化双方距离、回合数	
 	function battle_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//战斗准备阶段 初始化双方距离、回合数	
 		\c_battle\rs_battle_range_and_turns($pa, $pd, $active);
 		$chprocess($pa, $pd, $active);
 	}
 
-	function assault_finish(&$pa, &$pd, $active)
+	//战斗准备阶段 应用战斗轮与战斗距离步进
+	function assault_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//战斗结算阶段 应用战斗距离与战斗轮变化
-		\c_battle\change_battle_range($pa, $pd, $active);
+		$chprocess($pa, $pd, $active);
 		\c_battle\change_battle_turns($pa, $pd, $active);
+	}
+
+	//打击准备阶段 进行战斗距离的步进与pa的dot判定
+	function attack_prepare(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if($pa['hp']>0) \c_battle\check_dot_effect($pa,$pd,$active);
+		if($pa['hp']>0) \c_battle\change_battle_range($pa,$pd,$active);
+	}
+
+	//打击进行阶段 对$pa进行暴毙判断
+	function attack(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		if($pa['death_flag'])
+		{ 
+			//$pa暴毙了 跳过打击阶段
+			//eval(import_module('logger'));
+			//$log .= "出现了死人标记！<br>";
+			return;
+		}
+		$chprocess($pa, $pd, $active);
+	}
+
+	//打击结束阶段事件 进行pd的dot判定
+	function post_player_damaged_enemy_event(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//pd活着的情况下对pd进行dot判定
+		//其实不应该加这个条件 想了想有毒转愈的情况 这里不一定是伤害 也可能是回复
+		if($pd['hp']>0) \c_battle\check_dot_effect($pd,$pa,1-$active);
+		$chprocess($pa, $pd, $active);
+	}
+
+	//战斗外围结束阶段 注销死人标记
+	function battle_finish(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		unset($pa['death_flag']);
+		unset($pd['death_flag']);
 		$chprocess($pa, $pd, $active);
 	}
 	
+	//重载页面后维持战斗界面
 	function prepare_initial_response_content()
 	{	
-		//重载页面后维持战斗界面
 		//我是sb
 		if (eval(__MAGIC__)) return $___RET_VALUE;		
 		eval(import_module('sys','map','player','logger','metman','input','c_battle'));
 		$cmd = $main = '';
-		if(strpos($action,'chase')===0 && $gamestate<40 && $hp>0){
+		if(strpos($action,'chase')===0 && $hp>0){
 			$eid = str_replace('chase','',$action);
 			if($eid){
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
@@ -201,7 +196,7 @@ namespace c_battle
 				}
 			}
 		}
-		elseif(strpos($action,'attbycp')===0 && $gamestate<40 && $hp>0){
+		elseif(strpos($action,'attbycp')===0 && $hp>0){
 			$eid = str_replace('attbycp','',$action);
 			if($eid){
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");
@@ -213,7 +208,7 @@ namespace c_battle
 				}
 			}
 		}
-		elseif(strpos($action,'attcp')===0 && $gamestate<40 && $hp>0){
+		elseif(strpos($action,'attcp')===0 && $hp>0){
 			$eid = str_replace('attcp','',$action);
 			if($eid){
 				$result = $db->query("SELECT * FROM {$tablepre}players WHERE pid='$eid' AND hp>0");

@@ -75,10 +75,10 @@ namespace skill212
 		return $reuserate;
 	}
 	
-	function get_trap_escape_rate()
+	function get_trap_escape_rate($pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(212)) return $chprocess()+get_skill212_extra_ev_gain(); else return $chprocess();
+		if (\skillbase\skill_query(212,$pa)) return $chprocess($pa)+get_skill212_extra_ev_gain(); else return $chprocess($pa);
 	}
 	
 	function calculate_trap_reuse_rate()

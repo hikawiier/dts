@@ -137,6 +137,7 @@ namespace skill267
 				$log .= '「代偿」让你的生命上限增加了<span class="lime b">'.$mhpup.'</span>点！<br>';
 			}
 		}
+		$chprocess($pa,$pd, $active); //小老弟你怎么回事
 	}
 	
 }

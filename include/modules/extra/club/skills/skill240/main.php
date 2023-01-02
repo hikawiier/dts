@@ -25,12 +25,12 @@ namespace skill240
 		return 1;
 	}
 
-	function calculate_real_trap_obbs()
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(240))
-			return $chprocess()*0.85;
-		else  return $chprocess();
+		if (\skillbase\skill_query(240,$pa))
+			return $chprocess($var*0.85,$pa);
+		else  return $chprocess($var,$pa);
 	}
 	
 	function calculate_active_obbs_multiplier(&$ldata,&$edata)

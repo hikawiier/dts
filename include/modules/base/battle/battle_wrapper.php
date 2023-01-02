@@ -88,6 +88,11 @@ namespace battle
 
 		if ($active) 
 		{ 
+			if(($pa['action']=='' || strpos($pa['action'],'enemy')!==false) && $pa['type']==0)
+			{ //玩家身上只有发现敌人或被发现的标记 发一个追击标记
+				$pa['action'] = 'chase'.$pd['pid']; 
+				//echo "玩家主动触发了追击标记：".$pa['action']."<br>";
+			}	
 			if ($pd['hp']<=0 && $pa['hp']>0)
 			{
 				$pa['action']='corpse'.$pd['pid'];
@@ -96,14 +101,14 @@ namespace battle
 			{
 				$pd['action'] = 'pacorpse'.$pa['pid']; 
 			}		
-			if(($pa['action']=='' || strpos($pa['action'],'enemy')!==false) && $pa['type']==0)
-			{ //玩家身上只有发现敌人或被发现的标记 发一个追击标记
-				$pa['action'] = 'chase'.$pd['pid']; 
-				//echo "玩家主动触发了追击标记：".$pa['action']."<br>";
-			}	
 		}
 		else
 		{
+			if(($pd['action']=='' || strpos($pd['action'],'enemy')!==false) && $pd['type']==0)
+			{
+				$pd['action'] = 'chase'.$pa['pid']; 
+				//echo "玩家被动触发了追击标记：".$pd['action']."<br>";;
+			}
 			if ($pd['hp']<=0 && $pa['hp']>0 && $pa['action']=='' && $pa['type']==0)
 			{
 				$pa['action']='pacorpse'.$pd['pid'];
@@ -111,11 +116,6 @@ namespace battle
 			if ($pa['hp']<=0 && $pd['hp']>0)
 			{
 				$pd['action'] = 'corpse'.$pa['pid']; 
-			}
-			if(($pd['action']=='' || strpos($pd['action'],'enemy')!==false) && $pd['type']==0)
-			{
-				$pd['action'] = 'chase'.$pa['pid']; 
-				//echo "玩家被动触发了追击标记：".$pd['action']."<br>";;
 			}
 		}
 

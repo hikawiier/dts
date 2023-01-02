@@ -11,7 +11,7 @@ namespace map
 	//聊天记录里的禁区提示时间，单位秒
 	$areawarntime = 60;
 	//玩家激活结束时的增加禁区的回数，相当于已经进行的小时数/间隔时间，〉0
-	$arealimit = 4;
+	$arealimit = 10;
 	//是否激活自动躲避禁区
 	$areaesc = 1;
 

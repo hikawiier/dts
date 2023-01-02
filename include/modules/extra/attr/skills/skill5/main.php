@@ -26,7 +26,7 @@ namespace skill5
 	function skill_onload_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (strpos($pa['inf'],'p')!==false) \skillbase\skill_acquire(5,$pa);
+		if (strpos($pa['inf'],'p')!==false && !\skillbase\skill_query(5,$pa)) \skillbase\skill_acquire(5,$pa);
 		$chprocess($pa);
 	}
 	
@@ -77,32 +77,24 @@ namespace skill5
 		if ($hp>0) $chprocess($moveto);
 	}
 
-	//攻击准备阶段 结算$pa受到的异常伤害
-	function attack_prepare(&$pa, &$pd, $active)
+	function check_dot_effect(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);
-		unset($pa['deathmark']);//有点搞笑
-		if (\skillbase\skill_query(5,$pa) && !$pa['is_colatk'])
+		if (\skillbase\skill_query(5,$pa))
 		{
-			$tmp_inf_dmg = 1;
+			$tmp_inf_dmg = round($pa['mhp']*0.0625) + rand(0,10);
 			$pa['hp'] -= $tmp_inf_dmg;
 			eval(import_module('logger'));
-			$log .= $pa['name']."因<span class=\"purple b\">毒发</span>减少了<span class=\"red b\">$tmp_inf_dmg</span>点生命！<br>";
+			$tmp_name = $active ? '你' : $pa['name'];
+			$log .= $tmp_name."因<span class=\"purple b\">毒发</span>减少了<span class=\"red b\">$tmp_inf_dmg</span>点生命！<br>";
 			if($pa['hp']<=0)
 			{
+				$pa['death_flag'] = 1;
 				$pa['deathmark'] = 120;
 				return;
 			}
 		}
-	}
-
-	function attack(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//pa因为某些情况意外暴毙了 不会触发打击流程
-		if($pa['deathmark']) return;
-		$chprocess($pa, $pd, $active);
 	}
 	
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())	//毒发死亡新闻

@@ -95,6 +95,7 @@ namespace skill2600
 		$chprocess($pa,$pd,$active);
 	}
 
+	//打击结束阶段 判断对方是否会寻求盟友挡刀
 	function attack_finish(&$pa,&$pd,$active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
@@ -102,7 +103,7 @@ namespace skill2600
 		//这个功能目前只提供给NPC/NPC
 		//因为NPC替玩家挡刀暂时不好处理被打死了的情况 至于玩家替NPC挡刀 那就更不用说了……
 		//另外被反击打死了也不会触发这个功能，因为再套娃下去就搞不懂了！！而且被反击打死还有空闲拉人来挡刀就有点过分了！！
-		if (\skillbase\skill_query(2600,$pd) && $pd['type'] && $pd['hp']>0 && $pd['hp']<($pd['mhp']*0.15)) //被打到濒死（15%血以下）情况下才能叫队友来挡刀 被打死了不行
+		if ($pa['hp']>0 && $pd['hp']>0 && $pd['hp']<($pd['mhp']*0.15) && \skillbase\skill_query(2600,$pd) && $pd['type']) //被打到濒死（15%血以下）情况下才能叫队友来挡刀 被打死了不行
 		{
 			$mid = skill2600_get_mate_pid($pd); 
 			if($mid && skill2600_check_can_colatk($pd,$mid))
@@ -125,15 +126,14 @@ namespace skill2600
 		$chprocess($pa, $pd, $active);
 	}
 
+	//战斗外围结束阶段 判断是否能召唤协战队友
 	function battle_finish(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-
 		$chprocess($pa,$pd,$active);
-
-		//pa打人后 判断能不能召唤协战队友
 		eval(import_module('c_battle'));
-		if (\skillbase\skill_query(2600,$pa) && !\skillbase\skill_query(2601,$pa) && $pd['hp']>0 && skilll2600_check_colatk_obbs($pa)) //只有先手攻击才能召唤协战 反击不行
+		//战斗的发起者（pa）才能够召唤协战
+		if ($pa['hp']>0 && $pd['hp']>0 && \skillbase\skill_query(2600,$pa) && !\skillbase\skill_query(2601,$pa) && skilll2600_check_colatk_obbs($pa))
 		{
 			$mid = skill2600_get_mate_pid($pa); //获取协战队友的pid
 			if($mid && skill2600_check_can_colatk($pa,$mid))
@@ -167,7 +167,7 @@ namespace skill2600
 				//保存协战者数据
 				\player\player_save($m_data);
 				eval(import_module('logger'));
-				$log.="触发了协战者pid：".$mid;
+				$log.="【DEBUG】触发了协战者pid：".$mid;
 			}
 		}
 	}

@@ -190,13 +190,13 @@ namespace gameflow_combo
 		}
 	}
 	
-	function calculate_real_trap_obbs()
+	function calculate_real_trap_obbs_change($var,$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player'));
 		$r=0;
 		if($gamestate >= 40) $r=2.5;	//连斗以后略容易踩陷阱
-		return $chprocess()+$r;
+		return $chprocess($var+$r,$pa);
 	}
 }		
 
