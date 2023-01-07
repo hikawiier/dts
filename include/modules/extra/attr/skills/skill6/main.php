@@ -16,11 +16,13 @@ namespace skill6
 	function acquire6(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\set_inf_skills_value($pa,'u');
 	}
 	
 	function lost6(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\del_inf_skills_value($pa,'u');
 	}
 	
 	function skill_onload_event(&$pa)
@@ -33,7 +35,7 @@ namespace skill6
 	function skill_onsave_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(6,$pa)) \skillbase\skill_lost(6,$pa);
+		if (strpos($pa['inf'],'u')===false && \skillbase\skill_query(6,$pa)) \skillbase\skill_lost(6,$pa);
 		$chprocess($pa);
 	}
 	
@@ -58,8 +60,10 @@ namespace skill6
 		eval(import_module('sys','player','logger'));
 		if (\skillbase\skill_query(6))
 		{
-			$damage = round($mhp * 0.03125) + rand(0,10);
+			//$damage = round($mhp * 0.03125) + rand(0,10);
+			$damage = \c_battle\calculate_inf_dot_damage($sdata,'u');
 			deal_burn_move_damage($damage);
+			\c_battle\change_inf_turns($sdata,'u');
 		}
 		if ($hp>0) $chprocess();
 	}
@@ -70,8 +74,10 @@ namespace skill6
 		eval(import_module('sys','player','logger'));
 		if (\skillbase\skill_query(6))
 		{
-			$damage = round($mhp * 0.0625) + rand(0,10);
+			//$damage = round($mhp * 0.0625) + rand(0,10);
+			$damage = \c_battle\calculate_inf_dot_damage($sdata,'u');
 			deal_burn_move_damage($damage);
+			\c_battle\change_inf_turns($sdata,'u');
 		}
 		if ($hp>0) $chprocess($moveto);
 	}
@@ -82,7 +88,8 @@ namespace skill6
 		$chprocess($pa, $pd, $active);
 		if (\skillbase\skill_query(6,$pa))
 		{
-			$tmp_inf_dmg = round($pa['mhp']*0.0625) + rand(0,10);
+			//$tmp_inf_dmg = round($pa['mhp']*0.000625) + rand(0,10);
+			$tmp_inf_dmg = \c_battle\calculate_inf_dot_damage($pa,'u');
 			$pa['hp'] -= $tmp_inf_dmg;
 			eval(import_module('logger'));
 			$tmp_name = $active ? '你' : $pa['name'];
@@ -94,6 +101,13 @@ namespace skill6
 				return;
 			}
 		}
+	}
+
+	function change_battle_turns_events(&$pa, &$pd, $active) //战斗中在战斗轮步进阶段减少异常状态持续时间
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if (\skillbase\skill_query(6,$pa)) \c_battle\change_inf_turns($pa,'u');
 	}
 	
 	function get_att_multiplier(&$pa,&$pd,$active)	//烧伤攻击力下降

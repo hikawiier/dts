@@ -107,7 +107,7 @@ namespace ex_dmg_att
 				{
 					if ($punish > 1) $punish_word = "加重"; else $punish_word = "减轻";
 					if(!isset($pa['battlelogflag_punish_'.$key])){
-						$log .= \battle\battlelog_parser($pa, $pd, $active,"{$infname[$infkey]}{$punish_word}了<:pd_name:>受到的{$exdmgname[$key]}伤害！");
+					//	$log .= \battle\battlelog_parser($pa, $pd, $active,"{$infname[$infkey]}{$punish_word}了<:pd_name:>受到的{$exdmgname[$key]}伤害！");
 						$pa['battlelogflag_punish_'.$key] = 1;
 					}
 				}
@@ -135,7 +135,7 @@ namespace ex_dmg_att
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','ex_dmg_att','wound','logger'));
 		if (!isset($ex_inf[$key])) return 0; 	//本属性无可以造成的异常状态
-		if (\skillbase\skill_query($ex_inf[$key], $pd)) return 0;	//敌方已经有此异常状态了
+		//if (\skillbase\skill_query($ex_inf[$key], $pd)) return 0;	//敌方已经有此异常状态了
 		$rate = $ex_inf_r[$key]+$pa['fin_skill']*$ex_skill_inf_r[$key];
 		return min($rate,$ex_max_inf_r[$key]);
 	}
@@ -149,18 +149,44 @@ namespace ex_dmg_att
 	function check_ex_inf_infliction(&$pa, &$pd, $active, $key)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		eval(import_module('sys','ex_dmg_att','wound','logger'));
-		//判定造成异常状态
+		eval(import_module('sys','ex_dmg_att','wound','c_battle','logger'));
 		$inf_rate = calculate_ex_inf_rate($pa, $pd, $active, $key)+get_ex_inf_rate_modifier($pa, $pd, $active, $key);
-		$inf_dice = rand(0,99);
-		if ($inf_dice < $inf_rate)
+		if($inf_rate)
 		{
-			$infkey = array_search($ex_inf[$key], $infskillinfo);
-			if ($active)
-				$log .= "并致使{$pd['name']}{$infname[$infkey]}了！";
-			else  $log .= "并致使你{$infname[$infkey]}了！";
-			\wound\get_inf($infkey,$pd);
-			addnews($now,'inf',$pa['name'],$pd['name'],$infkey);
+			//$log.="<br>【DEBUG】异常基础概率:{$inf_rate}";
+			$inf_dice = rand(0,ceil($inf_rate));
+			//$log.="-异常概率骰:{$inf_dice}";
+			//异常率不为0的情况下 进行与抗性的对抗骰
+			$inf_def_dice = \c_battle\calculate_ex_inf_def_rate($pa, $pd, $active, $key);
+			if ($inf_dice > $inf_def_dice)
+			{
+				$infkey = array_search($ex_inf[$key], $infskillinfo);
+				//\wound\get_inf($infkey,$pd);
+				//新异常获得流程：首先用get_inf_check过一遍是初次获得异常还是状态加深 根据返回的检查值$inf_flag输出log 有想额外设定的参数 请在之后执行set_inf_skills_lvl
+				$inf_flag = \c_battle\get_inf_check($pd,$infkey,$ex_inf_lvl_arr[$infkey]['source_lvl'][$key][1]);
+				// $inf_flag： -1=>状态持续时间延长；0=>初次获得；>1=>状态加深；
+				if($inf_flag < 0)
+				{
+					$log .= "{$infname[$infkey]}的持续时间被延长了！";
+					return;
+				}
+				else
+				{
+					if($inf_flag > 0)
+					{
+						if ($active) $log .= "并加深了{$pd['name']}的{$infname[$infkey]}状态！";
+						else $log .= "并加深了你的{$infname[$infkey]}状态！";
+					}
+					else 
+					{
+						//初次获得异常状态 根据来源初始化对应参数
+						\c_battle\set_inf_skills_lvl($pd,$infkey,$key);
+						if ($active) $log .= "并致使{$pd['name']}{$infname[$infkey]}了！";
+						else $log .= "并致使你{$infname[$infkey]}了！";
+					}
+					addnews($now,'inf',$pa['name'],$pd['name'],$infkey);
+				}
+			}
 		}
 	}
 	
@@ -256,7 +282,58 @@ namespace ex_dmg_att
 	function ex_attack_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		//我服了 依赖开始套娃了 只能写在这里了
+		//身上挂着可传染的异常状态时 攻击时视为带有对应属性
+		eval(import_module('ex_dmg_att'));
+		$tmp_inf_info = Array();
+		foreach($ex_inf_list as $inf_key)
+		{
+			if(strpos($pa['inf'],$inf_key)!==false)
+			{
+				eval(import_module('c_battle','wound','logger'));
+				$inf_skillid = $infskillinfo[$inf_key];
+				if(\skillbase\skill_query($inf_skillid,$pa))
+				{
+					$inf_lvl = \skillbase\skill_getvalue($inf_skillid,'lvl',$pa);
+					if($ex_inf_lvl_arr[$inf_key]['infectious'][$inf_lvl])
+					{
+						$flag_name = 'skill'.$inf_skillid.'_infectious_flag';
+						$tmp_exkey = $ex_inf_lvl_arr[$inf_key]['infectious'][$inf_lvl];
+						$pa[$flag_name] = $tmp_exkey;
+						$tmp_inf_info[]=$ex_inf_infectious_info[$tmp_exkey];
+					}
+				}
+			}
+		}
+		if(count($tmp_inf_info)>0)
+		{
+			$tmp_name = $active ? '你' : $pa['name'];
+			$log.="<span class='yellow b'>萦绕在{$tmp_name}身遭的";
+			for($i=0;$i<count($tmp_inf_info);$i++)
+			{
+				$log.= $i ? '与'.$tmp_inf_info[$i] : $tmp_inf_info[$i];
+			}
+			$log.="随攻势一并扩散开来！</span><br>";
+		}
 	}
+
+	function get_ex_attack_array_core(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$r=$chprocess($pa, $pd, $active);
+		eval(import_module('ex_dmg_att'));
+		foreach($ex_skillid_list as $skill_id)
+		{
+			$flag_name = 'skill'.$skill_id.'_infectious_flag';
+			if($pa[$flag_name])
+			{
+				array_push($r,$pa[$flag_name]);
+				unset($pa[$flag_name]);
+			}
+		}
+		return $r;
+	}
+
 
 	function get_tmp_ex_attack_arr(&$pa, &$pd, $active, $ex_arr)
 	{
@@ -280,12 +357,17 @@ namespace ex_dmg_att
 		$tot = 0;
 		$pa['ex_attack_num'] = 0;
 		$ex_attack_array = \attrbase\get_ex_attack_array($pa, $pd, $active);
-		$ex_attack_array = get_tmp_ex_attack_arr($pa, $pd, $active, $ex_attack_array);
+		//$ex_attack_array = get_tmp_ex_attack_arr($pa, $pd, $active, $ex_attack_array);
 		//print_r($ex_attack_array);
-		foreach ( $ex_attack_list as $key )
-			if (in_array($key, $ex_attack_array))
+		//修改一下这里的判断逻辑 装备上存在多个同样的属性 可以打出多次同一属性的伤害 
+		//foreach ( $ex_attack_list as $key )
+		//	if (in_array($key, $ex_attack_array))
+		foreach ( $ex_attack_array as $key )
+			if (in_array($key, $ex_attack_list))
 			{
 				$pa['ex_attack_num'] ++ ;
+				//eval(import_module('logger'));
+				//$log.="【DEBUG】读取到属性{$key}；<br>";
 				$damage = calculate_ex_single_dmg($pa, $pd, $active, $key);
 				$pa['ex_dmg_dealt'] +=$damage;
 				$tot += $damage;
@@ -362,13 +444,15 @@ namespace ex_dmg_att
 		eval(import_module('player','logger','ex_dmg_att','wound'));
 		if (strpos($tritm['itm'],'毒性')!==false) 
 		{
-			\wound\get_inf('p');
-			$log.="陷阱还使你{$infname['p']}了！<br>";
+			$p_name = $pd['type'] ? $pd['name'] : '你';
+			\wound\get_inf('p',$pd);
+			$log.="陷阱还使{$p_name}{$infname['p']}了！<br>";
 		}
 		if (strpos($tritm['itm'],'电气')!==false) 
 		{
-			\wound\get_inf('e');
-			$log.="陷阱还使你{$infname['e']}了！<br>";
+			$p_name = $pd['type'] ? $pd['name'] : '你';
+			\wound\get_inf('e',$pd);
+			$log.="陷阱还使{$p_name}{$infname['e']}了！<br>";
 		}
 	}
 }

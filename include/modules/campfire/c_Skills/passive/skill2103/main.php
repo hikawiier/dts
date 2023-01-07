@@ -158,11 +158,6 @@ namespace skill2103
 			{
 				$log .= "{$exdmgname[$key]}的伤害降低了<span class=\"b\">{$tmp_ex_def_per}%</span>！";
 			}*/
-			if($tmp_ex_def_per > 30)
-			{//对应属性抗性达到30时免疫异常状态 记得之后做一个函数代替这里固定的抗性判断
-				//$log .= "仅";
-				$pd['ex_dmg_'.$key.'_defend_success'] = 1;
-			}
 			return $r;
 		}
 		return $chprocess($pa, $pd, $active, $key);

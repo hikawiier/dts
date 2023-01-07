@@ -2,6 +2,11 @@
 
 namespace skill5
 {
+	//关于异常状态的一些标准变量
+	/* 'lvl'=>'异常等级/程度', 
+	   'dot_dmg'=>'dot每跳伤害',
+	   'last_turns'=>'持续轮次',
+	*/
 	function init() 
 	{
 		eval(import_module('wound'));
@@ -16,11 +21,13 @@ namespace skill5
 	function acquire5(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\set_inf_skills_value($pa,'p');
 	}
 	
 	function lost5(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\del_inf_skills_value($pa,'p');
 	}
 	
 	function skill_onload_event(&$pa)
@@ -34,7 +41,7 @@ namespace skill5
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('skillbase'));
-		if (\skillbase\skill_query(5,$pa)) \skillbase\skill_lost(5,$pa);
+		if (strpos($pa['inf'],'p')===false && \skillbase\skill_query(5,$pa)) \skillbase\skill_lost(5,$pa);
 		$chprocess($pa);
 	}
 	
@@ -59,8 +66,10 @@ namespace skill5
 		eval(import_module('sys','player','logger'));
 		if (\skillbase\skill_query(5))
 		{
-			$damage = round($mhp * 0.03125) + rand(0,10);
+			//$damage = round($mhp * 0.03125) + rand(0,10);
+			$damage = \c_battle\calculate_inf_dot_damage($sdata,'p');
 			deal_poison_move_damage($damage);
+			\c_battle\change_inf_turns($sdata,'p');
 		}
 		if ($hp>0) $chprocess();
 	}
@@ -71,8 +80,10 @@ namespace skill5
 		eval(import_module('sys','player','logger'));
 		if (\skillbase\skill_query(5))
 		{
-			$damage = round($mhp * 0.0625) + rand(0,10);
+			//$damage = round($mhp * 0.0625) + rand(0,10);
+			$damage = \c_battle\calculate_inf_dot_damage($sdata,'p');
 			deal_poison_move_damage($damage);
+			\c_battle\change_inf_turns($sdata,'p');
 		}
 		if ($hp>0) $chprocess($moveto);
 	}
@@ -83,7 +94,8 @@ namespace skill5
 		$chprocess($pa, $pd, $active);
 		if (\skillbase\skill_query(5,$pa))
 		{
-			$tmp_inf_dmg = round($pa['mhp']*0.0625) + rand(0,10);
+			//$tmp_inf_dmg = round($pa['mhp']*0.0625) + rand(0,10);
+			$tmp_inf_dmg = \c_battle\calculate_inf_dot_damage($pa,'p');
 			$pa['hp'] -= $tmp_inf_dmg;
 			eval(import_module('logger'));
 			$tmp_name = $active ? '你' : $pa['name'];
@@ -95,6 +107,13 @@ namespace skill5
 				return;
 			}
 		}
+	}
+
+	function change_battle_turns_events(&$pa, &$pd, $active) //战斗中在战斗轮步进阶段减少异常状态持续时间
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if (\skillbase\skill_query(5,$pa)) \c_battle\change_inf_turns($pa,'p');
 	}
 	
 	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())	//毒发死亡新闻

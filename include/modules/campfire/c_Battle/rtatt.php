@@ -21,18 +21,18 @@ namespace c_battle
 	}
 
 	//距离、轮次初始化
-	function rs_battle_range_and_turns(&$pa, &$pd, $active)
+	function rs_battle_range_and_turns(&$pa, &$pd, $active, $force_range=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		//从追击来源发起的战斗 不进行初始化
 		if(strpos($pa['action'],'chase')!==false || strpos($pd['action'],'chase')!==false)	return;
 
-		$pa['battle_range'] = get_battle_range($pa, $pd, $active);
-		$pd['battle_range'] = 0-$pa['battle_range'];
+		$pa['battle_range'] = $force_range ? $force_range : get_battle_range($pa, $pd, $active);
+		$pd['battle_range'] = $force_range ? $force_range : 0-$pa['battle_range'];
 		$pd['battle_turns'] = $pa['battle_turns'] = 0;
 
 		eval(import_module('logger'));
-		$log .="【DEBUG】距离与轮次初始化完成。<br>";
+		//$log .="【DEBUG】距离与轮次初始化完成。分别为{$pa['battle_range']}与{$pd['battle_range']}<br>";
 	}
 
 	//战斗距离步进
@@ -65,14 +65,23 @@ namespace c_battle
 		if($trap_dice < $trap_max_obbs) calculate_in_battle_trap_obbs($pa,$pd,$active);
 	}
 
-	//战斗轮次步进
+	//战斗轮步进
 	function change_battle_turns(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;	
 		$pa['battle_turns']++;
-		$pd['battle_turns']=$pa['battle_turns'];
+		//$pd['battle_turns']=$pa['battle_turns'];
 		eval(import_module('logger'));
-		$log .="【DEBUG】战斗轮增加了一回合。<br>";
+		//$log .="【DEBUG】{$pa['name']}经过了一回合。<br>";
+
+		//改变战斗距离时应用距离事件
+		change_battle_turns_events($pa, $pd, $active);
+	}
+
+	//改变战斗轮次后触发的事件
+	function change_battle_turns_events(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;	
 	}
 }
 

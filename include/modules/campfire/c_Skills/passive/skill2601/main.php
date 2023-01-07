@@ -28,12 +28,12 @@ namespace skill2601
 	}
 
 	//协战不会改变战斗距离、轮次
-	function rs_battle_range_and_turns(&$pa, &$pd, $active)
+	function rs_battle_range_and_turns(&$pa, &$pd, $active, $force_range=NULL)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		if(strpos($pa['action'],'attcp')!==false || strpos($pd['action'],'attcp')!==false)	return;
 		elseif(strpos($pa['action'],'attbycp')!==false || strpos($pd['action'],'attbycp')!==false)	return;
-		$chprocess($pa,$pd,$active);
+		$chprocess($pa,$pd,$active,$force_range);
 	}
 
 	function change_battle_range(&$pa, &$pd, $active)

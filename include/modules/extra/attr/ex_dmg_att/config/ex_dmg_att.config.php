@@ -2,15 +2,23 @@
 
 namespace ex_dmg_att
 {
-	//每个属性可以组合的对应属性列表
-	$ex_mix_list = array
+	//属性异常登陆 杀了我吧
+	$ex_inf_list = Array('u','i','e','w','p');
+	$ex_skillid_list = Array(5,6,7,8,9);
+
+	//属性异常的传染性描述
+	$ex_inf_infectious_info = Array
 	(
-		'u' => Array('i','e','w','p'),
-		'i' => Array('u','e','w','p'),
-		'e' => Array('u','i','w','p'),
-		'w' => Array('u','e','i','p'),
-		'p' => Array('u','e','i','w'),
+		'u' => '<span class="red b">火焰</span>',
+		'f' => '<span class="red b">炽热之焰</span>',
+		'i' => '<span class="cyan b">冻气</span>',
+		'k' => '<span class="cyan b">凝结之息</span>',
+		'e' => '<span class="yellow b">电流</span>',
+		'p' => '<span class="purple b">毒雾</span>',
+		'w' => '<span class="grey b">不协调感</span>',
+		't' => '<span class="seagreen b">轰鸣音浪</span>',
 	);
+
 	//属性攻击登录
 	$ex_attack_list = Array('p', 'u', 'i', 'd', 'e','w','f','k','t');
 	

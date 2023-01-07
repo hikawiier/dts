@@ -16,25 +16,56 @@ namespace skill7
 	function acquire7(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\set_inf_skills_value($pa,'i');
 	}
 	
 	function lost7(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\del_inf_skills_value($pa,'i');
 	}
 	
 	function skill_onload_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (strpos($pa['inf'],'i')!==false) \skillbase\skill_acquire(7,$pa);
+		if (strpos($pa['inf'],'i')!==false && !\skillbase\skill_query(7,$pa)) \skillbase\skill_acquire(7,$pa);
 		$chprocess($pa);
 	}
 	
 	function skill_onsave_event(&$pa)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		if (\skillbase\skill_query(7,$pa)) \skillbase\skill_lost(7,$pa);
+		if (strpos($pa['inf'],'i')===false && \skillbase\skill_query(7,$pa)) \skillbase\skill_lost(7,$pa);
 		$chprocess($pa);
+	}
+
+	function search_area()	//探索时减少异常状态持续时间
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','logger'));
+		if (\skillbase\skill_query(7))
+		{
+			\c_battle\change_inf_turns($sdata,'i');
+		}
+		$chprocess();
+	}
+	
+	function move_to_area($moveto)	//移动时减少异常状态持续时间
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player','logger'));
+		if (\skillbase\skill_query(7))
+		{
+			\c_battle\change_inf_turns($sdata,'i');
+		}
+		$chprocess($moveto);
+	}
+
+	function change_battle_turns_events(&$pa, &$pd, $active) //战斗中在战斗轮步进阶段减少异常状态持续时间
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		$chprocess($pa, $pd, $active);
+		if (\skillbase\skill_query(7,$pa)) \c_battle\change_inf_turns($pa,'i');
 	}
 	
 	function calculate_move_sp_cost()			//冻结移动体力增加

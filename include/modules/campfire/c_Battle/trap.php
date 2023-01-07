@@ -34,6 +34,7 @@ namespace c_battle
 
 	function in_battle_trapget(&$pa,&$pd,$active,$mi)
 	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','trap'));
 		$pa['itm0']=$mi['itm'];
 		$pa['itmk0']=$mi['itmk'];
@@ -108,18 +109,19 @@ namespace c_battle
 		{		
 			$log .= "<span class=\"red b\">你被{$pa['trprefix']}陷阱杀死了！</span>";
 			$pa['death_flag'] = 1;
-			$pa['deathmark'] = 27;
-			return;			
+			$pa['deathmark'] = 122;		
 		}
 		//重置标记
 		in_battle_trapflag_reset($pa,$pd,$active);
+		return;	
 	}
 
 	function in_battle_trap_deal_damage(&$pa,&$pd,$active)
 	{
+		//关于陷阱迎击属性
+		//暂时没有在这里加上关于陷阱迎击的判定 因为之后要像“物理护甲、属性抗性”一样新建一个总计的“陷阱闪避率”技能 迎击、探雷等属性交由该技能统一处理
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		eval(import_module('sys','player','trap','logger'));
-		
 		$bid = $pa['itmsk0'];
 		$tmp_edata= $bid ? \player\fetch_playerdata_by_pid($bid) : \player\create_dummy_playerdata();
 		$p_name = $pa['type'] ? $pa['name'] : '你';
@@ -155,6 +157,8 @@ namespace c_battle
 		$trap_damage = \trap\get_trap_final_damage_change($tmp_edata, $pa, $tritm, $trap_damage);
 
 		$pa['hp'] -= $trap_damage;
+
+		if ($trap_damage>0) \trap\post_traphit_events($tmp_edata, $pa, $tritm, $damage);
 		
 		if($pa['source_trap']){
 			addnews($now,'trap',$pa['name'],$pa['source_trap'],$pa['itm0'],$trap_damage);
@@ -173,6 +177,20 @@ namespace c_battle
 		unset($pa['source_trap_type']);
 		unset($pa['trprefix']);
 		return;
+	}
+
+	function parse_news($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr = array())
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		eval(import_module('sys','player'));
+		if($news == 'death122') {
+			$dname = $typeinfo[$b].' '.$a;
+			if(!$e)
+				$e0="<span class=\"yellow b\">【{$dname} 什么都没说就死去了】</span><br>\n";
+			else  $e0="<span class=\"yellow b\">【{$dname}：“{$e}”】</span><br>\n";
+			return "<li id=\"nid$nid\">{$hour}时{$min}分{$sec}秒，<span class=\"yellow b\">$a</span>在与<span class=\"yellow b\">$c</span>的战斗中误触陷阱<span class=\"red b\">$d</span>而死{$e0}</li>";
+		}
+		return $chprocess($nid, $news, $hour, $min, $sec, $a, $b, $c, $d, $e, $exarr);
 	}
 }
 

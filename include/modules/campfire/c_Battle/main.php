@@ -102,7 +102,7 @@ namespace c_battle
 			//逃跑作为脱离战斗循环的唯一途径 在这里消除掉追击标记
 			$sdata['action'] = '';unset($sdata['keep_enemy']); 
 			//重置双方战斗回合、距离
-			\c_battle\rs_battle_range_and_turns($sdata,$edata,1);
+			\c_battle\rs_battle_range_and_turns($sdata,$edata,1,10);
 			\player\player_save($edata);\player\player_save($sdata);
 			$log .= "你逃跑了。<br>";
 			//$log .= "双方的战斗次数变为了".$sdata['battle_turns']."和".$edata['battle_turns']."<br>";
@@ -127,21 +127,13 @@ namespace c_battle
 		$chprocess($pa, $pd, $active);
 	}
 
-	//战斗准备阶段 应用战斗轮与战斗距离步进
-	function assault_prepare(&$pa, &$pd, $active)
-	{
-		if (eval(__MAGIC__)) return $___RET_VALUE;
-		$chprocess($pa, $pd, $active);
-		\c_battle\change_battle_turns($pa, $pd, $active);
-	}
-
-	//打击准备阶段 进行战斗距离的步进与pa的dot判定
+	//打击准备阶段 过战斗距离与pa的dot事件
 	function attack_prepare(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
 		$chprocess($pa, $pd, $active);
-		if($pa['hp']>0) \c_battle\check_dot_effect($pa,$pd,$active);
 		if($pa['hp']>0) \c_battle\change_battle_range($pa,$pd,$active);
+		if($pa['hp']>0) \c_battle\check_dot_effect($pa,$pd,$active);
 	}
 
 	//打击进行阶段 对$pa进行暴毙判断
@@ -158,13 +150,20 @@ namespace c_battle
 		$chprocess($pa, $pd, $active);
 	}
 
-	//打击结束阶段事件 进行pd的dot判定
+	//打击结束阶段事件 过pd的dot事件
 	function post_player_damaged_enemy_event(&$pa, &$pd, $active)
 	{
 		if (eval(__MAGIC__)) return $___RET_VALUE;
-		//pd活着的情况下对pd进行dot判定
-		//其实不应该加这个条件 想了想有毒转愈的情况 这里不一定是伤害 也可能是回复
 		if($pd['hp']>0) \c_battle\check_dot_effect($pd,$pa,1-$active);
+		$chprocess($pa, $pd, $active);
+	}
+
+	//战斗结束阶段 过战斗轮步进事件
+	function assault_finish(&$pa, &$pd, $active)
+	{
+		if (eval(__MAGIC__)) return $___RET_VALUE;
+		\c_battle\change_battle_turns($pa,$pd,$active);
+		\c_battle\change_battle_turns($pd,$pa,1-$active);
 		$chprocess($pa, $pd, $active);
 	}
 
